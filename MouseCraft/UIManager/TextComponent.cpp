@@ -26,6 +26,8 @@ void TextComponent::Resize() {
 		calculateScreenPosition();
         
 		generateVertices();
+
+		repopulateBuffers();
     }
 
 	valid = true;
