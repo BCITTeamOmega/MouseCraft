@@ -1,8 +1,16 @@
 #include "Game.h"
 #include "MainScene.h"
+#include "NetworkManager.h"
 #include <thread>
+#include <iostream>
 
 Game::Game() {
+    short port;
+    std::cout << "Select Port to initialize on: " << std::endl;
+    std::cin >> port;
+    if (NetworkManager::Initialize(port)) {
+        std::cout << "Network Manager successfully intialized." << std::endl;
+    }
     _currScene = new MainScene();
     _currScene->InitScene();
 }
@@ -10,6 +18,7 @@ Game::Game() {
 Game::~Game() {
     _currScene->CleanUp();
     delete _currScene;
+    NetworkManager::CleanUp();
 }
 
 void Game::Update(const float delta) {
@@ -29,6 +38,7 @@ void Game::Update(const float delta) {
 		}
 	} else if (_currScene != nullptr) {
 		_currScene->Update(delta);
+        NetworkManager::Update(delta);
     }
 }
 

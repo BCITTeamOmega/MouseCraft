@@ -124,6 +124,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="SoundManager\Sound.cpp" />
     <ClCompile Include="SoundManager\SoundManager.cpp" />
     <ClCompile Include="UIManager\ImageComponent.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="EventManager\ISubscriber.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SoundManager\Sound.h" />
     <ClInclude Include="SoundManager\SoundManager.h" />

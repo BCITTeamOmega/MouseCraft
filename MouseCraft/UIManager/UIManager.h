@@ -2,7 +2,6 @@
 
 #include <map>
 #include <string>
-#include <windows.h>
 #include <tinyxml2/tinyxml2.h>
 #include "UIComponent.h"
 
