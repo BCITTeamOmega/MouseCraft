@@ -13,49 +13,40 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\EventManager">
-      <UniqueIdentifier>{f1ad6db8-7c88-41c2-ba7e-fadd56125a57}</UniqueIdentifier>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{e064c986-1a39-4bc9-b35e-cb8da70db22b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\EventManager">
-      <UniqueIdentifier>{b4a4a4bf-a9a6-49a0-8230-23aa9840c1b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\SoundManager">
+    <Filter Include="Header Files\Sound">
       <UniqueIdentifier>{8de61ffd-8660-4fb8-a047-156d7ff294b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\SoundManager">
-      <UniqueIdentifier>{248b8563-7c2b-4fa5-83f8-be8ac986b24c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UIManager">
+    <Filter Include="Header Files\UI">
       <UniqueIdentifier>{7e8b2e0b-bef1-4d08-9f69-5c0a7175e307}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UIManager">
+    <Filter Include="Header Files\Event">
+      <UniqueIdentifier>{f1ad6db8-7c88-41c2-ba7e-fadd56125a57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{c39cee17-1a76-4906-aaaa-f324d1fc334b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Event">
+      <UniqueIdentifier>{b4a4a4bf-a9a6-49a0-8230-23aa9840c1b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{248b8563-7c2b-4fa5-83f8-be8ac986b24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
       <UniqueIdentifier>{9f21ae2f-ee38-4073-80c5-fff8a62248c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Loading">
+      <UniqueIdentifier>{5c0f7c31-531f-4033-a0e4-ba1deeb74c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading">
+      <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager\EventManager.cpp">
-      <Filter>Source Files\EventManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager\SoundManager.cpp">
-      <Filter>Source Files\SoundManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager\Sound.cpp">
-      <Filter>Source Files\SoundManager</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager\ImageComponent.cpp">
-      <Filter>Source Files\UIManager</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager\TextComponent.cpp">
-      <Filter>Source Files\UIManager</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager\UIComponent.cpp">
-      <Filter>Source Files\UIManager</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager\UIManager.cpp">
-      <Filter>Source Files\UIManager</Filter>
     </ClCompile>
     <ClCompile Include="MainScene.cpp">
       <Filter>Source Files</Filter>
@@ -63,35 +54,32 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\EventManager.cpp">
+      <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\Sound.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\SoundManager.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImageComponent.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TextComponent.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIComponent.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EventManager\EventManager.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager\EventName.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager\ISubscriber.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager\Sound.h">
-      <Filter>Header Files\SoundManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager\SoundManager.h">
-      <Filter>Header Files\SoundManager</Filter>
-    </ClInclude>
-    <ClInclude Include="UIManager\ImageComponent.h">
-      <Filter>Header Files\UIManager</Filter>
-    </ClInclude>
-    <ClInclude Include="UIManager\TextComponent.h">
-      <Filter>Header Files\UIManager</Filter>
-    </ClInclude>
-    <ClInclude Include="UIManager\UIComponent.h">
-      <Filter>Header Files\UIManager</Filter>
-    </ClInclude>
-    <ClInclude Include="UIManager\UIManager.h">
-      <Filter>Header Files\UIManager</Filter>
-    </ClInclude>
     <ClInclude Include="MainScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,11 +89,41 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager\SoundParams.h">
-      <Filter>Header Files\SoundManager</Filter>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager\TrackParams.h">
-      <Filter>Header Files\SoundManager</Filter>
+    <ClInclude Include="Event\EventManager.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\EventName.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\ISubscriber.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\Sound.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundParams.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\TrackParams.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImageComponent.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TextComponent.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIComponent.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

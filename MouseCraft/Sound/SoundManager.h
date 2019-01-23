@@ -1,7 +1,7 @@
 #pragma once
 //has Sounds; created by main
 #include "Sound.h"
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 #include "SoundParams.h"
 #include "TrackParams.h"
 #include <unordered_map>
