@@ -144,7 +144,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="UI\ImageComponent.cpp" />
@@ -156,9 +155,10 @@
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
     <ClInclude Include="Event\ISubscriber.h" />
+    <ClInclude Include="Graphics\image.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundManager.h" />
