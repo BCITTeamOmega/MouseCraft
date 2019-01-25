@@ -156,6 +156,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="SoundManager\Sound.cpp" />
     <ClCompile Include="SoundManager\SoundManager.cpp" />
+    <ClCompile Include="Core\StatusAction.cpp" />
     <ClCompile Include="UIManager\ImageComponent.cpp" />
     <ClCompile Include="UIManager\TextComponent.cpp" />
     <ClCompile Include="UIManager\UIComponent.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Entity.h" />
     <ClInclude Include="Core\Handle.h" />
+    <ClInclude Include="Core\RootEntity.h" />
     <ClInclude Include="Core\System.h" />
     <ClInclude Include="Core\Task.h" />
     <ClInclude Include="Core\TaskScheduler.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="SoundManager\SoundManager.h" />
     <ClInclude Include="SoundManager\SoundParams.h" />
     <ClInclude Include="SoundManager\TrackParams.h" />
+    <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="UIManager\ImageComponent.h" />
     <ClInclude Include="UIManager\TextComponent.h" />
     <ClInclude Include="UIManager\UIComponent.h" />

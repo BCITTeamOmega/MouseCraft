@@ -111,6 +111,9 @@
     <ClCompile Include="GL\glad.c">
       <Filter>Header Files\GL</Filter>
     </ClCompile>
+    <ClCompile Include="Core\StatusAction.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventManager\EventManager.h">
@@ -190,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="GL\khrplatform.h">
       <Filter>Header Files\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RootEntity.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\StatusAction.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

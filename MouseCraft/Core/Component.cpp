@@ -11,3 +11,7 @@ Component::~Component()
 {
 	std::cout << "Component destroyed" << std::endl;
 }
+
+void Component::initialize()
+{
+}

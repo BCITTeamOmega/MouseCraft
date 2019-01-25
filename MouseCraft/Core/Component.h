@@ -12,7 +12,7 @@ public:
 	virtual ~Component();
 	virtual Component& operator=(const Component&) = delete;  // Disallow copying
 	Component(const Component&) = delete;
-	
+	virtual void initialize();
 	virtual void update(float dt) = 0;
 	void Kill() { _isAlive = false; }
 	bool getEnabled() { return _enabled; }

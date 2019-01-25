@@ -15,6 +15,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include "Component.h"
 #include "Transform.h"
+#include "../Scene.h"
 
 class Entity
 {
@@ -30,10 +31,12 @@ private:
 	unsigned int _id = 0;
 	bool _enabled = true;
 	bool _static = false;
+	bool _initialized = false;
 	ComponentMap _components;					// component map (deprecated)
 	std::vector<Component*> _componentStorage;	// component storage
 	std::vector<Entity*> _children;
 	Entity* _parent;
+	Scene* _myScene;	// which scene this entity is in. null if not assigned.
 
 // Functions 
 public: 
@@ -45,6 +48,9 @@ public:
 	// Returns entity's ID. This cannot change. 
 	unsigned int getID() const;
 
+	// Called when added into the active scene. 
+	void initialize();
+
 	// TODO: Optimize
 	// Returns entity's active status. 
 	// Only true if in active scene, all parents enabled, and this is enabled.
@@ -54,7 +60,7 @@ public:
 	bool getEnabled() const;
 
 	// Set entity's enabled status. Does not change children's status. 
-	bool setEnabled(bool enabled);
+	void setEnabled(bool enabled, bool force = false);	
 	
 	// gets the entity's static status. 
 	bool getStatic() const;
@@ -64,14 +70,14 @@ public:
 	// ONLY call when you're done configuring it.
 	void setStatic(bool torf);
 
-	// Set the parent for this entity. Will properly bind entities together. 
-	void setParent(Entity* parent);
-
 	// Returns the parent entity. Can be null.
 	Entity* getParent() const;
-	
+
+	// Set the parent for this entity. Will properly bind entities together. 
+	void setParent(Entity* parent, bool force = false);
+
 	// Adds entity as a child. Will properly bind entities together.
-	void addChild(Entity* child);
+	void addChild(Entity* child, bool force = false);
 
 	// Returns a reference to child entities. 
 	std::vector<Entity*> const& getChildren() const;
@@ -122,11 +128,21 @@ public:
 	// Call destroy() otherwise.
 	void release();
 
+protected:
+	bool isInActiveScene() const;
+
+	void setScene(Scene* scene);
+
+	Scene* getScene() const;
+	
 private:
 	// Helper method to remove child with ID. This should only be called internally, as bindings will not be correct.
 	void removeChild(unsigned int id);
 
 	// Helper method to properly bind a parent and child entity together. 
+	// Any method that moves an entity around will always go through this function.
 	static void bindEntities(Entity* parent, Entity* child);
 
+	// Helper method to determine if all parents are enabled. 
+	bool getParentEnabled() const;
 };
