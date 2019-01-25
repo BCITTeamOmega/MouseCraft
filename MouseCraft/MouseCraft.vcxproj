@@ -141,6 +141,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Component.cpp" />
+    <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\Handle.cpp" />
+    <ClCompile Include="Core\System.cpp" />
+    <ClCompile Include="Core\Task.cpp" />
+    <ClCompile Include="Core\TaskScheduler.cpp" />
+    <ClCompile Include="Core\Transform.cpp" />
+    <ClCompile Include="Core\OmegaEngine.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="main.cpp" />
@@ -152,8 +160,18 @@
     <ClCompile Include="UIManager\TextComponent.cpp" />
     <ClCompile Include="UIManager\UIComponent.cpp" />
     <ClCompile Include="UIManager\UIManager.cpp" />
+    <ClCompile Include="Util\CpuProfiler.cpp" />
+    <ClCompile Include="Util\OpenGLProfiler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Component.h" />
+    <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\Handle.h" />
+    <ClInclude Include="Core\System.h" />
+    <ClInclude Include="Core\Task.h" />
+    <ClInclude Include="Core\TaskScheduler.h" />
+    <ClInclude Include="Core\Transform.h" />
+    <ClInclude Include="Core\OmegaEngine.h" />
     <ClInclude Include="EventManager\EventManager.h" />
     <ClInclude Include="EventManager\EventName.h" />
     <ClInclude Include="EventManager\ISubscriber.h" />
@@ -170,6 +188,8 @@
     <ClInclude Include="UIManager\TextComponent.h" />
     <ClInclude Include="UIManager\UIComponent.h" />
     <ClInclude Include="UIManager\UIManager.h" />
+    <ClInclude Include="Util\CpuProfiler.h" />
+    <ClInclude Include="Util\OpenGLProfiler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
