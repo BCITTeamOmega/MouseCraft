@@ -21,6 +21,9 @@ void OmegaEngine::initialize()
 
 	_profiler.StartTimer(5);
 
+	// main is defined elsewhere
+	SDL_SetMainReady();
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		std::cerr << "ERROR: SDL could not initialize. SDL_Error:  " << SDL_GetError() << std::endl;

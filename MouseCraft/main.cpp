@@ -1,7 +1,12 @@
 #include <Windows.h>
 #include "Game.h"
+#include "Core/OmegaEngine.h"
 
 int main() {
+
+	OmegaEngine::instance().initialize();
+	OmegaEngine::instance().loop();
+
     Game game = Game();
 
 	while (true) {

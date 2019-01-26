@@ -1,5 +1,7 @@
 #pragma once
 
+#define SDL_MAIN_HANDLED
+
 #include <typeindex>
 #include <typeinfo>
 #include <type_traits>
