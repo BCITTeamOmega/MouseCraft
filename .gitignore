@@ -17,8 +17,8 @@
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
-x86/
+# don't ignore dll x64/
+# don't ignore dll x86/
 bld/
 [Bb]in/
 [Oo]bj/
