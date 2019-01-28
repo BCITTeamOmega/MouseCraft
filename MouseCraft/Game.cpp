@@ -2,14 +2,34 @@
 #include "MainScene.h"
 #include "NetworkManager.h"
 #include <thread>
+#include <chrono>
 #include <iostream>
 
 Game::Game() {
-    short port;
+    int port;
     std::cout << "Select Port to initialize on: " << std::endl;
     std::cin >> port;
     if (NetworkManager::Initialize(port)) {
         std::cout << "Network Manager successfully intialized." << std::endl;
+
+        bool valid = false;
+        do {
+            std::cin.clear();
+
+            std::cout << "Client or Server? (C/S)" << std::endl;
+            char choice;
+            std::cin >> choice;
+
+            if (choice == 'C' || choice == 'c') {
+                NetworkManager::JoinServer();
+                valid = true;
+            } else if (choice == 'S' || choice == 's') {
+                NetworkManager::CreateRoom();
+                valid = true;
+            } else {
+                std::cout << "Invalid Option" << std::endl;
+            }
+        } while (!valid);
     }
     _currScene = new MainScene();
     _currScene->InitScene();
@@ -53,7 +73,7 @@ void fadeOut(Game* game) {
 	game->Black = UIManager::GetComponentById("BlackOverlay");
 	game->FadeOut = true;
 	while (game->FadeOut) {
-		Sleep(1);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }
 
@@ -61,8 +81,8 @@ void fadeIn(Game* game) {
 	game->Black = UIManager::GetComponentById("BlackOverlay");
 	game->FadeIn = true;
 	while (game->FadeIn) {
-		Sleep(1);
-	}
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
 }
 
 void Game::transition(Scene *nextScene) {

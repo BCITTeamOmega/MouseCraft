@@ -1,7 +1,6 @@
 #pragma once
 
-#include <winsock2.h>
-#pragma comment(lib, "WS2_32.lib")
+#include "Socket.h"
 
 enum NetState {
     NET_NO_INIT,
@@ -32,9 +31,7 @@ public:
 private:
     static NetState     _state;
     static NetRole      _role;
-    static WSADATA      _wsaData;
-    static SOCKET       _socket;
-    static SOCKADDR_IN  _localAddress;
+    static Socket       _socket;
 
     NetworkManager() {}
 };
