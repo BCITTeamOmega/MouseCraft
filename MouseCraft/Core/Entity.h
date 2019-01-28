@@ -15,7 +15,8 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include "Component.h"
 #include "Transform.h"
-#include "../Scene.h"
+
+class Scene;
 
 class Entity
 {
@@ -25,6 +26,9 @@ class Entity
 // Variables 
 public:
 	Transform transform;
+
+protected:
+	Scene* _myScene;	// which scene this entity is in. null if not assigned.
 
 private:
 	static unsigned int _curID;
@@ -36,12 +40,11 @@ private:
 	std::vector<Component*> _componentStorage;	// component storage
 	std::vector<Entity*> _children;
 	Entity* _parent;
-	Scene* _myScene;	// which scene this entity is in. null if not assigned.
 
 // Functions 
 public: 
 	Entity();
-	Entity(Entity* parent);	
+	Entity(Entity* parent);		// DEPRECATED 
 	Entity(unsigned int id);	// don't call this unless you know what you're doing.
 	~Entity();
 
@@ -122,7 +125,7 @@ public:
 	}
 
 	// Inform this entity to destroy itself. 
-	void destroy();
+	void destroy(bool force = false);
 
 	// Release resources. Only call it if you REALLY know what you're doing.
 	// Call destroy() otherwise.

@@ -81,17 +81,14 @@ void OmegaEngine::initialize()
 
 void OmegaEngine::changeScene(Scene* scene)
 {
-	std::cerr << "ERROR: Engine::changeScene() is not implemented yet" << std::endl;
-
-	// TODO: implement
-
-	// disable previous scene 
-	if (_activeScene)
-		_activeScene->CleanUp();
-
-	// enable new scene 
+	std::cerr << "ERROR: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
+	// cleanup
+	if (_activeScene) _activeScene->CleanUp();
+	std::queue<StatusAction*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
+	_sceneChangeRequested = false;
+	// load 
 	_activeScene = scene;
-	scene->InitScene();
+	_activeScene->InitScene();
 }
 
 void OmegaEngine::addSystem(System * system)
@@ -135,6 +132,11 @@ void OmegaEngine::deferAction(StatusAction * action)
 int OmegaEngine::getFrame() const
 {
 	return _frameCount;
+}
+
+Scene* OmegaEngine::getActiveScene() const
+{
+	return _activeScene;
 }
 
 void OmegaEngine::sequential_loop()

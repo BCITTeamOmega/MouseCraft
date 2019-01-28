@@ -201,10 +201,16 @@ std::vector<Entity*> const& Entity::getChildren() const
 	return _children;
 }
 
-void Entity::destroy()
+void Entity::destroy(bool force)
 {
 	std::cerr << "ERROR: Entity::destroy() is not implemented yet" << std::endl;
-	// Game::instance().deleteEntity(this);
+
+	if (!force && isInActiveScene())
+	{
+		return;
+	}
+	
+	delete(this);
 }
 
 void Entity::release()

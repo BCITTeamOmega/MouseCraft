@@ -2,12 +2,15 @@
 
 #include "Entity.h"
 
+#include "../Scene.h"
+
 // Special entity for scene root. 
 class RootEntity : public Entity
 {
 public:
-	RootEntity() : Entity(0u)
+	RootEntity(Scene* scene) : Entity(0u)
 	{
+		_myScene = scene;
 		setEnabled(false);
 	}
 

@@ -57,7 +57,7 @@ private:
 
 // variables 
 public:
-	Scene* activeScene = nullptr;
+	// Scene* activeScene = nullptr;
 	// AssetLoader loader;
 
 private:
@@ -89,13 +89,13 @@ public:
 	template<typename SceneType>
 	void changeScene()
 	{
-		
 		static_assert(std::is_base_of<Scene, SceneType>::value, "That's not a scene...");
 		_nextScene = new SceneType();	// might want to move this to the transition.
 		_sceneChangeRequested = true;
 	}
 
-	// Changes the active scene with a loaded scene. Not recommended, use changeScene(Type).
+	// Changes the active scene with a loaded scene. Not recommended, use changeScene<Type>.
+	// This forces the scene to change instantly.
 	void changeScene(Scene* scene);
 
 	// Add a system to receive updates. 
@@ -122,6 +122,8 @@ public:
 	void deferAction(StatusAction* action);
 
 	int getFrame() const;
+
+	Scene* getActiveScene() const;
 
 private:
 	// Current implementation of game loop
