@@ -6,11 +6,6 @@ unsigned int Entity::_curID = 0;
 
 Entity::Entity() :_id(++Entity::_curID) { }
 
-Entity::Entity(Entity* parent) :_id(++Entity::_curID) 
-{
-	setParent(parent);
-}
-
 Entity::Entity(unsigned int id) : _id(id)
 {
 	std::cout << "Entity created with custom ID: " << _id << std::endl;
@@ -28,16 +23,16 @@ unsigned int Entity::getID() const
 
 void Entity::initialize()
 {
-	if (_initialized)
+	if (!_initialized)
 	{
 		std::cout << "Entity already initialized" << std::endl;
+		
 		for (auto& c : _componentStorage)
 		{
 			c->initialize();
 		}
+		_initialized = true;
 	}
-
-	_initialized = true;
 
 	// (ensure) initialize children 
 	for (auto& e : _children)
@@ -61,14 +56,16 @@ void Entity::setEnabled(bool enabled, bool force)
 	// ensure actual change 
 	if (_enabled == enabled) return;
 
-	// defer? 
-	if (!force && isInActiveScene())
+	// explicit or implicit instant change  
+	if (force || !isInActiveScene())
 	{
-		// defer 
-		return;
+		_enabled = enabled;
 	}
-
-	_enabled = enabled;
+	else // defer 
+	{
+		OmegaEngine::instance().deferAction(
+			new StatusActionParam((enabled) ? StatusActionType::Enable : StatusActionType::Disable, this));
+	}
 }
 
 bool Entity::getStatic() const
@@ -99,21 +96,19 @@ void Entity::setStatic(bool torf)
 void Entity::setParent(Entity* parent, bool force)
 {
 	// ensure actual change
-	if (parent == _parent) return;
+	if (parent == this) return;
 
-	// defer ? 
-	if (!force)
+	// explicit or implicit instant change  
+	bool childOrParentInScene = isInActiveScene() || (parent != nullptr && parent->isInActiveScene());
+	if (force || !childOrParentInScene)
 	{
-		bool childOrParentInScene = isInActiveScene() || (parent != nullptr && parent->isInActiveScene());
-		if (childOrParentInScene)
-		{
-			// raise event 
-			return; 
-		}
+		Entity::bindEntities(parent, this);
 	}
-
-	// execute 
-	Entity::bindEntities(parent, this);
+	else // defer 
+	{
+		OmegaEngine::instance().deferAction(
+			new StatusActionParam(StatusActionType::Move, this, parent));
+	}
 }
 
 Entity* Entity::getParent() const
@@ -121,6 +116,7 @@ Entity* Entity::getParent() const
 	return _parent;
 }
 
+// Warning: this function does not check if this child has already been added. 
 void Entity::addChild(Entity* child, bool force)
 {
 	if (child == nullptr)
@@ -129,17 +125,17 @@ void Entity::addChild(Entity* child, bool force)
 		return;
 	}
 
-	if (!force)
+	// explicit or implicit instant change  
+	bool childOrParentInScene = isInActiveScene() || child->isInActiveScene();
+	if (force || !childOrParentInScene)
 	{
-		bool childOrParentInScene = isInActiveScene() || child->isInActiveScene();
-		if (childOrParentInScene)
-		{
-			//defer
-			return;
-		}
+		Entity::bindEntities(this, child);
 	}
-
-	Entity::bindEntities(this, child);
+	else // defer 
+	{
+		OmegaEngine::instance().deferAction(
+			new StatusActionParam(StatusActionType::Move, child, this));
+	}
 }
 
 void Entity::removeChild(unsigned int id)
@@ -166,7 +162,7 @@ void Entity::bindEntities(Entity * parent, Entity * child)
 		child->setScene(parent->getScene());
 
 		// initialize? 
-		if (parent->isInActiveScene() && !child->_initialized)
+		if (parent->isInActiveScene())
 		{
 			child->initialize();
 		}
@@ -201,16 +197,33 @@ std::vector<Entity*> const& Entity::getChildren() const
 	return _children;
 }
 
+void Entity::addComponent(Component * component)
+{
+	component->setEntity(this);
+	_componentStorage.push_back(component);
+}
+
 void Entity::destroy(bool force)
 {
-	std::cerr << "ERROR: Entity::destroy() is not implemented yet" << std::endl;
+	std::cerr << "WARNING: Entity::destroy() is not fully implemented yet" << std::endl;
 
-	if (!force && isInActiveScene())
+	// explicit or implicit instant change
+	if (force || !isInActiveScene())
 	{
-		return;
+		// TODO: destruct all components 
+		for (auto& c : _componentStorage)
+			delete(c);
+		
+		if (_parent)
+			_parent->removeChild(this->_id);
+
+		delete(this);
 	}
-	
-	delete(this);
+	else // defer
+	{
+		OmegaEngine::instance().deferAction(
+			new StatusActionParam(StatusActionType::Delete, this));
+	}
 }
 
 void Entity::release()
@@ -232,7 +245,9 @@ void Entity::release()
 
 bool Entity::isInActiveScene() const
 {
-	return getScene() && getScene() == OmegaEngine::instance().activeScene;
+	auto f = getScene();
+	auto o = OmegaEngine::instance().getActiveScene();
+	return getScene() && getScene() == OmegaEngine::instance().getActiveScene();
 }
 
 void Entity::setScene(Scene * scene)

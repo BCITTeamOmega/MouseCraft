@@ -11,6 +11,7 @@
 #include <chrono>
 #include <mutex>
 #include <queue>
+#include <deque>
 #include <SDL2/SDL.h>
 #include "Entity.h"
 #include "Component.h"
@@ -76,7 +77,7 @@ private:
 	Scene* _nextScene;
 	CpuProfiler _profiler;
 	Entity transitionHolder;	// used to hold entities while transitioning scene.
-	std::queue<StatusAction*> _deferredActions;
+	std::deque<StatusActionParam*> _deferredActions;
 	std::mutex _deferredActionMtx;
 	std::vector<System*> _systems;
 	int _frameCount;
@@ -90,7 +91,7 @@ public:
 	void changeScene()
 	{
 		static_assert(std::is_base_of<Scene, SceneType>::value, "That's not a scene...");
-		_nextScene = new SceneType();	// might want to move this to the transition.
+		_nextScene = new SceneType();	// TODO: no benefit to this, need to move this to the transition.
 		_sceneChangeRequested = true;
 	}
 
@@ -119,7 +120,7 @@ public:
 	void pause(bool pause);
 
 	// Defers actions that can cause catastrophic failure. 
-	void deferAction(StatusAction* action);
+	void deferAction(StatusActionParam* action);
 
 	int getFrame() const;
 
@@ -128,5 +129,7 @@ public:
 private:
 	// Current implementation of game loop
 	void sequential_loop();
+
+	void transitionScenes();
 };
 

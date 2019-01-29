@@ -1,5 +1,6 @@
 #include "StatusAction.h"
 
+/*
 #include "Entity.h"
 
 void MoveAction::Execute()
@@ -21,3 +22,4 @@ void DisableAction::Execute()
 {
 	target->setEnabled(false);
 }
+*/

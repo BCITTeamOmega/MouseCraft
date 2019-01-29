@@ -21,6 +21,7 @@ class Scene;
 class Entity
 {
 // Type definitions 
+	// DEPRECATED
 	typedef std::unordered_map <std::type_index, std::unique_ptr<Component>> ComponentMap;
 
 // Variables 
@@ -44,8 +45,7 @@ private:
 // Functions 
 public: 
 	Entity();
-	Entity(Entity* parent);		// DEPRECATED 
-	Entity(unsigned int id);	// don't call this unless you know what you're doing.
+	Entity(unsigned int id);	// WARNING: don't call this unless you know what you're doing.
 	~Entity();
 
 	// Returns entity's ID. This cannot change. 
@@ -104,6 +104,21 @@ public:
 	T* getComponent()
 	{
 		return static_cast<T*>(_components[typeid(T)].get());
+	}
+
+	// Returns a pointer to specified component.
+	// Note: This is a relatively expensive operation, cache your results. 
+	template<class T>
+	T* getComponentReal()
+	{
+		// Rationale: This function should not be called often.
+		// If you need to constantly call this cache it or consider using a system.
+		for (const auto& c : _componentStorage)
+		{
+			auto found = dynamic_cast<T*>(c);
+			if (found) return found;
+		}
+		return nullptr;
 	}
 
 	// Returns a copy of all components attached to this entity. 

@@ -46,6 +46,12 @@
     <Filter Include="Header Files\GL">
       <UniqueIdentifier>{27290bc5-d77d-4a85-9624-90b084778cff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Example">
+      <UniqueIdentifier>{8f1156c6-e7b0-48ce-98e5-0a8199af9cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Example">
+      <UniqueIdentifier>{83e0b0d4-0776-4684-bbd1-5c430c604c74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +119,15 @@
     </ClCompile>
     <ClCompile Include="Core\StatusAction.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UpdatableComponent.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Example\TestComponent.cpp">
+      <Filter>Source Files\Core\Example</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Example\TestDerivedComponent.cpp">
+      <Filter>Source Files\Core\Example</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="Core\StatusAction.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UpdatableComponent.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Example\TestDerivedComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Example\TestComponent.h">
+      <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

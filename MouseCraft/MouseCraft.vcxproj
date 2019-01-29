@@ -157,10 +157,13 @@
     <ClCompile Include="SoundManager\Sound.cpp" />
     <ClCompile Include="SoundManager\SoundManager.cpp" />
     <ClCompile Include="Core\StatusAction.cpp" />
+    <ClCompile Include="Core\Example\TestComponent.cpp" />
+    <ClCompile Include="Core\Example\TestDerivedComponent.cpp" />
     <ClCompile Include="UIManager\ImageComponent.cpp" />
     <ClCompile Include="UIManager\TextComponent.cpp" />
     <ClCompile Include="UIManager\UIComponent.cpp" />
     <ClCompile Include="UIManager\UIManager.cpp" />
+    <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
   </ItemGroup>
@@ -187,10 +190,13 @@
     <ClInclude Include="SoundManager\SoundParams.h" />
     <ClInclude Include="SoundManager\TrackParams.h" />
     <ClInclude Include="Core\StatusAction.h" />
+    <ClInclude Include="Core\Example\TestComponent.h" />
+    <ClInclude Include="Core\Example\TestDerivedComponent.h" />
     <ClInclude Include="UIManager\ImageComponent.h" />
     <ClInclude Include="UIManager\TextComponent.h" />
     <ClInclude Include="UIManager\UIComponent.h" />
     <ClInclude Include="UIManager\UIManager.h" />
+    <ClInclude Include="Core\UpdatableComponent.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
   </ItemGroup>

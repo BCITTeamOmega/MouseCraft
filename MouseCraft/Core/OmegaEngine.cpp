@@ -82,13 +82,8 @@ void OmegaEngine::initialize()
 void OmegaEngine::changeScene(Scene* scene)
 {
 	std::cerr << "ERROR: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
-	// cleanup
-	if (_activeScene) _activeScene->CleanUp();
-	std::queue<StatusAction*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
-	_sceneChangeRequested = false;
-	// load 
-	_activeScene = scene;
-	_activeScene->InitScene();
+	_nextScene = scene;
+	transitionScenes();
 }
 
 void OmegaEngine::addSystem(System * system)
@@ -98,7 +93,8 @@ void OmegaEngine::addSystem(System * system)
 
 void OmegaEngine::addEntity(Entity* entity)
 {
-	std::cerr << "ERROR: Engine::addEntity() is not implemented yet" << std::endl;
+	assert(getActiveScene() != nullptr && "ERROR: There was no active scene!");
+	_activeScene->root.addChild(entity);
 }
 
 void OmegaEngine::transferEntity(Entity * entity)
@@ -123,10 +119,17 @@ void OmegaEngine::pause(bool p)
 	_isPause = p;
 }
 
-void OmegaEngine::deferAction(StatusAction * action)
+void OmegaEngine::deferAction(StatusActionParam * action)
 {
 	std::unique_lock<std::mutex> lock(_deferredActionMtx);
-	_deferredActions.push(action);
+	if (action->action == StatusActionType::Delete)
+	{
+		_deferredActions.push_back(action);
+	}
+	else
+	{
+		_deferredActions.push_front(action);
+	}
 }
 
 int OmegaEngine::getFrame() const
@@ -159,13 +162,7 @@ void OmegaEngine::sequential_loop()
 		_profiler.StartTimer(1);
 		if (_sceneChangeRequested)
 		{
-			// cleanup
-			_activeScene->CleanUp();
-			std::queue<StatusAction*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
-			_sceneChangeRequested = false;
-			// load 
-			_activeScene = _nextScene;
-			_activeScene->InitScene();
+			transitionScenes();
 			continue;
 		}
 		_profiler.StopTimer(1);
@@ -175,15 +172,35 @@ void OmegaEngine::sequential_loop()
 		while (!_deferredActions.empty())
 		{
 			// WARNING: MEMORY LEAK - USE UNIQUE_POINTER 
-			_deferredActions.front()->Execute();
-			_deferredActions.pop();
+			auto action = _deferredActions.front();
+			
+			switch (action->action)
+			{
+			case Move:
+				action->target->setParent(action->destination, true);
+				break;
+			case Delete:
+				action->target->destroy(true);
+				break;
+			case Enable:
+				action->target->setEnabled(true, true);
+				break;
+			case Disable:
+				action->target->setEnabled(false, true);
+				break;
+			default:
+				std::cerr << "ERROR: UNKNOWN S.ACTION" << std::endl;
+				break;
+			}
+
+			_deferredActions.pop_front();
 		}
 		_profiler.StopTimer(2);
 
 		// PHASE 2: Component Update
 		_profiler.StartTimer(3);
 		auto deltaParam = new TypeParam<float>(deltaMs);	// Consider: Using unique-pointer for self-destruct
-		EventManager::Notify(EventName::PLAY_SONG, deltaParam);	// serial
+		EventManager::Notify(EventName::COMPONENT_UPDATE, deltaParam);	// serial
 		delete(deltaParam);
 		_profiler.StopTimer(3);
 
@@ -204,5 +221,21 @@ void OmegaEngine::sequential_loop()
 		SDL_GL_SwapWindow(_window);
 		++_frameCount;
 	}
+}
+
+void OmegaEngine::transitionScenes()
+{
+	// cleanup
+	if (_activeScene)
+	{
+		_activeScene->CleanUp();
+		_activeScene->root.setEnabled(false, true);
+	}
+	std::deque<StatusActionParam*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
+	_sceneChangeRequested = false;
+	// load 
+	_activeScene = _nextScene;
+	_activeScene->InitScene();
+	_activeScene->root.setEnabled(true, true);
 }
 
