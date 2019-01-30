@@ -224,5 +224,8 @@
     <ClInclude Include="Core\Example\TestComponent.h">
       <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ComponentManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

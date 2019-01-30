@@ -4,6 +4,7 @@
 #include "Core/Entity.h"
 #include "Core/Example/TestComponent.h"
 #include "Core/Example/TestDerivedComponent.h"
+#include "Core/ComponentManager.h"
 #include "MainScene.h"
 
 void Test_ECS()
@@ -92,6 +93,11 @@ void Test_ECS()
 	s->root.addChild(parent2);
 
 	SDL_assert(s->root.getChildren().size() == 0, "Deferred execution failed.");
+
+	//component manager test
+	auto* t = ComponentManager<TestComponent>::Instance().Create(new Entity());
+
+
 
 	OmegaEngine::instance().loop();
 }
