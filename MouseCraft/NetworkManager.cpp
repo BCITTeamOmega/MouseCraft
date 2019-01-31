@@ -4,6 +4,7 @@
 NetState NetworkManager::_state = NET_NO_INIT;
 Socket NetworkManager::_socket;
 NetRole NetworkManager::_role;
+Address NetworkManager::_remote;
 
 using namespace std;
 
@@ -39,8 +40,17 @@ void NetworkManager::CloseRoom() {
 
 }
 
-void NetworkManager::JoinServer() {
+void NetworkManager::JoinServer(Address server) {
     if (_state == NET_STANDBY) {
+        _remote = server;
+
+        cout << "Joined " <<
+            (int)server.GetA() << "." <<
+            (int)server.GetB() << "." <<
+            (int)server.GetC() << "." <<
+            (int)server.GetD() << ":" <<
+            server.GetPort() << endl;
+
         _role = NET_CLIENT;
         _state = NET_IN_ROOM;
     } else {
@@ -78,7 +88,7 @@ void NetworkManager::Update(const float delta) {
             char message[MAX_PACKET_SIZE];
             cin.getline(message, MAX_PACKET_SIZE);
 
-            if (!_socket.Send(Address(127, 0, 0, 1, PORT_NUMBER), message, sizeof(message))) {
+            if (!_socket.Send(_remote, message, sizeof(message))) {
                 cout << "Packet send failure" << endl;
             }
         }

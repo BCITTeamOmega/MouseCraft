@@ -21,7 +21,19 @@ Game::Game() {
             std::cin >> choice;
 
             if (choice == 'C' || choice == 'c') {
-                NetworkManager::JoinServer();
+                std::cout << "Server IP: ___.___.___.___:____" << std::endl;
+                int a,b,c,d,port;
+                std::cin >> a;
+                std::cout << "Server IP: " << a << ".___.___.___:____" << std::endl;
+                std::cin >> b;
+                std::cout << "Server IP: " << a << "." << b << ".___.___:____" << std::endl;
+                std::cin >> c;
+                std::cout << "Server IP: " << a << "." << b << "." << c << ".___:____" << std::endl;
+                std::cin >> d;
+                std::cout << "Server IP: " << a << "." << b << "." << c << "." << d << ":____" << std::endl;
+                std::cin >> port;
+
+                NetworkManager::JoinServer(Address(a,b,c,d,port));
                 valid = true;
             } else if (choice == 'S' || choice == 's') {
                 NetworkManager::CreateRoom();

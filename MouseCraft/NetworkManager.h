@@ -24,7 +24,7 @@ public:
 
     static void CreateRoom();
     static void CloseRoom();
-    static void JoinServer();
+    static void JoinServer(Address server);
     static void LeaveServer();
 
     static void Update(const float delta);
@@ -32,6 +32,8 @@ private:
     static NetState     _state;
     static NetRole      _role;
     static Socket       _socket;
+    
+    static Address      _remote;
 
     NetworkManager() {}
 };
