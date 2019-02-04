@@ -2,11 +2,13 @@
 #include <sstream>
 #include <GLEW/glew.h>
 #include <iostream>
+#include <set>
 
 using std::tuple;
 using std::make_tuple;
 using std::istringstream;
 using std::get;
+using std::set;
 
 ObjFileParser::ObjFileParser() : SimpleParser<Geometry>() {
 	std::cout << "Setting up parsers" << std::endl;
@@ -61,6 +63,20 @@ ObjFileParser::~ObjFileParser() {
 
 Geometry ObjFileParser::build() {
 	Geometry g = Geometry();
+	// Because of the way OpenGL works, we need to reformat things a bit
+	// So we can duplicate normals and such easily
+	vector<GLfloat>* vertices = new vector<GLfloat>();
+	vector<GLfloat>* normals = new vector<GLfloat>();
+	map<tuple<int, int, int>, tuple<int, int, int>> faceConvert; // Map to convert obj faces to model faces
+	for (tuple<int, int, int> face : faceData) {
+		tuple<int, int, int> convertedFace;
+		if (faceConvert.find(face) == faceConvert.end()) {
+			// We haven't modeled this face vertex yet; Need to add it to the geometry
+		}
+		else {
+
+		}
+	}
 	return g;
 }
 

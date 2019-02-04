@@ -4,6 +4,7 @@
 #include "../Graphics/Geometry.h"
 
 using std::vector;
+using std::tuple;
 
 class ObjFileParser :
 	public SimpleParser<Geometry>
