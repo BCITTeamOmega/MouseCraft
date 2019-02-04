@@ -19,7 +19,7 @@ private:
 	vector<float> vertData;
 	vector<float> textureCoordData;
 	vector<float> vertexNormData;
-	vector<std::tuple<int, int, int>> faceData;
-	std::tuple<int, int, int> parseFace(string face);
+	vector<std::tuple<size_t, size_t, size_t>> faceData;
+	std::tuple<size_t, size_t, size_t> parseFace(string face);
 };
 
