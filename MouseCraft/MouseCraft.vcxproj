@@ -140,23 +140,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CContactListener.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="SoundManager\Sound.cpp" />
     <ClCompile Include="SoundManager\SoundManager.cpp" />
     <ClCompile Include="UIManager\ImageComponent.cpp" />
     <ClCompile Include="UIManager\TextComponent.cpp" />
     <ClCompile Include="UIManager\UIComponent.cpp" />
     <ClCompile Include="UIManager\UIManager.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CContactListener.h" />
     <ClInclude Include="EventManager\EventManager.h" />
     <ClInclude Include="EventManager\EventName.h" />
     <ClInclude Include="EventManager\ISubscriber.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SoundManager\Sound.h" />
     <ClInclude Include="SoundManager\SoundManager.h" />
@@ -166,6 +171,7 @@
     <ClInclude Include="UIManager\TextComponent.h" />
     <ClInclude Include="UIManager\UIComponent.h" />
     <ClInclude Include="UIManager\UIManager.h" />
+    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
