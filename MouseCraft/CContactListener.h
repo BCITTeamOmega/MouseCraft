@@ -4,11 +4,6 @@
 
 class CContactListener : public b2ContactListener
 {
-private:
-	int collided;
-	int arraySize;
-	b2Body **dynamic, **kinematic;
-	void enlargeArrays();
 public:
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);
@@ -19,4 +14,9 @@ public:
 	void resetCollided();
 	b2Body** getDynamic();
 	b2Body** getKinematic();
+private:
+	int collided;
+	int arraySize;
+	b2Body **dynamic, **kinematic;
+	void enlargeArrays();
 };

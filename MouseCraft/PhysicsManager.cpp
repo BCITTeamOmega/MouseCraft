@@ -25,20 +25,27 @@ void PhysicsManager::Update(const float delta)
 	const float ts = 1.0f / 60.0f;
 	float t = 0;
 
+	//Step every 60th of a second
 	while (t + ts <= delta)
 	{
+		//Advance each physics world
 		floorWorld->Step(ts, 10, 10);
 		upperWorld->Step(ts, 10, 10);
-		checkHeights();
+
+		//Update the heights of characters based on gravity and jumping
+		updateHeights(delta);
+
+		//Check for collisions in each physics world
 		checkCollisions();
 		t += ts;
 	}
 
+	//Run a smaller step for the remainder of the delta time
 	if (t < delta)
 	{
 		floorWorld->Step(delta - t, 10, 10);
 		upperWorld->Step(delta - t, 10, 10);
-		checkHeights();
+		updateHeights(delta);
 		checkCollisions();
 	}
 }
@@ -69,12 +76,38 @@ void PhysicsManager::setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> wa
 	}
 }
 
-void PhysicsManager::updateHeights()
+//Move each physics object up or down based on gravity and jumping
+//Then, if any cross the height threshold, delete them from one world and add them to the other
+void PhysicsManager::updateHeights(float delta)
 {
-
+	//For each physics object, check if they are jumping
+	//If so, move them up by jump velocity * delta
+	//Otherwise check if they are on the floor
+	//If so, check if they are on a tall object/surface
+	//If not, move them by gravity * delta
 }
 
 void PhysicsManager::checkCollisions()
 {
+	//Should I have 2 separate collision listeners?
 
+	//If there are any unhandled collisions
+	if (cListener->hasCollided() == 0)
+		return;
+
+	b2Body** dynamics = cListener->getDynamic();
+	b2Body** kinematics = cListener->getKinematic();
+
+	for (int c = 0; c < cListener->hasCollided(); c++)
+	{
+		b2Body* d = dynamics[c];
+		b2Body* k = kinematics[c];
+			
+		//Figure out how to check for collisions on each one properly
+		//Index dynamics like so, cListender->hasCollided() should be number of collisions
+		//How do you know the number of dynamics and kinematics?
+		//Is it a pair for each collision?
+	}
+
+	cListener->resetCollided();
 }
