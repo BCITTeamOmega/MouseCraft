@@ -19,9 +19,12 @@ public:
 	void setEnabled(bool enabled) { _enabled = enabled; }
 	Entity* getEntity() { return _entity; }
 	void setEntity(Entity* e) { _entity = e; }	
+	unsigned int getID() const { return _id; }
 
 private:
 	bool _initialized = false;
 	bool _enabled = true;
 	Entity* _entity;
+	static unsigned int _curID;
+	unsigned int _id;
 };
