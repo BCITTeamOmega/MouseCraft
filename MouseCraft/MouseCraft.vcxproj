@@ -149,6 +149,7 @@
     <ClCompile Include="Core\TaskScheduler.cpp" />
     <ClCompile Include="Core\Transform.cpp" />
     <ClCompile Include="Core\OmegaEngine.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="main.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Core\TaskScheduler.h" />
     <ClInclude Include="Core\Transform.h" />
     <ClInclude Include="Core\OmegaEngine.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EventManager\EventManager.h" />
     <ClInclude Include="EventManager\EventName.h" />
     <ClInclude Include="EventManager\ISubscriber.h" />

@@ -1,18 +1,24 @@
 #include "Entity.h"
 #include "OmegaEngine.h"
+#include "../EventManager/EventManager.h"
 #include <iostream>
 
 unsigned int Entity::_curID = 0;
 
-Entity::Entity() :_id(++Entity::_curID) { }
+Entity::Entity() :_id(++Entity::_curID) 
+{ 
+	EventManager::Notify(EventName::ENTITY_CREATED, new TypeParam<Entity*>(this));
+}
 
 Entity::Entity(unsigned int id) : _id(id)
 {
+	// do not notify entity manager
 	std::cout << "Entity created with custom ID: " << _id << std::endl;
 }
 
 Entity::~Entity()
 {
+	EventManager::Notify(EventName::ENTITY_DESTROYED, new TypeParam<Entity*>(this));
 	std::cout << "Entity: " << _id << " destroyed" << std::endl;
 }
 

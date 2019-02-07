@@ -5,6 +5,7 @@
 #include "Core/Example/TestComponent.h"
 #include "Core/Example/TestDerivedComponent.h"
 #include "MainScene.h"
+#include "EntityManager.h"
 
 void Test_ECS()
 {
@@ -32,11 +33,16 @@ void Test_ECS()
 	- should be able to get reference
 	*/
 
+	EntityManager::instance();
+
 	// TESTS: transparent instant execution
 	Entity* parent1 = new Entity();
 	Entity* child1 = new Entity();
 	Entity* parent2 = new Entity();
 	Entity* child2 = new Entity();
+
+	auto sizeShouldBe4 = EntityManager::instance().GetEntities();
+	SDL_assert(sizeShouldBe4.size() == 4 && "EntityManager failed (1)");
 
 	// test 
 	parent1->addChild(child1);
@@ -57,6 +63,9 @@ void Test_ECS()
 	delete(child1);
 	delete(parent2);
 	delete(child2);
+
+	auto sizeShouldBe0 = EntityManager::instance().GetEntities();
+	SDL_assert(sizeShouldBe0.size() == 0 && "EntityManager failed (1)");
 
 	// TESTS: deferred execution 
 	

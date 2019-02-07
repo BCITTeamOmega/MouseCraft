@@ -11,7 +11,6 @@ public:
 	RootEntity(Scene* scene) : Entity(0u)
 	{
 		_myScene = scene;
-		setEnabled(false);
 	}
 
 	template<class T>

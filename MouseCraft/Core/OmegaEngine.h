@@ -53,7 +53,7 @@ public:
 	OmegaEngine(OmegaEngine const&) = delete;
 	void operator=(OmegaEngine const&) = delete;
 private:
-	OmegaEngine() {};
+	OmegaEngine() : transitionHolder(nullptr) {};
 	~OmegaEngine();
 
 // variables 
@@ -76,7 +76,7 @@ private:
 	Scene* _activeScene;
 	Scene* _nextScene;
 	CpuProfiler _profiler;
-	Entity transitionHolder;	// used to hold entities while transitioning scene.
+	RootEntity transitionHolder;	// used to hold entities while transitioning scene.
 	std::deque<StatusActionParam*> _deferredActions;
 	std::mutex _deferredActionMtx;
 	std::vector<System*> _systems;
