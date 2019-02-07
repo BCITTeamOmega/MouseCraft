@@ -33,7 +33,7 @@ void Entity::initialize()
 	{
 		std::cout << "Entity already initialized" << std::endl;
 		
-		for (auto& c : _componentStorage)
+		for (auto& c : _components)
 		{
 			c->initialize();
 		}
@@ -206,7 +206,22 @@ std::vector<Entity*> const& Entity::getChildren() const
 void Entity::addComponent(Component * component)
 {
 	component->setEntity(this);
-	_componentStorage.push_back(component);
+	_components.push_back(component);
+}
+
+void Entity::removeComponent(Component * c)
+{
+	auto it = std::find(_components.begin(), _components.end(), c);
+	if (it != _components.end())
+	{
+		delete(*it);
+		_components.erase(it);
+	}
+	/* 
+	_componentStorage.erase(
+		std::remove(_componentStorage.begin(), _componentStorage.end(), c),
+		_componentStorage.end());
+	*/
 }
 
 void Entity::destroy(bool force)
@@ -217,7 +232,7 @@ void Entity::destroy(bool force)
 	if (force || !isInActiveScene())
 	{
 		// TODO: destruct all components 
-		for (auto& c : _componentStorage)
+		for (auto& c : _components)
 			delete(c);
 		
 		if (_parent)

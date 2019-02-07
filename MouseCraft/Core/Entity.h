@@ -20,10 +20,6 @@ class Scene;
 
 class Entity
 {
-// Type definitions 
-	// DEPRECATED
-	typedef std::unordered_map <std::type_index, std::unique_ptr<Component>> ComponentMap;
-
 // Variables 
 public:
 	Transform transform;
@@ -37,8 +33,7 @@ private:
 	bool _enabled = true;
 	bool _static = false;
 	bool _initialized = false;
-	ComponentMap _components;					// component map (deprecated)
-	std::vector<Component*> _componentStorage;	// component storage
+	std::vector<Component*> _components;	// component storage
 	std::vector<Entity*> _children;
 	Entity* _parent;
 
@@ -88,23 +83,8 @@ public:
 	// template definitions "must" be in header
 	// https://isocpp.org/wiki/faq/templates#separate-template-fn-defn-from-decl
 
-	// DEPRECATED. Creates and adds a component to this entity. Component will be bound to this entity. 
-	template<class T>
-	void addComponent() {
-		_components[typeid(T)] = std::make_unique<T>();
-		_components[typeid(T)]->setEntity(this);
-		_componentStorage.push_back(_components[typeid(T)].get());
-	}
-
 	// Adds a component to this entity.
 	void addComponent(Component* component);
-
-	// Returns a pointer to specified component. 
-	template<class T>
-	T* getComponent()
-	{
-		return static_cast<T*>(_components[typeid(T)].get());
-	}
 
 	// Returns a pointer to specified component.
 	// Note: This is a relatively expensive operation, cache your results. 
@@ -113,7 +93,7 @@ public:
 	{
 		// Rationale: This function should not be called often.
 		// If you need to constantly call this cache it or consider using a system.
-		for (const auto& c : _componentStorage)
+		for (const auto& c : _components)
 		{
 			auto found = dynamic_cast<T*>(c);
 			if (found) return found;
@@ -121,23 +101,35 @@ public:
 		return nullptr;
 	}
 
-	// Returns a copy of all components attached to this entity. 
+	// Returns all components attached to this entity. 
 	const std::vector<Component*>& getComponents()
 	{
-		return _componentStorage;
+		return _components;
 	}
 
-	// Remove and destroy a component attached to this entity. 
+	// Removes and destroys the first instance of a component type attached to this entity. 
+	// Does nothing if not found. 
 	template<class T>
 	void removeComponent()
 	{
-		if (getComponent<T>() != nullptr)
+		for (auto it = _components.begin(); it != _components.end(); )
 		{
-			getComponent<T>()->Kill();
-			_componentStorage.erase(_components[typeid(T)].get());
-			_components.erase(typeid(T));
+			auto found = dynamic_cast<T*>(*it);
+			if (found)
+			{
+				delete(*it);
+				_components.erase(it);
+				return;
+			}
+			else
+			{
+				++it;
+			}
 		}
 	}
+
+	// Removes and destroy a specific component.
+	void removeComponent(Component* c);
 
 	// Inform this entity to destroy itself. 
 	void destroy(bool force = false);

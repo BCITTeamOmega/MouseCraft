@@ -48,6 +48,8 @@ void Test_ECS()
 	Entity* child1 = new Entity();
 	Entity* parent2 = new Entity();
 	Entity* child2 = new Entity();
+	TestComponent* tc = new TestComponent(nullptr);
+	TestDerivedComponent* tdc = new TestDerivedComponent();
 
 	auto sizeShouldBe4 = EntityManager::instance().GetEntities();
 	SDL_assert(sizeShouldBe4.size() == 4 && "EntityManager failed (1)");
@@ -65,6 +67,20 @@ void Test_ECS()
 	parent2->setEnabled(false);
 
 	SDL_assert(parent2->getEnabled() == false, "Instant disable failed");
+
+	// component test 
+	parent1->addComponent(tc);
+	parent2->addComponent(tdc);
+
+	SDL_assert(parent1->getComponents().size() == 1 && "Component add failed (1)");
+	SDL_assert(parent2->getComponents().size() == 1 && "Component add failed (2)");
+
+	parent1->removeComponent(tc);	
+	parent2->removeComponent<TestComponent>();	// should still work despite derived
+
+	SDL_assert(parent1->getComponents().size() == 0 && "Component remove failed (1)");
+	SDL_assert(parent2->getComponents().size() == 0 && "Component remove failed (2)");
+
 
 	// cleanup 
 	delete(parent1);
