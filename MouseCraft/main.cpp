@@ -33,6 +33,13 @@ void Test_ECS()
 	- should be able to get reference
 	*/
 
+	// testing componentmanager types
+	ComponentManager<TestComponent>& cm = ComponentManager<TestComponent>::Instance();
+	ComponentManager<UpdatableComponent>& ucm = ComponentManager<UpdatableComponent>::Instance();
+	ComponentManager<TestDerivedComponent>& tdm = ComponentManager<TestDerivedComponent>::Instance();
+	//ComponentManager<Component>& ccm = ComponentManager<Component>::Instance();
+
+
 	// TESTS: transparent instant execution
 	Entity* parent1 = new Entity();
 	Entity* child1 = new Entity();
@@ -94,10 +101,14 @@ void Test_ECS()
 
 	SDL_assert(s->root.getChildren().size() == 0, "Deferred execution failed.");
 
-	//component manager test
-	auto* t = ComponentManager<TestComponent>::Instance().Create(new Entity());
+	// component manager test
+	// this is how you should be creating components!
+	auto* t = ComponentManager<TestComponent>::Instance().Create<TestComponent>(new Entity());
+	auto* t1 = ComponentManager<TestComponent>::Instance().Create<TestDerivedComponent>(new Entity());
+	// not like this lol
+	TestComponent test(new Entity);
 
-
+	delete t;
 
 	OmegaEngine::instance().loop();
 }

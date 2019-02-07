@@ -6,7 +6,8 @@
 
 struct ComponentParams
 {
-	Component& target;
+	ComponentParams(Component* t) : target(t) {}
+	Component* target;
 };
 
 template <class T>
@@ -20,15 +21,22 @@ public:
 		return c;
 	}
 
-	template<typename... Args>
-	T* Create(Args... args)
+	template<typename ComponentType, typename... Args>
+	ComponentType* Create(Args... args)
 	{
-		auto* t = new T(args...);
+		static_assert(std::is_base_of<T, ComponentType>::value, "???");
+		auto* t = new ComponentType(args...);
 		_components.push_back(t);
 		return t;
 	}
-	void Add(T& component) { _components.push_back(component); }
-	void Remove(T& component) { _components.erase(std::find(_components.begin, _components.end, component)); }
+
+	void Add(T* component) { _components.push_back(component); }
+	void Remove(unsigned int id)
+	{
+		auto t = std::find_if(_components.begin(), _components.end(), [&id](const Component* c) { return c->getID() == id; });
+		if(t != _components.end())
+			_components.erase(t);
+	}
 
 	// Inherited via ISubscriber
 	void Notify(EventName eventName, Param * params)
@@ -37,16 +45,19 @@ public:
 		{
 			case COMPONENT_REMOVED:
 			{
-				auto* p = static_cast<TypeParam<ComponentParams*>*>(params);
-				auto* c = p->Param;
-				Remove(c->target);
+				auto* p = static_cast<TypeParam<Component*>*>(params);
+				unsigned int t = p->Param->getID();
+				Remove(t);
 				break;
 			}
+			// lol rip the dream
 			case COMPONENT_ADDED:
 			{
-				auto* p = static_cast<TypeParam<ComponentParams*>*>(params);
-				auto* c = p->Param;
-				Add(c->target);
+				auto* p = static_cast<TypeParam<Component*>*>(params);
+				auto* c = dynamic_cast<T*>(p->Param);
+				if (c == nullptr)
+					return;
+				Add(c);
 				break;
 			}
 			default:
@@ -63,6 +74,14 @@ private:
 	std::vector<T*> _components;
 
 protected:
-	ComponentManager() {}
-	~ComponentManager() {}
+	ComponentManager()
+	{
+		EventManager::Subscribe(COMPONENT_ADDED, this);
+		EventManager::Subscribe(COMPONENT_REMOVED, this);
+	}
+	~ComponentManager()
+	{
+		EventManager::Unsubscribe(COMPONENT_ADDED, this);
+		EventManager::Unsubscribe(COMPONENT_REMOVED, this);
+	}
 };
