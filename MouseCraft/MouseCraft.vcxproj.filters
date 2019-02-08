@@ -84,6 +84,9 @@
     <ClCompile Include="Loading\ModelLoader.cpp">
       <Filter>Source Files\Loading</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Renderer.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Loading\ModelLoader.h">
       <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderer.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
