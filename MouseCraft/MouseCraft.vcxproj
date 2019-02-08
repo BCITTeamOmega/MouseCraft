@@ -81,6 +81,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y</Command>
@@ -97,6 +98,7 @@
     <Link>
       <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y</Command>
@@ -117,6 +119,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)"bin\*.DLL "$(TargetDir)" /D /K /Y</Command>
@@ -137,6 +140,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -161,6 +165,7 @@
     <ClInclude Include="Event\ISubscriber.h" />
     <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />

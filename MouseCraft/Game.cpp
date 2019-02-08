@@ -5,10 +5,13 @@
 Game::Game() {
     _currScene = new MainScene();
     _currScene->InitScene();
+	renderer = new Renderer();
+	renderer->initialize();
 }
 
 Game::~Game() {
     _currScene->CleanUp();
+	renderer->cleanup();
     delete _currScene;
 }
 
@@ -30,6 +33,7 @@ void Game::Update(const float delta) {
 	} else if (_currScene != nullptr) {
 		_currScene->Update(delta);
     }
+	renderer->render();
 }
 
 void Game::Notify(EventName eventName, Param *params) {

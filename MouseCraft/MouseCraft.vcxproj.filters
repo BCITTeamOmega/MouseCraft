@@ -152,5 +152,8 @@
     <ClInclude Include="Graphics\Renderer.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\RenderData.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
