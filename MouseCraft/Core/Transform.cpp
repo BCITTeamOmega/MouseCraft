@@ -46,6 +46,24 @@ glm::vec3 Transform::getWorldPosition()
 	);
 }
 
+void Transform::translate(glm::vec3 amount)
+{
+	if (amount == glm::vec3()) return;
+	setLocalPosition(getLocalPosition() + amount);
+}
+
+void Transform::scale(float amount)
+{
+	if (amount == 1) return;
+	setLocalScale(getLocalScale() * amount);
+}
+
+void Transform::rotate(glm::vec3 amount)
+{
+	if (amount == glm::vec3()) return;
+	setLocalRotation(getLocalRotoation() + amount);
+}
+
 // WARNING: Entity::getWorldRotation() should be more performant (at the cost of memory locality?)
 glm::vec3 Transform::getWorldRotation()
 {

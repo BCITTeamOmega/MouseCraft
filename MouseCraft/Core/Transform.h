@@ -31,6 +31,15 @@ public:
 	// Gets the world position based on the current world transformation.
 	glm::vec3 getWorldPosition();
 
+	// Increments the local position by amount.
+	void translate(glm::vec3 amount);
+
+	// Times the local scale by amount.
+	void scale(float amount);
+
+	// Increments the local rotation by amount.
+	void rotate(glm::vec3 amount);
+
 	// ===== WARNING: SECTION UNTESTED ===== //
 
 	// Gets the world rotation based on the current world transformation.

@@ -42,7 +42,7 @@ void Test_ECS()
 	ComponentManager<TestComponent>& cm = ComponentManager<TestComponent>::Instance();
 	ComponentManager<UpdatableComponent>& ucm = ComponentManager<UpdatableComponent>::Instance();
 	ComponentManager<TestDerivedComponent>& tdm = ComponentManager<TestDerivedComponent>::Instance();
-	ComponentManager<ExampleComponent>::Instance();	// lazy initialize
+	// ComponentManager<ExampleComponent>::Instance();	// lazy initialize
 	//ComponentManager<Component>& ccm = ComponentManager<Component>::Instance();
 	
 

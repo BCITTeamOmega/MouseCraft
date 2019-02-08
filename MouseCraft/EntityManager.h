@@ -32,6 +32,11 @@ private:
 
 // functions 
 public:
+	Entity* Create()
+	{
+		return new Entity();
+	}
+
 	const std::vector<Entity*>& GetEntities()
 	{
 		return entities;
