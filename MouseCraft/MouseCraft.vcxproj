@@ -80,7 +80,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -96,7 +96,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -118,7 +118,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -138,12 +138,13 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glew32s.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\GLEW\glew.c" />
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,7 +153,8 @@
     <ClCompile Include="Loading\SimpleParser.cpp" />
     <ClCompile Include="Loading\ObjFileParser.cpp" />
     <ClCompile Include="Loading\ModelLoader.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Graphics\Shader.cpp" />
+    <ClCompile Include="Graphics\ShaderBuilder.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Loading\TextLoader.cpp" />
@@ -169,7 +171,7 @@
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\Renderer.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics\Geometry.h" />
@@ -177,6 +179,7 @@
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Loading\SimpleParser.h" />
+    <ClInclude Include="Graphics\ShaderBuilder.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\SoundParams.h" />

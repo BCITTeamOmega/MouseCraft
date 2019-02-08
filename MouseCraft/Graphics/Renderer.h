@@ -1,8 +1,6 @@
 #pragma once
 #include "RenderData.h"
 #include <GLEW/glew.h>
-#include <sdl/SDL_opengl.h>
-#include <gl/glu.h>
 #include <sdl/SDL.h>
 #include <vector>
 

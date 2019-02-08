@@ -14,5 +14,6 @@ Model* ModelLoader::loadModel(string filename) {
 		return nullptr;
 	}
 	Geometry g = parser.parse(file);
+	file.close();
 	return new Model(g);
 }
