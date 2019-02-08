@@ -5,6 +5,7 @@
 #include "Loading/ModelLoader.h"
 
 #define SDL_MAIN_HANDLED
+#define GLEW_STATIC
 
 int main(int argc, char* argv[]) {
     Game game = Game();

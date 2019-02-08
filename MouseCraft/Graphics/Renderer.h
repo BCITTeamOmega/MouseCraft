@@ -1,6 +1,8 @@
 #pragma once
-#include "Model.h"
 #include "RenderData.h"
+#include <GLEW/glew.h>
+#include <sdl/SDL_opengl.h>
+#include <gl/glu.h>
 #include <sdl/SDL.h>
 #include <vector>
 
@@ -12,7 +14,7 @@ public:
 	void cleanup();
 private:
 	SDL_Window* window;
-	SDL_Surface* surface;
+	SDL_GLContext context;
 	vector<RenderData> renderingList;
 	vector<RenderData> accumulatingList;
 };

@@ -13,8 +13,7 @@ void Renderer::initialize() {
 
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow(title, x, y, width, height, SDL_WINDOW_OPENGL);
-	//Get window surface
-	surface = SDL_GetWindowSurface(window);
+	context = SDL_GL_CreateContext(window);	
 }
 
 void Renderer::queueRender(const RenderData& m) {
