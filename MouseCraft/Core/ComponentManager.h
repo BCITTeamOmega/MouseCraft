@@ -3,8 +3,8 @@
 #include <vector>
 #include <memory>
 #include "Component.h"
-#include "../EventManager/ISubscriber.h"
-#include "../EventManager/EventManager.h"
+#include "../Event/ISubscriber.h"
+#include "../Event/EventManager.h"
 
 template <class T>
 class ComponentManager : public ISubscriber

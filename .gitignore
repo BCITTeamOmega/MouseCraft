@@ -17,8 +17,8 @@
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-# don't ignore dll x64/
-# don't ignore dll x86/
+x64/
+x86/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -64,6 +64,7 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
+!res/**/*.obj
 *.iobj
 *.pch
 *.pdb

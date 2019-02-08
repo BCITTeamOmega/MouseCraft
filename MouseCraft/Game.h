@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Scene.h"
-#include "EventManager/EventManager.h"
-#include "UIManager/UIManager.h"
+#include "Event/EventManager.h"
+#include "UI/UIManager.h"
 
 /**
 Game contains scenes for game and transitions between them

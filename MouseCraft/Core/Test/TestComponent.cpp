@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../Entity.h"
 #include "../OmegaEngine.h"
-#include "../../EventManager/EventManager.h"
+#include "../../Event/EventManager.h"
 
 TestComponent::TestComponent(Entity* target) 
 	: target(target)

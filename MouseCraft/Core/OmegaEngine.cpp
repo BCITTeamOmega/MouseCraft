@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include "../gl/glad.h"
 #include "TaskScheduler.h"
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 
 OmegaEngine::~OmegaEngine()
 {

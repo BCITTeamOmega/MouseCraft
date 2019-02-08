@@ -1,6 +1,6 @@
 #include "UpdatableComponent.h"
 
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 #include "Entity.h"
 
 UpdatableComponent::UpdatableComponent()

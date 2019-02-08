@@ -1,6 +1,6 @@
 #include "Component.h"
 #include <iostream>
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 #include "ComponentManager.h"
 #include "Entity.h"
 

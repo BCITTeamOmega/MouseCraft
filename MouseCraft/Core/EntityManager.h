@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Entity.h"
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 
 // Convenience class to retrieve all entities (including ones 
 // not in the scene root) in a flat vector. 

@@ -1,6 +1,6 @@
 #include "Entity.h"
 #include "OmegaEngine.h"
-#include "../EventManager/EventManager.h"
+#include "../Event/EventManager.h"
 #include <iostream>
 
 unsigned int Entity::_curID = 0;

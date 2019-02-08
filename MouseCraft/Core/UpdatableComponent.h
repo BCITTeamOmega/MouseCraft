@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "../EventManager/ISubscriber.h"
+#include "../Event/ISubscriber.h"
 
 class UpdatableComponent : public Component, public ISubscriber
 {
