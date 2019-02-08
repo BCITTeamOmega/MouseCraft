@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../EventManager/EventManager.h"
 #include "ComponentManager.h"
+#include "Entity.h"
 
 unsigned int Component::_curID = 0;
 
@@ -33,4 +34,9 @@ void Component::initialize()
 	}
 	_initialized = true;
 	onInitialized();
+}
+
+bool Component::getActive() const
+{
+	return getEnabled() && getEntity() && getEntity()->getActive();
 }

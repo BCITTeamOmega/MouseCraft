@@ -151,6 +151,10 @@
     <ClCompile Include="Core\OmegaEngine.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
+    <ClCompile Include="ExampleComponent.cpp" />
+    <ClCompile Include="ExampleSystem.cpp" />
+    <ClCompile Include="ExampleSystemComponent.cpp" />
+    <ClCompile Include="ExampleUpdatableComponent.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
@@ -183,6 +187,10 @@
     <ClInclude Include="EventManager\EventManager.h" />
     <ClInclude Include="EventManager\EventName.h" />
     <ClInclude Include="EventManager\ISubscriber.h" />
+    <ClInclude Include="ExampleComponent.h" />
+    <ClInclude Include="ExampleSystem.h" />
+    <ClInclude Include="ExampleSystemComponent.h" />
+    <ClInclude Include="ExampleUpdatableComponent.h" />
     <ClInclude Include="GL\glad.h" />
     <ClInclude Include="GL\khrplatform.h" />
     <ClInclude Include="MainScene.h" />

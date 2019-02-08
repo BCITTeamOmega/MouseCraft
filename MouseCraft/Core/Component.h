@@ -17,9 +17,10 @@ public:
 	virtual void onInitialized() {};
 	bool getEnabled() const { return _enabled; }
 	void setEnabled(bool enabled) { _enabled = enabled; }
-	Entity* getEntity() { return _entity; }
+	Entity* getEntity() const { return _entity; }
 	void setEntity(Entity* e) { _entity = e; }	
 	unsigned int getID() const { return _id; }
+	bool getActive() const;
 
 private:
 	bool _initialized = false;

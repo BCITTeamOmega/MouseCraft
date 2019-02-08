@@ -89,7 +89,7 @@ public:
 	// Returns a pointer to specified component.
 	// Note: This is a relatively expensive operation, cache your results. 
 	template<class T>
-	T* getComponentReal()
+	T* getComponent()
 	{
 		// Rationale: This function should not be called often.
 		// If you need to constantly call this cache it or consider using a system.

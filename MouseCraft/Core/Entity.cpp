@@ -231,10 +231,15 @@ void Entity::destroy(bool force)
 	// explicit or implicit instant change
 	if (force || !isInActiveScene())
 	{
+		// destroy all children 
+		for (auto& e : _children)
+			e->destroy(true);
+
 		// TODO: destruct all components 
 		for (auto& c : _components)
 			delete(c);
-		
+
+		// Remove from parent and release memory 
 		if (_parent)
 			_parent->removeChild(this->_id);
 
@@ -266,8 +271,6 @@ void Entity::release()
 
 bool Entity::isInActiveScene() const
 {
-	auto f = getScene();
-	auto o = OmegaEngine::instance().getActiveScene();
 	return getScene() && getScene() == OmegaEngine::instance().getActiveScene();
 }
 

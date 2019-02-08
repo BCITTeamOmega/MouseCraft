@@ -88,7 +88,7 @@ void OmegaEngine::changeScene(Scene* scene)
 
 void OmegaEngine::addSystem(System * system)
 {
-	std::cerr << "ERROR: Engine::addSystem() is not implemented yet" << std::endl;
+	_systems.push_back(system);
 }
 
 void OmegaEngine::addEntity(Entity* entity)
@@ -144,16 +144,13 @@ Scene* OmegaEngine::getActiveScene() const
 
 void OmegaEngine::sequential_loop()
 {
-	auto amt = std::chrono::milliseconds(16);
-	std::chrono::duration<double> dt = amt;
-
 	auto timestamp = std::chrono::high_resolution_clock::now();
 
 	while (_isRunning)
 	{
 		auto now = std::chrono::high_resolution_clock::now();
-		auto delta = now - timestamp;
-		auto deltaMs = delta.count() / (float)1000000;
+		std::chrono::duration<float, std::deca> delta = now - timestamp;
+		auto deltaSeconds = delta.count();
 		timestamp = now;
 
 		_profiler.StartTimer(0);
@@ -199,7 +196,7 @@ void OmegaEngine::sequential_loop()
 
 		// PHASE 2: Component Update
 		_profiler.StartTimer(3);
-		auto deltaParam = new TypeParam<float>(deltaMs);	// Consider: Using unique-pointer for self-destruct
+		auto deltaParam = new TypeParam<float>(deltaSeconds);	// Consider: Using unique-pointer for self-destruct
 		EventManager::Notify(EventName::COMPONENT_UPDATE, deltaParam);	// serial
 		delete(deltaParam);
 		_profiler.StopTimer(3);
@@ -210,7 +207,7 @@ void OmegaEngine::sequential_loop()
 		_profiler.StartTimer(4);
 		for (auto& s : _systems)
 		{
-			s->update(deltaMs);
+			s->update(deltaSeconds);
 		}
 		_profiler.StopTimer(4);
 

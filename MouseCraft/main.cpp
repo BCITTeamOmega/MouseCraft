@@ -7,6 +7,8 @@
 #include "Core/ComponentManager.h"
 #include "MainScene.h"
 #include "EntityManager.h"
+#include "ExampleComponent.h"
+#include "ExampleSystem.h"
 
 void Test_ECS()
 {
@@ -40,8 +42,9 @@ void Test_ECS()
 	ComponentManager<TestComponent>& cm = ComponentManager<TestComponent>::Instance();
 	ComponentManager<UpdatableComponent>& ucm = ComponentManager<UpdatableComponent>::Instance();
 	ComponentManager<TestDerivedComponent>& tdm = ComponentManager<TestDerivedComponent>::Instance();
+	ComponentManager<ExampleComponent>::Instance();	// lazy initialize
 	//ComponentManager<Component>& ccm = ComponentManager<Component>::Instance();
-
+	
 
 	// TESTS: transparent instant execution
 	Entity* parent1 = new Entity();
@@ -81,7 +84,6 @@ void Test_ECS()
 	SDL_assert(parent1->getComponents().size() == 0 && "Component remove failed (1)");
 	SDL_assert(parent2->getComponents().size() == 0 && "Component remove failed (2)");
 
-
 	// cleanup 
 	delete(parent1);
 	delete(child1);
@@ -105,6 +107,9 @@ void Test_ECS()
 	child1 = new Entity();
 	child2 = new Entity();
 
+	parent1->addChild(child1);
+	parent2->addChild(child2);
+
 	auto testComponent = new TestComponent(parent2);
 	auto derivedComponent = new TestDerivedComponent();
 
@@ -114,8 +119,8 @@ void Test_ECS()
 	// test
 	SDL_assert(s->root.getChildren().size() == 0, "Deferred execution initial state failed.");
 
-	auto shouldBeNull = parent1->getComponentReal<TestDerivedComponent>();
-	auto shouldBeOkay = parent2->getComponentReal<TestComponent>();
+	auto shouldBeNull = parent1->getComponent<TestDerivedComponent>();
+	auto shouldBeOkay = parent2->getComponent<TestComponent>();
 
 	SDL_assert(shouldBeNull == nullptr, "Component retrieval failed (1)");
 	SDL_assert(shouldBeOkay != nullptr, "Component retrieval failed (2)");
@@ -132,8 +137,21 @@ void Test_ECS()
 	auto* t1 = ComponentManager<TestComponent>::Instance().Create<TestDerivedComponent>(new Entity());
 	// not like this lol
 	TestComponent test(new Entity);
-
 	delete t;
+
+	auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+
+	parent1->addComponent(ec1);
+	parent2->addComponent(ec2);
+	child1->addComponent(ec3);	// this is weird, don't move child too lol
+	child2->addComponent(ec4);
+
+	ExampleSystem exampleSystem;
+
+	OmegaEngine::instance().addSystem(&exampleSystem);
 
 	OmegaEngine::instance().loop();
 }

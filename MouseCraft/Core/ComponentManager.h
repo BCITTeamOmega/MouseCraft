@@ -1,8 +1,10 @@
 #pragma once
+#include <algorithm>
 #include <vector>
 #include <memory>
 #include "Component.h"
 #include "../EventManager/ISubscriber.h"
+#include "../EventManager/EventManager.h"
 
 struct ComponentParams
 {
@@ -65,6 +67,11 @@ public:
 				break;
 			}
 		}
+	}
+
+	const std::vector<T*>& All()
+	{
+		return _components;
 	}
 
 	ComponentManager(const ComponentManager&) = delete;
