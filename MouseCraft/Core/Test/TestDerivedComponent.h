@@ -9,6 +9,6 @@ class TestDerivedComponent : public TestComponent
 public:
 	TestDerivedComponent(Entity* target = nullptr);
 	~TestDerivedComponent();
-	void update(float dt) override {};
+	void Update(float dt) override {};
 };
 

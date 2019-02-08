@@ -11,6 +11,6 @@ ExampleSystemComponent::~ExampleSystemComponent()
 {
 }
 
-void ExampleSystemComponent::update(float dt)
+void ExampleSystemComponent::Update(float dt)
 {
 }

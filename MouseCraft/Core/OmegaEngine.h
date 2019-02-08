@@ -16,36 +16,19 @@
 #include "Entity.h"
 #include "Component.h"
 #include "System.h"
-#include "../Scene.h"
+#include "Scene.h"
 #include "../Util/CpuProfiler.h"
 #include "StatusAction.h"
 
-//Screen dimension constants
+// Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
-
-struct EntityAction
-{
-	int target;
-	Entity* entity;
-	EntityAction(int parent, Entity* e)
-	{
-		target = parent;
-		entity = e;
-	}
-};
-
-//struct FloatParam
-//{
-//	FloatParam(float val) : value(val) {}
-//	float value;
-//};
 
 class OmegaEngine
 {
 // singleton pattern (threadsafe: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern)
 public:
-	static OmegaEngine& instance()
+	static OmegaEngine& Instance()
 	{
 		static OmegaEngine _instance;
 		return _instance;
@@ -57,10 +40,6 @@ private:
 	~OmegaEngine();
 
 // variables 
-public:
-	// Scene* activeScene = nullptr;
-	// AssetLoader loader;
-
 private:
 	// sdl 
 	SDL_Window* _window = NULL;
@@ -87,8 +66,10 @@ public:
 	// Initializes the core engine.
 	void initialize();
 
+	// TODO: Properly implement.
+	// Changes the active scene with another one.
 	template<typename SceneType>
-	void changeScene()
+	void ChangeScene()
 	{
 		static_assert(std::is_base_of<Scene, SceneType>::value, "That's not a scene...");
 		_nextScene = new SceneType();	// TODO: no benefit to this, need to move this to the transition.
@@ -97,34 +78,41 @@ public:
 
 	// Changes the active scene with a loaded scene. Not recommended, use changeScene<Type>.
 	// This forces the scene to change instantly.
-	void changeScene(Scene* scene);
+	void ChangeScene(Scene* scene);
 
 	// Add a system to receive updates. 
-	void addSystem(System* system);
+	void AddSystem(System* system);
 
 	// Convenience function to add entity to active scene root. Managed. 
-	void addEntity(Entity* entity);
+	void AddEntity(Entity* entity);
 
 	// Persist an entity to the next scene. Persisted entities will be in stasis
 	// until the scene is loaded. Note this ticket is valid for one transfer only.
-	// This function is unmanaged, be careful when multithreading.
-	void transferEntity(Entity* entity);
+	// WARNING: This function is unmanaged, be careful when multithreading.
+	void TransferEntity(Entity* entity);
 
 	// Starts engine loop. Blocking.
-	void loop();
+	void Loop();
 
-	// Stops engine loop.
-	void stop();
+	// Stops engine loop. This will exit the program.
+	void Stop();
 
+	// TODO: Implement properly.
 	// Pauses / unpauses the engine
-	void pause(bool pause);
+	void Pause(bool pause);
 
+	// WARNING: Should only be called internally by the engine.
 	// Defers actions that can cause catastrophic failure. 
-	void deferAction(StatusActionParam* action);
+	void DeferAction(StatusActionParam* action);
 
-	int getFrame() const;
+	// Get the total elapsed frames.
+	int GetFrame() const;
 
-	Scene* getActiveScene() const;
+	// Gets the current active scene.
+	Scene* GetActiveScene() const;
+
+	// Gets the active scene root entity.
+	Entity* GetRoot() const;
 
 private:
 	// Current implementation of game loop

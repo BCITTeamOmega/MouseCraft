@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-#include "../Scene.h"
+#include "Scene.h"
 
 // Special entity for scene root. 
 class RootEntity : public Entity
@@ -14,17 +14,17 @@ public:
 	}
 
 	template<class T>
-	void addComponent() = delete;
+	void AddComponent() = delete;
 
-	void setParent(Entity* parent) = delete;
+	void SetParent(Entity* parent) = delete;
 
-	void sceneActivated()
+	void SceneActivated()
 	{
-		setEnabled(true, true);
+		SetEnabled(true, true);
 	}
 
-	void sceneDeactivated()
+	void SceneDeactivated()
 	{
-		setEnabled(false, true);
+		SetEnabled(false, true);
 	}
 };

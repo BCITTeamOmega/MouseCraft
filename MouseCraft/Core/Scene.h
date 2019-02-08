@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/RootEntity.h"
+#include "RootEntity.h"
 
 /**
 Abstract class used to represent the framework for a game scene

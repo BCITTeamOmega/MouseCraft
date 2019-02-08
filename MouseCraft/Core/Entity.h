@@ -44,52 +44,50 @@ public:
 	~Entity();
 
 	// Returns entity's ID. This cannot change. 
-	unsigned int getID() const;
+	unsigned int GetID() const;
 
+	// WARNING: Should only be called internally by the engine.
 	// Called when added into the active scene. 
-	void initialize();
+	void Initialize();
 
 	// TODO: Optimize
 	// Returns entity's active status. 
 	// Only true if in active scene, all parents enabled, and this is enabled.
-	bool getActive() const;
+	bool GetActive() const;
 
 	// Returns entity's enabled status. Does not check if parent is enabled.
-	bool getEnabled() const;
+	bool GetEnabled() const;
 
 	// Set entity's enabled status. Does not change children's status. 
-	void setEnabled(bool enabled, bool force = false);	
+	void SetEnabled(bool enabled, bool force = false);	
 	
 	// gets the entity's static status. 
-	bool getStatic() const;
+	bool GetStatic() const;
 
 	// Sets the static flag on this entity. Setting this to true will completely freeze all transforms 
 	// on this entity and it's children. Moving the parent (even if not static) will not move this entity.
 	// ONLY call when you're done configuring it.
-	void setStatic(bool torf);
+	void SetStatic(bool torf);
 
 	// Returns the parent entity. Can be null.
-	Entity* getParent() const;
+	Entity* GetParent() const;
 
 	// Set the parent for this entity. Will properly bind entities together. 
-	void setParent(Entity* parent, bool force = false);
+	void SetParent(Entity* parent, bool force = false);
 
 	// Adds entity as a child. Will properly bind entities together.
-	void addChild(Entity* child, bool force = false);
+	void AddChild(Entity* child, bool force = false);
 
 	// Returns a reference to child entities. 
-	std::vector<Entity*> const& getChildren() const;
-
-	// template definitions "must" be in header
-	// https://isocpp.org/wiki/faq/templates#separate-template-fn-defn-from-decl
+	std::vector<Entity*> const& GetChildren() const;
 
 	// Adds a component to this entity.
-	void addComponent(Component* component);
+	void AddComponent(Component* component);
 
 	// Returns a pointer to specified component.
 	// Note: This is a relatively expensive operation, cache your results. 
 	template<class T>
-	T* getComponent()
+	T* GetComponent()
 	{
 		// Rationale: This function should not be called often.
 		// If you need to constantly call this cache it or consider using a system.
@@ -102,7 +100,7 @@ public:
 	}
 
 	// Returns all components attached to this entity. 
-	const std::vector<Component*>& getComponents()
+	const std::vector<Component*>& GetComponents()
 	{
 		return _components;
 	}
@@ -110,7 +108,7 @@ public:
 	// Removes and destroys the first instance of a component type attached to this entity. 
 	// Does nothing if not found. 
 	template<class T>
-	void removeComponent()
+	void RemoveComponent()
 	{
 		for (auto it = _components.begin(); it != _components.end(); )
 		{
@@ -129,14 +127,15 @@ public:
 	}
 
 	// Removes and destroy a specific component.
-	void removeComponent(Component* c);
+	void RemoveComponent(Component* c);
 
 	// Inform this entity to destroy itself. 
-	void destroy(bool force = false);
+	void Destroy(bool force = false);
 
+	// DEPRECATED
 	// Release resources. Only call it if you REALLY know what you're doing.
 	// Call destroy() otherwise.
-	void release();
+	void Release();
 
 protected:
 	bool isInActiveScene() const;

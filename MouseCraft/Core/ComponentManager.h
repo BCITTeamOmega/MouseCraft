@@ -6,12 +6,6 @@
 #include "../EventManager/ISubscriber.h"
 #include "../EventManager/EventManager.h"
 
-struct ComponentParams
-{
-	ComponentParams(Component* t) : target(t) {}
-	Component* target;
-};
-
 template <class T>
 class ComponentManager : public ISubscriber
 {
@@ -35,7 +29,7 @@ public:
 	void Add(T* component) { _components.push_back(component); }
 	void Remove(unsigned int id)
 	{
-		auto t = std::find_if(_components.begin(), _components.end(), [&id](const Component* c) { return c->getID() == id; });
+		auto t = std::find_if(_components.begin(), _components.end(), [&id](const Component* c) { return c->GetID() == id; });
 		if(t != _components.end())
 			_components.erase(t);
 	}
@@ -48,7 +42,7 @@ public:
 			case COMPONENT_REMOVED:
 			{
 				auto* p = static_cast<TypeParam<Component*>*>(params);
-				unsigned int t = p->Param->getID();
+				unsigned int t = p->Param->GetID();
 				Remove(t);
 				break;
 			}

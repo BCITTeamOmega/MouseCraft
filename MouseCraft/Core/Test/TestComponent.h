@@ -11,7 +11,7 @@ class TestComponent : public UpdatableComponent
 public:
 	TestComponent(Entity* target);
 	~TestComponent();
-	void update(float dt) override;
+	void Update(float dt) override;
 
 private: 
 	int _frame = 0;

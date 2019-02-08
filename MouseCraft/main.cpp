@@ -2,13 +2,13 @@
 #include "Game.h"
 #include "Core/OmegaEngine.h"
 #include "Core/Entity.h"
-#include "Core/Example/TestComponent.h"
-#include "Core/Example/TestDerivedComponent.h"
+#include "Core/Test/TestComponent.h"
+#include "Core/Test/TestDerivedComponent.h"
 #include "Core/ComponentManager.h"
 #include "MainScene.h"
-#include "EntityManager.h"
-#include "ExampleComponent.h"
-#include "ExampleSystem.h"
+#include "Core/EntityManager.h"
+#include "Core/Example/ExampleComponent.h"
+#include "Core/Example/ExampleSystem.h"
 
 void Test_ECS()
 {
@@ -36,7 +36,7 @@ void Test_ECS()
 	- should be able to get reference
 	*/
 
-	EntityManager::instance();
+	EntityManager::Instance();
 
 	// testing componentmanager types
 	ComponentManager<TestComponent>& cm = ComponentManager<TestComponent>::Instance();
@@ -54,35 +54,35 @@ void Test_ECS()
 	TestComponent* tc = new TestComponent(nullptr);
 	TestDerivedComponent* tdc = new TestDerivedComponent();
 
-	auto sizeShouldBe4 = EntityManager::instance().GetEntities();
+	auto sizeShouldBe4 = EntityManager::Instance().GetEntities();
 	SDL_assert(sizeShouldBe4.size() == 4 && "EntityManager failed (1)");
 
 	// test 
-	parent1->addChild(child1);
+	parent1->AddChild(child1);
 
-	SDL_assert(parent1->getChildren().size() == 1, "Instant add failed.");
+	SDL_assert(parent1->GetChildren().size() == 1, "Instant add failed.");
 
-	child1->setParent(parent2);
+	child1->SetParent(parent2);
 
-	SDL_assert(parent1->getChildren().size() == 0, "Instant move failed (was not removed from existing parent).");
-	SDL_assert(parent2->getChildren().size() == 1, "Instant move failed (was not moved to new parent).");
+	SDL_assert(parent1->GetChildren().size() == 0, "Instant move failed (was not removed from existing parent).");
+	SDL_assert(parent2->GetChildren().size() == 1, "Instant move failed (was not moved to new parent).");
 
-	parent2->setEnabled(false);
+	parent2->SetEnabled(false);
 
-	SDL_assert(parent2->getEnabled() == false, "Instant disable failed");
+	SDL_assert(parent2->GetEnabled() == false, "Instant disable failed");
 
 	// component test 
-	parent1->addComponent(tc);
-	parent2->addComponent(tdc);
+	parent1->AddComponent(tc);
+	parent2->AddComponent(tdc);
 
-	SDL_assert(parent1->getComponents().size() == 1 && "Component add failed (1)");
-	SDL_assert(parent2->getComponents().size() == 1 && "Component add failed (2)");
+	SDL_assert(parent1->GetComponents().size() == 1 && "Component add failed (1)");
+	SDL_assert(parent2->GetComponents().size() == 1 && "Component add failed (2)");
 
-	parent1->removeComponent(tc);	
-	parent2->removeComponent<TestComponent>();	// should still work despite derived
+	parent1->RemoveComponent(tc);	
+	parent2->RemoveComponent<TestComponent>();	// should still work despite derived
 
-	SDL_assert(parent1->getComponents().size() == 0 && "Component remove failed (1)");
-	SDL_assert(parent2->getComponents().size() == 0 && "Component remove failed (2)");
+	SDL_assert(parent1->GetComponents().size() == 0 && "Component remove failed (1)");
+	SDL_assert(parent2->GetComponents().size() == 0 && "Component remove failed (2)");
 
 	// cleanup 
 	delete(parent1);
@@ -90,46 +90,46 @@ void Test_ECS()
 	delete(parent2);
 	delete(child2);
 
-	auto sizeShouldBe0 = EntityManager::instance().GetEntities();
+	auto sizeShouldBe0 = EntityManager::Instance().GetEntities();
 	SDL_assert(sizeShouldBe0.size() == 0 && "EntityManager failed (1)");
 
 	// TESTS: deferred execution 
 	
 	// init 
-	OmegaEngine::instance().initialize();
+	OmegaEngine::Instance().initialize();
 
 	Scene* s = new MainScene();
 
-	OmegaEngine::instance().changeScene(s);	// use fast transition
+	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
 
 	parent1 = new Entity();
 	parent2 = new Entity();
 	child1 = new Entity();
 	child2 = new Entity();
 
-	parent1->addChild(child1);
-	parent2->addChild(child2);
+	parent1->AddChild(child1);
+	parent2->AddChild(child2);
 
 	auto testComponent = new TestComponent(parent2);
 	auto derivedComponent = new TestDerivedComponent();
 
-	parent1->addComponent(testComponent);
-	parent2->addComponent(derivedComponent);
+	parent1->AddComponent(testComponent);
+	parent2->AddComponent(derivedComponent);
 
 	// test
-	SDL_assert(s->root.getChildren().size() == 0, "Deferred execution initial state failed.");
+	SDL_assert(s->root.GetChildren().size() == 0, "Deferred execution initial state failed.");
 
-	auto shouldBeNull = parent1->getComponent<TestDerivedComponent>();
-	auto shouldBeOkay = parent2->getComponent<TestComponent>();
+	auto shouldBeNull = parent1->GetComponent<TestDerivedComponent>();
+	auto shouldBeOkay = parent2->GetComponent<TestComponent>();
 
 	SDL_assert(shouldBeNull == nullptr, "Component retrieval failed (1)");
 	SDL_assert(shouldBeOkay != nullptr, "Component retrieval failed (2)");
 
 	// deferred add 
-	s->root.addChild(parent1);
-	s->root.addChild(parent2);
+	s->root.AddChild(parent1);
+	s->root.AddChild(parent2);
 
-	SDL_assert(s->root.getChildren().size() == 0, "Deferred execution failed.");
+	SDL_assert(s->root.GetChildren().size() == 0, "Deferred execution failed.");
 
 	// component manager test
 	// this is how you should be creating components!
@@ -144,16 +144,16 @@ void Test_ECS()
 	auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
 	auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
 
-	parent1->addComponent(ec1);
-	parent2->addComponent(ec2);
-	child1->addComponent(ec3);	// this is weird, don't move child too lol
-	child2->addComponent(ec4);
+	parent1->AddComponent(ec1);
+	parent2->AddComponent(ec2);
+	child1->AddComponent(ec3);	// this is weird, don't move child too lol
+	child2->AddComponent(ec4);
 
 	ExampleSystem exampleSystem;
 
-	OmegaEngine::instance().addSystem(&exampleSystem);
+	OmegaEngine::Instance().AddSystem(&exampleSystem);
 
-	OmegaEngine::instance().loop();
+	OmegaEngine::Instance().Loop();
 }
 
 int main() 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "Core/Entity.h"
-#include "EventManager/EventManager.h"
+#include "Entity.h"
+#include "../EventManager/EventManager.h"
 
 // Convenience class to retrieve all entities (including ones 
 // not in the scene root) in a flat vector. 
@@ -11,7 +11,7 @@ class EntityManager : public ISubscriber
 public:
 // singleton 
 public:
-	static EntityManager& instance()
+	static EntityManager& Instance()
 	{
 		static EntityManager _instance;
 		return _instance;

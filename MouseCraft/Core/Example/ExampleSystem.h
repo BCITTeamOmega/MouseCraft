@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Core/System.h"
+#include "../System.h"
 
 class ExampleSystem : public System
 {
 public:
 	ExampleSystem();
 	~ExampleSystem();
-	void update(float dt) override;
+	void Update(float dt) override;
 };
 

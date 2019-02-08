@@ -22,12 +22,12 @@ Entity::~Entity()
 	std::cout << "Entity: " << _id << " destroyed" << std::endl;
 }
 
-unsigned int Entity::getID() const
+unsigned int Entity::GetID() const
 {
 	return _id;
 }
 
-void Entity::initialize()
+void Entity::Initialize()
 {
 	if (!_initialized)
 	{
@@ -35,7 +35,7 @@ void Entity::initialize()
 		
 		for (auto& c : _components)
 		{
-			c->initialize();
+			c->Initialize();
 		}
 		_initialized = true;
 	}
@@ -43,21 +43,21 @@ void Entity::initialize()
 	// (ensure) initialize children 
 	for (auto& e : _children)
 	{
-		e->initialize();
+		e->Initialize();
 	}
 }
 
-bool Entity::getActive() const
+bool Entity::GetActive() const
 {
 	return (_enabled && isInActiveScene() && getParentEnabled());
 }
 
-bool Entity::getEnabled() const
+bool Entity::GetEnabled() const
 {
 	return _enabled;
 }
 
-void Entity::setEnabled(bool enabled, bool force)
+void Entity::SetEnabled(bool enabled, bool force)
 {
 	// ensure actual change 
 	if (_enabled == enabled) return;
@@ -69,17 +69,17 @@ void Entity::setEnabled(bool enabled, bool force)
 	}
 	else // defer 
 	{
-		OmegaEngine::instance().deferAction(
+		OmegaEngine::Instance().DeferAction(
 			new StatusActionParam((enabled) ? StatusActionType::Enable : StatusActionType::Disable, this));
 	}
 }
 
-bool Entity::getStatic() const
+bool Entity::GetStatic() const
 {
 	return _static;
 }
 
-void Entity::setStatic(bool torf)
+void Entity::SetStatic(bool torf)
 {
 	// todo: implement properly
 	if (torf)
@@ -89,17 +89,17 @@ void Entity::setStatic(bool torf)
 
 		_static = true;				// freeze data 
 		for (auto& e : _children)	// apply to all children 
-			e->setStatic(true);
+			e->SetStatic(true);
 	}
 	else
 	{
 		_static = false;
 		for (auto& e : _children)
-			e->setStatic(false);
+			e->SetStatic(false);
 	}
 }
 
-void Entity::setParent(Entity* parent, bool force)
+void Entity::SetParent(Entity* parent, bool force)
 {
 	// ensure actual change
 	if (parent == this) return;
@@ -112,18 +112,18 @@ void Entity::setParent(Entity* parent, bool force)
 	}
 	else // defer 
 	{
-		OmegaEngine::instance().deferAction(
+		OmegaEngine::Instance().DeferAction(
 			new StatusActionParam(StatusActionType::Move, this, parent));
 	}
 }
 
-Entity* Entity::getParent() const
+Entity* Entity::GetParent() const
 {
 	return _parent;
 }
 
 // Warning: this function does not check if this child has already been added. 
-void Entity::addChild(Entity* child, bool force)
+void Entity::AddChild(Entity* child, bool force)
 {
 	if (child == nullptr)
 	{
@@ -139,14 +139,14 @@ void Entity::addChild(Entity* child, bool force)
 	}
 	else // defer 
 	{
-		OmegaEngine::instance().deferAction(
+		OmegaEngine::Instance().DeferAction(
 			new StatusActionParam(StatusActionType::Move, child, this));
 	}
 }
 
 void Entity::removeChild(unsigned int id)
 {
-	auto t = std::find_if(_children.begin(), _children.end(), [&id](const Entity* e) { return e->getID() == id; });
+	auto t = std::find_if(_children.begin(), _children.end(), [&id](const Entity* e) { return e->GetID() == id; });
 	_children.erase(t);
 }
 
@@ -170,7 +170,7 @@ void Entity::bindEntities(Entity * parent, Entity * child)
 		// initialize? 
 		if (parent->isInActiveScene())
 		{
-			child->initialize();
+			child->Initialize();
 		}
 	}
 	else
@@ -198,18 +198,18 @@ bool Entity::getParentEnabled() const
 	return true;
 }
 
-std::vector<Entity*> const& Entity::getChildren() const
+std::vector<Entity*> const& Entity::GetChildren() const
 {
 	return _children;
 }
 
-void Entity::addComponent(Component * component)
+void Entity::AddComponent(Component * component)
 {
-	component->setEntity(this);
+	component->SetEntity(this);
 	_components.push_back(component);
 }
 
-void Entity::removeComponent(Component * c)
+void Entity::RemoveComponent(Component * c)
 {
 	auto it = std::find(_components.begin(), _components.end(), c);
 	if (it != _components.end())
@@ -224,7 +224,7 @@ void Entity::removeComponent(Component * c)
 	*/
 }
 
-void Entity::destroy(bool force)
+void Entity::Destroy(bool force)
 {
 	std::cerr << "WARNING: Entity::destroy() is not fully implemented yet" << std::endl;
 
@@ -233,7 +233,7 @@ void Entity::destroy(bool force)
 	{
 		// destroy all children 
 		for (auto& e : _children)
-			e->destroy(true);
+			e->Destroy(true);
 
 		// TODO: destruct all components 
 		for (auto& c : _components)
@@ -247,19 +247,19 @@ void Entity::destroy(bool force)
 	}
 	else // defer
 	{
-		OmegaEngine::instance().deferAction(
+		OmegaEngine::Instance().DeferAction(
 			new StatusActionParam(StatusActionType::Delete, this));
 	}
 }
 
-void Entity::release()
+void Entity::Release()
 {
 	// aka. murder_all_children_and_commit_suicide_but_remember_to_leave_a_note_for_your_parents()
 
 	// 1. murder the children 
 	for (int i = 0; i < _children.size(); i++)
 	{
-		_children[i]->release();
+		_children[i]->Release();
 	}
 
 	// 2. leave a note 
@@ -271,7 +271,7 @@ void Entity::release()
 
 bool Entity::isInActiveScene() const
 {
-	return getScene() && getScene() == OmegaEngine::instance().getActiveScene();
+	return getScene() && getScene() == OmegaEngine::Instance().GetActiveScene();
 }
 
 void Entity::setScene(Scene * scene)

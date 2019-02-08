@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Component.h"
+#include "../Component.h"
 #include "glm/glm.hpp"
 
 // Demonstration of a component that a system uses. 

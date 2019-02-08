@@ -1,6 +1,6 @@
 #include "ExampleUpdatableComponent.h"
 
-#include "Core/Entity.h"
+#include "../Entity.h"
 
 ExampleUpdatableComponent::ExampleUpdatableComponent()
 {
@@ -11,11 +11,11 @@ ExampleUpdatableComponent::~ExampleUpdatableComponent()
 {
 }
 
-void ExampleUpdatableComponent::update(float dt)
+void ExampleUpdatableComponent::Update(float dt)
 {
 	counter += dt; 
 	if (counter >= deactivateAfter)
 	{
-		getEntity()->setEnabled(false);
+		GetEntity()->SetEnabled(false);
 	}
 }

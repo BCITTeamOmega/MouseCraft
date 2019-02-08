@@ -24,8 +24,8 @@ Component::~Component()
 // from being initialized twice and hides this interaction 
 // away from implementing classes.
 // Note: Implementors should extend onInitialized() 
-// Consider: Deleting this, as it's currently handled by Entity. 
-void Component::initialize()
+// Consider: Deleting this, as it's currently handled by Entity. (maybe?) 
+void Component::Initialize()
 {
 	if (_initialized)
 	{
@@ -33,10 +33,10 @@ void Component::initialize()
 		return;
 	}
 	_initialized = true;
-	onInitialized();
+	OnInitialized();
 }
 
-bool Component::getActive() const
+bool Component::GetActive() const
 {
-	return getEnabled() && getEntity() && getEntity()->getActive();
+	return GetEnabled() && GetEntity() && GetEntity()->GetActive();
 }

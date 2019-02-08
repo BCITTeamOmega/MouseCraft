@@ -52,6 +52,12 @@
     <Filter Include="Header Files\Core\Example">
       <UniqueIdentifier>{83e0b0d4-0776-4684-bbd1-5c430c604c74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Test">
+      <UniqueIdentifier>{850fdfe3-e82a-4dd5-9e1d-6b76a8b4742b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Test">
+      <UniqueIdentifier>{2e0bc802-8f7f-4fea-9c8b-171cd452f934}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,26 +129,26 @@
     <ClCompile Include="Core\UpdatableComponent.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Example\TestComponent.cpp">
+    <ClCompile Include="Core\EntityManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Example\ExampleComponent.cpp">
       <Filter>Source Files\Core\Example</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Example\TestDerivedComponent.cpp">
+    <ClCompile Include="Core\Example\ExampleSystem.cpp">
       <Filter>Source Files\Core\Example</Filter>
     </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Example\ExampleSystemComponent.cpp">
+      <Filter>Source Files\Core\Example</Filter>
     </ClCompile>
-    <ClCompile Include="ExampleSystemComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp">
+      <Filter>Source Files\Core\Example</Filter>
     </ClCompile>
-    <ClCompile Include="ExampleComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Test\TestComponent.cpp">
+      <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
-    <ClCompile Include="ExampleUpdatableComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExampleSystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
+      <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +180,6 @@
       <Filter>Header Files\UIManager</Filter>
     </ClInclude>
     <ClInclude Include="MainScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
@@ -233,29 +236,32 @@
     <ClInclude Include="Core\UpdatableComponent.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Example\TestDerivedComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\Test\TestComponent.h">
+      <Filter>Header Files\Core\Test</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Example\TestComponent.h">
+    <ClInclude Include="Core\Example\ExampleSystemComponent.h">
       <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\EntityManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\ComponentManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ExampleSystemComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\Example\ExampleComponent.h">
+      <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
-    <ClInclude Include="ExampleComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\Example\ExampleSystem.h">
+      <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
-    <ClInclude Include="ExampleUpdatableComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\Example\ExampleUpdatableComponent.h">
+      <Filter>Header Files\Core\Example</Filter>
     </ClInclude>
-    <ClInclude Include="ExampleSystem.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Core\Test\TestDerivedComponent.h">
+      <Filter>Header Files\Core\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Scene.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

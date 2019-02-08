@@ -79,47 +79,47 @@ void OmegaEngine::initialize()
 	std::cout << "Engine initialization finished: " << _profiler.GetDuration(4) << "ns" << std::endl;
 }
 
-void OmegaEngine::changeScene(Scene* scene)
+void OmegaEngine::ChangeScene(Scene* scene)
 {
 	std::cerr << "ERROR: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
 	_nextScene = scene;
 	transitionScenes();
 }
 
-void OmegaEngine::addSystem(System * system)
+void OmegaEngine::AddSystem(System * system)
 {
 	_systems.push_back(system);
 }
 
-void OmegaEngine::addEntity(Entity* entity)
+void OmegaEngine::AddEntity(Entity* entity)
 {
-	assert(getActiveScene() != nullptr && "ERROR: There was no active scene!");
-	_activeScene->root.addChild(entity);
+	assert(GetActiveScene() != nullptr && "ERROR: There was no active scene!");
+	_activeScene->root.AddChild(entity);
 }
 
-void OmegaEngine::transferEntity(Entity * entity)
+void OmegaEngine::TransferEntity(Entity * entity)
 {
-	transitionHolder.addChild(entity, true);
+	transitionHolder.AddChild(entity, true);
 }
 
-void OmegaEngine::loop()
+void OmegaEngine::Loop()
 {
 	_isRunning = true;
 	sequential_loop();
 }
 
-void OmegaEngine::stop()
+void OmegaEngine::Stop()
 {
 	_isRunning = false;
 }
 
-void OmegaEngine::pause(bool p)
+void OmegaEngine::Pause(bool p)
 {
 	std::cerr << "ERROR: Engine::pause() is not implemented yet" << std::endl;
 	_isPause = p;
 }
 
-void OmegaEngine::deferAction(StatusActionParam * action)
+void OmegaEngine::DeferAction(StatusActionParam * action)
 {
 	std::unique_lock<std::mutex> lock(_deferredActionMtx);
 	if (action->action == StatusActionType::Delete)
@@ -132,14 +132,20 @@ void OmegaEngine::deferAction(StatusActionParam * action)
 	}
 }
 
-int OmegaEngine::getFrame() const
+int OmegaEngine::GetFrame() const
 {
 	return _frameCount;
 }
 
-Scene* OmegaEngine::getActiveScene() const
+Scene* OmegaEngine::GetActiveScene() const
 {
 	return _activeScene;
+}
+
+Entity* OmegaEngine::GetRoot() const
+{
+	if (_activeScene == nullptr) return nullptr;
+	return &_activeScene->root;
 }
 
 void OmegaEngine::sequential_loop()
@@ -174,16 +180,16 @@ void OmegaEngine::sequential_loop()
 			switch (action->action)
 			{
 			case Move:
-				action->target->setParent(action->destination, true);
+				action->target->SetParent(action->destination, true);
 				break;
 			case Delete:
-				action->target->destroy(true);
+				action->target->Destroy(true);
 				break;
 			case Enable:
-				action->target->setEnabled(true, true);
+				action->target->SetEnabled(true, true);
 				break;
 			case Disable:
-				action->target->setEnabled(false, true);
+				action->target->SetEnabled(false, true);
 				break;
 			default:
 				std::cerr << "ERROR: UNKNOWN S.ACTION" << std::endl;
@@ -207,7 +213,7 @@ void OmegaEngine::sequential_loop()
 		_profiler.StartTimer(4);
 		for (auto& s : _systems)
 		{
-			s->update(deltaSeconds);
+			s->Update(deltaSeconds);
 		}
 		_profiler.StopTimer(4);
 
@@ -226,13 +232,13 @@ void OmegaEngine::transitionScenes()
 	if (_activeScene)
 	{
 		_activeScene->CleanUp();
-		_activeScene->root.setEnabled(false, true);
+		_activeScene->root.SetEnabled(false, true);
 	}
 	std::deque<StatusActionParam*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
 	_sceneChangeRequested = false;
 	// load 
 	_activeScene = _nextScene;
 	_activeScene->InitScene();
-	_activeScene->root.setEnabled(true, true);
+	_activeScene->root.SetEnabled(true, true);
 }
 
