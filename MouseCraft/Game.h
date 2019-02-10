@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "Core/Scene.h"
 #include "Event/EventManager.h"
 #include "UI/UIManager.h"
 

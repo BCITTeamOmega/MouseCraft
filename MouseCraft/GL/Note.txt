@@ -1,0 +1,5 @@
+This is used in place of GLEW (for OpenGL extension loading). 
+GLEW is very outdated, with better alternatives like gl3w and glad. 
+If you need a different version / extensions checkout their builder: https://glad.dav1d.de/ 
+
+Send me a message for more details - Jason Cheung.
