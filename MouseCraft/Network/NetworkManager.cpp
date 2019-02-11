@@ -71,9 +71,9 @@ void NetworkManager::Update(const float delta) {
             unsigned char buffer[MAX_PACKET_SIZE];
 
             Address sender;
-            int received = _socket.Receive(sender, buffer, sizeof(buffer));
-
-            if (received > 0) {
+            int received;
+            
+            while ((received = _socket.Receive(sender, buffer, sizeof(buffer))) > 0) {
                 cout << "[" <<
                     (int)sender.GetA() << "." <<
                     (int)sender.GetB() << "." <<

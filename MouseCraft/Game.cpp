@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "MainScene.h"
-#include "NetworkManager.h"
+#include "Network/NetworkManager.h"
 #include <thread>
 #include <chrono>
 #include <iostream>

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../MouseCraft/Address.cpp"
+#include "../MouseCraft/Network/Address.cpp"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
