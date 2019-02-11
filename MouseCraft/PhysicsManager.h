@@ -5,14 +5,16 @@
 #include <Box2D/Box2D.h>
 #include <vector>
 #include <utility>
+#include "Core\System.h"
 
-class PhysicsManager : public ISubscriber {
+class PhysicsManager : public System, public ISubscriber {
 public:
 	PhysicsManager();
 	~PhysicsManager();
-	void Update(const float delta);
+	void Update(float dt);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
-	void createPlayer(float x, float y);
+	void createPlayer(float x, float y, float w, float h, bool floor);
+	void createKinematic(float x, float y, float w, float h, bool floor);
 private:
 	b2World *floorWorld, *upperWorld;
 	b2Body **players;

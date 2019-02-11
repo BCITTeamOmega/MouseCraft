@@ -20,20 +20,20 @@ PhysicsManager::~PhysicsManager()
 	delete(upperWorld);
 }
 
-void PhysicsManager::Update(const float delta)
+void PhysicsManager::Update(float dt)
 {
 	const float ts = 1.0f / 60.0f;
 	float t = 0;
 
 	//Step every 60th of a second
-	while (t + ts <= delta)
+	while (t + ts <= dt)
 	{
 		//Advance each physics world
 		floorWorld->Step(ts, 10, 10);
 		upperWorld->Step(ts, 10, 10);
 
 		//Update the heights of characters based on gravity and jumping
-		updateHeights(delta);
+		updateHeights(dt);
 
 		//Check for collisions in each physics world
 		checkCollisions();
@@ -41,13 +41,59 @@ void PhysicsManager::Update(const float delta)
 	}
 
 	//Run a smaller step for the remainder of the delta time
-	if (t < delta)
+	if (t < dt)
 	{
-		floorWorld->Step(delta - t, 10, 10);
-		upperWorld->Step(delta - t, 10, 10);
-		updateHeights(delta);
+		floorWorld->Step(dt - t, 10, 10);
+		upperWorld->Step(dt - t, 10, 10);
+		updateHeights(dt);
 		checkCollisions();
 	}
+}
+
+void PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor)
+{
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x, y);
+	bodyDef.angle = 0;
+
+	b2Body* playerBody;
+
+	if (floor)
+		playerBody = floorWorld->CreateBody(&bodyDef);
+	else
+		playerBody = upperWorld->CreateBody(&bodyDef);
+
+	b2PolygonShape shape;
+	shape.SetAsBox(w, h);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 1;
+	playerBody->CreateFixture(&fixtureDef);
+}
+
+//Kinematics can be used for pushables, parts, contraptions, etc.
+void PhysicsManager::createKinematic(float x, float y, float w, float h, bool floor)
+{
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_kinematicBody;
+	bodyDef.position.Set(x, y);
+
+	b2Body* kinematicBody;
+
+	if (floor)
+		kinematicBody = floorWorld->CreateBody(&bodyDef);
+	else
+		kinematicBody = upperWorld->CreateBody(&bodyDef);
+
+	b2PolygonShape shape;
+	shape.SetAsBox(w, h);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 1;
+	kinematicBody->CreateFixture(&fixtureDef);
 }
 
 //Takes in a set of outer wall endpoints, makes a body out of them, and adds it to both worlds
