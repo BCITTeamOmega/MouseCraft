@@ -6,13 +6,6 @@
 #include <sstream>
 #include <iostream>
 
-using std::string;
-using std::getline;
-using std::istream;
-using std::map;
-using std::function;
-using std::istringstream;
-
 template <class T>
 class SimpleParser
 {
@@ -23,10 +16,10 @@ public:
 	virtual ~SimpleParser()
 	{
 	};
-	virtual T parse(istream& file) {
-		string currLine = "";
+	virtual T parse(std::istream& file) {
+		std::string currLine = "";
 		std::cout << "parsing" << std::endl;
-		while (getline(file, currLine)) {
+		while (std::getline(file, currLine)) {
 			parseLine(currLine);
 		}
 		std::cout << "done parsing" << std::endl;
@@ -34,17 +27,17 @@ public:
 		cleanup();
 		return obj;
 	};
-	void setParsers(map<string, function<void(const string&)>>& parsers) {
+	void setParsers(std::map<std::string, std::function<void(const std::string&)>>& parsers) {
 		miniParsers = parsers;
 	};
 protected:
 	virtual T build() = 0;
 	virtual void cleanup() = 0;
-	map<string, function<void(const string&)>> miniParsers;
+	std::map<std::string, std::function<void(const std::string&)>> miniParsers;
 private:
-	bool parseLine(const string& line) {
-		string firstSymbol = "";
-		istringstream lineStream = istringstream(line);
+	bool parseLine(const std::string& line) {
+		std::string firstSymbol = "";
+		std::istringstream lineStream = std::istringstream(line);
 		if (lineStream >> firstSymbol) {
 
 			if (miniParsers.find(firstSymbol) != miniParsers.end()) {

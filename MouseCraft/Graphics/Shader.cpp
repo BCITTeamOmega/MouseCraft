@@ -4,6 +4,7 @@
 
 using std::cerr;
 using std::endl;
+using std::string;
 
 Shader::Shader(string vertSrc, string fragSrc) : vertSrc(vertSrc), fragSrc(fragSrc), _program(0) {}
 

@@ -4,6 +4,7 @@
 #include "ObjFileParser.h"
 
 using std::ifstream;
+using std::string;
 
 Model* ModelLoader::loadModel(string filename) {
 	ObjFileParser parser = ObjFileParser();

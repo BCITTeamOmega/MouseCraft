@@ -1,11 +1,9 @@
 #pragma once
 #include <string>
 
-using std::string;
-
-static class TextLoader
+class TextLoader
 {
 public:
-	static string load(string path);
+	static std::string load(std::string path);
 };
 

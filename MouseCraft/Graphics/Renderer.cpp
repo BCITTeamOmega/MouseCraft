@@ -3,11 +3,22 @@
 #include "../Loading/TextLoader.h"
 #include <string>
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using std::string;
 using std::swap;
 using std::cerr;
 using std::endl;
+using glm::translate;
+using glm::identity;
+using glm::vec3;
+using std::map;
+using std::vector;
+using std::string;
+using glm::mat4;
+using glm::value_ptr;
+using glm::perspective;
 
 void Renderer::initialize() {
 	static const int width = 640;
@@ -57,8 +68,11 @@ void Renderer::initialize() {
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
 
+	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-	//glDepthRange(0.01f, 100.0f);
+
+	_width = width;
+	_height = height;
 }
 
 void Renderer::queueRender(const RenderData& m) {
@@ -71,15 +85,19 @@ void Renderer::render() {
 
 	glBindVertexArray(vao);
 
+	float windowRatio = (float)_width / _height;
+
 	setShader(_shaders["gbuffer"]);
 	GLint pos = glGetAttribLocation(_shaders["gbuffer"].getProgram(), "position");
 	glEnableVertexAttribArray(pos);
 
-	GLuint indices[] = { 0, 1, 2, 1, 2, 3 };
-
 	for (RenderData render : *_renderingList) {
 		Geometry* g = render.getModel()->getGeometry();
-		
+		vec3 color = convertColor(render.getColor());
+		mat4 model = makeMatrix(render);
+
+		mat4 projection = perspective(90.0f, windowRatio, 0.01f, 100.0f);
+		mat4 mvp = projection * model;
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(
 			GL_ARRAY_BUFFER,
@@ -96,6 +114,10 @@ void Renderer::render() {
 			GL_STATIC_DRAW
 		);
 
+		GLint colorPos = glGetUniformLocation(_currShader->getProgram(), "color");
+		glUniform3f(colorPos, color.r, color.g, color.b);
+		GLint transformPos = glGetUniformLocation(_currShader->getProgram(), "transform");
+		glUniformMatrix4fv(transformPos, 1, GL_FALSE, value_ptr(mvp));
 		glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glDrawElements(GL_TRIANGLES, g->getIndices().size(), GL_UNSIGNED_INT, 0);
@@ -104,6 +126,8 @@ void Renderer::render() {
 	glBindVertexArray(0);
 
 	SDL_GL_SwapWindow(_window);
+
+	clearShader();
 
 	SDL_Event e;
 	SDL_PollEvent(&e);
@@ -126,6 +150,12 @@ void Renderer::cleanup() {
 
 void Renderer::setShader(Shader& shader) {
 	glUseProgram(shader.getProgram());
+	_currShader = &shader;
+}
+
+void Renderer::clearShader() {
+	glUseProgram(0);
+	_currShader = nullptr;
 }
 
 int Renderer::trySDL(int val, string step) {
@@ -140,4 +170,13 @@ int Renderer::tryGLEW(int val, string step) {
 		cerr << "GLEW Error during " << step << ": " << glewGetErrorString(val) << endl;
 	}
 	return val;
+}
+
+mat4 Renderer::makeMatrix(RenderData r) {
+	mat4 matrix = translate(identity<mat4>(), vec3(r.getX(), r.getY(), r.getZ()));
+	return matrix;
+}
+
+vec3 Renderer::convertColor(Color c) {
+	return vec3(c.getRed(), c.getGreen(), c.getBlue());
 }

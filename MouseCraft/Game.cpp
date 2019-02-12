@@ -10,7 +10,8 @@ Game::Game() {
 	renderer = new Renderer();
 	renderer->initialize();
 	Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
-	rd = new RenderData(m, 0, 0, 5);
+	rd = new RenderData(m, -2.0, 0, -2.5, Color(0.5, 1.0, 0.25));
+	rd2 = new RenderData(m, 3.5, 0, -3.0, Color(1.0, 0.25, 0.5));
 }
 
 Game::~Game() {
@@ -22,6 +23,7 @@ Game::~Game() {
 
 void Game::Update(const float delta) {
 	renderer->queueRender(*rd);
+	renderer->queueRender(*rd2);
 	if (FadeOut) {
 		if (Black->color.a < 1) {
 			Black->color.a += 0.1;

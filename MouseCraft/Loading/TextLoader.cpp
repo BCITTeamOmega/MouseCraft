@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 
+using std::string;
 using std::ifstream;
 using std::stringstream;
 

@@ -30,4 +30,5 @@ private:
 
 	Renderer *renderer; //TEMPORARY
 	RenderData *rd; //TEMPORARY
+	RenderData *rd2; //TEMPORARY
 };

@@ -3,12 +3,10 @@
 #include "Shader.h"
 #include <GLEW/glew.h>
 #include <sdl/SDL.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <map>
-
-using std::map;
-using std::vector;
-using std::string;
+#include "Color.h"
 
 class Renderer {
 public:
@@ -18,15 +16,22 @@ public:
 	void cleanup();
 private:
 	void setShader(Shader& s);
-	int trySDL(int val, string step);
-	int tryGLEW(int val, string step);
+	void clearShader();
+	int trySDL(int val, std::string step);
+	int tryGLEW(int val, std::string step);
 	void swapLists();
+	glm::mat4 makeMatrix(RenderData r);
+	glm::vec3 convertColor(Color c);
+
 	SDL_Window* _window;
 	SDL_GLContext _context;
-	vector<RenderData>* _renderingList;
-	vector<RenderData>* _accumulatingList;
-	map<string, Shader> _shaders;
+	std::vector<RenderData>* _renderingList;
+	std::vector<RenderData>* _accumulatingList;
+	std::map<std::string, Shader> _shaders;
+	Shader* _currShader;
 	GLuint vao;
 	GLuint vbo;
 	GLuint ebo;
+	int _width;
+	int _height;
 };

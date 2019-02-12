@@ -4,11 +4,14 @@
 #include <iostream>
 #include <set>
 
+using std::vector;
 using std::tuple;
 using std::make_tuple;
 using std::istringstream;
 using std::get;
 using std::set;
+using std::string;
+using std::map;
 
 ObjFileParser::ObjFileParser() : SimpleParser<Geometry*>() {
 	this->miniParsers["v"] = [this](string line) {
