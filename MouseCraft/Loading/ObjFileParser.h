@@ -7,13 +7,13 @@ using std::vector;
 using std::tuple;
 
 class ObjFileParser :
-	public SimpleParser<Geometry>
+	public SimpleParser<Geometry*>
 {
 public:
 	explicit ObjFileParser();
 	virtual ~ObjFileParser() override;
 protected:
-	Geometry build() override;
+	Geometry* build() override;
 	void cleanup() override;
 private:
 	vector<float> vertData;

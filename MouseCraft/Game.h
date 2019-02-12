@@ -29,4 +29,5 @@ private:
     Scene *_currScene;
 
 	Renderer *renderer; //TEMPORARY
+	RenderData *rd; //TEMPORARY
 };

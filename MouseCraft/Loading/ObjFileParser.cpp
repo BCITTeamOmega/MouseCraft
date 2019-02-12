@@ -10,7 +10,7 @@ using std::istringstream;
 using std::get;
 using std::set;
 
-ObjFileParser::ObjFileParser() : SimpleParser<Geometry>() {
+ObjFileParser::ObjFileParser() : SimpleParser<Geometry*>() {
 	this->miniParsers["v"] = [this](string line) {
 		string cmd; // Just to contain a "v"
 		float x, y, z;
@@ -56,8 +56,8 @@ ObjFileParser::~ObjFileParser() {
 
 }
 
-Geometry ObjFileParser::build() {
-	Geometry g = Geometry();
+Geometry* ObjFileParser::build() {
+	Geometry* g = new Geometry();
 	// Because of the way OpenGL works, we need to reformat things a bit
 	// So we can duplicate normals and such easily
 	vector<GLfloat> vertices = vector<GLfloat>();
@@ -126,10 +126,10 @@ Geometry ObjFileParser::build() {
 			indices.push_back(faceConvert[face]);
 		}
 	}
-	g.setVertexData(vertices);
-	g.setNormalData(normals);
-	g.setTexCoordData(texcoord);
-	g.setIndices(indices);
+	g->setVertexData(vertices);
+	g->setNormalData(normals);
+	g->setTexCoordData(texcoord);
+	g->setIndices(indices);
 	return g;
 }
 

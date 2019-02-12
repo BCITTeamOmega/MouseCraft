@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "MainScene.h"
+#include "Loading/ModelLoader.h"
+#include "Graphics/RenderData.h"
 #include <thread>
 
 Game::Game() {
@@ -7,15 +9,19 @@ Game::Game() {
     _currScene->InitScene();
 	renderer = new Renderer();
 	renderer->initialize();
+	Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+	rd = new RenderData(m, 0, 0, 5);
 }
 
 Game::~Game() {
     _currScene->CleanUp();
 	renderer->cleanup();
     delete _currScene;
+	delete rd;
 }
 
 void Game::Update(const float delta) {
+	renderer->queueRender(*rd);
 	if (FadeOut) {
 		if (Black->color.a < 1) {
 			Black->color.a += 0.1;

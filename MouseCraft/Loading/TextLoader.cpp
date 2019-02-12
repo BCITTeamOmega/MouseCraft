@@ -15,6 +15,5 @@ string TextLoader::load(string path) {
 	}
 	stringstream ss;
 	ss << file.rdbuf();
-	file.close();
 	return ss.str();
 }

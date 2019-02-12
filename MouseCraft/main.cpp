@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 		Test code; remove later
 	*/
 	//std::cout << "Test" << std::endl;
-	//ModelLoader::loadModel("teapot.obj");
+	//Model* m = ModelLoader::loadModel("teapot.obj");
 	/*
 		End of test code
 	*/

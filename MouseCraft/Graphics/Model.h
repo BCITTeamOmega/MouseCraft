@@ -11,26 +11,26 @@ public:
 	/// Initializes the model with just geometry information
 	/// </summary>
 	/// <param name="geometry">The geometry of the model</param>
-	Model(Geometry& geometry) : _geometry(geometry), _texture(nullptr) {}
+	Model(Geometry* geometry) : _geometry(geometry), _texture(nullptr) {}
 
 	/// <summary>
 	/// Initializes the model with geometry and texture information
 	/// </summary>
 	/// <param name="geometry">The geometry of the model</param>
 	/// <param name="texture">The texture of the model</param>
-	Model(Geometry& geometry, Image* texture) : _geometry(geometry), _texture(texture) {}
+	Model(Geometry* geometry, Image* texture) : _geometry(geometry), _texture(texture) {}
 
 	/// <summary>
 	/// Get the geometry of the model
 	/// </summary>
 	/// <returns>The model geometry</returns>
-	Geometry& getGeometry() { return _geometry; }
+	Geometry* getGeometry() { return _geometry; }
 
 	/// <summary>
 	/// Set the geometry of the model
 	/// </summary>
 	/// <param name="geometry">The model geometry to change to</param>
-	void setGeometry(Geometry& geometry) { _geometry = geometry; }
+	void setGeometry(Geometry* geometry) { _geometry = geometry; }
 
 	/// <summary>
 	/// Get the texture of the model
@@ -55,7 +55,7 @@ private:
 	/// <summary>
 	/// The geometry of the model
 	/// </summary>
-	Geometry& _geometry;
+	Geometry* _geometry;
 
 	/// <summary>
 	/// The texture of the model

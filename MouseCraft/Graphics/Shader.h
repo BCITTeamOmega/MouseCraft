@@ -6,7 +6,14 @@ using std::string;
 
 class Shader {
 public:
-	Shader(GLuint program);
+	Shader();
+	Shader(string vertSrc, string fragSrc);
+	bool compile();
+	GLuint getProgram();
 private:
+	void printShaderError(GLuint shader);
+	void printProgramError(GLuint program);
+	string vertSrc;
+	string fragSrc;
 	GLuint _program;
 };

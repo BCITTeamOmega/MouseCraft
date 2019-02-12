@@ -84,7 +84,8 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,7 +102,9 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,7 +125,8 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)"bin\*.DLL "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,6 +146,10 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
@@ -154,7 +162,6 @@
     <ClCompile Include="Loading\ObjFileParser.cpp" />
     <ClCompile Include="Loading\ModelLoader.cpp" />
     <ClCompile Include="Graphics\Shader.cpp" />
-    <ClCompile Include="Graphics\ShaderBuilder.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Loading\TextLoader.cpp" />
@@ -179,7 +186,6 @@
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Loading\SimpleParser.h" />
-    <ClInclude Include="Graphics\ShaderBuilder.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\SoundParams.h" />

@@ -2,10 +2,14 @@
 #include "Model.h"
 class RenderData {
 public:
-	RenderData(Model m, float nx, float ny, float nz) : model(m), x(nx), y(ny), z(nz) {}
+	RenderData(Model* m, float nx, float ny, float nz) : _model(m), _x(nx), _y(ny), _z(nz) {}
+	Model* getModel() { return _model; }
+	float getX() { return _x; }
+	float getY() { return _y; }
+	float getZ() { return _z; }
 private:
-	Model model;
-	float x;
-	float y;
-	float z;
+	Model* _model;
+	float _x;
+	float _y;
+	float _z;
 };

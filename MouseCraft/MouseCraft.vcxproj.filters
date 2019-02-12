@@ -93,9 +93,6 @@
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\ShaderBuilder.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\include\GLEW\glew.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -171,9 +168,6 @@
       <Filter>Header Files\Loading</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Shader.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\ShaderBuilder.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
