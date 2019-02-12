@@ -5,7 +5,9 @@
 #include <Box2D/Box2D.h>
 #include <vector>
 #include <utility>
-#include "Core\System.h"
+#include "Core/System.h"
+#include "Core/ComponentManager.h"
+#include "PhysicsComponent.h"
 
 class PhysicsManager : public System, public ISubscriber {
 public:

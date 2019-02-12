@@ -25,6 +25,8 @@ void PhysicsManager::Update(float dt)
 	const float ts = 1.0f / 60.0f;
 	float t = 0;
 
+	std::vector<PhysicsComponent*> objects = ComponentManager<PhysicsComponent>::Instance().All();
+
 	//Step every 60th of a second
 	while (t + ts <= dt)
 	{

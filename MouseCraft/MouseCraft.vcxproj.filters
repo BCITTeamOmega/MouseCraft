@@ -113,6 +113,7 @@
     </ClCompile>
     <ClCompile Include="Vector2D.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Component.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -228,6 +229,7 @@
     </ClInclude>
     <ClInclude Include="Vector2D.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
