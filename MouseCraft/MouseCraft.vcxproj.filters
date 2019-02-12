@@ -165,6 +165,12 @@
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
       <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -283,6 +289,12 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMovement.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

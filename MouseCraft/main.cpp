@@ -9,6 +9,8 @@
 #include "Core/EntityManager.h"
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
+#include "InputSystem.h"
+#include "MouseMovement.h"
 
 void Test_ECS()
 {
@@ -158,7 +160,23 @@ void Test_ECS()
 
 int main() 
 {
-	Test_ECS();
+	// Test_ECS();
+
+	OmegaEngine::Instance().initialize();
+
+	OmegaEngine::Instance().AddSystem(new InputSystem());
+
+	// fast load 
+	Scene* s = new MainScene();
+	OmegaEngine::Instance().ChangeScene(s);	
+
+	auto mouse = EntityManager::Instance().Create();
+	auto c_control = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	mouse->AddComponent(c_control);
+
+	OmegaEngine::Instance().AddEntity(mouse);
+	
+	OmegaEngine::Instance().Loop();
 
 	while (true) {}
 }

@@ -156,6 +156,7 @@
     <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
+    <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -194,12 +196,14 @@
     <ClInclude Include="Core\Example\ExampleUpdatableComponent.h" />
     <ClInclude Include="GL\glad.h" />
     <ClInclude Include="GL\khrplatform.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="MouseMovement.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />

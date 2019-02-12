@@ -7,6 +7,7 @@
 
 OmegaEngine::~OmegaEngine()
 {
+	// TODO: close connected controllers
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
 }
@@ -24,10 +25,32 @@ void OmegaEngine::initialize()
 	// main is defined elsewhere
 	SDL_SetMainReady();
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cerr << "ERROR: SDL could not initialize. SDL_Error:  " << SDL_GetError() << std::endl;
 		return;
+	}
+
+	// display some input info
+	auto numControllers = SDL_NumJoysticks();
+	if (numControllers <= 0)
+	{
+		std::cout << "WARNING: There are no controllers plugged in!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Detected " << numControllers << " controllers." << std::endl;
+		for (int i = 0; i < numControllers; ++i)
+		{
+			std::cout << "Controller[" << i << "]: " << SDL_JoystickNameForIndex(i) << std::endl;
+			SDL_JoystickOpen(i);
+		}
+
+		if (numControllers > 4)
+		{
+			// Why do you have over 4 controllers? Unsure if this will have performance impact.
+			std::cout << "INFO: Over 4 controllers have been opened." << std::endl;
+		}
 	}
 
 	// prepare opengl version (4.2) for SDL 
