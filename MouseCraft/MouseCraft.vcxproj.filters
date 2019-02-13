@@ -183,6 +183,9 @@
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
       <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Window.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -337,6 +340,12 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Window.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderUtil.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

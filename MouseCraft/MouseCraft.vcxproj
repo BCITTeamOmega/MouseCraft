@@ -169,6 +169,7 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
+    <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -199,7 +200,9 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\Renderer.h" />
+    <ClInclude Include="Graphics\RenderUtil.h" />
     <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics\Geometry.h" />

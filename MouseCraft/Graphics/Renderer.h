@@ -1,8 +1,8 @@
 #pragma once
 #include "RenderData.h"
 #include "Shader.h"
-#include <GLEW/glew.h>
 #include <sdl/SDL.h>
+#include <GLEW/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <map>

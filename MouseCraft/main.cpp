@@ -1,7 +1,5 @@
 #include <Windows.h>
 #include <iostream>
-#include <sdl/SDL.h>
-#include "Game.h"
 #include "Core/OmegaEngine.h"
 #include "Core/Entity.h"
 #include "Core/Test/TestComponent.h"
@@ -162,11 +160,8 @@ void Test_ECS()
 
 int main(int argc, char* argv[]) 
 {
-	Game game = Game();
 	Test_ECS();
 
 	while (true) {
-        game.Update(1.0 / 59.94);
-		Sleep(1000.0 / 59.94);
 	}
 }
