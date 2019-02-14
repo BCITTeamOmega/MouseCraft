@@ -14,7 +14,7 @@ OmegaEngine::~OmegaEngine()
 void OmegaEngine::initialize()
 {
 	// measure performance 
-	_profiler.InitializeTimers(6);
+	_profiler.InitializeTimers(7);
 	_profiler.LogOutput("Engine.log");	// optional
 	// _profiler.PrintOutput(true);		// optional
 	// _profiler.FormatMilliseconds(true);	// optional
@@ -200,22 +200,27 @@ void OmegaEngine::sequential_loop()
 		}
 		_profiler.StopTimer(2);
 
-		// PHASE 2: Component Update
+		// PHASE 1.5: Transformation precompute 
 		_profiler.StartTimer(3);
+		precomputeTransforms(&_activeScene->root);
+		_profiler.StopTimer(3);
+
+		// PHASE 2: Component Update
+		_profiler.StartTimer(4);
 		auto deltaParam = new TypeParam<float>(deltaSeconds);	// Consider: Using unique-pointer for self-destruct
 		EventManager::Notify(EventName::COMPONENT_UPDATE, deltaParam);	// serial
 		delete(deltaParam);
-		_profiler.StopTimer(3);
+		_profiler.StopTimer(4);
 
 		// PHASE 3: System Update
 		// During this phase the entity state is frozen. 
 		// Entity parent, child, enable, or delete is deferred until next frame.
-		_profiler.StartTimer(4);
+		_profiler.StartTimer(5);
 		for (auto& s : _systems)
 		{
 			s->Update(deltaSeconds);
 		}
-		_profiler.StopTimer(4);
+		_profiler.StopTimer(5);
 
 		_profiler.StopTimer(0);
 		_profiler.FrameFinish();
@@ -240,5 +245,25 @@ void OmegaEngine::transitionScenes()
 	_activeScene = _nextScene;
 	_activeScene->InitScene();
 	_activeScene->root.SetEnabled(true, true);
+}
+
+void OmegaEngine::precomputeTransforms(Entity* entity, glm::mat4 parentTransformation)
+{
+	// can use a enabled check here b/c of the scenegraph
+	if (!entity->GetEnabled())
+		return;
+
+	// calculate local transformation 
+	if (!entity->GetStatic())
+		entity->transform.computeLocalTransformation();
+
+	// calculate world transformation 
+	entity->transform.computeWorldTransformation(parentTransformation);
+	auto worldTransform = entity->transform.getWorldTransformation();
+
+	// propogate to all children 
+	auto children = entity->GetChildren();
+	for (auto c : children)
+		precomputeTransforms(c, worldTransform);
 }
 
