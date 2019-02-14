@@ -15,7 +15,7 @@ Window::Window(string title, int width, int height) {
 
 	// OpenGL version 3.2
 	static const int glMajorVer = 3;
-	static const int glMinorVer = 2;
+	static const int glMinorVer = 3;
 
 	static const int glDepthBufferSize = 24;
 
