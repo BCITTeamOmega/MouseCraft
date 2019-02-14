@@ -1,5 +1,5 @@
 #pragma once
-#include "Scene.h"
+#include "Core/Scene.h"
 
 class MainScene : public Scene {
 	void InitScene();
