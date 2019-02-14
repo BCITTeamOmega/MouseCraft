@@ -19,8 +19,6 @@ Window::Window(string title, int width, int height) {
 
 	static const int glDepthBufferSize = 24;
 
-	static const string shaderPath = "res/shaders/";
-
 	SDL_SetMainReady();
 	RenderUtil::sdlErrorOnNotSuccess(SDL_Init(SDL_INIT_VIDEO), "Initialization", 0);
 
