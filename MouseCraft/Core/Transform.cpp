@@ -95,7 +95,7 @@ glm::mat4 Transform::getWorldTransformation()
 void Transform::computeLocalTransformation()
 {
 	// we going super-sonic http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q26
-	glm::mat4 _localTransformation = glm::mat4(1.0f);
+	_localTransformation = glm::mat4(1.0f);
 	_localTransformation = glm::translate(_localTransformation, _localPosition);
 
 	// this is the precalculated y*x*z rotation matrix. (x2 faster)

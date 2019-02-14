@@ -10,6 +10,10 @@
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
 
+extern "C" {
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
 void Test_ECS()
 {
 	// NOTE: Use SDL_assert b/c SDL2 is manhandling everything.
@@ -158,7 +162,24 @@ void Test_ECS()
 
 int main() 
 {
-	Test_ECS();
+	// Test_ECS();
+
+	OmegaEngine::Instance().initialize();
+
+	// OmegaEngine::Instance().AddSystem(new YourSystem());
+
+	// fast load 
+	Scene* s = new MainScene();
+	OmegaEngine::Instance().ChangeScene(s);
+
+	auto mouse = EntityManager::Instance().Create();
+	// ComponentManager<Base_Type>::Instance().Create<Base_or_Derived_Type>();
+	auto c_example = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	mouse->AddComponent(c_example);
+
+	OmegaEngine::Instance().AddEntity(mouse);
+
+	OmegaEngine::Instance().Loop();
 
 	while (true) {}
 }

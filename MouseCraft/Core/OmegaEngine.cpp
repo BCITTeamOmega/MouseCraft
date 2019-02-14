@@ -66,6 +66,7 @@ void OmegaEngine::initialize()
 	//cout << "SOUND:"<<SDL_GetCurrentAudioDriver()<<endl;
 
 	// configure opengl 
+	SDL_GL_SetSwapInterval(1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
@@ -81,7 +82,7 @@ void OmegaEngine::initialize()
 
 void OmegaEngine::ChangeScene(Scene* scene)
 {
-	std::cerr << "ERROR: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
+	std::cerr << "WARNING: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
 	_nextScene = scene;
 	transitionScenes();
 }
