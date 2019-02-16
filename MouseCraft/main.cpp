@@ -12,6 +12,10 @@
 #include "InputSystem.h"
 #include "MouseMovement.h"
 
+extern "C" {
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
 void Test_ECS()
 {
 	// NOTE: Use SDL_assert b/c SDL2 is manhandling everything.

@@ -68,10 +68,10 @@ public:
 
 	// ========== END SECTION ========== //
 
-	// Gets the world transformation matrix.
+	// Gets the local transformation matrix.
 	glm::mat4 getLocalTransformation();
 
-	// Gets the local transformation matrix. 
+	// Gets the world transformation matrix. 
 	glm::mat4 getWorldTransformation();
 
 
