@@ -174,13 +174,21 @@ int main()
 	Scene* s = new MainScene();
 	OmegaEngine::Instance().ChangeScene(s);	
 
+	// create some entities 
 	auto mouse = EntityManager::Instance().Create();
-	auto c_control = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	auto c_control = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control->player = 0;
 	mouse->AddComponent(c_control);
 
-	OmegaEngine::Instance().AddEntity(mouse);
-	
-	OmegaEngine::Instance().Loop();
+	auto playerTwo = EntityManager::Instance().Create();
+	auto c_control2 = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control2->player = 1;
+	playerTwo->AddComponent(c_control2);
 
-	while (true) {}
+	OmegaEngine::Instance().AddEntity(mouse);
+	OmegaEngine::Instance().AddEntity(playerTwo);
+
+	OmegaEngine::Instance().Loop();
 }

@@ -1,6 +1,11 @@
 #pragma once
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+#define GLM_ENABLE_EXPERIMENTAL
+#endif // !GLM_ENABLE_EXPERIMENTAL
+
 #include <iomanip>
+#include <glm/gtx/string_cast.hpp>
 #include "Event/EventManager.h"
 #include "Core/UpdatableComponent.h"
 #include "Core/Entity.h"
@@ -31,15 +36,16 @@ public:
 		if (glm::length(move) > 1.0f)
 			move = glm::normalize(move);
 		
+		GetEntity()->transform.translate(
+			glm::vec3(move.x * deltaTime, 0, move.y * deltaTime));
+
 		if (shoot)
 		{
 			std::cout << std::endl << "Mouse[" << player << "] - Pew pew!" << std::endl;
 			shoot = false;
 		}
 
-		std::cout << "\rMouse moving: " << move.x << "," << move.y << std::flush;
-		GetEntity()->transform.translate(
-			glm::vec3(move.x * deltaTime, 0, move.y * deltaTime));
+		// std::cout << "\rMouse moving: " << move.x << "," << move.y << std::flush;
 	}
 
 	virtual void Notify(EventName eventName, Param *params) override
@@ -81,6 +87,9 @@ public:
 
 			if (data.button == Button::PRIMARY && data.isDown)
 				shoot = true;	// or do it right away, no post processing required.
+		
+			if (data.button == Button::AUX1 && data.isDown)
+				std::cout << glm::to_string(GetEntity()->transform.getWorldPosition()) << std::endl;
 		}
 	}
 
