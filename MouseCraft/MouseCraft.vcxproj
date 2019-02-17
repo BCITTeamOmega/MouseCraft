@@ -80,7 +80,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -97,7 +97,7 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -154,6 +154,7 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
     <ClCompile Include="Graphics\Camera.cpp" />
+    <ClCompile Include="CContactListener.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
     <ClCompile Include="Core\Handle.cpp" />
@@ -177,7 +178,6 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\RenderSystem.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Loading\SimpleParser.cpp" />
     <ClCompile Include="Loading\ObjFileParser.cpp" />
@@ -187,8 +187,10 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
+    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Loading\TextLoader.cpp" />
@@ -196,9 +198,11 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\TextComponent.cpp" />
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Camera.h" />
+    <ClInclude Include="CContactListener.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
     <ClInclude Include="Event\ISubscriber.h" />
@@ -214,8 +218,6 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\BufferObjects\VAO.h" />
     <ClInclude Include="Graphics\BufferObjects\VBO.h" />
     <ClInclude Include="Graphics\Window.h" />
-    <ClInclude Include="MainScene.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
@@ -239,6 +241,9 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Example\ExampleUpdatableComponent.h" />
     <ClInclude Include="GL\glad.h" />
     <ClInclude Include="GL\khrplatform.h" />
+    <ClInclude Include="MainScene.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
@@ -256,6 +261,7 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
