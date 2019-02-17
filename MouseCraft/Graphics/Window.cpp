@@ -7,7 +7,9 @@ using std::string;
 using std::cout;
 using std::endl;
 
-Window::Window(string title, int width, int height) {
+// TODO: Change width and height when window is resized
+
+Window::Window(string title, int width, int height) : _width(width), _height(height) {
 	static const int x = SDL_WINDOWPOS_UNDEFINED;
 	static const int y = SDL_WINDOWPOS_UNDEFINED;
 
@@ -25,6 +27,7 @@ Window::Window(string title, int width, int height) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, glMajorVer);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, glMinorVer);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, glDepthBufferSize);
+	SDL_GL_SetSwapInterval(1);
 
 	_sdlWindow = SDL_CreateWindow(cTitle, x, y, width, height, SDL_WINDOW_OPENGL);
 	RenderUtil::sdlErrorOnNotSuccess(_sdlWindow == nullptr, "Window Creation", false);
@@ -48,4 +51,12 @@ SDL_Window* Window::getSDLWindow() {
 
 SDL_GLContext Window::getContext() {
 	return _context;
+}
+
+int Window::getWidth() {
+	return _width;
+}
+
+int Window::getHeight() {
+	return _height;
 }

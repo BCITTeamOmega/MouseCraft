@@ -1,5 +1,5 @@
-#version 150 core
-in vec3 position;
+#version 330 core
+layout(location = 0) in vec3 position;
 uniform vec3 color;
 uniform mat4 transform;
 

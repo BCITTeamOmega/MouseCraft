@@ -55,8 +55,8 @@ void Renderer::initialize() {
 
 	SDL_GL_SetSwapInterval(1);
 
-	glewExperimental = GL_TRUE;
-	tryGLEW(glewInit(), "Initialization");
+	/*glewExperimental = GL_TRUE;
+	tryGLEW(glewInit(), "Initialization");*/
 
 	string vshSrc = TextLoader::load(shaderPath + "gbuffer.vsh");
 	string fshSrc = TextLoader::load(shaderPath + "gbuffer.fsh");
@@ -166,15 +166,15 @@ int Renderer::trySDL(int val, string step) {
 }
 
 int Renderer::tryGLEW(int val, string step) {
-	if (val != GLEW_OK) {
+	/*if (val != GLEW_OK) {
 		cerr << "GLEW Error during " << step << ": " << glewGetErrorString(val) << endl;
 	}
-	return val;
+	return val;*/
+	return 0;
 }
 
 mat4 Renderer::makeMatrix(RenderData r) {
-	mat4 matrix = translate(identity<mat4>(), vec3(r.getX(), r.getY(), r.getZ()));
-	return matrix;
+	return r.getTransform();
 }
 
 vec3 Renderer::convertColor(Color c) {

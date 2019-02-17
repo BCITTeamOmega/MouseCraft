@@ -1,5 +1,5 @@
 #pragma once
-#include <GLEW/glew.h>
+#include "../GL/glad.h"
 #include <vector>
 
 /// <summary>

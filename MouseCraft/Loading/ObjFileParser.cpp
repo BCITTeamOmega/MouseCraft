@@ -1,6 +1,6 @@
 #include "ObjFileParser.h"
 #include <sstream>
-#include <GLEW/glew.h>
+#include "../GL/glad.h"
 #include <iostream>
 #include <set>
 
@@ -91,11 +91,19 @@ Geometry* ObjFileParser::build() {
 			if (normInd == 0) {
 				// If there was no normal index, just treat it like as if the normal is from the center
 				// In other words just use the vertex
-				normAdd = vertAdd;
+				float v1 = get<0>(vertAdd);
+				float v2 = get<1>(vertAdd);
+				float v3 = get<2>(vertAdd);
+				float l = sqrt(v1 + v2 + v3);
+				normAdd = make_tuple(v1 / l, v2 / l, v3 / l);
 			}
 			else {
 				size_t ind = normInd - 1;
-				normAdd = make_tuple(vertexNormData[ind * 3], vertexNormData[ind * 3 + 1], vertexNormData[ind * 3 + 2]);
+				float v1 = vertexNormData[ind * 3];
+				float v2 = vertexNormData[ind * 3 + 1];
+				float v3 = vertexNormData[ind * 3 + 2];
+				float l = sqrt(v1 + v2 + v3);
+				normAdd = make_tuple(v1 / l, v2 / l, v3 / l);
 			}
 
 			tuple<GLfloat, GLfloat> texAdd;

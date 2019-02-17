@@ -1,10 +1,14 @@
 #include "Shader.h"
 #include "../Loading/TextLoader.h"
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 using std::cerr;
 using std::endl;
 using std::string;
+using glm::mat4;
+using glm::vec3;
+using glm::value_ptr;
 
 Shader::Shader(string vertSrc, string fragSrc) : vertSrc(vertSrc), fragSrc(fragSrc), _program(0) {}
 
@@ -71,4 +75,16 @@ void Shader::printProgramError(GLuint program) {
 
 GLuint Shader::getProgram() {
 	return _program;
+}
+
+void Shader::setUniformMatrix(string name, mat4 matrix) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniformMatrix4fv(pos, 1, GL_FALSE, value_ptr(matrix));
+}
+
+void Shader::setUniformVec3(string name, vec3 vector) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform3f(pos, vector.r, vector.g, vector.b);
 }
