@@ -14,6 +14,8 @@
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
+#include "Input/InputSystem.h"
+#include "MouseMovement.h"
 
 #define GLEW_STATIC
 
@@ -29,9 +31,11 @@ void Test_Rendering()
 	Scene* s = new MainScene();
 	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
 
+	// rendering 
+
 	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
-
+	
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
 
 	rc->setColor(Color(0.5, 1.0, 0.25));
@@ -59,8 +63,30 @@ void Test_Rendering()
 
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
-	
+
+	// input 
+
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+
+	c_p1_movement->player = 0;
+	c_p1_movement->speed = 50.0f;
+	c_p2_movement->player = 1;
+	c_p2_movement->speed = 50.0f;
+
+	e1->AddComponent(c_p1_movement);
+	e2->AddComponent(c_p2_movement);
+
+	InputSystem* is = new InputSystem();
+
+	// add the entities 
+
+	OmegaEngine::Instance().AddEntity(e1);
+	OmegaEngine::Instance().AddEntity(e2);
+	OmegaEngine::Instance().AddEntity(e3);
+
 	OmegaEngine::Instance().AddSystem(rs);
+	OmegaEngine::Instance().AddSystem(is);
 	OmegaEngine::Instance().Loop();
 }
 
@@ -224,22 +250,28 @@ int main(int argc, char* argv[])
 
 	OmegaEngine::Instance().initialize();
 
-	// OmegaEngine::Instance().AddSystem(new YourSystem());
+	OmegaEngine::Instance().AddSystem(new InputSystem());
 
 	// fast load 
 	Scene* s = new MainScene();
-	OmegaEngine::Instance().ChangeScene(s);
+	OmegaEngine::Instance().ChangeScene(s);	
 
+	// create some entities 
 	auto mouse = EntityManager::Instance().Create();
-	// ComponentManager<Base_Type>::Instance().Create<Base_or_Derived_Type>();
-	auto c_example = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	mouse->AddComponent(c_example);
+	auto c_control = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control->player = 0;
+	mouse->AddComponent(c_control);
+
+	auto playerTwo = EntityManager::Instance().Create();
+	auto c_control2 = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control2->player = 1;
+	playerTwo->AddComponent(c_control2);
 
 	OmegaEngine::Instance().AddEntity(mouse);
+	OmegaEngine::Instance().AddEntity(playerTwo);
 
 	OmegaEngine::Instance().Loop();
-    */
-
-	while (true) {
-	}
+	*/
 }

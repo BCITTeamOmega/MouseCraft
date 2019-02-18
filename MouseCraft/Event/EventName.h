@@ -9,4 +9,13 @@ enum EventName {
 	COMPONENT_ADDED,
 	ENTITY_CREATED,
 	ENTITY_DESTROYED,
+	// input is only raised when it changes!
+	INPUT_RAW, 
+	INPUT_AXIS, 
+	INPUT_BUTTON,
+	/*
+	INPUT_P1_MOVE,	
+	INPUT_P1_AIM,
+	INPUT_P1_BUTTON,
+	*/
 };

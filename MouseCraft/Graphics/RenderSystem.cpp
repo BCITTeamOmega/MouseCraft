@@ -61,7 +61,6 @@ void RenderSystem::Update(float dt) {
 
 	if (_camera != nullptr) {
 		Transform viewTransform = _camera->getTransform();
-		viewTransform.computeLocalTransformation(); //TEMPORARY
 		mat4 view = inverse(viewTransform.getLocalTransformation());
 
 		float fov = _camera->getFOV();
@@ -114,7 +113,6 @@ void RenderSystem::accumulateList() {
 	auto cameras = ComponentManager<Camera>::Instance().All();
 	for (Renderable* r : renderables) {
 		Transform t = r->getTransform();
-		t.computeLocalTransformation(); //TEMPORARY
 		_accumulatingList->push_back(
 			RenderData(
 				r->getModel(),
