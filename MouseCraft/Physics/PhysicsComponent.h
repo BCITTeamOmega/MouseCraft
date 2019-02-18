@@ -5,9 +5,10 @@
 class PhysicsComponent : public Component
 {
 public:
-	PhysicsComponent(float x, float y, float vX = 0, float vY = 0);
+	PhysicsComponent(float x, float y, float z, float vX = 0, float vY = 0, float zY = 0);
 
 	Vector2D position, velocity;
+	float zPos, zVel;
 private:
 	
 };

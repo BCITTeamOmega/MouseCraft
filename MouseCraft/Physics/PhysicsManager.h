@@ -20,12 +20,12 @@ public:
 	~PhysicsManager();
 	void Update(float dt);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
-	void createPlatform(float x, float y, float w, float h);
-	void createPlayer(float x, float y, float w, float h, bool floor);
-	void createKinematic(float x, float y, float w, float h, bool floor);
+	PhysicsComponent* createPlatform(float x, float y, float w, float h);
+	PhysicsComponent* createPlayer(float x, float y, float w, float h, bool floor);
+	PhysicsComponent* createKinematic(float x, float y, float w, float h, bool floor);
 private:
 	b2World *world;
-	b2Body *player;
+	std::vector<b2Body*> players;
 	CContactListener *cListener;
 	void updateHeights(float delta);
 	void checkCollisions();

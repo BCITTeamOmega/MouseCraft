@@ -47,8 +47,10 @@ void PhysicsManager::Update(float dt)
 	}
 }
 
-void PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor)
+PhysicsComponent* PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor)
 {
+	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
+
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x, y);
@@ -64,14 +66,19 @@ void PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1;
+	fixtureDef.userData = physicsComp;
 	playerBody->CreateFixture(&fixtureDef);
 
-	player = playerBody;
+	players.push_back(playerBody);
+
+	return physicsComp;
 }
 
 //Kinematics can be used for pushables, parts, contraptions, etc.
-void PhysicsManager::createKinematic(float x, float y, float w, float h, bool floor)
+PhysicsComponent* PhysicsManager::createKinematic(float x, float y, float w, float h, bool floor)
 {
+	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
+
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_kinematicBody;
 	bodyDef.position.Set(x, y);
@@ -86,13 +93,17 @@ void PhysicsManager::createKinematic(float x, float y, float w, float h, bool fl
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1;
+	fixtureDef.userData = physicsComp;
 	kinematicBody->CreateFixture(&fixtureDef);
 
+	return physicsComp;
 	//NOTE: there is a bullet setting for projectiles that move exceptionally fast
 }
 
-void PhysicsManager::createPlatform(float x, float y, float w, float h)
+PhysicsComponent* PhysicsManager::createPlatform(float x, float y, float w, float h)
 {
+	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
+
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_staticBody;
 	bodyDef.position.Set(x, y);
@@ -108,7 +119,10 @@ void PhysicsManager::createPlatform(float x, float y, float w, float h)
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1;
+	fixtureDef.userData = physicsComp;
 	playerBody->CreateFixture(&fixtureDef);
+
+	return physicsComp;
 }
 
 //Takes in a set of outer wall endpoints, makes a body out of them, and adds it to both worlds
@@ -144,6 +158,8 @@ void PhysicsManager::updateHeights(float delta)
 	//Otherwise check if they are on the floor
 	//If so, check if they are on a tall object/surface
 	//If not, move them by gravity * delta
+
+	//WHEN A Z THRESHOLD IS MET TO CHANGE LEVELS, MODIFY THE FILTERS
 }
 
 void PhysicsManager::checkCollisions()
