@@ -158,7 +158,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
     <ClCompile Include="Graphics\Camera.cpp" />
-    <ClCompile Include="CContactListener.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
     <ClCompile Include="Core\Handle.cpp" />
@@ -172,6 +171,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Example\ExampleSystem.cpp" />
     <ClCompile Include="Core\Example\ExampleSystemComponent.cpp" />
     <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp" />
+    <ClCompile Include="Core\Vector2D.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
@@ -193,9 +193,11 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Physics\CContactListener.cpp" />
+    <ClCompile Include="Physics\PhysicsComponent.cpp" />
+    <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
-    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Loading\TextLoader.cpp" />
@@ -203,11 +205,10 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\TextComponent.cpp" />
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="Graphics\Camera.h" />
-    <ClInclude Include="CContactListener.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
     <ClInclude Include="Event\ISubscriber.h" />
@@ -226,7 +227,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Graphics\RenderSystem.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="Loading\SimpleParser.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\ComponentManager.h" />
@@ -248,16 +248,17 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Input\InputSystem.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="MouseMovement.h" />
+    <ClInclude Include="Physics\CContactListener.h" />
+    <ClInclude Include="Physics\PhysicsComponent.h" />
+    <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\SoundParams.h" />
@@ -267,7 +268,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
-    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

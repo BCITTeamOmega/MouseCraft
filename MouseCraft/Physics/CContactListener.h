@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 class CContactListener : public b2ContactListener
 {

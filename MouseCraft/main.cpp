@@ -9,6 +9,7 @@
 #include "Core/EntityManager.h"
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
+#include "Physics/PhysicsManager.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
@@ -218,19 +219,25 @@ void Test_ECS()
 	TestComponent test(new Entity);
 	delete t;
 
-	auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
 
-	parent1->AddComponent(ec1);
-	parent2->AddComponent(ec2);
-	child1->AddComponent(ec3);	// this is weird, don't move child too lol
-	child2->AddComponent(ec4);
+	//parent1->AddComponent(ec1);
+	//parent2->AddComponent(ec2);
+	//child1->AddComponent(ec3);	// this is weird, don't move child too lol
+	//child2->AddComponent(ec4);
 
 	ExampleSystem exampleSystem;
 
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
+
+	PhysicsManager physicsSystem;
+	physicsSystem.createPlatform(0, 0, 100, 100);
+	physicsSystem.createPlayer(0, 0, 20, 20, true);
+
+	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
 	OmegaEngine::Instance().Loop();
 }
