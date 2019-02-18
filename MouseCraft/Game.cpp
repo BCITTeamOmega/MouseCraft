@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "MainScene.h"
+#include "Loading/ModelLoader.h"
+#include "Graphics/RenderData.h"
 #include <thread>
 
 Game::Game() {
