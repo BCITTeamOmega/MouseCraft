@@ -9,7 +9,7 @@
 #include "Event/EventManager.h"
 #include "Core/UpdatableComponent.h"
 #include "Core/Entity.h"
-#include "InputSystem.h"
+#include "Input/InputSystem.h"
 
 // Test component for mouse movement
 

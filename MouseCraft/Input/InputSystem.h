@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core/System.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <climits>
 #include <glm/glm.hpp>
-#include "Event/EventManager.h"
+#include "../Core/System.h"
+#include "../Event/EventManager.h"
 
 enum Axis
 {

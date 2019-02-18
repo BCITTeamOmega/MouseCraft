@@ -13,7 +13,7 @@
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
-#include "InputSystem.h"
+#include "Input/InputSystem.h"
 #include "MouseMovement.h"
 
 #define GLEW_STATIC
