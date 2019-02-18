@@ -5,7 +5,7 @@ void CContactListener::BeginContact(b2Contact* contact)
 	b2Fixture* fa = contact->GetFixtureA();
 	b2Fixture* fb = contact->GetFixtureB();
 
-	if (fa == NULL || fb == NULL)
+	/*if (fa == NULL || fb == NULL)
 		return;
 
 	//if a is player or tongue
@@ -28,7 +28,7 @@ void CContactListener::BeginContact(b2Contact* contact)
 		kinematic[collided] = fa->GetBody();
 
 		collided++;
-	}
+	}*/
 }
 
 void CContactListener::EndContact(b2Contact* contact) {};

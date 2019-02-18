@@ -1,6 +1,6 @@
 #pragma once
-#include "Vector2D.h"
-#include "Core/Component.h"
+#include "../Core/Vector2D.h"
+#include "../Core/Component.h"
 
 class PhysicsComponent : public Component
 {
