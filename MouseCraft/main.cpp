@@ -30,9 +30,11 @@ void Test_Rendering()
 	Scene* s = new MainScene();
 	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
 
+	// rendering 
+
 	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
-
+	
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
 
 	rc->setColor(Color(0.5, 1.0, 0.25));
@@ -60,8 +62,30 @@ void Test_Rendering()
 
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
-	
+
+	// input 
+
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+
+	c_p1_movement->player = 0;
+	c_p1_movement->speed = 50.0f;
+	c_p2_movement->player = 1;
+	c_p2_movement->speed = 50.0f;
+
+	e1->AddComponent(c_p1_movement);
+	e2->AddComponent(c_p2_movement);
+
+	InputSystem* is = new InputSystem();
+
+	// add the entities 
+
+	OmegaEngine::Instance().AddEntity(e1);
+	OmegaEngine::Instance().AddEntity(e2);
+	OmegaEngine::Instance().AddEntity(e3);
+
 	OmegaEngine::Instance().AddSystem(rs);
+	OmegaEngine::Instance().AddSystem(is);
 	OmegaEngine::Instance().Loop();
 }
 
@@ -242,4 +266,5 @@ int main(int argc, char* argv[])
 	OmegaEngine::Instance().AddEntity(playerTwo);
 
 	OmegaEngine::Instance().Loop();
+	*/
 }

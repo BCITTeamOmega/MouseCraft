@@ -43,6 +43,7 @@ Window::Window(string title, int width, int height) : _width(width), _height(hei
 		
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	SDL_GL_SetSwapInterval(1);	// turn v-sync on
 }
 
 SDL_Window* Window::getSDLWindow() {

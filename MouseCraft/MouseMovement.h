@@ -37,7 +37,7 @@ public:
 			move = glm::normalize(move);
 		
 		GetEntity()->transform.translate(
-			glm::vec3(move.x * deltaTime, 0, move.y * deltaTime));
+			glm::vec3(move.x * deltaTime * speed, 0, move.y * deltaTime * speed));
 
 		if (shoot)
 		{
@@ -96,6 +96,7 @@ public:
 
 public:
 	int player = 0;
+	float speed = 10.0f;
 
 private: 
 	float moveX; 
