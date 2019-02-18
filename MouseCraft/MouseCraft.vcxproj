@@ -85,7 +85,8 @@
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y
-XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,7 +104,8 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
-XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -125,8 +127,9 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)\bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
-XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
+      <Command>XCOPY "$(SolutionDir)bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +151,8 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
-XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
