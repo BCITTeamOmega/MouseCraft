@@ -120,5 +120,7 @@ private:
 	void sequential_loop();
 
 	void transitionScenes();
+
+	void precomputeTransforms(Entity* entity, glm::mat4 parentTransformation = glm::mat4(1.0f));
 };
 
