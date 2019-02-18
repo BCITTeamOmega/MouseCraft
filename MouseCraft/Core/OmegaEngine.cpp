@@ -4,11 +4,11 @@
 #include "../gl/glad.h"
 #include "TaskScheduler.h"
 #include "../Event/EventManager.h"
+#include "../Graphics/Window.h" 
 
 OmegaEngine::~OmegaEngine()
 {
-	// TODO: close connected controllers
-	SDL_DestroyWindow(_window);
+	SDL_DestroyWindow(_window->getSDLWindow());
 	SDL_Quit();
 }
 
@@ -23,75 +23,7 @@ void OmegaEngine::initialize()
 	_profiler.StartTimer(5);
 
 	// main is defined elsewhere
-	SDL_SetMainReady();
-
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
-	{
-		std::cerr << "ERROR: SDL could not initialize. SDL_Error:  " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// display some input info
-	auto numControllers = SDL_NumJoysticks();
-	if (numControllers <= 0)
-	{
-		std::cout << "WARNING: There are no controllers plugged in!" << std::endl;
-	}
-	else
-	{
-		std::cout << "Detected " << numControllers << " controllers." << std::endl;
-		for (int i = 0; i < numControllers; ++i)
-		{
-			std::cout << "Controller[" << i << "]: " << SDL_JoystickNameForIndex(i) << std::endl;
-			SDL_JoystickOpen(i);
-		}
-
-		if (numControllers > 4)
-		{
-			// Why do you have over 4 controllers? Unsure if this will have performance impact.
-			std::cout << "INFO: Over 4 controllers have been opened." << std::endl;
-		}
-	}
-
-	// prepare opengl version (4.2) for SDL 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	// using core as opposed to compatibility or ES 
-
-	// create window
-	_window = SDL_CreateWindow("Mouse Craft", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-	if (_window == NULL)
-	{
-		std::cerr << "ERROR: SDL window could not be created. SDL_Error:  " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// get window surface (not necessary)
-	_screenSurface = SDL_GetWindowSurface(_window);
-
-	// initialize sdl opengl context 
-	_context = SDL_GL_CreateContext(_window);
-	if (_context == NULL)
-	{
-		std::cerr << "ERROR: SDL failed to create openGL context. SDL_Error: " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// initialize opengl 
-	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-	{
-		std::cerr << "ERROR: GLAD failed to initialize opengl function pointers." << std::endl;
-		return;
-	}
-	std::cout << "Vendor:\t" << glGetString(GL_VENDOR) << std::endl
-		<< "Renderer:\t" << glGetString(GL_RENDERER) << std::endl
-		<< "Version:\t" << glGetString(GL_VERSION) << std::endl;
-	//cout << "SOUND:"<<SDL_GetCurrentAudioDriver()<<endl;
-
-	// configure opengl 
-	SDL_GL_SetSwapInterval(1);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	_window = new Window("MouseCraft", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//initialize SDL sound mixer context
 	//if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
@@ -250,7 +182,7 @@ void OmegaEngine::sequential_loop()
 		_profiler.FrameFinish();
 
 		// PHASE 4: Buffer swap and Input Poll (SDL specific)
-		SDL_GL_SwapWindow(_window);
+		SDL_GL_SwapWindow(_window->getSDLWindow());
 		++_frameCount;
 	}
 }
@@ -271,6 +203,10 @@ void OmegaEngine::transitionScenes()
 	_activeScene->root.SetEnabled(true, true);
 }
 
+Window* OmegaEngine::getWindow() const
+{
+	return _window;
+}
 void OmegaEngine::precomputeTransforms(Entity* entity, glm::mat4 parentTransformation)
 {
 	// can use a enabled check here b/c of the scenegraph
@@ -290,4 +226,3 @@ void OmegaEngine::precomputeTransforms(Entity* entity, glm::mat4 parentTransform
 	for (auto c : children)
 		precomputeTransforms(c, worldTransform);
 }
-
