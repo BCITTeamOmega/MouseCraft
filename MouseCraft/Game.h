@@ -3,7 +3,6 @@
 #include "Core/Scene.h"
 #include "Event/EventManager.h"
 #include "UI/UIManager.h"
-#include "Graphics/Renderer.h"
 
 /**
 Game contains scenes for game and transitions between them
@@ -27,8 +26,4 @@ private:
 	void transition(Scene *nextScene);
 
     Scene *_currScene;
-
-	Renderer *renderer; //TEMPORARY
-	RenderData *rd; //TEMPORARY
-	RenderData *rd2; //TEMPORARY
 };

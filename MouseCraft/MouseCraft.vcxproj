@@ -174,7 +174,6 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
     <ClCompile Include="Graphics\BufferObjects\VBO.cpp" />
     <ClCompile Include="Graphics\Renderable.cpp" />
-    <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\RenderSystem.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="main.cpp" />
@@ -212,7 +211,6 @@ XCOPY "$(SolutionDir)\res\*" "$(TargetDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Graphics\RenderData.h" />
-    <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\RenderUtil.h" />
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VAO.h" />

@@ -7,15 +7,11 @@
 Game::Game() {
     _currScene = new MainScene();
     _currScene->InitScene();
-	renderer = new Renderer();
-	renderer->initialize();
 }
 
 Game::~Game() {
     _currScene->CleanUp();
-	renderer->cleanup();
     delete _currScene;
-	delete rd;
 }
 
 void Game::Update(const float delta) {
