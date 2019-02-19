@@ -70,18 +70,30 @@
     <Filter Include="Header Files\GL">
       <UniqueIdentifier>{27290bc5-d77d-4a85-9624-90b084778cff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{092fd361-982d-42a8-bd76-f5da315426ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{53de4277-c255-497b-a1af-b24c6ff26379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\BufferObjects">
+      <UniqueIdentifier>{41a85668-4fc7-4ffc-ad79-82922acab571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\BufferObjects">
+      <UniqueIdentifier>{9998886b-5b8d-4333-9856-59a2e6cdd3ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{a78e8ccf-9344-4b4d-b460-250414a2a24d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Event\EventManager.cpp">
@@ -105,13 +117,22 @@
     <ClCompile Include="UI\UIManager.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Loading\SimpleParser.cpp">
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="CContactListener.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Loading\ObjFileParser.cpp">
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2D.cpp">
+    <ClCompile Include="Loading\ModelLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\TextLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\GLEW\glew.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Component.cpp">
@@ -174,6 +195,48 @@
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
       <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
+    <ClCompile Include="MouseMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Vector2D.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsComponent.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CContactListener.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Window.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderSystem.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VAO.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VBO.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\EBO.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Renderable.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputSystem.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -181,9 +244,6 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Event\EventManager.h">
       <Filter>Header Files\Event</Filter>
@@ -221,14 +281,32 @@
     <ClInclude Include="UI\UIManager.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Geometry.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="CContactListener.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Image.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Model.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\SimpleParser.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\ObjFileParser.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\ModelLoader.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderData.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\TextLoader.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shader.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component.h">
       <Filter>Header Files\Core</Filter>
@@ -301,6 +379,54 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Vector2D.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsManager.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsComponent.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CContactListener.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Window.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderUtil.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderSystem.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\EBO.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VBO.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VAO.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Color.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderable.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputSystem.h">
+      <Filter>Header Files\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
 #include "Scene.h"
 #include "../Util/CpuProfiler.h"
 #include "StatusAction.h"
+#include "../Graphics/Window.h"
 
 // Screen dimension constants
 const int SCREEN_WIDTH = 1280;
@@ -42,9 +43,7 @@ private:
 // variables 
 private:
 	// sdl 
-	SDL_Window* _window = NULL;
-	SDL_Surface* _screenSurface = NULL;
-	SDL_GLContext _context = NULL;
+	Window* _window = NULL;
 	
 	// engine 
 	const std::chrono::nanoseconds _frameTime = std::chrono::milliseconds((long)(10));
@@ -114,10 +113,14 @@ public:
 	// Gets the active scene root entity.
 	Entity* GetRoot() const;
 
+	Window* getWindow() const;
+
 private:
 	// Current implementation of game loop
 	void sequential_loop();
 
 	void transitionScenes();
+
+	void precomputeTransforms(Entity* entity, glm::mat4 parentTransformation = glm::mat4(1.0f));
 };
 

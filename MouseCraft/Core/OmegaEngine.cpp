@@ -4,17 +4,18 @@
 #include "../gl/glad.h"
 #include "TaskScheduler.h"
 #include "../Event/EventManager.h"
+#include "../Graphics/Window.h" 
 
 OmegaEngine::~OmegaEngine()
 {
-	SDL_DestroyWindow(_window);
+	SDL_DestroyWindow(_window->getSDLWindow());
 	SDL_Quit();
 }
 
 void OmegaEngine::initialize()
 {
 	// measure performance 
-	_profiler.InitializeTimers(6);
+	_profiler.InitializeTimers(7);
 	_profiler.LogOutput("Engine.log");	// optional
 	// _profiler.PrintOutput(true);		// optional
 	// _profiler.FormatMilliseconds(true);	// optional
@@ -22,52 +23,7 @@ void OmegaEngine::initialize()
 	_profiler.StartTimer(5);
 
 	// main is defined elsewhere
-	SDL_SetMainReady();
-
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-	{
-		std::cerr << "ERROR: SDL could not initialize. SDL_Error:  " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// prepare opengl version (4.2) for SDL 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	// using core as opposed to compatibility or ES 
-
-	// create window
-	_window = SDL_CreateWindow("Mouse Craft", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-	if (_window == NULL)
-	{
-		std::cerr << "ERROR: SDL window could not be created. SDL_Error:  " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// get window surface (not necessary)
-	_screenSurface = SDL_GetWindowSurface(_window);
-
-	// initialize sdl opengl context 
-	_context = SDL_GL_CreateContext(_window);
-	if (_context == NULL)
-	{
-		std::cerr << "ERROR: SDL failed to create openGL context. SDL_Error: " << SDL_GetError() << std::endl;
-		return;
-	}
-
-	// initialize opengl 
-	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-	{
-		std::cerr << "ERROR: GLAD failed to initialize opengl function pointers." << std::endl;
-		return;
-	}
-	std::cout << "Vendor:\t" << glGetString(GL_VENDOR) << std::endl
-		<< "Renderer:\t" << glGetString(GL_RENDERER) << std::endl
-		<< "Version:\t" << glGetString(GL_VERSION) << std::endl;
-	//cout << "SOUND:"<<SDL_GetCurrentAudioDriver()<<endl;
-
-	// configure opengl 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	_window = new Window("MouseCraft", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//initialize SDL sound mixer context
 	//if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
@@ -81,7 +37,7 @@ void OmegaEngine::initialize()
 
 void OmegaEngine::ChangeScene(Scene* scene)
 {
-	std::cerr << "ERROR: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
+	std::cerr << "WARNING: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
 	_nextScene = scene;
 	transitionScenes();
 }
@@ -200,28 +156,33 @@ void OmegaEngine::sequential_loop()
 		}
 		_profiler.StopTimer(2);
 
-		// PHASE 2: Component Update
+		// PHASE 1.5: Transformation precompute 
 		_profiler.StartTimer(3);
+		precomputeTransforms(&_activeScene->root);
+		_profiler.StopTimer(3);
+
+		// PHASE 2: Component Update
+		_profiler.StartTimer(4);
 		auto deltaParam = new TypeParam<float>(deltaSeconds);	// Consider: Using unique-pointer for self-destruct
 		EventManager::Notify(EventName::COMPONENT_UPDATE, deltaParam);	// serial
 		delete(deltaParam);
-		_profiler.StopTimer(3);
+		_profiler.StopTimer(4);
 
 		// PHASE 3: System Update
 		// During this phase the entity state is frozen. 
 		// Entity parent, child, enable, or delete is deferred until next frame.
-		_profiler.StartTimer(4);
+		_profiler.StartTimer(5);
 		for (auto& s : _systems)
 		{
 			s->Update(deltaSeconds);
 		}
-		_profiler.StopTimer(4);
+		_profiler.StopTimer(5);
 
 		_profiler.StopTimer(0);
 		_profiler.FrameFinish();
 
 		// PHASE 4: Buffer swap and Input Poll (SDL specific)
-		SDL_GL_SwapWindow(_window);
+		SDL_GL_SwapWindow(_window->getSDLWindow());
 		++_frameCount;
 	}
 }
@@ -242,3 +203,26 @@ void OmegaEngine::transitionScenes()
 	_activeScene->root.SetEnabled(true, true);
 }
 
+Window* OmegaEngine::getWindow() const
+{
+	return _window;
+}
+void OmegaEngine::precomputeTransforms(Entity* entity, glm::mat4 parentTransformation)
+{
+	// can use a enabled check here b/c of the scenegraph
+	if (!entity->GetEnabled())
+		return;
+
+	// calculate local transformation 
+	if (!entity->GetStatic())
+		entity->transform.computeLocalTransformation();
+
+	// calculate world transformation 
+	entity->transform.computeWorldTransformation(parentTransformation);
+	auto worldTransform = entity->transform.getWorldTransformation();
+
+	// propogate to all children 
+	auto children = entity->GetChildren();
+	for (auto c : children)
+		precomputeTransforms(c, worldTransform);
+}

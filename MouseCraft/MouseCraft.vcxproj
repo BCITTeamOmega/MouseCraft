@@ -79,11 +79,14 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenAL32.lib;glew32s.lib;tinyxml2.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -95,12 +98,15 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenAL32.lib;glew32s.lib;tinyxml2.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,10 +123,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)"bin\*.DLL "$(TargetDir)" /D /K /Y</Command>
+      <Command>XCOPY "$(SolutionDir)bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,12 +145,19 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CContactListener.cpp" />
+    <ClCompile Include="..\include\GLEW\glew.c" />
+    <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
     <ClCompile Include="Core\Handle.cpp" />
@@ -155,35 +171,66 @@
     <ClCompile Include="Core\Example\ExampleSystem.cpp" />
     <ClCompile Include="Core\Example\ExampleSystemComponent.cpp" />
     <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp" />
+    <ClCompile Include="Core\Vector2D.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="Input\InputSystem.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VBO.cpp" />
+    <ClCompile Include="Graphics\Renderable.cpp" />
+    <ClCompile Include="Graphics\RenderSystem.cpp" />
+    <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Loading\SimpleParser.cpp" />
+    <ClCompile Include="Loading\ObjFileParser.cpp" />
+    <ClCompile Include="Loading\ModelLoader.cpp" />
+    <ClCompile Include="Graphics\Shader.cpp" />
     <ClCompile Include="Core\StatusAction.cpp" />
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
+    <ClCompile Include="MouseMovement.cpp" />
+    <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Physics\CContactListener.cpp" />
+    <ClCompile Include="Physics\PhysicsComponent.cpp" />
+    <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Network\Address.cpp" />
     <ClCompile Include="Network\NetworkManager.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
-    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
+    <ClCompile Include="Loading\TextLoader.cpp" />
     <ClCompile Include="UI\ImageComponent.cpp" />
     <ClCompile Include="UI\TextComponent.cpp" />
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CContactListener.h" />
+    <ClInclude Include="Core\Vector2D.h" />
+    <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
     <ClInclude Include="Event\ISubscriber.h" />
+    <ClInclude Include="Graphics\BufferObjects\EBO.h" />
+    <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\Image.h" />
+    <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="Graphics\RenderData.h" />
+    <ClInclude Include="Graphics\RenderUtil.h" />
+    <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\BufferObjects\VAO.h" />
+    <ClInclude Include="Graphics\BufferObjects\VBO.h" />
+    <ClInclude Include="Graphics\Window.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="Loading\ObjFileParser.h" />
+    <ClInclude Include="Loading\ModelLoader.h" />
+    <ClInclude Include="Graphics\RenderSystem.h" />
+    <ClInclude Include="Loading\SimpleParser.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Entity.h" />
@@ -201,26 +248,29 @@
     <ClInclude Include="Core\Example\ExampleUpdatableComponent.h" />
     <ClInclude Include="GL\glad.h" />
     <ClInclude Include="GL\khrplatform.h" />
+    <ClInclude Include="Input\InputSystem.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="MouseMovement.h" />
+    <ClInclude Include="Physics\CContactListener.h" />
+    <ClInclude Include="Physics\PhysicsComponent.h" />
+    <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Sound\SoundParams.h" />
     <ClInclude Include="Sound\TrackParams.h" />
+    <ClInclude Include="Loading\TextLoader.h" />
     <ClInclude Include="UI\ImageComponent.h" />
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
-    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

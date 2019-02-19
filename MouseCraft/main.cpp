@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "Game.h"
+#include <iostream>
 #include "Core/OmegaEngine.h"
 #include "Core/Entity.h"
 #include "Core/Test/TestComponent.h"
@@ -9,6 +9,86 @@
 #include "Core/EntityManager.h"
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
+#include "Physics/PhysicsManager.h"
+#include "Loading/ModelLoader.h"
+#include "Graphics/Model.h"
+#include "Graphics/RenderSystem.h"
+#include "Graphics/Renderable.h"
+#include "Input/InputSystem.h"
+#include "MouseMovement.h"
+
+#define GLEW_STATIC
+
+extern "C" {
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
+void Test_Rendering()
+{
+	Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+
+	OmegaEngine::Instance().initialize();
+	Scene* s = new MainScene();
+	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
+
+	// rendering 
+
+	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	
+	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
+
+	rc->setColor(Color(0.5, 1.0, 0.25));
+	rc->setModel(*m);
+
+	rc2->setColor(Color(1.0, 0.25, 0.5));
+	rc2->setModel(*m);
+
+	cam->setFOV(90.0f);
+	cam->setCloseClip(0.01f);
+	cam->setFarClip(100.0f);
+
+	Entity* e1 = EntityManager::Instance().Create();
+	Entity* e2 = EntityManager::Instance().Create();
+	Entity* e3 = EntityManager::Instance().Create();
+
+	e1->transform.setLocalPosition(glm::vec3(-2.0, 0, -2.5));
+	e2->transform.setLocalPosition(glm::vec3(3.5, 0, -3.0));
+	e3->transform.setLocalPosition(glm::vec3(0, 10, 5));
+	e3->transform.setLocalRotation(glm::vec3(-1.0f, 0, 0));
+
+	e1->AddComponent(rc);
+	e2->AddComponent(rc2);
+	e3->AddComponent(cam);
+
+	RenderSystem* rs = new RenderSystem();
+	rs->setWindow(OmegaEngine::Instance().getWindow());
+
+	// input 
+
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+
+	c_p1_movement->player = 0;
+	c_p1_movement->speed = 50.0f;
+	c_p2_movement->player = 1;
+	c_p2_movement->speed = 50.0f;
+
+	e1->AddComponent(c_p1_movement);
+	e2->AddComponent(c_p2_movement);
+
+	InputSystem* is = new InputSystem();
+
+	// add the entities 
+
+	OmegaEngine::Instance().AddEntity(e1);
+	OmegaEngine::Instance().AddEntity(e2);
+	OmegaEngine::Instance().AddEntity(e3);
+
+	OmegaEngine::Instance().AddSystem(rs);
+	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().Loop();
+}
 
 void Test_ECS()
 {
@@ -139,26 +219,59 @@ void Test_ECS()
 	TestComponent test(new Entity);
 	delete t;
 
-	auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
+	//auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
 
-	parent1->AddComponent(ec1);
-	parent2->AddComponent(ec2);
-	child1->AddComponent(ec3);	// this is weird, don't move child too lol
-	child2->AddComponent(ec4);
+	//parent1->AddComponent(ec1);
+	//parent2->AddComponent(ec2);
+	//child1->AddComponent(ec3);	// this is weird, don't move child too lol
+	//child2->AddComponent(ec4);
 
 	ExampleSystem exampleSystem;
 
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
 
+	PhysicsManager physicsSystem;
+	physicsSystem.createPlatform(0, 0, 100, 100);
+	physicsSystem.createPlayer(0, 0, 20, 20, true);
+
+	OmegaEngine::Instance().AddSystem(&physicsSystem);
+
 	OmegaEngine::Instance().Loop();
 }
 
-int main() 
+int main(int argc, char* argv[]) 
 {
-	Test_ECS();
+	Test_Rendering();
+    /*
+	// Test_ECS();
 
-	while (true) {}
+	OmegaEngine::Instance().initialize();
+
+	OmegaEngine::Instance().AddSystem(new InputSystem());
+
+	// fast load 
+	Scene* s = new MainScene();
+	OmegaEngine::Instance().ChangeScene(s);	
+
+	// create some entities 
+	auto mouse = EntityManager::Instance().Create();
+	auto c_control = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control->player = 0;
+	mouse->AddComponent(c_control);
+
+	auto playerTwo = EntityManager::Instance().Create();
+	auto c_control2 = ComponentManager<UpdatableComponent>::Instance()
+		.Create<MouseMovement>();
+	c_control2->player = 1;
+	playerTwo->AddComponent(c_control2);
+
+	OmegaEngine::Instance().AddEntity(mouse);
+	OmegaEngine::Instance().AddEntity(playerTwo);
+
+	OmegaEngine::Instance().Loop();
+	*/
 }

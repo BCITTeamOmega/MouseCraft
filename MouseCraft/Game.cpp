@@ -1,48 +1,12 @@
 #include "Game.h"
 #include "MainScene.h"
-#include "Network/NetworkManager.h"
+#include "Loading/ModelLoader.h"
+#include "Graphics/RenderData.h"
 #include <thread>
 #include <chrono>
 #include <iostream>
 
 Game::Game() {
-    int port;
-    std::cout << "Select Port to initialize on: " << std::endl;
-    std::cin >> port;
-    if (NetworkManager::Initialize(port)) {
-        std::cout << "Network Manager successfully intialized." << std::endl;
-
-        bool valid = false;
-        do {
-            std::cin.clear();
-
-            std::cout << "Client or Server? (C/S)" << std::endl;
-            char choice;
-            std::cin >> choice;
-
-            if (choice == 'C' || choice == 'c') {
-                std::cout << "Server IP: ___.___.___.___:____" << std::endl;
-                int a,b,c,d,port;
-                std::cin >> a;
-                std::cout << "Server IP: " << a << ".___.___.___:____" << std::endl;
-                std::cin >> b;
-                std::cout << "Server IP: " << a << "." << b << ".___.___:____" << std::endl;
-                std::cin >> c;
-                std::cout << "Server IP: " << a << "." << b << "." << c << ".___:____" << std::endl;
-                std::cin >> d;
-                std::cout << "Server IP: " << a << "." << b << "." << c << "." << d << ":____" << std::endl;
-                std::cin >> port;
-
-                NetworkManager::JoinServer(Address(a,b,c,d,port));
-                valid = true;
-            } else if (choice == 'S' || choice == 's') {
-                NetworkManager::CreateRoom();
-                valid = true;
-            } else {
-                std::cout << "Invalid Option" << std::endl;
-            }
-        } while (!valid);
-    }
     _currScene = new MainScene();
     _currScene->InitScene();
 }
@@ -50,7 +14,6 @@ Game::Game() {
 Game::~Game() {
     _currScene->CleanUp();
     delete _currScene;
-    NetworkManager::CleanUp();
 }
 
 void Game::Update(const float delta) {
@@ -70,7 +33,6 @@ void Game::Update(const float delta) {
 		}
 	} else if (_currScene != nullptr) {
 		_currScene->Update(delta);
-        NetworkManager::Update(delta);
     }
 }
 
