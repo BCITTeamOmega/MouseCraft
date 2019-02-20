@@ -1,12 +1,20 @@
 #include "DebugColliderComponent.h"
 
+#include <iostream>
 
 
-DebugColliderComponet::DebugColliderComponet()
+DebugColliderComponent::DebugColliderComponent()
 {
+	OnCollide.Attach(this);
 }
 
-
-DebugColliderComponet::~DebugColliderComponet()
+DebugColliderComponent::~DebugColliderComponent()
 {
+	OnCollide.Detach(this);
 }
+
+void DebugColliderComponent::Update(DebugColliderComponent *, DebugColliderComponent *)
+{
+	std::cout << "COLLIDED" << std::endl;
+}
+

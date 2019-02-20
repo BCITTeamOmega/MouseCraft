@@ -17,6 +17,8 @@
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
 #include "TestSubObs.h"
+#include "DebugColliderComponent.h"
+#include "DebugColliderSystem.h"
 
 #define GLEW_STATIC
 
@@ -80,6 +82,18 @@ void Test_Rendering()
 
 	InputSystem* is = new InputSystem();
 
+	// game 
+
+	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
+		.Create<DebugColliderComponent>();
+	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance()
+		.Create<DebugColliderComponent>();
+
+	e1->AddComponent(c_p1_collider);
+	e2->AddComponent(c_p2_collider);
+
+	DebugColliderSystem* dcs = new DebugColliderSystem();
+
 	// add the entities 
 
 	OmegaEngine::Instance().AddEntity(e1);
@@ -88,6 +102,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 }
 

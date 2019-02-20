@@ -1,16 +1,21 @@
 #pragma once
 
 #include "Core/Component.h"
+#include "Subject.h"
+#include "Observer.h"
 
-class DebugColliderComponet : public Component
+class DebugColliderComponent : public Component,
+	public Observer<DebugColliderComponent*, DebugColliderComponent*>
 {
 // functions 
 public:
-	DebugColliderComponet();
-	~DebugColliderComponet();
+	DebugColliderComponent();
+	~DebugColliderComponent();
+	void Update(DebugColliderComponent*, DebugColliderComponent*) override;
 
 // variables 
 public: 
 	float radius = 0.5f;
+	Subject<DebugColliderComponent*, DebugColliderComponent*> OnCollide;
 };
 
