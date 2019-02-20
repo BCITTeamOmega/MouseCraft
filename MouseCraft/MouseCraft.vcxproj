@@ -157,6 +157,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
+    <ClCompile Include="DebugColliderComponent.cpp" />
+    <ClCompile Include="DebugColliderSystem.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
@@ -193,9 +195,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
+    <ClCompile Include="Subject.cpp" />
+    <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
@@ -208,6 +213,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Vector2D.h" />
+    <ClInclude Include="DebugColliderComponent.h" />
+    <ClInclude Include="DebugColliderSystem.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
@@ -253,9 +260,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="MouseMovement.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
+    <ClInclude Include="Subject.h" />
+    <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />

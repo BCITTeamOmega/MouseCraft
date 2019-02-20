@@ -16,6 +16,7 @@
 #include "Graphics/Renderable.h"
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
+#include "TestSubObs.h"
 
 #define GLEW_STATIC
 
@@ -242,8 +243,35 @@ void Test_ECS()
 	OmegaEngine::Instance().Loop();
 }
 
+void Test_ObserverPattern()
+{
+	// Test 1
+	FoobarSubject subject;
+	FoobarObserver observer;
+
+	subject.Attach(observer);
+	subject.Notify(4.0f, 2);
+
+	// Test 2
+	Subject<int> OnTemperatureChanged;
+	FreezingObserver obs1;
+	BoilingObserver obs2;
+
+	OnTemperatureChanged.Attach(obs1);
+	OnTemperatureChanged.Attach(obs2);
+
+	OnTemperatureChanged.Notify(-20);
+	OnTemperatureChanged.Notify(-10);
+	OnTemperatureChanged.Notify(0);
+	OnTemperatureChanged.Notify(50);
+	OnTemperatureChanged.Notify(100);
+	OnTemperatureChanged.Notify(200);
+}
+
 int main(int argc, char* argv[]) 
 {
+	Test_ObserverPattern();
+
 	Test_Rendering();
     /*
 	// Test_ECS();
