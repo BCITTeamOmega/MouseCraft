@@ -9,11 +9,16 @@
 #include "Event/EventManager.h"
 #include "Core/UpdatableComponent.h"
 #include "Core/Entity.h"
+#include "Core/OmegaEngine.h"
 #include "Input/InputSystem.h"
+#include "Event/Observer.h"
+#include "DebugColliderComponent.h"
+#include "Pickup.h"
 
-// Test component for mouse movement
+// Test component for mouse movement (SCRAP THIS LATER)
 
-class MouseMovement : public UpdatableComponent
+class MouseMovement : public UpdatableComponent,
+	public Observer<DebugColliderComponent*, DebugColliderComponent*>
 {
 public:
 	MouseMovement()
@@ -27,6 +32,12 @@ public:
 	{
 		EventManager::Unsubscribe(EventName::INPUT_AXIS, this);
 		EventManager::Unsubscribe(EventName::INPUT_BUTTON, this);
+	};
+
+	virtual void OnInitialized() override
+	{
+		// no need to store
+		GetEntity()->GetComponent<DebugColliderComponent>()->OnCollide.Attach(this);
 	};
 
 	virtual void Update(float deltaTime)
@@ -43,6 +54,12 @@ public:
 		{
 			std::cout << std::endl << "Mouse[" << player << "] - Pew pew!" << std::endl;
 			shoot = false;
+		}
+
+		if (drop)
+		{
+			drop = false;
+			DropPickup();
 		}
 
 		// std::cout << "\rMouse moving: " << move.x << "," << move.y << std::flush;
@@ -90,9 +107,44 @@ public:
 		
 			if (data.button == Button::AUX1 && data.isDown)
 				std::cout << glm::to_string(GetEntity()->transform.getWorldPosition()) << std::endl;
+		
+			if (data.button == Button::AUX2)
+				drop = data.isDown;
 		}
 	}
 
+	virtual void Publish(DebugColliderComponent* me, DebugColliderComponent* other) override
+	{
+		if (other->tag == "pickup")
+		{
+			GrabPickup(other->GetEntity()->GetComponent<Pickup>());
+		}
+	}
+
+	void GrabPickup(Pickup* pickup)
+	{
+		if (currentPickup != nullptr) return;
+
+		pickup->Grab();
+		currentPickup = pickup;
+
+		GetEntity()->AddChild(pickup->GetEntity());
+		pickup->GetEntity()->transform.setLocalPosition(glm::vec3(2, 1, 0));
+
+	}
+
+	void DropPickup()
+	{
+		if (currentPickup != nullptr)
+		{
+			auto e = currentPickup->GetEntity();
+			e->SetParent(OmegaEngine::Instance().GetRoot());
+			e->transform.setLocalPosition(e->transform.getWorldPosition());
+
+			currentPickup->Drop();
+			currentPickup = nullptr;
+		}
+	}
 
 public:
 	int player = 0;
@@ -104,5 +156,7 @@ private:
 	float aimX;
 	float aimY;
 	bool shoot;
+	bool drop;
+	Pickup* currentPickup;
 };
 

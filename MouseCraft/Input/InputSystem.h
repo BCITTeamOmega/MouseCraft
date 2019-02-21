@@ -145,6 +145,10 @@ public:
 				{
 					axis = Axis::RIGHT_VER;
 				}
+				else
+				{
+					continue;
+				}
 
 				// notify 
 				EventManager::Notify(
