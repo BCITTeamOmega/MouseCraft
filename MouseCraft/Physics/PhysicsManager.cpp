@@ -45,6 +45,22 @@ void PhysicsManager::Update(float dt)
 		updateHeights(dt);
 		checkCollisions();
 	}
+
+	//update all the components to match the bodies
+	b2Body* b = world->GetBodyList(); //points to the first body
+
+	while (b != NULL)
+	{
+		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
+
+		if (pcomp != NULL)
+		{
+			//copy all relevant data from b to pcomp
+		}
+
+		//get the next body
+		b = b->GetNext();
+	}
 }
 
 PhysicsComponent* PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor)
