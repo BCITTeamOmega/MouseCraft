@@ -61,7 +61,7 @@ void RenderSystem::Update(float dt) {
 
 	if (_camera != nullptr) {
 		Transform viewTransform = _camera->getTransform();
-		mat4 view = inverse(viewTransform.getLocalTransformation());
+		mat4 view = inverse(viewTransform.getWorldTransformation());
 
 		float fov = _camera->getFOV();
 		float closeClip = _camera->getCloseClip();
@@ -116,7 +116,7 @@ void RenderSystem::accumulateList() {
 		_accumulatingList->push_back(
 			RenderData(
 				r->getModel(),
-				t.getLocalTransformation(),
+				t.getWorldTransformation(),
 				r->getColor()
 			)
 		);
