@@ -159,6 +159,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="..\include\GLEW\glew.c" />
     <ClCompile Include="DebugColliderComponent.cpp" />
     <ClCompile Include="DebugColliderSystem.cpp" />
+    <ClCompile Include="Event\Observer.cpp" />
+    <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
@@ -176,6 +178,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Vector2D.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
     <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
@@ -195,14 +198,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="MainScene.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
-    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
@@ -218,6 +219,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />
+    <ClInclude Include="Event\Observer.h" />
+    <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
@@ -226,6 +229,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\ModelGen.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\RenderUtil.h" />
@@ -264,14 +268,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="MouseMovement.h" />
-    <ClInclude Include="Observer.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />
     <ClInclude Include="PickupSpawner.h" />
-    <ClInclude Include="Subject.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />

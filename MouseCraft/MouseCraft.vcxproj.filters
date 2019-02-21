@@ -237,16 +237,13 @@
     <ClCompile Include="Input\InputSystem.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\ModelGen.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Observer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestSubObs.cpp">
@@ -260,6 +257,12 @@
     </ClCompile>
     <ClCompile Include="PickupSpawner.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\Observer.cpp">
+      <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\Subject.cpp">
+      <Filter>Source Files\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -449,16 +452,13 @@
     <ClInclude Include="Input\InputSystem.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\ModelGen.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="DebugColliderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DebugColliderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestSubObs.h">
@@ -475,6 +475,12 @@
     </ClInclude>
     <ClInclude Include="PickupSpawner.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Subject.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Observer.h">
+      <Filter>Header Files\Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

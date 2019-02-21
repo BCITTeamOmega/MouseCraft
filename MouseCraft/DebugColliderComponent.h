@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Component.h"
-#include "Subject.h"
-#include "Observer.h"
+#include "Event/Subject.h"
+#include "Event/Observer.h"
 #include <string>
 
 class DebugColliderComponent : public Component,

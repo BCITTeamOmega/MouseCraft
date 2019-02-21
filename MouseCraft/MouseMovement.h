@@ -11,7 +11,7 @@
 #include "Core/Entity.h"
 #include "Core/OmegaEngine.h"
 #include "Input/InputSystem.h"
-#include "Observer.h"
+#include "Event/Observer.h"
 #include "DebugColliderComponent.h"
 #include "Pickup.h"
 

@@ -16,6 +16,7 @@
 #include "Graphics/Renderable.h"
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
+#include "Graphics/ModelGen.h"
 #include "TestSubObs.h"
 #include "DebugColliderComponent.h"
 #include "DebugColliderSystem.h"
@@ -29,7 +30,8 @@ extern "C" {
 
 void Test_Rendering()
 {
-	Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+	Model* m = ModelGen::makeCube(1, 1, 1);
 
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();

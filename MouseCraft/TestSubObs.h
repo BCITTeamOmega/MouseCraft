@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "Subject.h"
-#include "Observer.h"
+#include "Event/Subject.h"
+#include "Event/Observer.h"
 
 class FreezingObserver : public Observer<int>
 {
