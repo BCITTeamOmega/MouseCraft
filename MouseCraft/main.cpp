@@ -17,6 +17,10 @@
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
 #include "Graphics/ModelGen.h"
+#include "TestSubObs.h"
+#include "DebugColliderComponent.h"
+#include "DebugColliderSystem.h"
+#include "PickupSpawner.h"
 
 #define GLEW_STATIC
 
@@ -81,14 +85,34 @@ void Test_Rendering()
 
 	InputSystem* is = new InputSystem();
 
+	// game 
+
+	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
+		.Create<DebugColliderComponent>();
+	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance()
+		.Create<DebugColliderComponent>();
+
+	e1->AddComponent(c_p1_collider);
+	e2->AddComponent(c_p2_collider);
+
+	auto e_spawner = EntityManager::Instance().Create();
+	auto c_spawner = ComponentManager<UpdatableComponent>::Instance()
+		.Create<PickupSpawner>();
+
+	e_spawner->AddComponent(c_spawner);
+
+	DebugColliderSystem* dcs = new DebugColliderSystem();
+
 	// add the entities 
 
 	OmegaEngine::Instance().AddEntity(e1);
 	OmegaEngine::Instance().AddEntity(e2);
 	OmegaEngine::Instance().AddEntity(e3);
+	OmegaEngine::Instance().AddEntity(e_spawner);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 }
 
@@ -244,8 +268,35 @@ void Test_ECS()
 	OmegaEngine::Instance().Loop();
 }
 
+void Test_ObserverPattern()
+{
+	// Test 1
+	FoobarSubject subject;
+	FoobarObserver observer;
+
+	subject.Attach(observer);
+	subject.Notify(4.0f, 2);
+
+	// Test 2
+	Subject<int> OnTemperatureChanged;
+	FreezingObserver obs1;
+	BoilingObserver obs2;
+
+	OnTemperatureChanged.Attach(obs1);
+	OnTemperatureChanged.Attach(obs2);
+
+	OnTemperatureChanged.Notify(-20);
+	OnTemperatureChanged.Notify(-10);
+	OnTemperatureChanged.Notify(0);
+	OnTemperatureChanged.Notify(50);
+	OnTemperatureChanged.Notify(100);
+	OnTemperatureChanged.Notify(200);
+}
+
 int main(int argc, char* argv[]) 
 {
+	Test_ObserverPattern();
+
 	Test_Rendering();
     /*
 	// Test_ECS();
