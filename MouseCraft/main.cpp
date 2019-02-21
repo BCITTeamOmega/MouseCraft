@@ -19,6 +19,7 @@
 #include "TestSubObs.h"
 #include "DebugColliderComponent.h"
 #include "DebugColliderSystem.h"
+#include "PickupSpawner.h"
 
 #define GLEW_STATIC
 
@@ -92,6 +93,12 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 	e2->AddComponent(c_p2_collider);
 
+	auto e_spawner = EntityManager::Instance().Create();
+	auto c_spawner = ComponentManager<UpdatableComponent>::Instance()
+		.Create<PickupSpawner>();
+
+	e_spawner->AddComponent(c_spawner);
+
 	DebugColliderSystem* dcs = new DebugColliderSystem();
 
 	// add the entities 
@@ -99,6 +106,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e1);
 	OmegaEngine::Instance().AddEntity(e2);
 	OmegaEngine::Instance().AddEntity(e3);
+	OmegaEngine::Instance().AddEntity(e_spawner);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);

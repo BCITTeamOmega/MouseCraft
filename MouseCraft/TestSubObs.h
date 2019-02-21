@@ -7,7 +7,7 @@
 class FreezingObserver : public Observer<int>
 {
 public:
-	void Update(int i) override
+	void Publish(int i) override
 	{
 		if (i <= 0)
 		{
@@ -23,7 +23,7 @@ public:
 class BoilingObserver : public Observer<int>
 {
 public:
-	void Update(int i) override
+	void Publish(int i) override
 	{
 		if (i >= 100)
 		{
@@ -70,7 +70,7 @@ private:
 class FoobarObserver : public Observer<float, int>
 {
 public:
-	void Update(float f, int i) override
+	void Publish(float f, int i) override
 	{
 		std::cout << "Float: " << f << " Int: " << i << std::endl;
 	}

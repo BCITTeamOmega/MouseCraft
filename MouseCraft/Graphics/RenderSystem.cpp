@@ -116,7 +116,7 @@ void RenderSystem::accumulateList() {
 		_accumulatingList->push_back(
 			RenderData(
 				r->getModel(),
-				t.getLocalTransformation(),
+				t.getWorldTransformation(),
 				r->getColor()
 			)
 		);

@@ -252,6 +252,15 @@
     <ClCompile Include="TestSubObs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickupFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickupSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -453,6 +462,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestSubObs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MOUSECRAFT_ENUMS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickupFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickupSpawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

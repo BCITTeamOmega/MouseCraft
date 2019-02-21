@@ -28,10 +28,16 @@ void DebugColliderSystem::Update(float dt)
 
 	for (int i = 0; i < colliders.size(); ++i)
 	{
+		auto left = colliders[i];
+		if (!left->GetActive()) 
+			continue;
+
 		for (int j = i + 1; j < colliders.size(); ++j)
 		{
-			auto left = colliders[i];
 			auto right = colliders[j];
+			if (!right->GetActive())
+				continue;
+			
 			if (CheckCollision(left, right))
 			{
 				left->OnCollide.Notify(left, right);

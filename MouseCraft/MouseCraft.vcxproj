@@ -199,6 +199,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
+    <ClCompile Include="Pickup.cpp" />
+    <ClCompile Include="PickupFactory.cpp" />
+    <ClCompile Include="PickupSpawner.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
@@ -259,11 +262,15 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="MouseMovement.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
+    <ClInclude Include="Pickup.h" />
+    <ClInclude Include="PickupFactory.h" />
+    <ClInclude Include="PickupSpawner.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />

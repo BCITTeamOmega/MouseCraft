@@ -43,7 +43,7 @@ public:
 	{
 		for (auto it : _observers)
 		{
-			it->Update(args...);
+			it->Publish(args...);
 		}
 	};
 

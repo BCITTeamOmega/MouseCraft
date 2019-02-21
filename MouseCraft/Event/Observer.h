@@ -10,5 +10,5 @@ class Observer
 public:
 	Observer() {};
 	~Observer() {};
-	virtual void Update(Args... args) {}
+	virtual void Publish(Args... args) {}
 };

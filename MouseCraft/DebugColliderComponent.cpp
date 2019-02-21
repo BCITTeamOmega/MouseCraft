@@ -13,7 +13,7 @@ DebugColliderComponent::~DebugColliderComponent()
 	OnCollide.Detach(this);
 }
 
-void DebugColliderComponent::Update(DebugColliderComponent *, DebugColliderComponent *)
+void DebugColliderComponent::Publish(DebugColliderComponent *, DebugColliderComponent *)
 {
 	std::cout << "COLLIDED" << std::endl;
 }
