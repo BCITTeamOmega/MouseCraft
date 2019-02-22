@@ -14,7 +14,6 @@ public:
     unsigned char GetD() const;
 
     unsigned short GetPort() const;
-
 private:
     unsigned int _address;
     unsigned short _port;
