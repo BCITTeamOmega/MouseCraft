@@ -6,7 +6,7 @@
 
 #define MAX_PACKET_SIZE 256
 
-class NetworkSystem : System {
+class NetworkSystem : public System {
 public:
     NetworkSystem();
     ~NetworkSystem();

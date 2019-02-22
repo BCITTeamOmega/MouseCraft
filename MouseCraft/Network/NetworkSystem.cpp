@@ -41,5 +41,11 @@ void NetworkSystem::serverTick() {
 }
 
 void NetworkSystem::processPacket(Address &sender, unsigned char * data, const int size) const {
-
+    cout << "[" <<
+        sender.GetA() << "." <<
+        sender.GetB() << "." <<
+        sender.GetC() << "." <<
+        sender.GetD() << ":" <<
+        sender.GetPort() << "] " <<
+        data << endl;
 }

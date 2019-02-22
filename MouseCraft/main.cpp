@@ -17,6 +17,7 @@
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
 #include "Graphics/ModelGen.h"
+#include "Network/NetworkSystem.h"
 
 #define GLEW_STATIC
 
@@ -80,6 +81,7 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_movement);
 
 	InputSystem* is = new InputSystem();
+    NetworkSystem *ns = new NetworkSystem();
 
 	// add the entities 
 
@@ -89,6 +91,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+    OmegaEngine::Instance().AddSystem(ns);
 	OmegaEngine::Instance().Loop();
 }
 
