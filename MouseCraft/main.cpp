@@ -21,6 +21,7 @@
 #include "DebugColliderComponent.h"
 #include "DebugColliderSystem.h"
 #include "PickupSpawner.h"
+#include "Cat.h"
 
 #define GLEW_STATIC
 
@@ -102,7 +103,9 @@ void Test_Rendering()
 	e_spawner->AddComponent(c_spawner);
 
 	DebugColliderSystem* dcs = new DebugColliderSystem();
-
+    auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+    c_p2_Cat->setPlayer(1);
+    e2->AddComponent(c_p2_Cat);
 	// add the entities 
 
 	OmegaEngine::Instance().AddEntity(e1);

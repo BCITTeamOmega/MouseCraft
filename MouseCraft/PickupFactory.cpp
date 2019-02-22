@@ -7,9 +7,9 @@
 
 PickupFactory::PickupFactory()
 {
-	_screwModel = ModelLoader::loadModel("res/models/screw.obj");
-	_springModel = ModelLoader::loadModel("res/models/spring.obj");
-	_batteryModel = ModelLoader::loadModel("res/models/battery.obj");
+	_screwModel = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+	_springModel = ModelLoader::loadModel("res/models/test/CubeModel.obj");
+	_batteryModel = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 }
 
 PickupFactory::~PickupFactory()
