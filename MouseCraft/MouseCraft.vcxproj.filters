@@ -254,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="Network\NetworkSystem.cpp">
       <Filter>Source Files\Network</Filter>
+	</ClCompile>
+    <ClCompile Include="Graphics\ModelGen.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="Network\NetworkSystem.h">
       <Filter>Header Files\Network</Filter>
+	</ClInclude>
+    <ClInclude Include="Graphics\ModelGen.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
