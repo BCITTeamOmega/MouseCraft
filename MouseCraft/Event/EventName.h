@@ -18,4 +18,5 @@ enum EventName {
 	INPUT_P1_AIM,
 	INPUT_P1_BUTTON,
 	*/
+	HEALTH_CHANGE,
 };

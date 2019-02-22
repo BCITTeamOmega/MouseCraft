@@ -204,6 +204,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
@@ -238,6 +239,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\BufferObjects\VBO.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Graphics\RenderSystem.h" />
@@ -274,6 +276,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />
     <ClInclude Include="PickupSpawner.h" />
+    <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
