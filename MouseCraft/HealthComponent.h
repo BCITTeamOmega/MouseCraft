@@ -1,13 +1,25 @@
 #pragma once
 #include "Core/Component.h"
 #include "Event/ISubscriber.h"
+#include "Event/EventManager.h"
 
 class HealthComponent : public Component, public ISubscriber
 {
 public:
-	virtual void OnInitialized() {}
+	virtual void OnInitialized()
+	{
+		EventManager::Subscribe(HEALTH_CHANGE, this);
+	}
+
+	virtual ~HealthComponent()
+	{
+		EventManager::Unsubscribe(HEALTH_CHANGE, this);
+	}
+
+	int GetHealth() { return _health; }
+
 private:
-	unsigned int _health = 1;
+	int _health = 1;
 
 	void Notify(EventName eventName, Param* params)
 	{
