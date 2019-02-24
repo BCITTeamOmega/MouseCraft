@@ -6,5 +6,8 @@ class Coil :
 public:
 	Coil();
 	~Coil();
+
+	void use() override;
+	void show() override;
 };
 

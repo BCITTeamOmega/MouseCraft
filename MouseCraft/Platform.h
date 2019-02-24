@@ -6,5 +6,8 @@ class Platform :
 public:
 	Platform();
 	~Platform();
+
+	void use() override;
+	void show() override;
 };
 

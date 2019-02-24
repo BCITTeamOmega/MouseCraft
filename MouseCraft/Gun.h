@@ -6,5 +6,8 @@ class Gun :
 public:
 	Gun();
 	~Gun();
+
+	void use() override;
+	void show() override;
 };
 

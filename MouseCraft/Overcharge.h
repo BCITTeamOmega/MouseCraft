@@ -6,5 +6,8 @@ class Overcharge :
 public:
 	Overcharge();
 	~Overcharge();
+
+	void use() override;
+	void show() override;
 };
 
