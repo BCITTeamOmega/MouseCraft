@@ -170,6 +170,7 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 			players.push_back(playerBody);
 			break;
 		default:
+			break;
 	}
 
 	physicsComp->body = playerBody;

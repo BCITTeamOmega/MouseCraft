@@ -236,8 +236,8 @@ void Test_ECS()
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
 
 	PhysicsManager physicsSystem;
-	physicsSystem.createPlatform(0, 0, 100, 100);
-	physicsSystem.createPlayer(0, 0, 20, 20, true);
+	physicsSystem.createObject(0, 0, 100, 100, 0, PhysicsManager::PLATFORM);
+	physicsSystem.createObject(0, 0, 20, 20, 0, PhysicsManager::CAT_UP);
 
 	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
