@@ -1,9 +1,11 @@
 #include "PhysicsComponent.h"
 
-PhysicsComponent::PhysicsComponent(float x, float y, float z, float vX, float vY, float vZ)
+PhysicsComponent::PhysicsComponent(float x, float y, float z, float r)
 {
 	position = Vector2D(x, y);
-	velocity = Vector2D(vX, vY);
+	velocity = Vector2D(0, 0);
 	zPos = z;
-	zVel = vZ;
+	zVel = 0;
+	rotation = r;
+	isJumping = false;
 }
