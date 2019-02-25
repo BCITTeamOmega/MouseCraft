@@ -22,6 +22,8 @@
 #include "DebugColliderSystem.h"
 #include "PickupSpawner.h"
 #include "Cat.h"
+#include "PlayerComponent.h"
+#include "HealthComponent.h"
 
 #define GLEW_STATIC
 
@@ -104,6 +106,12 @@ void Test_Rendering()
 
 	DebugColliderSystem* dcs = new DebugColliderSystem();
     auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	playerc->SetID(1);
+	e2->AddComponent(playerc);
+	e2->AddComponent(healthc);
+
     c_p2_Cat->setPlayer(1);
     e2->AddComponent(c_p2_Cat);
 	// add the entities 
