@@ -18,13 +18,13 @@ public:
 	Team GetTeam() { return _teamID; }
 	void SetTeam(Team id) { _teamID = id; }
 	unsigned int GetID() { return _playerID; }
+	void SetID(unsigned int id) { _playerID = id; }
 	void SetSpeed(float speed) { _speed = speed; }
 	float GetSpeed() { return _speed; }
 
 private:
 	HealthComponent* _health;
 	unsigned int _playerID;
-	static unsigned int _curID;
 	Team _teamID;
 
 	Entity* _entity;
@@ -32,7 +32,7 @@ private:
 	float _moveY;
 	float _aimX;
 	float _aimY;
-	float _speed;
+	float _speed = 50.0f;
 
 	// Inherited via ISubscriber
 	virtual void Notify(EventName eventName, Param * params) override;

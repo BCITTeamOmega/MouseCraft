@@ -1,14 +1,11 @@
 #include "PlayerComponent.h"
 #include "Input/InputSystem.h"
 
-unsigned int PlayerComponent::_curID = 0;
-
 void PlayerComponent::OnInitialized()
 {
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
 	_entity = GetEntity();
 	_health = _entity->GetComponent<HealthComponent>();
-	_playerID = _curID++;
 }
 
 void PlayerComponent::Notify(EventName eventName, Param* params)

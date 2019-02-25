@@ -4,6 +4,7 @@
 #include "Event/ISubscriber.h"
 #include "Event/EventManager.h"
 #include "Core/Entity.h"
+#include "Event/Subject.h"
 
 class HealthComponent : public Component, public ISubscriber
 {
@@ -19,6 +20,22 @@ public:
 	}
 
 	int GetHealth() { return _health; }
+
+	Subject<int> OnHealthChanged;
+	Subject<> OnDeath;
+
+
+	void CutSelf(int dmg)
+	{
+		if (dmg == 0)
+			return;
+		if ((_health -= dmg) < 0)
+		{
+			_health = 0;
+			OnDeath.Notify();
+		}
+		OnHealthChanged.Notify(_health);
+	}
 
 private:
 	int _health = 1;
