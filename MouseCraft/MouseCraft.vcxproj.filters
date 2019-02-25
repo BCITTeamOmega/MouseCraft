@@ -201,9 +201,6 @@
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
       <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
-    <ClCompile Include="MouseMovement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Vector2D.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -439,9 +436,6 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseMovement.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Vector2D.h">
       <Filter>Header Files\Core</Filter>
