@@ -94,6 +94,7 @@ void Mice::addItem(Pickup* item) {
 	else if (baseItem != nullptr && newItem == nullptr) {
 		std::cout << "Mouse will combine the " << baseItem << " and the " << item << std::endl;
 		combine(item);
+		item->GetEntity()->Destroy();
 	}
 	else return;
 }

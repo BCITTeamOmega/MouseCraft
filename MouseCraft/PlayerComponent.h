@@ -28,10 +28,8 @@ private:
 	Team _teamID;
 
 	Entity* _entity;
-	float _moveX;
-	float _moveY;
-	float _aimX;
-	float _aimY;
+	glm::vec2 _move;
+	glm::vec2 _aim;
 	float _speed = 50.0f;
 
 	// Inherited via ISubscriber
