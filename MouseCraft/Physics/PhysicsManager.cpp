@@ -80,9 +80,9 @@ void PhysicsManager::Update(float dt)
 	}
 }
 
-PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, ObjectType t)
+PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, r);
+	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, r, t);
 
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
