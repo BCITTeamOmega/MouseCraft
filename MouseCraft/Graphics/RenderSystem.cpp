@@ -17,6 +17,7 @@ using glm::inverse;
 RenderSystem::RenderSystem() : System() {
 	initShaders();
 	glClearColor(0.3f, 0.75f, 1.0f, 1.0f);
+	glEnable(GL_FRAMEBUFFER_SRGB);
 
 	_renderingList = new vector<RenderData>();
 	_accumulatingList = new vector<RenderData>();
@@ -87,6 +88,7 @@ void RenderSystem::Update(float dt) {
 			mat4 mvp = vp * model;
 
 			if (tex != nullptr) {
+				// _texture->setImage(*tex, true, GL_SRGB_ALPHA);
 				_texture->setImage(*tex);
 			}
 

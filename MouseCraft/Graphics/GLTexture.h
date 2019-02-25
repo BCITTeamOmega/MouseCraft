@@ -6,7 +6,11 @@ public:
 	GLTexture();
 	~GLTexture();
 	GLuint getID();
-	void setImage(Image& image, bool mipmap = true);
+	void setImage(
+		Image& image,
+		bool mipmap = true,
+		GLuint storageFormat = GL_RGBA16F
+	);
 	void bind(GLenum slot);
 	void unbind(GLenum slot);
 private:
