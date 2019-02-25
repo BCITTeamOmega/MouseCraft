@@ -17,9 +17,12 @@
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
 #include "Graphics/ModelGen.h"
+#include "Sound/SoundManager.h"
 #include "Loading/ImageLoader.h"
 
 #define GLEW_STATIC
+
+SoundManager* noise;
 
 extern "C" {
 	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
@@ -114,6 +117,8 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
 	OmegaEngine::Instance().Loop();
+
+
 }
 
 void Test_ECS()
@@ -264,6 +269,21 @@ void Test_ECS()
 
 int main(int argc, char* argv[]) 
 {
+    //adding sound system
+    noise = new SoundManager();
+    //start initial music track, standard form for music selection
+    //create Track Params for event
+    TrackParams * initial = new TrackParams();
+    //select song
+    initial->track = MainBGM;
+    //specify song location. Usually fine to leave with default values of 0
+    initial->x = 0;
+    initial->y = 0;
+    initial->z = 0;
+    //create a type Param from the track params and pass it into the event notifier
+    TypeParam<TrackParams*> param(initial);
+    EventManager::Notify(PLAY_SONG, &param);
+
 	Test_Rendering();
     /*
 	// Test_ECS();
