@@ -36,6 +36,8 @@ private:
 
 	VAO* _vao;
 	VBO* _positionVBO;
+	VBO* _normalVBO;
+	VBO* _texCoordVBO;
 	EBO* _ebo;
 	Camera* _camera;
 	

@@ -7,11 +7,11 @@ GLTexture::~GLTexture() {
 	glDeleteTextures(1, &_id);
 }
 
-void GLTexture::setImage(Image image, bool mipmap) {
+void GLTexture::setImage(Image& image, bool mipmap) {
 	glBindTexture(GL_TEXTURE_2D, _id);
-	GLuint format = GL_RGBA;
+	GLuint format = image.getFormat();
 	glTexImage2D(
-		_id,
+		GL_TEXTURE_2D,
 		0,
 		format,
 		image.getWidth(),

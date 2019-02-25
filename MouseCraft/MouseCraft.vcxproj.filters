@@ -243,6 +243,9 @@
     <ClCompile Include="Graphics\GLTexture.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Loading\ImageLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -436,6 +439,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\GLTexture.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\ImageLoader.h">
+      <Filter>Header Files\Loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

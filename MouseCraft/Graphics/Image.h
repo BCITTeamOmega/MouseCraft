@@ -19,7 +19,6 @@ public:
 		_format(format) {}
 
 	/// <summary>
-	/// Default destructor
 	/// </summary>
 	~Image() {
 		free(_data);
@@ -42,6 +41,8 @@ public:
 	/// </summary>
 	/// <returns>The height of the image</returns>
 	int getHeight() { return _height; }
+
+	int getFormat() { return _format; }
 private:
 	/// <summary>
 	/// The bitmap data of the image

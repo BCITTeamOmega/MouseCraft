@@ -17,6 +17,7 @@
 #include "Input/InputSystem.h"
 #include "MouseMovement.h"
 #include "Graphics/ModelGen.h"
+#include "Loading/ImageLoader.h"
 
 #define GLEW_STATIC
 
@@ -27,7 +28,11 @@ extern "C" {
 void Test_Rendering()
 {
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
-	Model* m = ModelGen::makeCube(1, 1, 1);
+	//Model* m = ModelGen::makeCube(1, 1, 1);
+	Model* m = ModelGen::makeQuad(ModelGen::Axis::Z, 1, 1);
+	
+	Image* i = ImageLoader::loadImage("res/models/test/test.jpg");
+	m->setTexture(i);
 
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();
