@@ -41,5 +41,7 @@ private:
 	Model* _bombModel;
 	Model* _overchargeModel;
 	Model* _swordsModel;
+
+	Model* _coilFieldModel;
 };
 
