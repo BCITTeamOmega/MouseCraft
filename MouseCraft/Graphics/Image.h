@@ -1,4 +1,6 @@
 #pragma once
+#include "../GL/glad.h"
+#include <stdlib.h>
 /// <summary>
 /// Bitmap data with additional image information like width and height
 /// </summary>
@@ -10,12 +12,17 @@ public:
 	/// <param name="data">The bitmap data of the image</param>
 	/// <param name="width">The width of the image</param>
 	/// <param name="height">The height of the image</param>
-	Image(unsigned char* data, int width, int height) : _data(data), _width(width), _height(height) {}
+	Image(unsigned char* data, int width, int height, GLuint format = GL_RGBA)
+		: _data(data),
+		_width(width),
+		_height(height),
+		_format(format) {}
 
 	/// <summary>
-	/// Default destructor
 	/// </summary>
-	~Image() = default;
+	~Image() {
+		free(_data);
+	};
 
 	/// <summary>
 	/// Get the bitmap data of the image
@@ -34,6 +41,8 @@ public:
 	/// </summary>
 	/// <returns>The height of the image</returns>
 	int getHeight() { return _height; }
+
+	int getFormat() { return _format; }
 private:
 	/// <summary>
 	/// The bitmap data of the image
@@ -49,4 +58,6 @@ private:
 	/// The height of the image
 	/// </summary>
 	int _height;
+
+	GLuint _format;
 };
