@@ -1,0 +1,3 @@
+cat battery.obj | sed -E -e "s/f ([0-9\/]+) ([0-9\/]+) ([0-9\/]+) ([0-9\/]+)/f \1 \2 \3 \nf \1 \3 \4/g" > battery_tri.obj
+
+bash command - run in cygwin or git bash

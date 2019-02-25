@@ -135,7 +135,7 @@ void Mice::use(Contraption* item) {
 void Mice::combine(Pickup *material) {
 
 	Entity* entity;
-	Contraption* c;
+	Contraption* c = new Contraption();
 	GetEntity()->AddChild(c->GetEntity());
 	c->GetEntity()->transform.setLocalPosition(glm::vec3(2, 1, 0));
 
@@ -152,27 +152,31 @@ void Mice::combine(Pickup *material) {
 			case BATTERY:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::OVERCHARGE;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SCREW:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::BOMB;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SPRING:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::COIL;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		case SCREW:
 			switch (material->type)
@@ -180,27 +184,31 @@ void Mice::combine(Pickup *material) {
 			case BATTERY:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::BOMB;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SCREW:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::SWORDS;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SPRING:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::GUN;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		case SPRING:
 			switch (material->type)
@@ -208,27 +216,31 @@ void Mice::combine(Pickup *material) {
 			case BATTERY:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::COIL;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SCREW:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::GUN;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			case SPRING:
 				baseItem = nullptr;
 				c->type = CONTRAPTIONS::PLATFORM;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition());
 				OmegaEngine::Instance().AddEntity(entity);
 				newItem = c;
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		default:
 			break;

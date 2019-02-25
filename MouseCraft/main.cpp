@@ -15,7 +15,7 @@
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
 #include "Input/InputSystem.h"
-#include "MouseMovement.h"
+#include "Mice.h"
 #include "Graphics/ModelGen.h"
 #include "TestSubObs.h"
 #include "DebugColliderComponent.h"
@@ -72,8 +72,8 @@ void Test_Rendering()
 
 	// input 
 
-	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
-	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
 
 	c_p1_movement->player = 0;
 	c_p1_movement->speed = 50.0f;

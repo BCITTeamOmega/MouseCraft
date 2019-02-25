@@ -13,6 +13,6 @@ void Gun::use() {
 	Contraption::use();
 }
 
-void Gun::use() {
+void Gun::show() {
 	Contraption::show();
 }
