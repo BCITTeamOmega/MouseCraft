@@ -94,11 +94,16 @@ void Mice::Publish(DebugColliderComponent* me, DebugColliderComponent* other)
 {
 	if (other->tag == "pickup")
 	{
+		std::cout << "PICKUP???" << std::endl;
 		addItem(other->GetEntity()->GetComponent<Pickup>());
 	}
 }
 
 void Mice::addItem(Pickup* item) {
+
+	if (newItem != nullptr) {
+		return;
+	}
 
 	if (baseItem == nullptr && newItem == nullptr) {
 		item->Grab();
@@ -106,24 +111,33 @@ void Mice::addItem(Pickup* item) {
 
 		GetEntity()->AddChild(item->GetEntity());
 		item->GetEntity()->transform.setLocalPosition(glm::vec3(2, 1, 0));
+		std::cout << "Mouse has pickup up a " << item << std::endl;
 	}
 	else if (baseItem != nullptr && newItem == nullptr) {
+		std::cout << "Mouse will combine the " << baseItem << " and the " << item << std::endl;
 		combine(item);
-	}
-	else if (newItem != nullptr) {
-		use(newItem);
 	}
 	else return;
 }
 
 void Mice::dropItem() {
-	if (baseItem != nullptr || newItem != nullptr) {
+	
+	if (baseItem != nullptr) {
 		auto e = baseItem->GetEntity();
 		e->SetParent(OmegaEngine::Instance().GetRoot());
 		e->transform.setLocalPosition(e->transform.getWorldPosition());
 
 		baseItem->Drop();
 		baseItem = nullptr;
+	}
+
+	if (newItem != nullptr) {
+		auto e = newItem->GetEntity();
+		e->SetParent(OmegaEngine::Instance().GetRoot());
+		e->transform.setLocalPosition(e->transform.getWorldPosition());
+
+		newItem->Drop();
+		newItem = nullptr;
 	}
 }
 
@@ -135,9 +149,6 @@ void Mice::use(Contraption* item) {
 void Mice::combine(Pickup *material) {
 
 	Entity* entity;
-	Contraption* c;
-	GetEntity()->AddChild(c->GetEntity());
-	c->GetEntity()->transform.setLocalPosition(glm::vec3(2, 1, 0));
 
 	if (baseItem == nullptr) {
 		return;
@@ -150,85 +161,106 @@ void Mice::combine(Pickup *material) {
 			switch (material->type)
 			{
 			case BATTERY:
+				std::cout << "Mouse is creating the OVERCHARGE" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::OVERCHARGE;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SCREW:
+				std::cout << "Mouse is creating the BOMB" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::BOMB;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::BOMB, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SPRING:
+				std::cout << "Mouse is creating the COIL" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::COIL;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::COIL, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		case SCREW:
 			switch (material->type)
 			{
 			case BATTERY:
+				std::cout << "Mouse is creating the BOMB" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::BOMB;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::BOMB, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SCREW:
+				std::cout << "Mouse is creating the SWORDS" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::SWORDS;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::SWORDS, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SPRING:
+				std::cout << "Mouse is creating the GUN" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::GUN;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::GUN, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		case SPRING:
 			switch (material->type)
 			{
 			case BATTERY:
+				std::cout << "Mouse is creating the COIL" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::COIL;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::COIL, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SCREW:
+				std::cout << "Mouse is creating the GUN" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::GUN;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::GUN, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			case SPRING:
+				std::cout << "Mouse is creating the PLATFORM" << std::endl;
+				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				c->type = CONTRAPTIONS::PLATFORM;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::OVERCHARGE, c->GetEntity()->transform.getLocalPosition);
-				OmegaEngine::Instance().AddEntity(entity);
-				newItem = c;
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::PLATFORM, glm::vec3(0, 0, 1));
+				GetEntity()->AddChild(entity);
+				newItem = entity->GetComponent<Contraption>();
+				break;
 
 			default:
 				break;
 			}
+			break;
 
 		default:
 			break;

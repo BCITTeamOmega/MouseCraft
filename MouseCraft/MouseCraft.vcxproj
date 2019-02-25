@@ -160,7 +160,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Coil.cpp" />
     <ClCompile Include="Contraption.cpp" />
+
     <ClCompile Include="Cat.cpp" />
+    <ClCompile Include="ContraptionFactory.cpp" />
     <ClCompile Include="DebugColliderComponent.cpp" />
     <ClCompile Include="DebugColliderSystem.cpp" />
     <ClCompile Include="Event\Observer.cpp" />
@@ -202,7 +204,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="Mice.cpp" />
-    <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
@@ -229,6 +230,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Coil.h" />
     <ClInclude Include="Contraption.h" />
     <ClInclude Include="Cat.h" />
+    <ClInclude Include="ContraptionFactory.h" />
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />
@@ -282,7 +284,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="Mice.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
-    <ClInclude Include="MouseMovement.h" />
     <ClInclude Include="Overcharge.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />

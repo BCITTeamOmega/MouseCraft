@@ -11,6 +11,7 @@ Platform::~Platform()
 
 void Platform::use() {
 	Contraption::use();
+
 }
 
 void Platform::show() {

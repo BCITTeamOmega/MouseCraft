@@ -8,6 +8,12 @@
 #include "Graphics/Model.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "Contraption.h"
+#include "Bomb.h"
+#include "Coil.h"
+#include "Gun.h"
+#include "Overcharge.h"
+#include "Platform.h"
+#include "Swords.h"
 
 class ContraptionFactory
 {
