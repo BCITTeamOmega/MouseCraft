@@ -157,7 +157,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Coil.cpp" />
+    <ClCompile Include="Contraption.cpp" />
+
     <ClCompile Include="Cat.cpp" />
+    <ClCompile Include="ContraptionFactory.cpp" />
     <ClCompile Include="DebugColliderComponent.cpp" />
     <ClCompile Include="DebugColliderSystem.cpp" />
     <ClCompile Include="Event\Observer.cpp" />
@@ -180,6 +185,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
     <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
@@ -197,14 +203,17 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
-    <ClCompile Include="MouseMovement.cpp" />
+    <ClCompile Include="Mice.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Swords.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
@@ -217,7 +226,11 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Coil.h" />
+    <ClInclude Include="Contraption.h" />
     <ClInclude Include="Cat.h" />
+    <ClInclude Include="ContraptionFactory.h" />
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />
@@ -240,6 +253,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\BufferObjects\VBO.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Graphics\RenderSystem.h" />
@@ -268,14 +282,17 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="Mice.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
-    <ClInclude Include="MouseMovement.h" />
+    <ClInclude Include="Overcharge.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />
     <ClInclude Include="PickupSpawner.h" />
+    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Swords.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
