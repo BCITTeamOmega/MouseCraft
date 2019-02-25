@@ -9,7 +9,7 @@ public:
 	PhysicsComponent(float x, float y, float z, float r);
 
 	Vector2D position, velocity;
-	float zPos, zVel, rotation;
+	float zPos, rotation;
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 private:

@@ -5,6 +5,8 @@ void CContactListener::BeginContact(b2Contact* contact)
 	b2Fixture* fa = contact->GetFixtureA();
 	b2Fixture* fb = contact->GetFixtureB();
 
+	std::cout << "collision" << std::endl;
+
 	/*if (fa == NULL || fb == NULL)
 		return;
 

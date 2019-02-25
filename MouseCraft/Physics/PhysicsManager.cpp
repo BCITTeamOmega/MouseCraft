@@ -32,13 +32,13 @@ void PhysicsManager::Update(float dt)
 		if (pcomp != NULL)
 		{
 			//call set velocity on the body to set it to velocity in physics component
-
+			b->SetLinearVelocity(b2Vec2(pcomp->velocity.x, pcomp->velocity.y));
 		}
 
 		//get the next body
 		b = b->GetNext();
 	}
-
+	
 	//Step every 60th of a second
 	while (t + ts <= dt)
 	{
@@ -60,7 +60,7 @@ void PhysicsManager::Update(float dt)
 		updateHeights(dt - t);
 		checkCollisions();
 	}
-
+	
 	//update all the components to match the bodies
 	b = world->GetBodyList(); //points to the first body
 
@@ -71,7 +71,8 @@ void PhysicsManager::Update(float dt)
 		if (pcomp != NULL)
 		{
 			//copy all relevant data from b to pcomp
-
+			pcomp->position = Vector2D(b->GetPosition().x, b->GetPosition().y);
+			pcomp->velocity = Vector2D(b->GetLinearVelocity().x, b->GetLinearVelocity().y);
 		}
 
 		//get the next body
@@ -175,6 +176,8 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	physicsComp->body = playerBody;
 
+	playerBody->SetUserData(physicsComp);
+
 	return physicsComp;
 
 	//NOTE: there is a bullet setting for projectiles that move exceptionally fast
@@ -217,11 +220,17 @@ void PhysicsManager::updateHeights(float step)
 		//If the body can't move don't bother
 		if (b->GetType() == b2_staticBody)
 		{
-			b->GetNext();
+			b = b->GetNext();
 			continue;
 		}
 
 		comp = static_cast<PhysicsComponent*>(b->GetUserData());
+
+		if (comp == nullptr)
+		{
+			b = b->GetNext();
+			continue;
+		}
 
 		if (comp->isJumping)
 		{
@@ -267,7 +276,7 @@ void PhysicsManager::updateHeights(float step)
 			}
 		}
 
-		comp->zPos;
+		b = b->GetNext();
 	}
 
 	//For each physics object, check if they are jumping

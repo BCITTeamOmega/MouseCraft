@@ -81,6 +81,12 @@ void Test_Rendering()
 
 	InputSystem* is = new InputSystem();
 
+	PhysicsManager* physicsSystem = new PhysicsManager();;
+	physicsSystem->createObject(0, 0, 100, 100, 0, PhysicsManager::PLATFORM);
+	physicsSystem->createObject(0, 0, 20, 20, 0, PhysicsManager::CAT_UP);
+
+	OmegaEngine::Instance().AddSystem(physicsSystem);
+
 	// add the entities 
 
 	OmegaEngine::Instance().AddEntity(e1);
@@ -234,12 +240,6 @@ void Test_ECS()
 	ExampleSystem exampleSystem;
 
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
-
-	PhysicsManager physicsSystem;
-	physicsSystem.createObject(0, 0, 100, 100, 0, PhysicsManager::PLATFORM);
-	physicsSystem.createObject(0, 0, 20, 20, 0, PhysicsManager::CAT_UP);
-
-	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
 	OmegaEngine::Instance().Loop();
 }
