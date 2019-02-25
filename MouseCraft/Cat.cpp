@@ -3,13 +3,14 @@
 #include "Input\InputSystem.h"
 #include <iostream>
 
-#define ATTACK_TIME 60
-#define JUMP_TIME 60
-#define POUNCE_TIME 60
+#define ATTACK_TIME 5
+#define JUMP_TIME 5
+#define POUNCE_TIME 5
 
 Cat::Cat() {
     EventManager::Subscribe(INPUT_BUTTON, this);
     playerID = 0;
+    current_time = 0;
 }
 
 
@@ -74,6 +75,7 @@ void Cat::Attack()
     }
     //actually launch attack
     std::cout << "Cat has attacked." << std::endl;
+    isAttacking = true;
 }
 
 // track the time since we launched the attack animation, and reset when finished

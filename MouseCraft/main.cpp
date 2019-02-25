@@ -74,15 +74,15 @@ void Test_Rendering()
 	// input 
 
 	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
-	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
+	//auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
 
 	c_p1_movement->player = 0;
 	c_p1_movement->speed = 50.0f;
-	c_p2_movement->player = 1;
-	c_p2_movement->speed = 50.0f;
+	//c_p2_movement->player = 1;
+	//c_p2_movement->speed = 50.0f;
 
 	e1->AddComponent(c_p1_movement);
-	e2->AddComponent(c_p2_movement);
+	//e2->AddComponent(c_p2_movement);
 
 	InputSystem* is = new InputSystem();
 

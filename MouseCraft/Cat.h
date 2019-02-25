@@ -18,7 +18,7 @@ private:
     int playerID;
 
     //time tracking variable
-    int current_time = 0;
+    float current_time;
 
     //update bools that let us know if we're in the middle of an animaktion
     bool isAttacking = false;
