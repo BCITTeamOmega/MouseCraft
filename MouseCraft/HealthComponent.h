@@ -1,7 +1,9 @@
 #pragma once
+#include <utility>
 #include "Core/Component.h"
 #include "Event/ISubscriber.h"
 #include "Event/EventManager.h"
+#include "Core/Entity.h"
 
 class HealthComponent : public Component, public ISubscriber
 {
@@ -25,8 +27,10 @@ private:
 	{
 		if (eventName == HEALTH_CHANGE)
 		{
-			auto p = static_cast<TypeParam<int>*>(params)->Param;
-			if ((_health += p) <= 0)
+			auto p = static_cast<TypeParam<std::pair<int, int>>*>(params)->Param;
+			if (p.first != GetEntity()->GetID())
+				return;
+			if ((_health += p.second) <= 0)
 			{
 				//notify death
 			}
