@@ -82,11 +82,11 @@
     <Filter Include="Source Files\Graphics\BufferObjects">
       <UniqueIdentifier>{9998886b-5b8d-4333-9856-59a2e6cdd3ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{a78e8ccf-9344-4b4d-b460-250414a2a24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
