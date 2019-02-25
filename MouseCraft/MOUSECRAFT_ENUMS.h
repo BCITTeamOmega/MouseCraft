@@ -7,9 +7,13 @@ enum PICKUPS
 	SPRING,
 };
 
-/*
+
 enum CONTRAPTIONS 
 {
-
+	PLATFORM,
+	GUN,
+	COIL,
+	BOMB,
+	OVERCHARGE,
+	SWORDS,
 };
-*/
