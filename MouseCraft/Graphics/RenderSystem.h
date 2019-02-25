@@ -11,6 +11,7 @@
 #include "BufferObjects/VBO.h"
 #include "BufferObjects/EBO.h"
 #include "Camera.h"
+#include "GLTexture.h"
 
 class RenderSystem : public System {
 public:
@@ -37,4 +38,6 @@ private:
 	VBO* _positionVBO;
 	EBO* _ebo;
 	Camera* _camera;
+	
+	GLTexture* _texture;
 };

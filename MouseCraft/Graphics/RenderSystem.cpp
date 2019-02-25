@@ -25,12 +25,15 @@ RenderSystem::RenderSystem() : System() {
 	_ebo = new EBO();
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setElementBuffer(*_ebo);
+
+	_texture = new GLTexture();
 }
 
 RenderSystem::~RenderSystem() {
 	delete _vao;
 	delete _positionVBO;
 	delete _ebo;
+	delete _texture;
 }
 
 void RenderSystem::setWindow(Window* window) {
