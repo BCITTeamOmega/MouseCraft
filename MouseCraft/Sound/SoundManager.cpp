@@ -2,9 +2,9 @@
 #include <iostream>
 #include <mutex>
 //defines for track filenames
-#define MAIN_BGM "../Music/bgm1.wav" 
-#define MENU_BGM "../Music/bgm2.wav"
-#define WELCOME_BGM "../Music/bgm3.wav"
+#define MAIN_BGM "../res/music/bgm1.wav" 
+#define MENU_BGM "../music/bgm2.wav"
+#define WELCOME_BGM "../music/bgm3.wav"
 
 //defines for SoundEffect Names
 #define JUMP "../Sounds/jumpSE.wav"
@@ -34,7 +34,7 @@ SoundManager::SoundManager() {
     loadAudioData();
     //subscribe to events
 	EventManager::Subscribe(PLAY_SONG, this);
-	EventManager::Subscribe(PLAY_SOUND, this);
+	//EventManager::Subscribe(PLAY_SOUND, this);
 }
 
 //method that loads Audio Files into memory to minimize repeated file I/O
@@ -49,48 +49,48 @@ void SoundManager::loadAudioData() {
     }
     Music.insert(std::pair<TrackList,AudioData>(MainBGM, temp)); //store in track memory with handle
     
-    //load menu BGM, steps are identical to above but with different file and Handle
-    temp = soundObject->GetAudioData(MENU_BGM);
-    if (temp.data == NULL) {
-        std::cout << "Menu BGM failed to store correctly." << std::endl;
-    }
-    Music.insert(std::pair<TrackList, AudioData>(MenuBGM, temp));
+    ////load menu BGM, steps are identical to above but with different file and Handle
+    //temp = soundObject->GetAudioData(MENU_BGM);
+    //if (temp.data == NULL) {
+    //    std::cout << "Menu BGM failed to store correctly." << std::endl;
+    //}
+    //Music.insert(std::pair<TrackList, AudioData>(MenuBGM, temp));
 
-    //load welcome message BGM, steps are identical to above but with different file and Handle
-    temp = soundObject->GetAudioData(WELCOME_BGM);
-    if (temp.data == NULL) {
-        std::cout << "Welcome BGM failed to store correctly." << std::endl;
-    }
-    Music.insert(std::pair<TrackList, AudioData>(WelcomeBGM, temp));
+    ////load welcome message BGM, steps are identical to above but with different file and Handle
+    //temp = soundObject->GetAudioData(WELCOME_BGM);
+    //if (temp.data == NULL) {
+    //    std::cout << "Welcome BGM failed to store correctly." << std::endl;
+    //}
+    //Music.insert(std::pair<TrackList, AudioData>(WelcomeBGM, temp));
 
-    //Load Sounds Section
-    //Jump Sound
-    temp = soundObject->GetAudioData(JUMP); //attempt to read file
-    if (temp.data == NULL) {
-        std::cout << "Jump SE failed to store correctly." << std::endl; //handle failed file read
-    }
-    SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
+    ////Load Sounds Section
+    ////Jump Sound
+    //temp = soundObject->GetAudioData(JUMP); //attempt to read file
+    //if (temp.data == NULL) {
+    //    std::cout << "Jump SE failed to store correctly." << std::endl; //handle failed file read
+    //}
+    //SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
 
-    //Explosion Sound, steps are identical to above but with different file and Handle
-    temp = soundObject->GetAudioData(DAMAGE);
-    if (temp.data == NULL) {
-        std::cout << "Explosion SE failed to store correctly." << std::endl;
-    }
-    SoundEffects.insert(std::pair<SoundsList, AudioData>(Damage, temp));
+    ////Explosion Sound, steps are identical to above but with different file and Handle
+    //temp = soundObject->GetAudioData(DAMAGE);
+    //if (temp.data == NULL) {
+    //    std::cout << "Explosion SE failed to store correctly." << std::endl;
+    //}
+    //SoundEffects.insert(std::pair<SoundsList, AudioData>(Damage, temp));
 
-    //death Sound 1, steps are identical to above but with different file and Handle
-    temp = soundObject->GetAudioData(GOAT_DEATH);
-    if (temp.data == NULL) {
-        std::cout << "Death SE failed to store correctly." << std::endl;
-    }
-    SoundEffects.insert(std::pair<SoundsList, AudioData>(GoatDeath, temp));
+    ////death Sound 1, steps are identical to above but with different file and Handle
+    //temp = soundObject->GetAudioData(GOAT_DEATH);
+    //if (temp.data == NULL) {
+    //    std::cout << "Death SE failed to store correctly." << std::endl;
+    //}
+    //SoundEffects.insert(std::pair<SoundsList, AudioData>(GoatDeath, temp));
 }
 
 //destructor. Cleans up the engine object/ local memory and unsubscribes
 SoundManager::~SoundManager() {
     CleanUp();
 	EventManager::Unsubscribe(PLAY_SONG, this);
-	EventManager::Unsubscribe(PLAY_SOUND, this);
+	//EventManager::Unsubscribe(PLAY_SOUND, this);
 }
 
 //Method that plays the given song at the given position
@@ -112,18 +112,18 @@ void SoundManager::PlaySong(TrackList track, float x, float y, float z) {
             soundObject->PlaceSource(bgmSource, x, y, z);
             soundObject->PlayAudio(bgmSource);
             break;
-        case MenuBGM:
-            soundObject->BufferData(bgmBuffer, bgmSource, Music.find(MenuBGM)->second);
-            soundObject->ToggleLooping(bgmSource, true);
-            soundObject->PlaceSource(bgmSource, x, y, z);
-            soundObject->PlayAudio(bgmSource);
-            break;
-        case WelcomeBGM:
-            soundObject->BufferData(bgmBuffer, bgmSource, Music.find(WelcomeBGM)->second);
-            soundObject->ToggleLooping(bgmSource, false);
-            soundObject->PlaceSource(bgmSource, x, y, z);
-            soundObject->PlayAudio(bgmSource);
-            break;
+        //case MenuBGM:
+        //    soundObject->BufferData(bgmBuffer, bgmSource, Music.find(MenuBGM)->second);
+        //    soundObject->ToggleLooping(bgmSource, true);
+        //    soundObject->PlaceSource(bgmSource, x, y, z);
+        //    soundObject->PlayAudio(bgmSource);
+        //    break;
+        //case WelcomeBGM:
+        //    soundObject->BufferData(bgmBuffer, bgmSource, Music.find(WelcomeBGM)->second);
+        //    soundObject->ToggleLooping(bgmSource, false);
+        //    soundObject->PlaceSource(bgmSource, x, y, z);
+        //    soundObject->PlayAudio(bgmSource);
+        //    break;
         default:
             break;
     }
