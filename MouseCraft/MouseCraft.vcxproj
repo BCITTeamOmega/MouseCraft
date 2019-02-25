@@ -160,6 +160,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Coil.cpp" />
     <ClCompile Include="Contraption.cpp" />
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="DebugColliderComponent.cpp" />
     <ClCompile Include="DebugColliderSystem.cpp" />
     <ClCompile Include="Event\Observer.cpp" />
@@ -227,6 +228,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Coil.h" />
     <ClInclude Include="Contraption.h" />
+    <ClInclude Include="Cat.h" />
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />
