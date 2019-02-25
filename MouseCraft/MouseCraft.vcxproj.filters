@@ -82,11 +82,11 @@
     <Filter Include="Source Files\Graphics\BufferObjects">
       <UniqueIdentifier>{9998886b-5b8d-4333-9856-59a2e6cdd3ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{a78e8ccf-9344-4b4d-b460-250414a2a24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +239,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\ModelGen.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GLTexture.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\ImageLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -430,6 +436,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\ModelGen.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GLTexture.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\ImageLoader.h">
+      <Filter>Header Files\Loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

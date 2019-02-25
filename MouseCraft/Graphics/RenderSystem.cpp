@@ -22,15 +22,22 @@ RenderSystem::RenderSystem() : System() {
 	_accumulatingList = new vector<RenderData>();
 	_vao = new VAO();
 	_positionVBO = new VBO(3);
+	_normalVBO = new VBO(3);
+	_texCoordVBO = new VBO(2);
 	_ebo = new EBO();
 	_vao->setBuffer(0, *_positionVBO);
+	_vao->setBuffer(1, *_normalVBO);
+	_vao->setBuffer(2, *_texCoordVBO);
 	_vao->setElementBuffer(*_ebo);
+
+	_texture = new GLTexture();
 }
 
 RenderSystem::~RenderSystem() {
 	delete _vao;
 	delete _positionVBO;
 	delete _ebo;
+	delete _texture;
 }
 
 void RenderSystem::setWindow(Window* window) {
@@ -61,7 +68,7 @@ void RenderSystem::Update(float dt) {
 
 	if (_camera != nullptr) {
 		Transform viewTransform = _camera->getTransform();
-		mat4 view = inverse(viewTransform.getLocalTransformation());
+		mat4 view = inverse(viewTransform.getWorldTransformation());
 
 		float fov = _camera->getFOV();
 		float closeClip = _camera->getCloseClip();
@@ -73,12 +80,19 @@ void RenderSystem::Update(float dt) {
 
 		for (RenderData render : *_renderingList) {
 			Geometry* g = render.getModel()->getGeometry();
+			Image* tex = render.getModel()->getTexture();
 			vec3 color = convertColor(render.getColor());
 			mat4 model = render.getTransform();
 
 			mat4 mvp = vp * model;
 
+			if (tex != nullptr) {
+				_texture->setImage(*tex);
+			}
+
 			_positionVBO->buffer(g->getVertexData());
+			_normalVBO->buffer(g->getNormalData());
+			_texCoordVBO->buffer(g->getTexCoordData());
 			_ebo->buffer(g->getIndices());
 
 			_shader->setUniformVec3("color", color);
@@ -116,7 +130,7 @@ void RenderSystem::accumulateList() {
 		_accumulatingList->push_back(
 			RenderData(
 				r->getModel(),
-				t.getLocalTransformation(),
+				t.getWorldTransformation(),
 				r->getColor()
 			)
 		);
