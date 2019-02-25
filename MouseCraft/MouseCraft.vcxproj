@@ -157,6 +157,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
+    <ClCompile Include="Graphics\GLTexture.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
@@ -209,6 +210,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Vector2D.h" />
+    <ClInclude Include="Graphics\GLTexture.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
