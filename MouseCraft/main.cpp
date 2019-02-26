@@ -101,7 +101,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_mice);
 
 	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	c_p1_movement->SetID(0);
+	c_p1_movement->SetID(10);
 	e1->AddComponent(c_p1_movement);
 
 	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
