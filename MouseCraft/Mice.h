@@ -21,9 +21,9 @@
 #include "PlayerComponent.h"
 
 class Mice : public UpdatableComponent, 
-	public Observer<DebugColliderComponent*, DebugColliderComponent*>,
-	public Observer<Entity*>,
-	public Observer<>
+	public Observer<DebugColliderComponent*, DebugColliderComponent*>,	// debug collision
+	public Observer<PhysicsComponent*>,											// physics
+	public Observer<>													// health
 {
 public:
 	Mice();
@@ -33,6 +33,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Notify(EventName eventName, Param *params) override;
 	virtual void Publish(DebugColliderComponent* me, DebugColliderComponent* other) override;	// on collide
+	virtual void Publish(PhysicsComponent* e) override;
 	virtual void Publish() override;	// on death 
 	void addItem(Pickup* item);
 	void dropItem();

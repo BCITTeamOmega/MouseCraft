@@ -8,7 +8,7 @@
 #include "PlayerComponent.h"
 
 
-class Cat : public UpdatableComponent, public Observer<Entity*>
+class Cat : public UpdatableComponent, public Observer<PhysicsComponent*>
 {
 public:
     Cat();

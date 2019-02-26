@@ -8,7 +8,7 @@
 #include "Event/Observer.h"
 
 
-class Contraption : public Component, public Observer<Entity*>
+class Contraption : public Component, public Observer<PhysicsComponent*>
 {
 public:
 	Contraption();

@@ -101,7 +101,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_mice);
 
 	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	c_p1_movement->SetID(10);
+	c_p1_movement->SetID(0);
 	e1->AddComponent(c_p1_movement);
 
 	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
@@ -117,7 +117,7 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(0);
+	playerc->SetID(1);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -163,7 +163,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
-	OmegaEngine::Instance().AddSystem(dcs);
+	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 
 
