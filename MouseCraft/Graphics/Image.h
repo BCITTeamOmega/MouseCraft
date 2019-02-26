@@ -12,11 +12,11 @@ public:
 	/// <param name="data">The bitmap data of the image</param>
 	/// <param name="width">The width of the image</param>
 	/// <param name="height">The height of the image</param>
-	Image(unsigned char* data, int width, int height, GLuint format = GL_RGBA)
+	Image(unsigned char* data, int width, int height, int channels = 4)
 		: _data(data),
 		_width(width),
 		_height(height),
-		_format(format) {}
+		_channels(channels) {}
 
 	/// <summary>
 	/// </summary>
@@ -42,7 +42,7 @@ public:
 	/// <returns>The height of the image</returns>
 	int getHeight() { return _height; }
 
-	int getFormat() { return _format; }
+	int getChannels() { return _channels; }
 private:
 	/// <summary>
 	/// The bitmap data of the image
@@ -59,5 +59,5 @@ private:
 	/// </summary>
 	int _height;
 
-	GLuint _format;
+	int _channels;
 };

@@ -16,21 +16,5 @@ Image* ImageLoader::loadImage(string filename) {
 		std::cerr << "Reason: " << stbi_failure_reason() << std::endl;
 		return nullptr;
 	}
-
-	GLuint format = GL_RGBA;
-	switch (channels) {
-	case 1:
-		format = GL_RED;
-		break;
-	case 2:
-		format = GL_RG;
-		break;
-	case 3:
-		format = GL_RGB;
-		break;
-	case 4:
-		format = GL_RGBA;
-		break;
-	}
-	return new Image(data, width, height, format);
+	return new Image(data, width, height, channels);
 }

@@ -7,17 +7,35 @@ GLTexture::~GLTexture() {
 	glDeleteTextures(1, &_id);
 }
 
-void GLTexture::setImage(Image& image, bool mipmap) {
+void GLTexture::setImage(Image& image, bool mipmap, GLuint storageFormat) {
 	glBindTexture(GL_TEXTURE_2D, _id);
-	GLuint format = image.getFormat();
+	GLuint inputFormat = 0;
+	GLuint depth = image.getChannels();
+	switch (depth) {
+	case 1:
+		inputFormat = GL_RED;
+		break;
+	case 2:
+		inputFormat = GL_RG;
+		break;
+	case 3:
+		inputFormat = GL_RGB;
+		break;
+	case 4:
+		inputFormat = GL_RGBA;
+		break;
+	}
+	if (!inputFormat) {
+		throw "Invalid number of channels in image";
+	}
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
-		format,
+		storageFormat,
 		image.getWidth(),
 		image.getHeight(),
 		0,
-		format,
+		inputFormat,
 		GL_UNSIGNED_BYTE,
 		image.getData()
 	);
