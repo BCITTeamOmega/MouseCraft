@@ -7,9 +7,9 @@
 class PhysicsComponent : public Component
 {
 public:
-	PhysicsComponent(float x, float y, float z, float r, PhysObjectType::PhysObjectType t);
+	PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float vX = 0, float vY = 0);
 
-	Vector2D position, velocity;
+	Vector2D velocity;
 	float zPos, rotation;
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
