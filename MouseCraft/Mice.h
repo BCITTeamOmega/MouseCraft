@@ -18,7 +18,9 @@
 #include "Event/Observer.h"
 #include "Input/InputSystem.h"
 
-class Mice : public UpdatableComponent, public Observer<DebugColliderComponent*, DebugColliderComponent*>
+class Mice : public UpdatableComponent, 
+	public Observer<DebugColliderComponent*, DebugColliderComponent*>,
+	public Observer<>
 {
 public:
 	Mice();
@@ -27,7 +29,8 @@ public:
 	virtual void OnInitialized() override;
 	virtual void Update(float deltaTime);
 	virtual void Notify(EventName eventName, Param *params) override;
-	virtual void Publish(DebugColliderComponent* me, DebugColliderComponent* other) override;
+	virtual void Publish(DebugColliderComponent* me, DebugColliderComponent* other) override;	// on collide
+	virtual void Publish() override;	// on death 
 	void addItem(Pickup* item);
 	void dropItem();
 	void use(Contraption* item);
@@ -36,6 +39,7 @@ public:
 public:
 	int player = 0;
 	float speed = 10.0f;
+	bool downed = false;
 
 private:
 	float moveX;

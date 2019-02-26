@@ -9,5 +9,6 @@ public:
 
 	void use() override;
 	void show() override;
-};
 
+	Entity* fieldEntity;
+};

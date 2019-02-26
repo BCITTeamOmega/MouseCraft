@@ -73,47 +73,46 @@ void Test_Rendering()
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
 
-	// input 
+	// player 1 (mice)
+	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	c_p1_mice->player = 0;
+	c_p1_mice->speed = 50.0f;
+	e1->AddComponent(c_p1_mice);
 
-	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-
-	c_p1_movement->player = 0;
-	c_p1_movement->speed = 50.0f;
-	//c_p2_movement->player = 1;
-	//c_p2_movement->speed = 50.0f;
-
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	c_p1_movement->SetID(0);
 	e1->AddComponent(c_p1_movement);
-	//e2->AddComponent(c_p2_movement);
-
-	InputSystem* is = new InputSystem();
-
-	// game 
 
 	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
 		.Create<DebugColliderComponent>();
-	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance()
-		.Create<DebugColliderComponent>();
-
 	e1->AddComponent(c_p1_collider);
-	e2->AddComponent(c_p2_collider);
 
-	auto e_spawner = EntityManager::Instance().Create();
-	auto c_spawner = ComponentManager<UpdatableComponent>::Instance()
-		.Create<PickupSpawner>();
+	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	e1->AddComponent(c_p1_collider);
 
-	e_spawner->AddComponent(c_spawner);
+	// player 2 (cat)
+	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+	c_p2_Cat->setPlayer(1);
+	e2->AddComponent(c_p2_Cat);
 
-	DebugColliderSystem* dcs = new DebugColliderSystem();
-    auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	playerc->SetID(1);
 	e2->AddComponent(playerc);
+	
+	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	e2->AddComponent(healthc);
 
-    c_p2_Cat->setPlayer(1);
-    e2->AddComponent(c_p2_Cat);
+	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
+	e2->AddComponent(c_p2_collider);
+
+	// spawner 
+	auto e_spawner = EntityManager::Instance().Create();
+	auto c_spawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	e_spawner->AddComponent(c_spawner);
+	
+	DebugColliderSystem* dcs = new DebugColliderSystem();
+	InputSystem* is = new InputSystem();
+
 	// add the entities 
 
 	OmegaEngine::Instance().AddEntity(e1);
