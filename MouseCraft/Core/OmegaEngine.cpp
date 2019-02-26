@@ -111,7 +111,7 @@ void OmegaEngine::sequential_loop()
 	while (_isRunning)
 	{
 		auto now = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float, std::deca> delta = now - timestamp;
+		std::chrono::duration<float> delta = now - timestamp;
 		auto deltaSeconds = delta.count();
 		timestamp = now;
 

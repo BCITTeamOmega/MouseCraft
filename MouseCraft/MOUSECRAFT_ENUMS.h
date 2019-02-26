@@ -1,0 +1,19 @@
+#pragma once
+
+enum PICKUPS
+{
+	BATTERY,
+	SCREW,
+	SPRING,
+};
+
+
+enum CONTRAPTIONS 
+{
+	PLATFORM,
+	GUN,
+	COIL,
+	BOMB,
+	OVERCHARGE,
+	SWORDS,
+};

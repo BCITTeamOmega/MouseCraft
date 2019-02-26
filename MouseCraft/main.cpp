@@ -15,10 +15,17 @@
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
 #include "Input/InputSystem.h"
-#include "MouseMovement.h"
+#include "Mice.h"
 #include "Graphics/ModelGen.h"
 #include "Sound/SoundManager.h"
 #include "Loading/ImageLoader.h"
+#include "TestSubObs.h"
+#include "DebugColliderComponent.h"
+#include "DebugColliderSystem.h"
+#include "PickupSpawner.h"
+#include "Cat.h"
+#include "PlayerComponent.h"
+#include "HealthComponent.h"
 
 #define GLEW_STATIC
 
@@ -86,19 +93,44 @@ void Test_Rendering()
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
 
-	// input 
+	// player 1 (mice)
+	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	c_p1_mice->player = 0;
+	c_p1_mice->speed = 50.0f;
+	e1->AddComponent(c_p1_mice);
 
-	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
-	auto c_p2_movement = ComponentManager<UpdatableComponent>::Instance().Create<MouseMovement>();
-
-	c_p1_movement->player = 0;
-	c_p1_movement->speed = 50.0f;
-	c_p2_movement->player = 1;
-	c_p2_movement->speed = 50.0f;
-
+	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	c_p1_movement->SetID(0);
 	e1->AddComponent(c_p1_movement);
-	e2->AddComponent(c_p2_movement);
 
+	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
+		.Create<DebugColliderComponent>();
+	e1->AddComponent(c_p1_collider);
+
+	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	e1->AddComponent(c_p1_collider);
+
+	// player 2 (cat)
+	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+	c_p2_Cat->setPlayer(1);
+	e2->AddComponent(c_p2_Cat);
+
+	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	playerc->SetID(1);
+	e2->AddComponent(playerc);
+	
+	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	e2->AddComponent(healthc);
+
+	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
+	e2->AddComponent(c_p2_collider);
+
+	// spawner 
+	auto e_spawner = EntityManager::Instance().Create();
+	auto c_spawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	e_spawner->AddComponent(c_spawner);
+	
+	DebugColliderSystem* dcs = new DebugColliderSystem();
 	InputSystem* is = new InputSystem();
 
 	// add the entities 
@@ -106,10 +138,12 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e1);
 	OmegaEngine::Instance().AddEntity(e2);
 	OmegaEngine::Instance().AddEntity(e3);
+	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 
 
@@ -265,6 +299,31 @@ void Test_ECS()
 	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
 	OmegaEngine::Instance().Loop();
+}
+
+void Test_ObserverPattern()
+{
+	// Test 1
+	FoobarSubject subject;
+	FoobarObserver observer;
+
+	subject.Attach(observer);
+	subject.Notify(4.0f, 2);
+
+	// Test 2
+	Subject<int> OnTemperatureChanged;
+	FreezingObserver obs1;
+	BoilingObserver obs2;
+
+	OnTemperatureChanged.Attach(obs1);
+	OnTemperatureChanged.Attach(obs2);
+
+	OnTemperatureChanged.Notify(-20);
+	OnTemperatureChanged.Notify(-10);
+	OnTemperatureChanged.Notify(0);
+	OnTemperatureChanged.Notify(50);
+	OnTemperatureChanged.Notify(100);
+	OnTemperatureChanged.Notify(200);
 }
 
 int main(int argc, char* argv[]) 

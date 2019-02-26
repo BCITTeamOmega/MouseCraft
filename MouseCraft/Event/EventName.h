@@ -12,10 +12,12 @@ enum EventName {
 	// input is only raised when it changes!
 	INPUT_RAW, 
 	INPUT_AXIS, 
+	INPUT_AXIS_2D,
 	INPUT_BUTTON,
 	/*
 	INPUT_P1_MOVE,	
 	INPUT_P1_AIM,
 	INPUT_P1_BUTTON,
 	*/
+	HEALTH_CHANGE,
 };
