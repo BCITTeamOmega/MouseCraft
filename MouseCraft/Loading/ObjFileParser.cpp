@@ -88,7 +88,7 @@ Geometry* ObjFileParser::build() {
 			}
 
 			tuple<GLfloat, GLfloat, GLfloat> normAdd;
-			if (normInd == 0) {
+			if (normInd == 0 || vertexNormData.size() == 0) {
 				// If there was no normal index, just treat it like as if the normal is from the center
 				// In other words just use the vertex
 				float v1 = get<0>(vertAdd);
@@ -155,10 +155,14 @@ tuple<size_t, size_t, size_t> ObjFileParser::parseFace(string face) {
 	size_t vertexInd = 0;
 	size_t normalInd = 0;
 	size_t texCoordInd = 0;
-	size_t* dataLocs[3] = { &vertexInd, &normalInd, &texCoordInd };
+	size_t* dataLocs[3] = { &vertexInd, &texCoordInd, &normalInd};
 	size_t prevPos = 0;
 	for (size_t num = 0, pos = 0; num < 3 && prevPos != string::npos; num++) {
-		pos = face.find("/", pos);
+		pos = face.find("/", pos) + 1;
+		if (pos == 0) {
+			// Reached the end, so just set pos to the end
+			pos = string::npos;
+		}
 		istringstream numStringStream = istringstream(face.substr(prevPos, pos));
 		numStringStream >> *dataLocs[num];
 		prevPos = pos;
