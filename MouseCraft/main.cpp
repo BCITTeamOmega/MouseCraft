@@ -40,14 +40,17 @@ void Test_Rendering()
 {
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 	Model* m = ModelGen::makeCube(1, 1, 1);
-	
 	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 100);
-	
+	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
+	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
+
 	Image* i = ImageLoader::loadImage("res/models/test/test.jpg");
 	floorModel->setTexture(i);
 
 	Image* blank = ImageLoader::loadImage("res/models/test/blank.bmp");
 	m->setTexture(blank);
+	miceModel->setTexture(blank);
+	catModel->setTexture(blank);
 
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();
@@ -95,6 +98,11 @@ void Test_Rendering()
 	rs->setWindow(OmegaEngine::Instance().getWindow());
 
 	// player 1 (mice)
+	auto c_p1_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	c_p1_render->setColor(Color(0.1, 0.1, 0.1));
+	c_p1_render->setModel(*miceModel);
+	e1->AddComponent(c_p1_render);
+
 	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
 	c_p1_mice->player = 0;
 	c_p1_mice->speed = 50.0f;
@@ -112,6 +120,11 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	// player 2 (cat)
+	auto c_p2_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	c_p2_render->setColor(Color(0.99, 0.96, 0.88)); //253,245,226
+	c_p2_render->setModel(*catModel);
+	e2->AddComponent(c_p2_render);
+
 	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
 	c_p2_Cat->setPlayer(1);
 	e2->AddComponent(c_p2_Cat);

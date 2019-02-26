@@ -12,5 +12,6 @@ const vec4 shadowedColor = vec4(0.2f, 0.3f, 0.45f, 1.0f);
 
 void main()
 {
+    //result = vec4(fragNormal, 1.0f);
     result = mix(shadowedColor, vec4(1.0f, 1.0f, 1.0f, 1.0f), max(0.0f, -dot(fragNormal, sunDirection))) * vec4(color, 1.0f) * texture(texture0, fragTexCoord);
 }
