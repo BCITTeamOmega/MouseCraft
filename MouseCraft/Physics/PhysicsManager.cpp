@@ -243,6 +243,31 @@ void PhysicsManager::updateHeights(float step)
 				//The object is in the lower half
 				//Has it reached the threshold yet?
 				comp->isUp = true;
+
+				b2Filter filter;
+
+				switch (comp->type)
+				{
+					case PhysObjectType::MOUSE_DOWN:
+						comp->type = PhysObjectType::MOUSE_UP;
+						filter.categoryBits = MOUSE_UP_CATEGORY;
+						filter.maskBits = MOUSE_UP_CATEGORY;
+						break;
+					case PhysObjectType::CAT_DOWN:
+						comp->type = PhysObjectType::CAT_UP;
+						filter.categoryBits = CAT_UP_CATEGORY;
+						filter.maskBits = CAT_UP_CATEGORY;
+						break;
+					case PhysObjectType::OBSTACLE_DOWN:
+						comp->type = PhysObjectType::OBSTACLE_UP;
+						filter.categoryBits = OBSTACLE_UP_CATEGORY;
+						filter.maskBits = OBSTACLE_UP_CATEGORY;
+						break;
+					default:
+						break; //you goofed
+				}
+
+				b->GetFixtureList()->SetFilterData(filter);
 			}
 		}
 		else if (comp->isFalling)
@@ -254,6 +279,31 @@ void PhysicsManager::updateHeights(float step)
 				//The object is in the upper half
 				//Has it reached the threshold yet?
 				comp->isUp == false;
+
+				b2Filter filter;
+
+				switch (comp->type)
+				{
+					case PhysObjectType::MOUSE_UP:
+						comp->type = PhysObjectType::MOUSE_DOWN;
+						filter.categoryBits = MOUSE_DOWN_CATEGORY;
+						filter.maskBits = MOUSE_DOWN_CATEGORY;
+						break;
+					case PhysObjectType::CAT_UP:
+						comp->type = PhysObjectType::CAT_DOWN;
+						filter.categoryBits = CAT_DOWN_CATEGORY;
+						filter.maskBits = CAT_DOWN_CATEGORY;
+						break;
+					case PhysObjectType::OBSTACLE_UP:
+						comp->type = PhysObjectType::OBSTACLE_DOWN;
+						filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
+						filter.maskBits = OBSTACLE_DOWN_CATEGORY;
+						break;
+					default:
+						break; //you goofed
+				}
+
+				b->GetFixtureList()->SetFilterData(filter);
 			}
 			else
 			{
@@ -269,14 +319,6 @@ void PhysicsManager::updateHeights(float step)
 
 		b = b->GetNext();
 	}
-
-	//For each physics object, check if they are jumping
-	//If so, move them up by jump velocity * delta
-	//Otherwise check if they are on the floor
-	//If so, check if they are on a tall object/surface
-	//If not, move them by gravity * delta
-
-	//WHEN A Z THRESHOLD IS MET TO CHANGE LEVELS, MODIFY THE FILTERS
 }
 
 void PhysicsManager::checkCollisions()

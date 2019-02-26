@@ -23,6 +23,8 @@ void Mice::OnInitialized()
 
 	if(pComp != nullptr)
 		pComp->onCollide.Attach(this);
+
+    player = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
 
 void Mice::Update(float deltaTime) 
