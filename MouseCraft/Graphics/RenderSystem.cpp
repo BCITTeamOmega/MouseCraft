@@ -67,6 +67,9 @@ void RenderSystem::Update(float dt) {
 	_vao->bind();
 	setShader(_shaders["gbuffer"]);
 
+	// First Pass
+	//setOutBuffers({});
+
 	if (_camera != nullptr) {
 		Transform viewTransform = _camera->getTransform();
 		mat4 view = inverse(viewTransform.getWorldTransformation());
@@ -143,4 +146,37 @@ void RenderSystem::accumulateList() {
 		_camera = c;
 		break;
 	}
+}
+void RenderSystem::setOutBuffers(std::vector<GLTexture> buffers) {
+	int w = _window->getWidth();
+	int h = _window->getHeight();
+	Image* img = new Image(nullptr, w, h); // Temp image so we can use GLtextures
+	int num = 0;
+	vector<GLuint> attachments;
+	for (GLTexture b : buffers) {
+		b.setImage(*img, false, GL_RGBA16F);
+		GLuint attachment = 0;
+		switch (num) {
+		case 0:
+			attachment = GL_COLOR_ATTACHMENT0;
+			break;
+		case 1:
+			attachment = GL_COLOR_ATTACHMENT1;
+			break;
+		case 2:
+			attachment = GL_COLOR_ATTACHMENT2;
+			break;
+		case 3:
+			attachment = GL_COLOR_ATTACHMENT3;
+			break;
+		case 4:
+			attachment = GL_COLOR_ATTACHMENT4;
+			break;
+		}
+		attachments.push_back(attachment);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, b.getID(), 0);
+		num++;
+	}
+	glDrawBuffers(attachments.size(), &attachments[0]);
+	delete img;
 }

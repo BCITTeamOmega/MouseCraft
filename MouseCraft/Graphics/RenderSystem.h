@@ -26,6 +26,7 @@ private:
 	void setShader(Shader& s);
 	void clearShader();
 	void accumulateList();
+	void setOutBuffers(std::vector<GLTexture> buffers);
 	glm::vec3 convertColor(Color c);
 
 	Window* _window;
@@ -42,4 +43,7 @@ private:
 	Camera* _camera;
 	
 	GLTexture* _texture;
+	GLTexture* _geometryBuffer;
+	GLTexture* _normalBuffer;
+	GLTexture* _positionBuffer;
 };
