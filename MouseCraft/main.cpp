@@ -143,7 +143,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_physics);
 
 	// component_player2_physics 
-	auto c_p2_physics = physicsSystem->createObject(0, 0, 2, 2, 0, PhysObjectType::CAT_DOWN);
+	auto c_p2_physics = physicsSystem->createObject(0, 0, 2, 2, 0, PhysObjectType::CAT_UP);
 
 	// add to cat entity
 	e2->AddComponent(c_p2_physics);
