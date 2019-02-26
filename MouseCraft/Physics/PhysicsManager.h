@@ -8,6 +8,7 @@
 #include "../Core/System.h"
 #include "../Core/ComponentManager.h"
 #include "PhysicsComponent.h"
+#include <glm/glm.hpp>
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -52,7 +53,8 @@ enum PhysObjectType
 	MOUSE_DOWN,
 	OBSTACLE_UP,
 	OBSTACLE_DOWN,
-	PLATFORM
+	PLATFORM,
+	WALL
 };
 
 class PhysicsManager : public System {

@@ -88,7 +88,7 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 	bodyDef.position.Set(x, y);
 	bodyDef.angle = r;
 
-	b2Body* playerBody;
+	b2Body* body;
 
 	b2PolygonShape shape;
 	shape.SetAsBox(w, h);
@@ -157,10 +157,15 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
 		fixtureDef.filter.maskBits = PLATFORM_MASK;
+		break;
+	case WALL:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = WALL_CATEGORY;
+		fixtureDef.filter.maskBits = WALL_MASK;
 	}
 
-	playerBody = world->CreateBody(&bodyDef);
-	playerBody->CreateFixture(&fixtureDef);
+	body = world->CreateBody(&bodyDef);
+	body->CreateFixture(&fixtureDef);
 
 	switch (t)
 	{
@@ -168,43 +173,19 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		case CAT_DOWN:
 		case MOUSE_UP:
 		case MOUSE_DOWN:
-			players.push_back(playerBody);
+			players.push_back(body);
 			break;
 		default:
 			break;
 	}
 
-	physicsComp->body = playerBody;
+	physicsComp->body = body;
 
-	playerBody->SetUserData(physicsComp);
+	body->SetUserData(physicsComp);
 
 	return physicsComp;
 
 	//NOTE: there is a bullet setting for projectiles that move exceptionally fast
-}
-
-//Takes in a set of outer wall endpoints, makes a body out of them, and adds it to both worlds
-void PhysicsManager::setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls)
-{
-	//Make the walls
-	b2BodyDef wallsDef;
-	wallsDef.type = b2_staticBody;
-	wallsDef.position.Set(0, 0);
-
-	b2Body* wallsBody = world->CreateBody(&wallsDef);
-
-	//define fixture
-	b2EdgeShape edge;
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &edge;
-	fixtureDef.filter.categoryBits = WALL_CATEGORY;
-	fixtureDef.filter.maskBits = WALL_MASK;
-
-	for (int i = 0; i < walls.size(); i++)
-	{
-		edge.Set(b2Vec2(walls[i].first.x, walls[i].first.y), b2Vec2(walls[i].second.x, walls[i].second.x));
-		wallsBody->CreateFixture(&fixtureDef);
-	}
 }
 
 //Move each physics object up or down based on gravity and jumping
