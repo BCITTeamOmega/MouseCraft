@@ -18,6 +18,7 @@
 #include "Event/Observer.h"
 #include "Input/InputSystem.h"
 #include "Physics/PhysicsComponent.h"
+#include "PlayerComponent.h"
 
 class Mice : public UpdatableComponent, 
 	public Observer<DebugColliderComponent*, DebugColliderComponent*>,
