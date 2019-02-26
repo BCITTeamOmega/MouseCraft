@@ -295,7 +295,7 @@
       <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
     <ClCompile Include="Mice.cpp">
-	      <Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cat.cpp">
       <Filter>Source Files</Filter>
@@ -561,13 +561,16 @@
       <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
     <ClInclude Include="Mice.h">
-	      <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContraptionFactory.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysObjectType.h">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

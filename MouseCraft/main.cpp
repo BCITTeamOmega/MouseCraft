@@ -10,6 +10,7 @@
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
 #include "Physics/PhysicsManager.h"
+#include "Physics/PhysObjectType.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
@@ -132,6 +133,24 @@ void Test_Rendering()
 	
 	DebugColliderSystem* dcs = new DebugColliderSystem();
 	InputSystem* is = new InputSystem();
+
+	PhysicsManager* physicsSystem = new PhysicsManager();
+
+	// component_player1_physics 
+	auto c_p1_physics = physicsSystem->createObject(10, 10, 20, 20, 0, PhysObjectType::MOUSE_DOWN);
+
+	// add to mouse entity
+	e1->AddComponent(c_p1_physics);
+
+	// component_player2_physics 
+	auto c_p2_physics = physicsSystem->createObject(0, 0, 20, 20, 0, PhysObjectType::CAT_UP);
+
+	// add to cat entity
+	e2->AddComponent(c_p2_physics);
+
+	// adjustments made in PlayerComponent 
+
+	OmegaEngine::Instance().AddSystem(physicsSystem);
 
 	// add the entities 
 
@@ -291,12 +310,6 @@ void Test_ECS()
 	ExampleSystem exampleSystem;
 
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
-
-	PhysicsManager physicsSystem;
-	physicsSystem.createPlatform(0, 0, 100, 100);
-	physicsSystem.createPlayer(0, 0, 20, 20, true);
-
-	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
 	OmegaEngine::Instance().Loop();
 }

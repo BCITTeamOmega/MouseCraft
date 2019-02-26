@@ -2,6 +2,8 @@
 
 #include <Box2D/Box2D.h>
 #include <iostream>
+#include "PhysicsComponent.h"
+#include "PhysObjectType.h"
 
 class CContactListener : public b2ContactListener
 {
@@ -13,11 +15,11 @@ public:
 	void setup();
 	int hasCollided();
 	void resetCollided();
-	b2Body** getDynamic();
-	b2Body** getKinematic();
+	b2Body** getColliders1();
+	b2Body** getColliders2();
 private:
 	int collided;
 	int arraySize;
-	b2Body **dynamic, **kinematic;
+	b2Body **colliders1, **colliders2;
 	void enlargeArrays();
 };
