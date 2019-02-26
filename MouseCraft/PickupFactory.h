@@ -29,5 +29,6 @@ private:
 	Model* _screwModel;
 	Model* _springModel;
 	Model* _batteryModel;
+	Image* _texture; 
 };
 

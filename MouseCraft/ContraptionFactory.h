@@ -43,5 +43,7 @@ private:
 	Model* _swordsModel;
 
 	Model* _coilFieldModel;
+
+	Image* _texture;	// generic default texture
 };
 

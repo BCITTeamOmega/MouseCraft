@@ -1,5 +1,6 @@
 #include "ContraptionFactory.h"
 
+#include "Loading/ImageLoader.h"
 
 
 ContraptionFactory::ContraptionFactory()
@@ -10,8 +11,16 @@ ContraptionFactory::ContraptionFactory()
 	_bombModel = ModelLoader::loadModel("res/models/battery.obj");
 	_overchargeModel = ModelLoader::loadModel("res/models/battery.obj");
 	_swordsModel = ModelLoader::loadModel("res/models/screw.obj");
-
 	_coilFieldModel = ModelLoader::loadModel("res/models/test/Cylinder.obj");
+
+	_texture = ImageLoader::loadImage("res/models/test/blank.bmp");
+	_platformModel->setTexture(_texture);
+	_gunModel->setTexture(_texture);
+	_coilModel->setTexture(_texture);
+	_bombModel->setTexture(_texture);
+	_overchargeModel->setTexture(_texture);
+	_swordsModel->setTexture(_texture);
+	_coilFieldModel->setTexture(_texture);
 }
 
 
@@ -54,7 +63,7 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		c_coilRender->setModel(*_coilFieldModel);
 		c_coilRender->setColor(Color(0.9f, 1.0f, 0.9f));
 		e_coilField->AddComponent(c_coilRender);
-		
+
 		c_coil->fieldEntity = e_coilField;
 		break;
 	}
