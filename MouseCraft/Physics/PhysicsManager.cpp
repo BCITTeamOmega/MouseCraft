@@ -80,7 +80,7 @@ void PhysicsManager::Update(float dt)
 	}
 }
 
-PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType t)
+PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
 	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, r, t);
 
@@ -100,65 +100,65 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	switch (t)
 	{
-	case PART:
+	case PhysObjectType::PART:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = PART_CATEGORY;
 		fixtureDef.filter.maskBits = PART_MASK;
 		break;
-	case CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_UP:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = CONTRAPTION_UP_CATEGORY;
 		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
 		physicsComp->isUp = true;
 		break;
-	case CONTRAPTION_DOWN:
+	case PhysObjectType::CONTRAPTION_DOWN:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
 		physicsComp->isUp = false;
 		break;
-	case CAT_UP:
+	case PhysObjectType::CAT_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = CAT_UP_CATEGORY;
 		fixtureDef.filter.maskBits = CAT_UP_MASK;
 		physicsComp->isUp = true;
 		break;
-	case CAT_DOWN:
+	case PhysObjectType::CAT_DOWN:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = CAT_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = CAT_DOWN_MASK;
 		physicsComp->isUp = false;
 		break;
-	case MOUSE_UP:
+	case PhysObjectType::MOUSE_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = MOUSE_UP_CATEGORY;
 		fixtureDef.filter.maskBits = MOUSE_UP_MASK;
 		physicsComp->isUp = true;
 		break;
-	case MOUSE_DOWN:
+	case PhysObjectType::MOUSE_DOWN:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = MOUSE_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = MOUSE_DOWN_MASK;
 		physicsComp->isUp = false;
 		break;
-	case OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_UP:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
 		physicsComp->isUp = true;
 		break;
-	case OBSTACLE_DOWN:
+	case PhysObjectType::OBSTACLE_DOWN:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
 		physicsComp->isUp = false;
 		break;
-	case PLATFORM:
+	case PhysObjectType::PLATFORM:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
 		fixtureDef.filter.maskBits = PLATFORM_MASK;
 		break;
-	case WALL:
+	case PhysObjectType::WALL:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
 		fixtureDef.filter.maskBits = WALL_MASK;
@@ -169,10 +169,10 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	switch (t)
 	{
-		case CAT_UP:
-		case CAT_DOWN:
-		case MOUSE_UP:
-		case MOUSE_DOWN:
+		case PhysObjectType::CAT_UP:
+		case PhysObjectType::CAT_DOWN:
+		case PhysObjectType::MOUSE_UP:
+		case PhysObjectType::MOUSE_DOWN:
 			players.push_back(body);
 			break;
 		default:

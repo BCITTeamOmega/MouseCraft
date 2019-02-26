@@ -3,6 +3,7 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include "PhysicsComponent.h"
+#include "PhysObjectType.h"
 
 class CContactListener : public b2ContactListener
 {

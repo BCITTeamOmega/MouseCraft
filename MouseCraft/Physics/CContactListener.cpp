@@ -16,8 +16,8 @@ void CContactListener::BeginContact(b2Contact* contact)
 	if (pCompA == nullptr || pCompB == nullptr)
 		return;
 
-	if (pCompA->type == PLATFORM && (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP
-		|| pCompB->type == OBSTACLE_UP || pCompB->type == CONTRAPTION_DOWN))
+	if (pCompA->type == PhysObjectType::PLATFORM && (pCompB->type == PhysObjectType::CAT_UP || pCompB->type == PhysObjectType::MOUSE_UP
+		|| pCompB->type == PhysObjectType::OBSTACLE_UP || pCompB->type == PhysObjectType::CONTRAPTION_DOWN))
 	{
 		if (collided + 1 > arraySize)
 			enlargeArrays();
@@ -27,8 +27,8 @@ void CContactListener::BeginContact(b2Contact* contact)
 
 		collided++;
 	}
-	else if (pCompB->type == PLATFORM && (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP
-		|| pCompA->type == OBSTACLE_UP || pCompA->type == CONTRAPTION_DOWN))
+	else if (pCompB->type == PhysObjectType::PLATFORM && (pCompA->type == PhysObjectType::CAT_UP || pCompA->type == PhysObjectType::MOUSE_UP
+		|| pCompA->type == PhysObjectType::OBSTACLE_UP || pCompA->type == PhysObjectType::CONTRAPTION_DOWN))
 	{
 		if (collided + 1 > arraySize)
 			enlargeArrays();
@@ -38,10 +38,10 @@ void CContactListener::BeginContact(b2Contact* contact)
 
 		collided++;
 	}
-	else if (pCompA->type == WALL)
+	else if (pCompA->type == PhysObjectType::WALL)
 	{
 		//Unless you are a contraption nothing special happens on collision with walls
-		if (pCompB->type != CONTRAPTION_UP && pCompB->type != CONTRAPTION_DOWN)
+		if (pCompB->type != PhysObjectType::CONTRAPTION_UP && pCompB->type != PhysObjectType::CONTRAPTION_DOWN)
 			return;
 
 		if (collided + 1 > arraySize)
@@ -52,10 +52,10 @@ void CContactListener::BeginContact(b2Contact* contact)
 
 		collided++;
 	}
-	else if (pCompB->type == WALL)
+	else if (pCompB->type == PhysObjectType::WALL)
 	{
 		//Unless you are a contraption nothing special happens on collision with walls
-		if (pCompA->type != CONTRAPTION_UP && pCompA->type != CONTRAPTION_DOWN)
+		if (pCompA->type != PhysObjectType::CONTRAPTION_UP && pCompA->type != PhysObjectType::CONTRAPTION_DOWN)
 			return;
 
 		if (collided + 1 > arraySize)
@@ -93,7 +93,8 @@ void CContactListener::EndContact(b2Contact* contact)
 	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
 
 	//if A is a platform
-	if (pCompA->type == PLATFORM && (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP || pCompB->type == OBSTACLE_UP))
+	if (pCompA->type == PhysObjectType::PLATFORM && (pCompB->type == PhysObjectType::CAT_UP
+		|| pCompB->type == PhysObjectType::MOUSE_UP || pCompB->type == PhysObjectType::OBSTACLE_UP))
 	{
 		if (collided + 1 > arraySize)
 			enlargeArrays();
@@ -104,7 +105,8 @@ void CContactListener::EndContact(b2Contact* contact)
 
 		collided++;
 	}//if B is a platform
-	else if (pCompB->type == PLATFORM && (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP || pCompA->type == OBSTACLE_UP))
+	else if (pCompB->type == PhysObjectType::PLATFORM && (pCompA->type == PhysObjectType::CAT_UP
+		|| pCompA->type == PhysObjectType::MOUSE_UP || pCompA->type == PhysObjectType::OBSTACLE_UP))
 	{
 		if (collided + 1 > arraySize)
 			enlargeArrays();
@@ -132,8 +134,10 @@ void CContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifol
 		return;
 
 	//If an object is trying to land on a platform it should not be pushed away so disable the collision resolution for this step
-	if (pCompA->type == PLATFORM && (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP || pCompB->type == OBSTACLE_UP)
-		|| pCompB->type == PLATFORM && (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP || pCompA->type == OBSTACLE_UP))
+	if (pCompA->type == PhysObjectType::PLATFORM && (pCompB->type == PhysObjectType::CAT_UP
+		|| pCompB->type == PhysObjectType::MOUSE_UP || pCompB->type == PhysObjectType::OBSTACLE_UP)
+		|| pCompB->type == PhysObjectType::PLATFORM && (pCompA->type == PhysObjectType::CAT_UP
+		|| pCompA->type == PhysObjectType::MOUSE_UP || pCompA->type == PhysObjectType::OBSTACLE_UP))
 	{
 		contact->SetEnabled(false);
 	}

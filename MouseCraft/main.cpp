@@ -10,6 +10,7 @@
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
 #include "Physics/PhysicsManager.h"
+#include "Physics/PhysObjectType.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
@@ -134,8 +135,8 @@ void Test_Rendering()
 	InputSystem* is = new InputSystem();
 
 	PhysicsManager* physicsSystem = new PhysicsManager();;
-	physicsSystem->createObject(0, 0, 100, 100, 0, PhysicsManager::PLATFORM);
-	physicsSystem->createObject(0, 0, 20, 20, 0, PhysicsManager::CAT_UP);
+	physicsSystem->createObject(0, 0, 100, 100, 0, PhysObjectType::PLATFORM);
+	physicsSystem->createObject(0, 0, 20, 20, 0, PhysObjectType::CAT_UP);
 
 	OmegaEngine::Instance().AddSystem(physicsSystem);
 

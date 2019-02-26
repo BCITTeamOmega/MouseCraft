@@ -9,6 +9,7 @@
 #include "../Core/ComponentManager.h"
 #include "PhysicsComponent.h"
 #include <glm/glm.hpp>
+#include "PhysObjectType.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -42,28 +43,13 @@ constexpr auto PLATFORM_MASK = 0x01F8;
 constexpr auto WALL_MASK = 0x03F0;
 #pragma endregion
 
-enum PhysObjectType
-{
-	PART,
-	CONTRAPTION_UP,
-	CONTRAPTION_DOWN,
-	CAT_UP,
-	CAT_DOWN,
-	MOUSE_UP,
-	MOUSE_DOWN,
-	OBSTACLE_UP,
-	OBSTACLE_DOWN,
-	PLATFORM,
-	WALL
-};
-
 class PhysicsManager : public System {
 public:
 	PhysicsManager();
 	~PhysicsManager();
 	void Update(float dt);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
-	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType t);
+	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
 private:
 	b2World *world;
 	std::vector<b2Body*> players;
