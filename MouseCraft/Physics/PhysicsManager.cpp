@@ -76,8 +76,14 @@ void PhysicsManager::Update(float dt)
 	//update all the components to match the bodies
 	b = world->GetBodyList(); //points to the first body
 
-	while (b != NULL && b->GetType() != b2_staticBody)
+	while (b != NULL)
 	{
+		if (b->GetType() == b2_staticBody)
+		{
+			b = b->GetNext();
+			continue;
+		}
+
 		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
 
 		if (pcomp != NULL)
