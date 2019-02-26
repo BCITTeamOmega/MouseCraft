@@ -71,7 +71,8 @@ void PhysicsManager::Update(float dt)
 		if (pcomp != NULL)
 		{
 			//copy all relevant data from b to pcomp
-			pcomp->position = Vector2D(b->GetPosition().x, b->GetPosition().y);
+			pcomp->GetEntity()->transform.setLocalPosition(glm::vec3(b->GetPosition().x, pcomp->zPos, b->GetPosition().y));
+			// = Vector2D(b->GetPosition().x, b->GetPosition().y);
 			pcomp->velocity = Vector2D(b->GetLinearVelocity().x, b->GetLinearVelocity().y);
 		}
 
@@ -82,7 +83,7 @@ void PhysicsManager::Update(float dt)
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, r, t);
+	PhysicsComponent* physicsComp = new PhysicsComponent(t, 0, r);
 
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
@@ -104,54 +105,63 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = PART_CATEGORY;
 		fixtureDef.filter.maskBits = PART_MASK;
+		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = CONTRAPTION_UP_CATEGORY;
 		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
 		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::CONTRAPTION_DOWN:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
 		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::CAT_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = CAT_UP_CATEGORY;
 		fixtureDef.filter.maskBits = CAT_UP_MASK;
 		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::CAT_DOWN:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = CAT_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = CAT_DOWN_MASK;
 		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::MOUSE_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = MOUSE_UP_CATEGORY;
 		fixtureDef.filter.maskBits = MOUSE_UP_MASK;
 		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::MOUSE_DOWN:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = MOUSE_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = MOUSE_DOWN_MASK;
 		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::OBSTACLE_UP:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
 		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::OBSTACLE_DOWN:
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
 		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::PLATFORM:
 		bodyDef.type = b2_staticBody;
@@ -275,13 +285,13 @@ void PhysicsManager::checkCollisions()
 	if (cListener->hasCollided() == 0)
 		return;
 
-	/*b2Body** dynamics = cListener->getDynamic();
-	b2Body** kinematics = cListener->getKinematic();
+	b2Body** collider1 = cListener->getColliders1();
+	b2Body** collider2 = cListener->getColliders2();
 
 	for (int c = 0; c < cListener->hasCollided(); c++)
 	{
-		b2Body* d = dynamics[c];
-		b2Body* k = kinematics[c];
+		b2Body* c1 = collider1[c];
+		b2Body* c2 = collider2[c];
 			
 		//Figure out how to check for collisions on each one properly
 		//Index dynamics like so, cListender->hasCollided() should be number of collisions
@@ -289,5 +299,5 @@ void PhysicsManager::checkCollisions()
 		//Is it a pair for each collision?
 	}
 
-	cListener->resetCollided();*/
+	cListener->resetCollided();
 }

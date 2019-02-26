@@ -10,6 +10,7 @@
 #include "PhysicsComponent.h"
 #include <glm/glm.hpp>
 #include "PhysObjectType.h"
+#include "../Core/Entity.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
