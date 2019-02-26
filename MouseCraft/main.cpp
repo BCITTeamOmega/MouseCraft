@@ -136,7 +136,14 @@ void Test_Rendering()
 
 	PhysicsManager* physicsSystem = new PhysicsManager();;
 	physicsSystem->createObject(0, 0, 100, 100, 0, PhysObjectType::PLATFORM);
-	physicsSystem->createObject(0, 0, 20, 20, 0, PhysObjectType::CAT_UP);
+
+	// component_player2_physics 
+	auto c_p2_physics = physicsSystem->createObject(0, 0, 20, 20, 0, PhysObjectType::CAT_UP);
+
+	// add to cat entity
+	e2->AddComponent(c_p2_physics);
+
+	// adjustments made in PlayerComponent 
 
 	OmegaEngine::Instance().AddSystem(physicsSystem);
 
