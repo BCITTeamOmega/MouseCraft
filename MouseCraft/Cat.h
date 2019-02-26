@@ -3,13 +3,16 @@
 #include "Core\UpdatableComponent.h"
 #include "Core\Entity.h"
 #include "Event\ISubscriber.h"
+#include "Physics/PhysicsComponent.h"
+#include "Event/Observer.h"
 
 
-class Cat : public UpdatableComponent
+class Cat : public UpdatableComponent, public Observer<Entity*>
 {
 public:
     Cat();
     ~Cat();
+	void OnInitialized() override;
     void Update(float dt) override;
     void Notify(EventName eventName, Param* param) override;
     void setPlayer(int ID) { playerID = ID; }
@@ -20,7 +23,7 @@ private:
     //time tracking variable
     float current_time;
 
-    //update bools that let us know if we're in the middle of an animaktion
+    //update bools that let us know if we're in the middle of an animation
     bool isAttacking = false;
     bool isJumping = false;
     bool isPouncing = false;

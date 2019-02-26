@@ -4,9 +4,11 @@
 #include "Core/Component.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "DebugColliderComponent.h"
+#include "Physics/PhysicsComponent.h"
+#include "Event/Observer.h"
 
 
-class Contraption : public Component
+class Contraption : public Component, public Observer<Entity*>
 {
 public:
 	Contraption();

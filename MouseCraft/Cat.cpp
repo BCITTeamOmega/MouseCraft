@@ -30,6 +30,14 @@ void Cat::Update(float dt) {
     }
 }
 
+void Cat::OnInitialized()
+{
+	//Listens for collisions with the physics component
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	if (pComp != nullptr)
+		pComp->onCollide.Attach(this);
+}
 
 //check for button presses and then call functions
 void Cat::Notify(EventName eventName, Param * param) {

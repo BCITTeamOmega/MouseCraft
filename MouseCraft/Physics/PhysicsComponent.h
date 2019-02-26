@@ -3,6 +3,7 @@
 #include "../Core/Component.h"
 #include <Box2D/Box2D.h>
 #include "PhysObjectType.h"
+#include "../Event/Subject.h"
 
 class PhysicsComponent : public Component
 {
@@ -14,6 +15,7 @@ public:
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 	PhysObjectType::PhysObjectType type;
+	Subject<Entity*> onCollide;
 private:
 	
 };

@@ -292,11 +292,12 @@ void PhysicsManager::checkCollisions()
 	{
 		b2Body* c1 = collider1[c];
 		b2Body* c2 = collider2[c];
+
+		PhysicsComponent* pComp1 = static_cast<PhysicsComponent*>(c1->GetUserData());
+		PhysicsComponent* pComp2 = static_cast<PhysicsComponent*>(c2->GetUserData());
 			
-		//Figure out how to check for collisions on each one properly
-		//Index dynamics like so, cListender->hasCollided() should be number of collisions
-		//How do you know the number of dynamics and kinematics?
-		//Is it a pair for each collision?
+		pComp1->onCollide.Notify(pComp2->GetEntity());
+		pComp2->onCollide.Notify(pComp1->GetEntity());
 	}
 
 	cListener->resetCollided();

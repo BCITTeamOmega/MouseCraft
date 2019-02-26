@@ -17,9 +17,11 @@
 #include "Event/EventManager.h"
 #include "Event/Observer.h"
 #include "Input/InputSystem.h"
+#include "Physics/PhysicsComponent.h"
 
 class Mice : public UpdatableComponent, 
 	public Observer<DebugColliderComponent*, DebugColliderComponent*>,
+	public Observer<Entity*>,
 	public Observer<>
 {
 public:

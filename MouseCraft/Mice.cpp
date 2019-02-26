@@ -17,6 +17,12 @@ Mice::~Mice()
 void Mice::OnInitialized() 
 {
 	GetEntity()->GetComponent<DebugColliderComponent>()->OnCollide.Attach(this);
+
+	//Listens for collisions with the physics component
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	if(pComp != nullptr)
+		pComp->onCollide.Attach(this);
 }
 
 void Mice::Update(float deltaTime) 
