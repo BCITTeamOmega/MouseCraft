@@ -13,6 +13,7 @@ using glm::perspective;
 using glm::translate;
 using glm::identity;
 using glm::inverse;
+using glm::transpose;
 
 RenderSystem::RenderSystem() : System() {
 	initShaders();
@@ -89,6 +90,7 @@ void RenderSystem::Update(float dt) {
 			mat4 model = render.getTransform();
 
 			mat4 mvp = vp * model;
+			mat4 invMVP = transpose(inverse(view * model));
 
 			if (tex != nullptr) {
 				// _texture->setImage(*tex, true, GL_SRGB_ALPHA);
@@ -102,6 +104,7 @@ void RenderSystem::Update(float dt) {
 
 			_shader->setUniformVec3("color", color);
 			_shader->setUniformMatrix("transform", mvp);
+			_shader->setUniformMatrix("invTransform", invMVP);
 
 			glDrawElements(GL_TRIANGLES, g->getIndices().size(), GL_UNSIGNED_INT, 0);
 		}
