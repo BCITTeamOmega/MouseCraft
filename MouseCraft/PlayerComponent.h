@@ -4,6 +4,7 @@
 #include "HealthComponent.h"
 #include "Core/Entity.h"
 #include "Event/ISubscriber.h"
+#include "Physics/PhysicsComponent.h"
 
 enum Team
 {
@@ -31,6 +32,9 @@ private:
 	glm::vec2 _move;
 	glm::vec2 _aim;
 	float _speed = 50.0f;
+
+	// physics component 
+	PhysicsComponent* _physicsComponent;
 
 	// Inherited via ISubscriber
 	virtual void Notify(EventName eventName, Param * params) override;

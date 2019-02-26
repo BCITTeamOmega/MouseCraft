@@ -10,6 +10,12 @@ Vector2D::Vector2D(const Vector2D& v)
 	this->y = v.y;
 }
 
+Vector2D::Vector2D(glm::vec2 vec)
+{
+	this->x = vec.x;
+	this->y = vec.y;
+}
+
 Vector2D Vector2D::operator=(const Vector2D& v2)
 {
 	this->x = v2.x;

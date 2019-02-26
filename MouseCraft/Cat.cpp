@@ -30,6 +30,16 @@ void Cat::Update(float dt) {
     }
 }
 
+void Cat::OnInitialized()
+{
+	//Listens for collisions with the physics component
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	if (pComp != nullptr)
+		pComp->onCollide.Attach(this);
+
+    playerID = GetEntity()->GetComponent<PlayerComponent>()->GetID();
+}
 
 //check for button presses and then call functions
 void Cat::Notify(EventName eventName, Param * param) {
@@ -61,9 +71,10 @@ bool Cat::canJump()
     //something something colt physics stuff
 
     //temp
-    int i = rand() % 2;
-    
-    return i == 1 ? true : false;
+    return true;
+    //int i = rand() % 2;
+    //
+    //return i == 1 ? true : false;
 }
 
 //check if we are doing something, then attack
@@ -99,6 +110,7 @@ void Cat::Jump() {
     if (canJump()) {
         //Jump code
         std::cout << "Cat has jumped." << std::endl;
+        GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
         isJumping = true;
         return;
     }

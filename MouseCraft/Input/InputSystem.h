@@ -10,6 +10,7 @@
 
 #define MAX_PLAYERS 4
 #define JOYSTICK_DEADZONE 0.1
+#define DEBUG_PLAYER 10
 
 enum Axis
 {
@@ -144,6 +145,7 @@ private:
 // variables 
 private:
 	std::array<Axis2DInput, MAX_PLAYERS * 2> playerAxes;
+	Axis2DInput debugPlayerAxis;	// special axis for keyboard input
 
 // functions
 public:
@@ -177,163 +179,9 @@ public:
 	{
 	};
 
-	virtual void Update(float dt) override
-	{
-		SDL_Event e;
-		while (SDL_PollEvent(&e) != 0)
-		{
-			if (e.type == SDL_QUIT)
-			{
-				// todo: omegaengine quit. 
-				SDL_Quit();
-			}
-			else if (e.type == SDL_JOYAXISMOTION)
-			{
-				/*
-				std::cout << "joy event" << std::endl;
-				std::cout << (unsigned)e.jaxis.axis << std::endl;
-				std::cout << (int)e.jaxis.value << std::endl;
-				std::cout << (unsigned)e.jbutton.button << std::endl;
+	virtual void Update(float dt) override;
 
-				std::cout << "\rjoy event: "
-					<< (unsigned)e.jaxis.axis << "\t"
-					<< (unsigned)e.jaxis.value << "\t"
-					<< (unsigned)e.jbutton.button
-					<< std::flush;
-				*/
-
-				int player = e.jaxis.which;
-				Axis axis;
-				float value = (float)e.jaxis.value / (float)INT16_MAX;
-				
-				if (player >= MAX_PLAYERS)
-					continue;
-
-				// left analog horizontal
-				if (e.jaxis.axis == 0)
-				{
-					playerAxes[player * 2].SetX(value);
-				}
-				// left analog vertical 
-				else if (e.jaxis.axis == 1)
-				{
-					playerAxes[player * 2].SetY(value);
-				}
-				// right analog horizontal 
-				else if (e.jaxis.axis == 3)
-				{
-					playerAxes[player * 2 + 1].SetX(value);
-				}
-				// right analog vertical
-				else if (e.jaxis.axis == 4)
-				{
-					playerAxes[player * 2 + 1].SetY(value);
-				}
-				else
-				{
-					continue;
-				}
-			}
-			else if (e.type == SDL_JOYBUTTONDOWN)
-			{
-				int player = e.jbutton.which;
-				Button b;
-
-				switch (e.jbutton.button)
-				{
-				case 5:
-					b = Button::PRIMARY;
-					break;
-				case 4:
-					b = Button::SECONDARY;
-					break;
-				case 0:
-					b = Button::AUX1;
-					break;
-				case 1:
-					b = Button::AUX2;
-					break;
-				default:
-					continue;
-				}
-
-				// notify
-				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, b, true)));
-			}
-			else if (e.type == SDL_JOYBUTTONUP)
-			{
-				int player = e.jbutton.which;
-				Button b;
-
-				switch (e.jbutton.button)
-				{
-				case 5:
-					b = Button::PRIMARY;
-					break;
-				case 4:
-					b = Button::SECONDARY;
-					break;
-				case 0:
-					b = Button::AUX1;
-					break;
-				case 1:
-					b = Button::AUX2;
-					break;
-				default:
-					continue;
-				}
-
-				// notify
-				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, b, false)));
-			}
-		} // end while 
-
-
-		// notify joystick movement 
-		for (int player = 0; player < MAX_PLAYERS; ++player)
-		{
-			Axis2DInput& leftStick = playerAxes[player * 2];
-			Axis2DInput& rightStick = playerAxes[player * 2 + 1];
-			
-			// update 
-			leftStick.Update();
-			rightStick.Update();
-
-			// notify 
-			if (leftStick.HasXChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS,
-					new TypeParam<AxisEvent>(AxisEvent(player, Axis::LEFT_HOR, leftStick.GetX())));
-			}
-			if (leftStick.HasYChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS,
-					new TypeParam<AxisEvent>(AxisEvent(player, Axis::LEFT_VER, leftStick.GetY())));
-			}
-			if (leftStick.HasAxisChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS_2D,
-					new TypeParam<Axis2DEvent>(Axis2DEvent(player, Axis::LEFT, leftStick.GetAxis())));
-			}
-
-			if (rightStick.HasXChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS,
-					new TypeParam<AxisEvent>(AxisEvent(player, Axis::RIGHT_HOR, rightStick.GetX())));
-			}
-			if (rightStick.HasYChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS,
-					new TypeParam<AxisEvent>(AxisEvent(player, Axis::RIGHT_VER, rightStick.GetY())));
-			}
-			if (rightStick.HasAxisChanged())
-			{
-				EventManager::Notify(EventName::INPUT_AXIS_2D,
-					new TypeParam<Axis2DEvent>(Axis2DEvent(player, Axis::RIGHT, rightStick.GetAxis())));
-			}
-		}
-	}
+private:
+	void NotifyAxis(Axis2DInput& axis, int player);
 };
 

@@ -10,6 +10,7 @@
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
 #include "Physics/PhysicsManager.h"
+#include "Physics/PhysObjectType.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
@@ -108,7 +109,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_mice);
 
 	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	c_p1_movement->SetID(0);
+	c_p1_movement->SetID(10);
 	e1->AddComponent(c_p1_movement);
 
 	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
@@ -129,7 +130,7 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(1);
+	playerc->SetID(0);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -145,6 +146,25 @@ void Test_Rendering()
 	
 	DebugColliderSystem* dcs = new DebugColliderSystem();
 	InputSystem* is = new InputSystem();
+
+	PhysicsManager* physicsSystem = new PhysicsManager();
+
+	// component_player1_physics 
+	auto c_p1_physics = physicsSystem->createObject(10, 10, 2, 2, 0, PhysObjectType::MOUSE_DOWN);
+
+	// add to mouse entity
+	e1->AddComponent(c_p1_physics);
+
+	// component_player2_physics 
+
+	auto c_p2_physics = physicsSystem->createObject(0, 0, 2, 2, 0, PhysObjectType::CAT_DOWN);
+
+	// add to cat entity
+	e2->AddComponent(c_p2_physics);
+
+	// adjustments made in PlayerComponent 
+
+	OmegaEngine::Instance().AddSystem(physicsSystem);
 
 	// add the entities 
 
@@ -304,12 +324,6 @@ void Test_ECS()
 	ExampleSystem exampleSystem;
 
 	OmegaEngine::Instance().AddSystem(&exampleSystem);
-
-	PhysicsManager physicsSystem;
-	physicsSystem.createPlatform(0, 0, 100, 100);
-	physicsSystem.createPlayer(0, 0, 20, 20, true);
-
-	OmegaEngine::Instance().AddSystem(&physicsSystem);
 
 	OmegaEngine::Instance().Loop();
 }
