@@ -16,17 +16,9 @@ void CContactListener::BeginContact(b2Contact* contact)
 	if (pCompA == nullptr || pCompB == nullptr)
 		return;
 
-	if (pCompA->type == PLATFORM)
+	if (pCompA->type == PLATFORM && (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP
+		|| pCompB->type == OBSTACLE_UP || pCompB->type == CONTRAPTION_DOWN))
 	{
-		if (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP || pCompB->type == OBSTACLE_UP)
-		{
-			//PREVENT COLLISION RESOLUTION
-		}
-		else if (pCompB->type != CONTRAPTION_DOWN) //if you're anything other than these 4 just do the collision
-		{
-			return;
-		}
-
 		if (collided + 1 > arraySize)
 			enlargeArrays();
 
@@ -35,17 +27,9 @@ void CContactListener::BeginContact(b2Contact* contact)
 
 		collided++;
 	}
-	else if (pCompB->type == PLATFORM)
+	else if (pCompB->type == PLATFORM && (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP
+		|| pCompA->type == OBSTACLE_UP || pCompA->type == CONTRAPTION_DOWN))
 	{
-		if (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP || pCompA->type == OBSTACLE_UP)
-		{
-			//PREVENT COLLISION RESOLUTION
-		}
-		else if (pCompA->type != CONTRAPTION_DOWN) //if you're anything other than these 4 just do the collision
-		{
-			return;
-		}
-
 		if (collided + 1 > arraySize)
 			enlargeArrays();
 
@@ -133,7 +117,28 @@ void CContactListener::EndContact(b2Contact* contact)
 	}
 }
 
-void CContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {};
+void CContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+{
+	b2Fixture* fa = contact->GetFixtureA();
+	b2Fixture* fb = contact->GetFixtureB();
+
+	if (fa == NULL || fb == NULL)
+		return;
+
+	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
+	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
+
+	if (pCompA == nullptr || pCompB == nullptr)
+		return;
+
+	//If an object is trying to land on a platform it should not be pushed away so disable the collision resolution for this step
+	if (pCompA->type == PLATFORM && (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP || pCompB->type == OBSTACLE_UP)
+		|| pCompB->type == PLATFORM && (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP || pCompA->type == OBSTACLE_UP))
+	{
+		contact->SetEnabled(false);
+	}
+}
+
 void CContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
 
 void CContactListener::setup()
