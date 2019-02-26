@@ -19,12 +19,24 @@ PhysicsManager::~PhysicsManager()
 
 void PhysicsManager::Update(float dt)
 {
+	/* 
+	Resolve body status. This allows use to disable entities or components. 
+	Note: OmegaEngine guarantees that entity life/status will not change during system updates. 	
+	*/
+	auto physicComponents = ComponentManager<PhysicsComponent>::Instance().All();
+	for (auto& pc : physicComponents)
+	{
+		// performance should be ok referring to the latest revision of b2body.cpp 
+		// (there's fast return if this doesn't change active status)
+		pc->body->SetActive(pc->GetActive());
+	}
+
 	const float ts = 1.0f / 60.0f;
 	float t = 0;
 
 	//update body velocities
 	b2Body* b = world->GetBodyList(); //points to the first body
-
+	
 	while (b != NULL)
 	{
 		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
@@ -64,8 +76,14 @@ void PhysicsManager::Update(float dt)
 	//update all the components to match the bodies
 	b = world->GetBodyList(); //points to the first body
 
-	while (b != NULL && b->GetType() != b2_staticBody)
+	while (b != NULL)
 	{
+		if (b->GetType() == b2_staticBody)
+		{
+			b = b->GetNext();
+			continue;
+		}
+
 		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
 
 		if (pcomp != NULL)
@@ -83,11 +101,12 @@ void PhysicsManager::Update(float dt)
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = new PhysicsComponent(t, 0, r);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t,0,r);
 
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
 	bodyDef.angle = r;
+	bodyDef.active = false;	// wait for component to be active (valid state)
 
 	b2Body* body;
 
@@ -338,8 +357,8 @@ void PhysicsManager::checkCollisions()
 		PhysicsComponent* pComp1 = static_cast<PhysicsComponent*>(c1->GetUserData());
 		PhysicsComponent* pComp2 = static_cast<PhysicsComponent*>(c2->GetUserData());
 			
-		pComp1->onCollide.Notify(pComp2->GetEntity());
-		pComp2->onCollide.Notify(pComp1->GetEntity());
+		pComp1->onCollide.Notify(pComp2);
+		pComp2->onCollide.Notify(pComp1);
 	}
 
 	cListener->resetCollided();

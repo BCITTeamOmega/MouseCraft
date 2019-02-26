@@ -8,3 +8,8 @@ PhysicsComponent::PhysicsComponent(PhysObjectType::PhysObjectType t, float z, fl
 	isJumping = false;
 	type = t;
 }
+
+PhysicsComponent::~PhysicsComponent()
+{
+	body->GetWorld()->DestroyBody(body);
+}

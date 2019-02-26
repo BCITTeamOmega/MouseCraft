@@ -2,9 +2,11 @@
 
 #include "Core/EntityManager.h"
 #include "Core/ComponentManager.h"
+#include "Core/OmegaEngine.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Renderable.h"
 #include "Loading/ImageLoader.h"
+#include "Physics/PhysicsManager.h"
 
 PickupFactory::PickupFactory()
 {
@@ -56,10 +58,15 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	auto c_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
 	c_collider->tag = "pickup";
 
+	auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
+	auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::PART);
+	// auto c_physics = pSys->createObject(0, 0, 0.1, 0.1, 0.0, PhysObjectType::OBSTACLE_DOWN); this works
+
 	// ASSEMBLE
 	pickup->AddComponent(c_renderable);
 	pickup->AddComponent(c_pickup);
 	pickup->AddComponent(c_collider);
+	pickup->AddComponent(c_physics);
 
 	return pickup;
 }

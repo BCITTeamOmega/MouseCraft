@@ -78,12 +78,23 @@ void Mice::Publish(DebugColliderComponent* me, DebugColliderComponent* other)
 	}
 }
 
+void Mice::Publish(PhysicsComponent * pc)
+{
+	if (pc->type == PhysObjectType::PART)
+	{
+		// collided with part 
+		// addItem(pc->GetEntity()->GetComponent<Pickup>());
+	}
+}
+
 void Mice::Publish()
 {
 	// on death
 	downed = true;
 	GetEntity()->SetEnabled(false);
 }
+
+
 
 void Mice::addItem(Pickup* item) {
 

@@ -82,6 +82,19 @@ public:
 	// Add a system to receive updates. 
 	void AddSystem(System* system);
 
+	// Gets the system of type. Not recommended to call every frame.
+	template<typename SystemType>
+	SystemType* GetSystem() 
+	{
+		// Don't call this too often. Same rationale as Entity::GetComponent
+		for (const auto& s : _systems)
+		{
+			auto found = dynamic_cast<SystemType*>(s);
+			if (found) return found;
+		}
+		return nullptr;
+	}
+
 	// Convenience function to add entity to active scene root. Managed. 
 	void AddEntity(Entity* entity);
 
