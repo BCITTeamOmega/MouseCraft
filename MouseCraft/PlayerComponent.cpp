@@ -36,5 +36,14 @@ void PlayerComponent::Notify(EventName eventName, Param* params)
 
 void PlayerComponent::Update(float deltaTime)
 {
+	// movement 
 	_entity->transform.translate(glm::vec3(_move.x * deltaTime * _speed, 0, _move.y * deltaTime * _speed));
+	// rotation
+	if (_move.x != 0 && _move.y != 0)
+	{
+		auto rotation = glm::atan(_move.x / _move.y);
+		if (_move.y > 0)
+			rotation -= M_PI;
+		_entity->transform.setLocalRotation(glm::vec3(0, rotation, 0));
+	}
 }
