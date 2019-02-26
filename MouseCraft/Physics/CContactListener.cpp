@@ -12,10 +12,79 @@ void CContactListener::BeginContact(b2Contact* contact)
 
 	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
 	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
-	
-	//if A is a static object
-	if (true) //DO SOMETHING HERE
+
+	if (pCompA == nullptr || pCompB == nullptr)
+		return;
+
+	if (pCompA->type == PLATFORM)
 	{
+		if (pCompB->type == CAT_UP || pCompB->type == MOUSE_UP || pCompB->type == OBSTACLE_UP)
+		{
+			//PREVENT COLLISION RESOLUTION
+		}
+		else if (pCompB->type != CONTRAPTION_DOWN) //if you're anything other than these 4 just do the collision
+		{
+			return;
+		}
+
+		if (collided + 1 > arraySize)
+			enlargeArrays();
+
+		colliders1[collided] = fb->GetBody();
+		colliders2[collided] = fa->GetBody();
+
+		collided++;
+	}
+	else if (pCompB->type == PLATFORM)
+	{
+		if (pCompA->type == CAT_UP || pCompA->type == MOUSE_UP || pCompA->type == OBSTACLE_UP)
+		{
+			//PREVENT COLLISION RESOLUTION
+		}
+		else if (pCompA->type != CONTRAPTION_DOWN) //if you're anything other than these 4 just do the collision
+		{
+			return;
+		}
+
+		if (collided + 1 > arraySize)
+			enlargeArrays();
+
+		colliders1[collided] = fa->GetBody();
+		colliders2[collided] = fb->GetBody();
+
+		collided++;
+	}
+	else if (pCompA->type == WALL)
+	{
+		//Unless you are a contraption nothing special happens on collision with walls
+		if (pCompB->type != CONTRAPTION_UP && pCompB->type != CONTRAPTION_DOWN)
+			return;
+
+		if (collided + 1 > arraySize)
+			enlargeArrays();
+
+		colliders1[collided] = fb->GetBody();
+		colliders2[collided] = fa->GetBody();
+
+		collided++;
+	}
+	else if (pCompB->type == WALL)
+	{
+		//Unless you are a contraption nothing special happens on collision with walls
+		if (pCompA->type != CONTRAPTION_UP && pCompA->type != CONTRAPTION_DOWN)
+			return;
+
+		if (collided + 1 > arraySize)
+			enlargeArrays();
+
+		colliders1[collided] = fa->GetBody();
+		colliders2[collided] = fb->GetBody();
+
+		collided++;
+	}
+	else
+	{
+		//Basically everything else has special handling for collisions
 		if (collided + 1 > arraySize)
 			enlargeArrays();
 
