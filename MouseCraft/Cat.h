@@ -5,6 +5,7 @@
 #include "Event\ISubscriber.h"
 #include "Physics/PhysicsComponent.h"
 #include "Event/Observer.h"
+#include "PlayerComponent.h"
 
 
 class Cat : public UpdatableComponent, public Observer<Entity*>
