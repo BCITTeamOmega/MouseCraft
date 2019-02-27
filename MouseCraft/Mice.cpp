@@ -83,7 +83,7 @@ void Mice::Publish(PhysicsComponent * pc)
 	if (pc->type == PhysObjectType::PART)
 	{
 		// collided with part 
-		// addItem(pc->GetEntity()->GetComponent<Pickup>());
+		addItem(pc->GetEntity()->GetComponent<Pickup>());
 	}
 }
 

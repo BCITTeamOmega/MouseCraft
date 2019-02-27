@@ -33,6 +33,9 @@ RenderSystem::RenderSystem() : System() {
 	_vao->setElementBuffer(*_ebo);
 
 	_texture = new GLTexture();
+
+	profiler.InitializeTimers(1);
+	profiler.LogOutput("Rendering.log");	// optional
 }
 
 RenderSystem::~RenderSystem() {
@@ -61,6 +64,9 @@ void RenderSystem::clearShader() {
 }
 
 void RenderSystem::Update(float dt) {
+
+	profiler.StartTimer(0);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	float windowRatio = (float)_window->getWidth() / _window->getHeight();
@@ -111,6 +117,9 @@ void RenderSystem::Update(float dt) {
 	}
 	accumulateList();
 	swapLists();
+
+	profiler.StopTimer(0);
+	profiler.FrameFinish();
 }
 
 void RenderSystem::swapLists() {

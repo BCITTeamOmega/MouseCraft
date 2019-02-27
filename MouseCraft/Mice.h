@@ -22,7 +22,7 @@
 
 class Mice : public UpdatableComponent, 
 	public Observer<DebugColliderComponent*, DebugColliderComponent*>,	// debug collision
-	public Observer<PhysicsComponent*>,											// physics
+	public Observer<PhysicsComponent*>,									// physics
 	public Observer<>													// health
 {
 public:
