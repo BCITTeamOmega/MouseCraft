@@ -157,6 +157,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\GLEW\glew.c" />
+    <ClCompile Include="Event\Handler.cpp" />
     <ClCompile Include="Graphics\GLTexture.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Coil.cpp" />
@@ -234,6 +235,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Cat.h" />
     <ClInclude Include="ContraptionFactory.h" />
     <ClInclude Include="Core\Vector2D.h" />
+    <ClInclude Include="Event\Handler.h" />
     <ClInclude Include="Graphics\GLTexture.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />
