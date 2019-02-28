@@ -1,6 +1,10 @@
 #include "Mice.h"
 
-Mice::Mice()
+#include "HealthComponent.h"
+
+Mice::Mice() : 
+	HandleOnCollide(this, &Mice::OnCollision),
+	HandleOnDeath(this, &Mice::OnDeath)
 {
 	std::cout << std::setprecision(2);
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
@@ -20,9 +24,14 @@ void Mice::OnInitialized()
 
 	//Listens for collisions with the physics component
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+	if (pComp != nullptr)
+	{
+		HandleOnCollide.Observe(pComp->onCollide);
+	}
 
-	if(pComp != nullptr)
-		pComp->onCollide.Attach(this);
+	// Listen for death 
+	HealthComponent* c_health = GetEntity()->GetComponent<HealthComponent>();
+	HandleOnDeath.Observe(c_health->OnDeath);
 
     player = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
@@ -68,17 +77,7 @@ void Mice::Notify(EventName eventName, Param * params)
 	}
 }
 
-void Mice::Publish(DebugColliderComponent* me, DebugColliderComponent* other)
-{
-	// on collide
-	if (other->tag == "pickup")
-	{
-		std::cout << "PICKUP???" << std::endl;
-		addItem(other->GetEntity()->GetComponent<Pickup>());
-	}
-}
-
-void Mice::Publish(PhysicsComponent * pc)
+void Mice::OnCollision(PhysicsComponent * pc)
 {
 	if (pc->type == PhysObjectType::PART)
 	{
@@ -87,7 +86,7 @@ void Mice::Publish(PhysicsComponent * pc)
 	}
 }
 
-void Mice::Publish()
+void Mice::OnDeath()
 {
 	// on death
 	downed = true;

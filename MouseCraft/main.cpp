@@ -117,7 +117,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-	e1->AddComponent(c_p1_collider);
+	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
 	auto c_p2_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -364,7 +364,6 @@ void Test_ObserverPattern()
 	Health health;
 
 	Dude* dude = new Dude(health);
-	Dude* lonelyDude = new Dude(nullptr);
 
 	health.Damage(50);	// ouch
 	health.Heal(50);	// nothing happens 
