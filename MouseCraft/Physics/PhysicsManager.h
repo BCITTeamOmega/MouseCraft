@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include "PhysObjectType.h"
 #include "../Core/Entity.h"
+#include "../Util/CpuProfiler.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -52,6 +53,7 @@ public:
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
 private:
+	CpuProfiler profiler;
 	b2World *world;
 	std::vector<b2Body*> players;
 	CContactListener *cListener;

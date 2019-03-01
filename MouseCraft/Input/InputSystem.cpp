@@ -110,6 +110,8 @@ void InputSystem::Axis2DInput::Update()
 
 void InputSystem::Update(float dt)
 {
+	profiler.StartTimer(0);
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e) != 0)
 	{
@@ -278,6 +280,9 @@ void InputSystem::Update(float dt)
 	// notify debug keyboard player 
 	debugPlayerAxis.Update();
 	NotifyAxis(debugPlayerAxis, DEBUG_PLAYER);
+
+	profiler.StopTimer(0);
+	profiler.FrameFinish();
 }
 
 void InputSystem::NotifyAxis(Axis2DInput& axis, int player)

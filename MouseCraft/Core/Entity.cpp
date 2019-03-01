@@ -226,11 +226,11 @@ void Entity::RemoveComponent(Component * c)
 
 void Entity::Destroy(bool force)
 {
-	std::cerr << "WARNING: Entity::destroy() is not fully implemented yet" << std::endl;
-
 	// explicit or implicit instant change
 	if (force || !isInActiveScene())
 	{
+		std::cout << "Destroying: " << this->GetID() << std::endl;
+
 		// destroy all children 
 		for (auto& e : _children)
 			e->Destroy(true);
@@ -247,6 +247,7 @@ void Entity::Destroy(bool force)
 	}
 	else // defer
 	{
+		std::cout << "Scheduling: " << this->GetID() << " for destruction" << std::endl;
 		OmegaEngine::Instance().DeferAction(
 			new StatusActionParam(StatusActionType::Delete, this));
 	}

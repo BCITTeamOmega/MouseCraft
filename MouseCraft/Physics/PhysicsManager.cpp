@@ -9,6 +9,9 @@ PhysicsManager::PhysicsManager()
 	cListener = new CContactListener();
 	cListener->setup();
 	world->SetContactListener(cListener);
+
+	profiler.InitializeTimers(4);
+	profiler.LogOutput("Physics.log");	// optional
 }
 
 PhysicsManager::~PhysicsManager()
@@ -19,6 +22,8 @@ PhysicsManager::~PhysicsManager()
 
 void PhysicsManager::Update(float dt)
 {
+	profiler.StartTimer(0);
+
 	/* 
 	Resolve body status. This allows use to disable entities or components. 
 	Note: OmegaEngine guarantees that entity life/status will not change during system updates. 	
@@ -97,6 +102,10 @@ void PhysicsManager::Update(float dt)
 		//get the next body
 		b = b->GetNext();
 	}
+
+
+	profiler.StopTimer(0);
+	profiler.FrameFinish();
 }
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)

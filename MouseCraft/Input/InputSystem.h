@@ -7,6 +7,7 @@
 #include <array>
 #include "../Core/System.h"
 #include "../Event/EventManager.h"
+#include "../Util/CpuProfiler.h"
 
 #define MAX_PLAYERS 4
 #define JOYSTICK_DEADZONE 0.1
@@ -146,6 +147,7 @@ private:
 private:
 	std::array<Axis2DInput, MAX_PLAYERS * 2> playerAxes;
 	Axis2DInput debugPlayerAxis;	// special axis for keyboard input
+	CpuProfiler profiler;
 
 // functions
 public:
@@ -174,6 +176,9 @@ public:
 				std::cout << "WARNING: Up to 4 controllers can be opened." << std::endl;
 			}
 		}
+
+		profiler.InitializeTimers(1);
+		profiler.LogOutput("Input.log");
 	};
 	~InputSystem()
 	{
