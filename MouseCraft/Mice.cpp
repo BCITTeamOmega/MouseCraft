@@ -16,13 +16,14 @@ Mice::~Mice()
 
 void Mice::OnInitialized() 
 {
-	GetEntity()->GetComponent<DebugColliderComponent>()->OnCollide.Attach(this);
-
 	//Listens for collisions with the physics component
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 
-	if(pComp != nullptr)
+	if (pComp != nullptr)
+	{
 		pComp->onCollide.Attach(this);
+		pComp->onHit.Attach(this);
+	}
 
     player = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
@@ -65,16 +66,6 @@ void Mice::Notify(EventName eventName, Param * params)
 
 		if (data.button == Button::AUX2)
 			drop = data.isDown;
-	}
-}
-
-void Mice::Publish(DebugColliderComponent* me, DebugColliderComponent* other)
-{
-	// on collide
-	if (other->tag == "pickup")
-	{
-		std::cout << "PICKUP???" << std::endl;
-		addItem(other->GetEntity()->GetComponent<Pickup>());
 	}
 }
 

@@ -36,7 +36,10 @@ void Cat::OnInitialized()
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 
 	if (pComp != nullptr)
+	{
 		pComp->onCollide.Attach(this);
+		pComp->onHit.Attach(this);
+	}
 
     playerID = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
