@@ -13,6 +13,7 @@
 #include "../Core/Entity.h"
 #include "AreaQueryCallback.h"
 #include "RayQueryCallback.h"
+#include "../Util/CpuProfiler.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -61,6 +62,7 @@ public:
 	Vector2D* rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit);
 private:
 	static PhysicsManager* pmInstance;
+	CpuProfiler profiler;
 	b2World *world;
 	CContactListener *cListener;
 

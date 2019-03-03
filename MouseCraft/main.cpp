@@ -117,7 +117,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-	e1->AddComponent(c_p1_collider);
+	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
 	auto c_p2_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -349,10 +349,40 @@ void Test_ObserverPattern()
 	OnTemperatureChanged.Notify(50);
 	OnTemperatureChanged.Notify(100);
 	OnTemperatureChanged.Notify(200);
+
+	// Test 3 
+	Subject<int> thermostat;
+	FoobarRandom foobar(thermostat);
+
+	thermostat.Notify(100);
+	thermostat.Notify(-100);
+	int i = 0;
+
+	// Test 4 
+	Health health;
+
+	Dude* dude = new Dude(health);
+
+	health.Damage(50);	// ouch
+	health.Heal(50);	// nothing happens 
+	health.Damage(100);	// ouch + death
+	
+	delete(dude);		// stop listening 
+
+	Dudette* dudette = new Dudette(health);
+	health.Heal(100);	// thanks
+	health.Damage(50);	// ouch
+	health.Damage(50);	// sayonara
+
+	delete(dudette);
+
+	health.Heal(100);	// nothing
 }
 
 int main(int argc, char* argv[]) 
 {
+	Test_ObserverPattern();
+
     //adding sound system
     noise = new SoundManager();
     //start initial music track, standard form for music selection
@@ -369,9 +399,9 @@ int main(int argc, char* argv[])
     EventManager::Notify(PLAY_SONG, &param);
 
 	Test_Rendering();
-    /*
 	// Test_ECS();
 
+	/*
 	OmegaEngine::Instance().initialize();
 
 	OmegaEngine::Instance().AddSystem(new InputSystem());
