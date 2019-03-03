@@ -25,7 +25,7 @@ PhysicsManager::~PhysicsManager()
 PhysicsManager* PhysicsManager::instance()
 {
 	if (pmInstance == nullptr)
-		return new PhysicsManager();
+		pmInstance = new PhysicsManager();
 	return pmInstance;
 }
 
