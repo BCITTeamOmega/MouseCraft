@@ -3,7 +3,6 @@
 #include "Core/Entity.h"
 #include "Core/Component.h"
 #include "MOUSECRAFT_ENUMS.h"
-#include "DebugColliderComponent.h"
 #include "Physics/PhysicsComponent.h"
 #include "Event/Observer.h"
 
@@ -23,7 +22,6 @@ public:
 public:
 	CONTRAPTIONS type;
 private:
-	DebugColliderComponent* _collider;
 
 };
 

@@ -92,11 +92,8 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 	default:
 		break;
 	}
-	auto c_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
-	c_collider->tag = "contraption";
 
 	contraption->AddComponent(c_renderable);
-	contraption->AddComponent(c_collider);
 
 	return contraption;
 }

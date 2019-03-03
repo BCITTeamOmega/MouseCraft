@@ -2,9 +2,9 @@
 
 #include "Core/Component.h"
 #include "MOUSECRAFT_ENUMS.h"
-#include "DebugColliderComponent.h"
+#include "./Physics/PhysicsComponent.h"
 
-class Pickup : public Component
+class Pickup : public Component, public Observer<PhysicsComponent*>
 {
 // functions 
 public:
@@ -19,6 +19,5 @@ public:
 public:
 	PICKUPS type;
 private:
-	DebugColliderComponent* _collider;
 };
 

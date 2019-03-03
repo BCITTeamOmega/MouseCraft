@@ -4,7 +4,8 @@
 
 Mice::Mice() : 
 	HandleOnCollide(this, &Mice::OnCollision),
-	HandleOnDeath(this, &Mice::OnDeath)
+	HandleOnDeath(this, &Mice::OnDeath),
+	HandleOnHit(this, &Mice::OnHit)
 {
 	std::cout << std::setprecision(2);
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
@@ -20,13 +21,12 @@ Mice::~Mice()
 
 void Mice::OnInitialized() 
 {
-	GetEntity()->GetComponent<DebugColliderComponent>()->OnCollide.Attach(this);
-
 	//Listens for collisions with the physics component
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 	if (pComp != nullptr)
 	{
 		HandleOnCollide.Observe(pComp->onCollide);
+		HandleOnHit.Observe(pComp->onHit);
 	}
 
 	// Listen for death 
@@ -84,6 +84,11 @@ void Mice::OnCollision(PhysicsComponent * pc)
 		// collided with part 
 		addItem(pc->GetEntity()->GetComponent<Pickup>());
 	}
+}
+
+void Mice::OnHit(PhysicsComponent* e)
+{
+
 }
 
 void Mice::OnDeath()

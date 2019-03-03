@@ -54,9 +54,6 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	// create logic 
 	auto c_pickup = ComponentManager<Pickup>::Instance().Create<Pickup>();
 	c_pickup->type = type;
-	
-	auto c_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
-	c_collider->tag = "pickup";
 
 	auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
 	auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::PART);
@@ -65,7 +62,6 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	// ASSEMBLE
 	pickup->AddComponent(c_renderable);
 	pickup->AddComponent(c_pickup);
-	pickup->AddComponent(c_collider);
 	pickup->AddComponent(c_physics);
 
 	return pickup;

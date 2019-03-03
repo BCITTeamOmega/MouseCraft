@@ -9,7 +9,6 @@
 #include "Pickup.h"
 #include "Contraption.h"
 #include "ContraptionFactory.h"
-#include "DebugColliderComponent.h"
 #include "Core/OmegaEngine.h"
 #include "Core/Entity.h"
 #include "Core/Component.h"
@@ -21,10 +20,7 @@
 #include "Physics/PhysicsComponent.h"
 #include "PlayerComponent.h"
 
-class Mice : public UpdatableComponent, 
-	public Observer<DebugColliderComponent*, DebugColliderComponent*>,	// debug collision
-	public Observer<PhysicsComponent*>,									// physics
-	public Observer<>													// health
+class Mice : public UpdatableComponent
 {
 public:
 	Mice();
@@ -34,6 +30,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Notify(EventName eventName, Param *params) override;
 	virtual void OnCollision(PhysicsComponent* e);
+	virtual void OnHit(PhysicsComponent* e);
 	virtual void OnDeath();	
 	void addItem(Pickup* item);
 	void dropItem();
@@ -45,6 +42,7 @@ public:
 	float speed = 10.0f;
 	bool downed = false;
 	Handler<Mice, PhysicsComponent*> HandleOnCollide;
+	Handler<Mice, PhysicsComponent*> HandleOnHit;
 	Handler<Mice> HandleOnDeath;
 
 private:

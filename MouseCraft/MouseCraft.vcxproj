@@ -292,10 +292,12 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Mice.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="Overcharge.h" />
+    <ClInclude Include="Physics\AreaQueryCallback.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Physics\PhysObjectType.h" />
+    <ClInclude Include="Physics\RayQueryCallback.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />

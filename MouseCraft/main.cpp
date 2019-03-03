@@ -147,24 +147,22 @@ void Test_Rendering()
 	DebugColliderSystem* dcs = new DebugColliderSystem();
 	InputSystem* is = new InputSystem();
 
-	PhysicsManager* physicsSystem = new PhysicsManager();
-
 	// component_player1_physics 
-	auto c_p1_physics = physicsSystem->createObject(10, 10, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
+	auto c_p1_physics = PhysicsManager::instance()->createObject(10, 10, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
 
 	// add to mouse entity
 	e1->AddComponent(c_p1_physics);
 
 	// component_player2_physics 
 
-	auto c_p2_physics = physicsSystem->createObject(0, 0, 1, 1, 0, PhysObjectType::CAT_DOWN);
+	auto c_p2_physics = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::CAT_DOWN);
 
 	// add to cat entity
 	e2->AddComponent(c_p2_physics);
 
 	// adjustments made in PlayerComponent 
 
-	OmegaEngine::Instance().AddSystem(physicsSystem);
+	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
 
 	// add the entities 
 

@@ -13,3 +13,13 @@ PhysicsComponent::~PhysicsComponent()
 {
 	body->GetWorld()->DestroyBody(body);
 }
+
+bool PhysicsComponent::areaCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	return PhysicsManager::instance()->areaCheck(this, toCheck, p1, p2, triggerHit);
+}
+
+Vector2D* PhysicsComponent::rayCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, triggerHit);
+}

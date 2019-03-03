@@ -7,7 +7,10 @@
 #define JUMP_TIME 5
 #define POUNCE_TIME 5
 
-Cat::Cat() {
+Cat::Cat() :
+	HandleOnCollide(this, &Cat::OnCollision),
+	HandleOnHit(this, &Cat::OnHit)
+{
     EventManager::Subscribe(INPUT_BUTTON, this);
     playerID = 0;
     current_time = 0;
@@ -36,7 +39,10 @@ void Cat::OnInitialized()
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 
 	if (pComp != nullptr)
-		pComp->onCollide.Attach(this);
+	{
+		HandleOnCollide.Observe(pComp->onCollide);
+		HandleOnHit.Observe(pComp->onHit);
+	}
 
     playerID = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
@@ -63,6 +69,16 @@ void Cat::Notify(EventName eventName, Param * param) {
             break;
         }
     }
+}
+
+void Cat::OnCollision(PhysicsComponent * pc)
+{
+	
+}
+
+void Cat::OnHit(PhysicsComponent* e)
+{
+
 }
 
 //this function will call the physics/map system to determine if we're at a jump location (floor -> platform)
