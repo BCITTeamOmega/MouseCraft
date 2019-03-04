@@ -80,7 +80,17 @@ void OmegaEngine::DeferAction(StatusActionParam * action)
 	std::unique_lock<std::mutex> lock(_deferredActionMtx);
 	if (action->action == StatusActionType::Delete)
 	{
-		_deferredActions.push_back(action);
+		const bool is_in = _destructionValidation.find(action->target->GetID()) != _destructionValidation.end();
+		if (is_in)
+		{
+			std::cout << "WARNING: You are attempting to delete an entity twice, check your code!" << std::endl;
+			// do nothing
+		}
+		else
+		{
+			_destructionValidation.insert(action->target->GetID());
+			_deferredActions.push_back(action);
+		}
 	}
 	else
 	{

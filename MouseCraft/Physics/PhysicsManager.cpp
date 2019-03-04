@@ -1,5 +1,7 @@
 #include "PhysicsManager.h"
 
+PhysicsManager* PhysicsManager::pmInstance;
+
 PhysicsManager::PhysicsManager()
 {
 	b2Vec2 gravity(0, 0);
@@ -9,6 +11,9 @@ PhysicsManager::PhysicsManager()
 	cListener = new CContactListener();
 	cListener->setup();
 	world->SetContactListener(cListener);
+
+	profiler.InitializeTimers(4);
+	profiler.LogOutput("Physics.log");	// optional
 }
 
 PhysicsManager::~PhysicsManager()
@@ -17,8 +22,23 @@ PhysicsManager::~PhysicsManager()
 	delete(world);
 }
 
+PhysicsManager* PhysicsManager::instance()
+{
+	if (pmInstance == nullptr)
+		pmInstance = new PhysicsManager();
+	return pmInstance;
+}
+
+void PhysicsManager::destroy()
+{
+	if (pmInstance != nullptr)
+		delete(pmInstance);
+}
+
 void PhysicsManager::Update(float dt)
 {
+	profiler.StartTimer(0);
+
 	/* 
 	Resolve body status. This allows use to disable entities or components. 
 	Note: OmegaEngine guarantees that entity life/status will not change during system updates. 	
@@ -90,13 +110,16 @@ void PhysicsManager::Update(float dt)
 		{
 			//copy all relevant data from b to pcomp
 			pcomp->GetEntity()->transform.setLocalPosition(glm::vec3(b->GetPosition().x, pcomp->zPos, b->GetPosition().y));
-			// = Vector2D(b->GetPosition().x, b->GetPosition().y);
 			pcomp->velocity = Vector2D(b->GetLinearVelocity().x, b->GetLinearVelocity().y);
 		}
 
 		//get the next body
 		b = b->GetNext();
 	}
+
+
+	profiler.StopTimer(0);
+	profiler.FrameFinish();
 }
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
@@ -195,18 +218,6 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	body = world->CreateBody(&bodyDef);
 	body->CreateFixture(&fixtureDef);
-
-	switch (t)
-	{
-		case PhysObjectType::CAT_UP:
-		case PhysObjectType::CAT_DOWN:
-		case PhysObjectType::MOUSE_UP:
-		case PhysObjectType::MOUSE_DOWN:
-			players.push_back(body);
-			break;
-		default:
-			break;
-	}
 
 	physicsComp->body = body;
 
@@ -362,4 +373,85 @@ void PhysicsManager::checkCollisions()
 	}
 
 	cListener->resetCollided();
+}
+
+bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	bool objFound = false;
+
+	AreaQueryCallback callback;
+
+	b2AABB boundingBox;
+	boundingBox.lowerBound = b2Vec2(p1->x, p1->y);
+	boundingBox.upperBound = b2Vec2(p2->x, p2->y);
+
+	world->QueryAABB(&callback, boundingBox);
+
+	for (int i = 0; i < callback.foundBodies.size(); i++)
+	{
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
+
+		for (int j = 0; j < toCheck.size(); j++)
+		{
+			if (pComp->type == toCheck[j])
+			{
+				if (triggerHit)
+				{
+					pComp->onHit.Notify(checkedBy);
+					objFound = true;
+					break;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return objFound;
+}
+
+//returns whether it hit something or not
+Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	float32 frac = 1; //used to determine the closest object
+	PhysicsComponent* bestMatch = nullptr;
+	RayQueryCallback callback;
+
+	b2Vec2 point1 = b2Vec2(p1->x, p1->y);
+	b2Vec2 point2 = b2Vec2(p2->x, p2->y);
+
+	world->RayCast(&callback, point1, point2);
+
+	for (int i = 0; i < callback.hitBodies.size(); i++)
+	{
+		//if the object is further than the best match so far, move on
+		if (callback.fractions[i] > frac)
+			continue;
+
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
+
+		for (int j = 0; j < toCheck.size(); j++)
+		{
+			if (pComp->type == toCheck[j])
+			{
+				frac = callback.fractions[i];
+				bestMatch = pComp;
+			}
+		}
+	}
+
+	if (bestMatch == nullptr)
+	{
+		return nullptr;
+	}
+	else
+	{
+		if(triggerHit)
+			bestMatch->onHit.Notify(checkedBy);
+
+		b2Vec2 pos = bestMatch->body->GetPosition();
+		return new Vector2D(pos.x, pos.y);
+	}
 }

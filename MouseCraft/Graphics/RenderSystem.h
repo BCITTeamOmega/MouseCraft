@@ -12,6 +12,7 @@
 #include "BufferObjects/EBO.h"
 #include "Camera.h"
 #include "GLTexture.h"
+#include "../Util/CpuProfiler.h"
 
 class RenderSystem : public System {
 public:
@@ -46,4 +47,6 @@ private:
 	GLTexture* _geometryBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
+
+	CpuProfiler profiler;
 };

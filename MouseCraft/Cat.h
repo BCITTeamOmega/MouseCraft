@@ -6,6 +6,7 @@
 #include "Physics/PhysicsComponent.h"
 #include "Event/Observer.h"
 #include "PlayerComponent.h"
+#include "Event/Handler.h"
 
 
 class Cat : public UpdatableComponent, public Observer<PhysicsComponent*>
@@ -16,7 +17,12 @@ public:
 	void OnInitialized() override;
     void Update(float dt) override;
     void Notify(EventName eventName, Param* param) override;
-    void setPlayer(int ID) { playerID = ID; }
+	virtual void OnCollision(PhysicsComponent* e);
+	virtual void OnHit(PhysicsComponent* e);
+	void setPlayer(int ID) { playerID = ID; }
+
+	Handler<Cat, PhysicsComponent*> HandleOnCollide;
+	Handler<Cat, PhysicsComponent*> HandleOnHit;
 private:
     // player id for checking input events
     int playerID;

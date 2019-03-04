@@ -11,6 +11,9 @@
 #include <glm/glm.hpp>
 #include "PhysObjectType.h"
 #include "../Core/Entity.h"
+#include "AreaQueryCallback.h"
+#include "RayQueryCallback.h"
+#include "../Util/CpuProfiler.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -44,17 +47,27 @@ constexpr auto PLATFORM_MASK = 0x01F8;
 constexpr auto WALL_MASK = 0x03F0;
 #pragma endregion
 
-class PhysicsManager : public System {
+class PhysicsComponent;
+class CContactListener;
+
+class PhysicsManager : public System
+{
 public:
-	PhysicsManager();
-	~PhysicsManager();
+	static PhysicsManager* instance();
+	static void destroy();
 	void Update(float dt);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
+	bool areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit);
+	Vector2D* rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit);
 private:
+	static PhysicsManager* pmInstance;
+	CpuProfiler profiler;
 	b2World *world;
-	std::vector<b2Body*> players;
 	CContactListener *cListener;
+
+	PhysicsManager();
+	~PhysicsManager();
 	void updateHeights(float delta);
 	void checkCollisions();
 };
