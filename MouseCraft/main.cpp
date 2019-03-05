@@ -1,3 +1,6 @@
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
 #include <Windows.h>
 #include <iostream>
 #include "Core/OmegaEngine.h"

@@ -1,4 +1,7 @@
 #include "TaskScheduler.h"
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
 #include <Windows.h>
 //
 //TaskScheduler::TaskScheduler()
