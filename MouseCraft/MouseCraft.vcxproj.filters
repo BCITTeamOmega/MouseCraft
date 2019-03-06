@@ -141,9 +141,6 @@
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\GLEW\glew.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Component.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -311,6 +308,9 @@
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -583,6 +583,9 @@
     </ClInclude>
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\FBO.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

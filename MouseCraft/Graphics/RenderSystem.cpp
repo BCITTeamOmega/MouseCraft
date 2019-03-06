@@ -17,7 +17,6 @@ using glm::transpose;
 
 RenderSystem::RenderSystem() : System() {
 	initShaders();
-	glClearColor(0.3f, 0.75f, 1.0f, 1.0f);
 	glEnable(GL_FRAMEBUFFER_SRGB);
 
 	_renderingList = new vector<RenderData>();
@@ -26,6 +25,7 @@ RenderSystem::RenderSystem() : System() {
 	_positionVBO = new VBO(3);
 	_normalVBO = new VBO(3);
 	_texCoordVBO = new VBO(2);
+	_fbo = new FBO();
 	_ebo = new EBO();
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
@@ -33,6 +33,9 @@ RenderSystem::RenderSystem() : System() {
 	_vao->setElementBuffer(*_ebo);
 
 	_texture = new GLTexture();
+	_albedoBuffer = new GLTexture();
+	_normalBuffer = new GLTexture();
+	_positionBuffer = new GLTexture();
 
 	profiler.InitializeTimers(1);
 	profiler.LogOutput("Rendering.log");	// optional
@@ -75,9 +78,11 @@ void RenderSystem::Update(float dt) {
 	setShader(_shaders["gbuffer"]);
 
 	// First Pass
-	//setOutBuffers({});
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	setOutBuffers({_albedoBuffer, _normalBuffer, _positionBuffer});
 
 	if (_camera != nullptr) {
+		_fbo->bind();
 		Transform viewTransform = _camera->getTransform();
 		mat4 view = inverse(viewTransform.getWorldTransformation());
 
@@ -115,6 +120,9 @@ void RenderSystem::Update(float dt) {
 			glDrawElements(GL_TRIANGLES, g->getIndices().size(), GL_UNSIGNED_INT, 0);
 		}
 	}
+
+	glClearColor(0.3f, 0.75f, 1.0f, 1.0f);
+
 	accumulateList();
 	swapLists();
 
@@ -159,14 +167,14 @@ void RenderSystem::accumulateList() {
 		break;
 	}
 }
-void RenderSystem::setOutBuffers(std::vector<GLTexture> buffers) {
+void RenderSystem::setOutBuffers(std::vector<GLTexture*> buffers) {
 	int w = _window->getWidth();
 	int h = _window->getHeight();
-	Image* img = new Image(nullptr, w, h); // Temp image so we can use GLtextures
+	Image* img = new Image(NULL, w, h); // Temp image so we can use GLtextures
 	int num = 0;
 	vector<GLuint> attachments;
-	for (GLTexture b : buffers) {
-		b.setImage(*img, false, GL_RGBA16F);
+	for (GLTexture* b : buffers) {
+		b->setImage(*img, false, GL_RGBA16F);
 		GLuint attachment = 0;
 		switch (num) {
 		case 0:
@@ -186,7 +194,7 @@ void RenderSystem::setOutBuffers(std::vector<GLTexture> buffers) {
 			break;
 		}
 		attachments.push_back(attachment);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, b.getID(), 0);
+		_fbo->buffer(attachment, *b);
 		num++;
 	}
 	glDrawBuffers(attachments.size(), &attachments[0]);

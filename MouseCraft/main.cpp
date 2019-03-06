@@ -31,8 +31,6 @@
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
 
-#define GLEW_STATIC
-
 SoundManager* noise;
 
 extern "C" {
