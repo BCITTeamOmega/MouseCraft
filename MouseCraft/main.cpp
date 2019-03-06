@@ -30,6 +30,7 @@
 #include "Cat.h"
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
+#include "PrefabLoader.h"
 
 #define GLEW_STATIC
 
@@ -384,6 +385,10 @@ void Test_ObserverPattern()
 
 int main(int argc, char* argv[]) 
 {
+	auto testp = PrefabLoader::LoadPrefab("res/prefabs/test.json");
+
+	return 0;
+
 	Test_ObserverPattern();
 
     //adding sound system
