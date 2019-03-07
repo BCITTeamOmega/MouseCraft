@@ -29,24 +29,31 @@ void Renderable::setColor(Color color) {
 	_color = color;
 }
 
+
+
 #pragma region prefab support 
 
-PrefabRegistrar<Renderable> Renderable::reg("Renderable");
-Renderable::Renderable(json json)
+Component* Renderable::CreateFromJson(json json)
 {
+	auto c = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
 	// parse color 
 	if (json.find("color") != json.end())
 	{
-		_color = Color(
+		c->_color = Color(
 			json["color"]["r"].get<double>(),
 			json["color"]["g"].get<double>(),
 			json["color"]["b"].get<double>());
 	}
 
 	// parse geometry and texture
-	_model = ModelLoader::loadModel(json["model_path"].get<std::string>());
+	c->_model = ModelLoader::loadModel(json["model_path"].get<std::string>());
 	Image* i = ImageLoader::loadImage(json["texture_path"].get<std::string>());
-	_model->setTexture(i);
+	c->_model->setTexture(i);
+
+	return c;
 }
+
+PrefabRegistrar Renderable::reg("Renderable", &Renderable::CreateFromJson);
 
 #pragma endregion

@@ -13,12 +13,6 @@
 
 using json = nlohmann::json;
 
-// used for generic component ctor 
-template<typename T> Component* CreateComponent(json json)
-{
-	return new T(json);
-}
-
 // datatype for string_key -> loader()
 typedef std::map<std::string, Component*(*)(json)> ComponentMap;
 
@@ -111,13 +105,33 @@ private:
 };
 
 // Helper class to automatically register a Component class to the PrefabLoader 
-template<typename T>
 struct PrefabRegistrar : PrefabLoader
 {
 // note: Doesn't actually inherit from PrefabLoader just need access to the ComponentMap
+public:
+	PrefabRegistrar(const std::string& jsonKey, Component*(*func)(json))
+	{
+		getMap()->insert(std::make_pair(jsonKey, func));
+	};
+};
+
+/* Below doesn't work as we use CM's. With the updated ComponentFactory it would work.
+
+// used for generic component ctor (doesn't work as we use CM's)
+template<typename T> Component* CreateComponent(json json)
+{
+	return new T(json);
+}
+
+// Helper class to automatically register a Component class to the PrefabLoader 
+template<typename T>
+struct PrefabRegistrar : PrefabLoader
+{
+	// note: Doesn't actually inherit from PrefabLoader just need access to the ComponentMap
 public:
 	PrefabRegistrar(const std::string& jsonKey)
 	{
 		getMap()->insert(std::make_pair(jsonKey, &CreateComponent<T>));
 	};
 };
+*/

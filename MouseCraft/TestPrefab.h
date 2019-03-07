@@ -13,8 +13,6 @@ using json = nlohmann::json;
 class TestPrefabComponent1 : public Component
 {
 public:
-	// !!! custom json ctor 
-	TestPrefabComponent1(json j);						
 	TestPrefabComponent1();
 
 private:
@@ -22,8 +20,11 @@ private:
 	double dawg;										
 
 private:
+	// !!! function to create component
+	static Component* Create(json json);
+
 	// !!! register self to prefab loader
-	static PrefabRegistrar<TestPrefabComponent1> reg;
+	static PrefabRegistrar reg;
 };
 
 
@@ -32,7 +33,6 @@ private:
 class TestPrefabComponent2 : public Component
 {
 public:
-	TestPrefabComponent2(json j);
 	TestPrefabComponent2();
 
 private:
@@ -40,5 +40,6 @@ private:
 	bool boi;
 
 private:
-	static PrefabRegistrar<TestPrefabComponent2> reg;
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

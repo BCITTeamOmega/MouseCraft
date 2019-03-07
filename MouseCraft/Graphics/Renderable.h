@@ -10,7 +10,6 @@ using json = nlohmann::json;
 class Renderable : public Component {
 public:
 	Renderable();
-	Renderable(json json);
 	Model* getModel();
 	void setModel(Model& model);
 	Transform getTransform();
@@ -19,5 +18,7 @@ public:
 private:
 	Model* _model;
 	Color _color;
-	static PrefabRegistrar<Renderable> reg;
+
+	static Component* CreateFromJson(json json);
+	static PrefabRegistrar reg;
 };

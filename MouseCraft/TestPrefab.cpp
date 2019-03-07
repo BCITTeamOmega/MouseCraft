@@ -1,27 +1,33 @@
 #include "TestPrefab.h"
 
+#include "Core/ComponentManager.h"
 
+TestPrefabComponent1::TestPrefabComponent1() {}
 
-TestPrefabComponent1::TestPrefabComponent1(json j)
+// !!! define the creator function
+Component* TestPrefabComponent1::Create(json json)
 {
-	iunno = j["iunno"].get<int>();
-	dawg = j["dawg"].get<double>();
+	auto c = ComponentManager<TestPrefabComponent1>::Instance().Create<TestPrefabComponent1>();
+	c->iunno = json["iunno"].get<int>();
+	c->dawg = json["dawg"].get<double>();
+	return c;
 }
-TestPrefabComponent1::TestPrefabComponent1()
-{
-}
+
 // !!! which key you want to load 
-PrefabRegistrar<TestPrefabComponent1> TestPrefabComponent1::reg("TestComponent1");
+PrefabRegistrar TestPrefabComponent1::reg("TestComponent1", &TestPrefabComponent1::Create);
 
 
 
 
-TestPrefabComponent2::TestPrefabComponent2(json j)
+
+TestPrefabComponent2::TestPrefabComponent2() {}
+
+Component * TestPrefabComponent2::Create(json json)
 {
-	bic = j["bic"].get<bool>();
-	boi = j["boi"].get<bool>();
+	auto c = ComponentManager<TestPrefabComponent2>::Instance().Create<TestPrefabComponent2>();
+	c->bic = json["bic"].get<bool>();
+	c->boi = json["boi"].get<bool>();
+	return c;
 }
-TestPrefabComponent2::TestPrefabComponent2()
-{
-}
-PrefabRegistrar<TestPrefabComponent2> TestPrefabComponent2::reg("TestComponent2");
+
+PrefabRegistrar TestPrefabComponent2::reg("TestComponent2", &TestPrefabComponent2::Create);

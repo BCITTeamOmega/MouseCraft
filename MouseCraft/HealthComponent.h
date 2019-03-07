@@ -17,11 +17,6 @@ public:
 
 	}
 
-	HealthComponent(json json)
-	{
-		_health = json["health"].get<int>();
-	}
-
 	virtual void OnInitialized()
 	{
 		EventManager::Subscribe(HEALTH_CHANGE, this);
