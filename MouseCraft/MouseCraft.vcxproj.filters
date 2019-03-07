@@ -312,11 +312,11 @@
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PrefabLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestPrefab.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\PrefabLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -590,14 +590,14 @@
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PrefabLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestPrefab.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\PrefabLoader.h">
+      <Filter>Header Files\Loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

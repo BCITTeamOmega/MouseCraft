@@ -30,7 +30,7 @@
 #include "Cat.h"
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
-#include "PrefabLoader.h"
+#include "Loading/PrefabLoader.h"
 
 #define GLEW_STATIC
 
@@ -42,6 +42,8 @@ extern "C" {
 
 void Test_Rendering()
 {
+	PrefabLoader::DumpLoaders();
+
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 	Model* m = ModelGen::makeCube(1, 1, 1);
 	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 100);
@@ -175,6 +177,11 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+
+	// prefabs 
+
+	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	OmegaEngine::Instance().AddEntity(p_pot);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
@@ -385,12 +392,6 @@ void Test_ObserverPattern()
 
 int main(int argc, char* argv[]) 
 {
-	auto testp = PrefabLoader::LoadPrefab("res/prefabs/test.json");
-
-	return 0;
-
-	Test_ObserverPattern();
-
     //adding sound system
     noise = new SoundManager();
     //start initial music track, standard form for music selection

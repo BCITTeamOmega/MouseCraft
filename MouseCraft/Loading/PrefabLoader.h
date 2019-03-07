@@ -1,16 +1,15 @@
 #pragma once
 
-#include "Core/Component.h"
-#include "Core/Entity.h"
-#include "Core/EntityManager.h"
-#include "Core/ComponentManager.h"
-#include "json.hpp"
+#include "../Core/Component.h"
+#include "../Core/Entity.h"
+#include "../Core/EntityManager.h"
+#include "../Core/ComponentManager.h"
+#include "../json.hpp"
 #include <glm/glm.hpp>
 #include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "Mice.h"
 
 using json = nlohmann::json;
 
@@ -79,8 +78,8 @@ private:
 		for (auto& j : components)
 		{
 			// use custom loader 
-			auto loader = componentMap->find(j["type"]);
-			if (loader != componentMap->end())
+			auto loader = getMap()->find(j["type"]);
+			if (loader != getMap()->end())
 			{
 				e->AddComponent(loader->second(j));
 			}
@@ -107,6 +106,7 @@ protected:
 			componentMap = new ComponentMap;
 		return componentMap;
 	}
+private:
 	static ComponentMap* componentMap;
 };
 

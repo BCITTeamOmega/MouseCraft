@@ -11,4 +11,4 @@ PrefabLoader::~PrefabLoader()
 {
 }
 
-ComponentMap* PrefabLoader::componentMap = new ComponentMap;
+ComponentMap* PrefabLoader::componentMap;

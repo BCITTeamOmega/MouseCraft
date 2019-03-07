@@ -215,7 +215,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
     <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="PrefabLoader.cpp" />
+    <ClCompile Include="Loading\PrefabLoader.cpp" />
     <ClCompile Include="Swords.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="TestPrefab.cpp" />
@@ -300,7 +300,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Physics\PhysObjectType.h" />
-    <ClInclude Include="PrefabLoader.h" />
+    <ClInclude Include="Loading\PrefabLoader.h" />
     <ClInclude Include="Physics\RayQueryCallback.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Pickup.h" />
