@@ -2,8 +2,6 @@
 
 #include "Core/ComponentManager.h"
 
-TestPrefabComponent1::TestPrefabComponent1() {}
-
 // !!! define the creator function
 Component* TestPrefabComponent1::Create(json json)
 {
@@ -17,10 +15,6 @@ Component* TestPrefabComponent1::Create(json json)
 PrefabRegistrar TestPrefabComponent1::reg("TestComponent1", &TestPrefabComponent1::Create);
 
 
-
-
-
-TestPrefabComponent2::TestPrefabComponent2() {}
 
 Component * TestPrefabComponent2::Create(json json)
 {
