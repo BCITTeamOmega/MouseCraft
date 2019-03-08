@@ -50,7 +50,7 @@ void Test_Rendering()
 	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
 	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
 
-	Image* i = ImageLoader::loadImage("res/models/test/test.jpg");
+	Image* i = ImageLoader::loadImage("res/textures/wood.png");
 	floorModel->setTexture(i);
 
 	Image* blank = ImageLoader::loadImage("res/models/test/blank.bmp");
@@ -76,7 +76,7 @@ void Test_Rendering()
 	rc2->setColor(Color(1.0, 0.25, 0.5));
 	rc2->setModel(*m);
 
-	floorRC->setColor(Color(0.6, 0.0, 0.75));
+	floorRC->setColor(Color(1.0, 1.0, 1.0));
 	floorRC->setModel(*floorModel);
 
 	cam->setFOV(90.0f);
