@@ -390,6 +390,8 @@ void Test_ObserverPattern()
 	health.Heal(100);	// nothing
 }
 
+#define GLM_EQUAL(v3a,v3b) glm::all(glm::epsilonEqual(v3a, v3b, glm::epsilon<float>()))
+
 void Test_Transform()
 {
 	// create some entities 
@@ -408,41 +410,43 @@ void Test_Transform()
 	e_right->transform.computeWorldTransformation();
 	e_left->transform.computeLocalTransformation();
 	e_left->transform.computeWorldTransformation(e_right->transform.getWorldTransformation());
-	   
-	// check (manually lol)
-	std::cout << glm::to_string(e_base->transform.getLocalForward()) << std::endl;
-	std::cout << glm::to_string(e_base->transform.getLocalRight()) << std::endl;
-	std::cout << glm::to_string(e_base->transform.getLocalUp()) << std::endl;
-	std::cout << glm::to_string(e_base->transform.getWorldForward()) << std::endl;
-	std::cout << glm::to_string(e_base->transform.getWorldRight()) << std::endl;
-	std::cout << glm::to_string(e_base->transform.getWorldUp()) << std::endl;
-	std::cout << std::endl;
-
-	std::cout << glm::to_string(e_right->transform.getLocalForward()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getLocalRight()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getLocalUp()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getWorldForward()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getWorldRight()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getWorldUp()) << std::endl;
-	std::cout << std::endl;
-
-	std::cout << glm::to_string(e_left->transform.getLocalForward()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getLocalRight()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getLocalUp()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getWorldForward()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getWorldRight()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getWorldUp()) << std::endl;
-	std::cout << std::endl;
-
-	std::cout << glm::to_string(e_right->transform.getLocalRotation()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getLocalRotation()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getLocalRotation()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getWorldRotation()) << std::endl;
 	
-	std::cout << glm::to_string(e_right->transform.getLocalScale()) << std::endl;
-	std::cout << glm::to_string(e_right->transform.getWorldScale()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getLocalScale()) << std::endl;
-	std::cout << glm::to_string(e_left->transform.getWorldScale()) << std::endl;
+	// base
+	SDL_assert(GLM_EQUAL(e_base->t().forward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_base->t().right(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().wForward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_base->t().wRight(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// right 
+	SDL_assert(GLM_EQUAL(e_right->t().forward(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().right(), glm::vec3(0, 0, -1)));
+	SDL_assert(GLM_EQUAL(e_right->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wForward(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wRight(), glm::vec3(0, 0, -1)));
+	SDL_assert(GLM_EQUAL(e_right->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// right + left 
+	auto asdf = e_left->t().wForward();
+	SDL_assert(GLM_EQUAL(e_left->t().forward(), glm::vec3(-1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().right(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wForward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().wRight(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// rotation
+	SDL_assert(GLM_EQUAL(e_right->t().rot(), glm::vec3(0, M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wRot(), glm::vec3(0, M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().rot(), glm::vec3(0, -M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wRot(), glm::vec3(0, 0, 0)));
+
+	// scale
+	SDL_assert(GLM_EQUAL(e_right->t().scl(), glm::vec3(1, 2, 3)));
+	SDL_assert(GLM_EQUAL(e_right->t().wScl(), glm::vec3(1, 2, 3)));
+	SDL_assert(GLM_EQUAL(e_left->t().scl(), glm::vec3(1, 1, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().wScl(), glm::vec3(3, 2, 1)));
 }
 
 int main(int argc, char* argv[]) 
