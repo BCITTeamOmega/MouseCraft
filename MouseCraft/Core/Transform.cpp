@@ -17,7 +17,7 @@ void Transform::setLocalPosition(glm::vec3 position)
 	_localPosition = position;
 }
 
-glm::vec3 Transform::getLocalRotoation()
+glm::vec3 Transform::getLocalRotation()
 {
 	return _localRotation;
 }
@@ -61,24 +61,78 @@ void Transform::scale(float amount)
 void Transform::rotate(glm::vec3 amount)
 {
 	if (amount == glm::vec3()) return;
-	setLocalRotation(getLocalRotoation() + amount);
+	setLocalRotation(getLocalRotation() + amount);
 }
 
 // WARNING: Entity::getWorldRotation() should be more performant (at the cost of memory locality?)
 glm::vec3 Transform::getWorldRotation()
 {
-	// https://gamedev.stackexchange.com/questions/50963/how-to-extract-euler-angles-from-transformation-matrix
-	std::cerr << "ERROR: Transform::getWorldRotation() is not implemented yet!" << std::endl;
-	return glm::vec3();
+	float y, x, z;
+	glm::extractEulerAngleYXZ(_worldTransformation, y, x, z);
+	return glm::vec3(x,y,z);
 }
 
 // WARNING: UNTESTED.
 glm::vec3 Transform::getWorldScale()
 {
 	return glm::vec3(
-		_worldTransformation[0].length(),
-		_worldTransformation[1].length(),
-		_worldTransformation[2].length()
+		glm::length(glm::vec3(_worldTransformation[0])),
+		glm::length(glm::vec3(_worldTransformation[1])),
+		glm::length(glm::vec3(_worldTransformation[2]))
+	);
+}
+
+glm::vec3 Transform::getLocalForward()
+{
+	return glm::vec3(
+		_localTransformation[2][0],
+		_localTransformation[2][1],
+		_localTransformation[2][2]
+	);
+}
+
+glm::vec3 Transform::getLocalRight()
+{
+	return glm::vec3(
+		_localTransformation[0][0],
+		_localTransformation[0][1],
+		_localTransformation[0][2]
+	);
+}
+
+glm::vec3 Transform::getLocalUp()
+{
+	return glm::vec3(
+		_localTransformation[1][0],
+		_localTransformation[1][1],
+		_localTransformation[1][2]
+	);
+}
+
+glm::vec3 Transform::getWorldForward()
+{
+	return glm::vec3(
+		_worldTransformation[2][0],
+		_worldTransformation[2][1],
+		_worldTransformation[2][2]
+	);
+}
+
+glm::vec3 Transform::getWorldRight()
+{
+	return glm::vec3(
+		_worldTransformation[0][0],
+		_worldTransformation[0][1],
+		_worldTransformation[0][2]
+	);
+}
+
+glm::vec3 Transform::getWorldUp()
+{
+	return glm::vec3(
+		_worldTransformation[1][0],
+		_worldTransformation[1][1],
+		_worldTransformation[1][2]
 	);
 }
 

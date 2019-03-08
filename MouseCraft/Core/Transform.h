@@ -17,7 +17,7 @@ public:
 	void setLocalPosition(glm::vec3 position);
 
 	// Gets the local rotation.
-	glm::vec3 getLocalRotoation();
+	glm::vec3 getLocalRotation();
 	
 	// Sets the local rotation.
 	void setLocalRotation(glm::vec3 rotation);
@@ -39,8 +39,6 @@ public:
 
 	// Increments the local rotation by amount.
 	void rotate(glm::vec3 amount);
-
-	// ===== WARNING: SECTION UNTESTED ===== //
 
 	// Gets the world rotation based on the current world transformation.
 	glm::vec3 getWorldRotation();
@@ -65,8 +63,6 @@ public:
 
 	// Gets the world up direction.
 	glm::vec3 getWorldUp();
-
-	// ========== END SECTION ========== //
 
 	// Gets the local transformation matrix.
 	glm::mat4 getLocalTransformation();

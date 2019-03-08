@@ -390,8 +390,65 @@ void Test_ObserverPattern()
 	health.Heal(100);	// nothing
 }
 
+void Test_Transform()
+{
+	// create some entities 
+	auto e_base = EntityManager::Instance().Create();
+	auto e_right = EntityManager::Instance().Create();
+	e_right->transform.setLocalRotation(glm::vec3(0, M_PI/2, 0));
+	e_right->transform.setLocalScale(glm::vec3(1, 2, 3));
+	auto e_left = EntityManager::Instance().Create();
+	e_left->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
+	e_right->AddChild(e_left);
+
+	// manually compute transform
+	e_base->transform.computeLocalTransformation();
+	e_base->transform.computeWorldTransformation();
+	e_right->transform.computeLocalTransformation();
+	e_right->transform.computeWorldTransformation();
+	e_left->transform.computeLocalTransformation();
+	e_left->transform.computeWorldTransformation(e_right->transform.getWorldTransformation());
+	   
+	// check (manually lol)
+	std::cout << glm::to_string(e_base->transform.getLocalForward()) << std::endl;
+	std::cout << glm::to_string(e_base->transform.getLocalRight()) << std::endl;
+	std::cout << glm::to_string(e_base->transform.getLocalUp()) << std::endl;
+	std::cout << glm::to_string(e_base->transform.getWorldForward()) << std::endl;
+	std::cout << glm::to_string(e_base->transform.getWorldRight()) << std::endl;
+	std::cout << glm::to_string(e_base->transform.getWorldUp()) << std::endl;
+	std::cout << std::endl;
+
+	std::cout << glm::to_string(e_right->transform.getLocalForward()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getLocalRight()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getLocalUp()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getWorldForward()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getWorldRight()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getWorldUp()) << std::endl;
+	std::cout << std::endl;
+
+	std::cout << glm::to_string(e_left->transform.getLocalForward()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getLocalRight()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getLocalUp()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getWorldForward()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getWorldRight()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getWorldUp()) << std::endl;
+	std::cout << std::endl;
+
+	std::cout << glm::to_string(e_right->transform.getLocalRotation()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getLocalRotation()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getLocalRotation()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getWorldRotation()) << std::endl;
+	
+	std::cout << glm::to_string(e_right->transform.getLocalScale()) << std::endl;
+	std::cout << glm::to_string(e_right->transform.getWorldScale()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getLocalScale()) << std::endl;
+	std::cout << glm::to_string(e_left->transform.getWorldScale()) << std::endl;
+}
+
 int main(int argc, char* argv[]) 
 {
+	Test_Transform();
+
     //adding sound system
     noise = new SoundManager();
     //start initial music track, standard form for music selection
