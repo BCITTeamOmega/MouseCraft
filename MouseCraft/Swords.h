@@ -1,5 +1,7 @@
 #pragma once
 #include "Contraption.h"
+#include "Physics/PhysObjectType.h"
+
 class Swords :
 	public Contraption
 {

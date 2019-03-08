@@ -4,7 +4,7 @@
 #include "Core/Component.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "Physics/PhysicsComponent.h"
-#include "Event/Observer.h"
+#include "Physics/PhysObjectType.h"
 
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
