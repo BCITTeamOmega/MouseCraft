@@ -1,0 +1,47 @@
+{
+    "pos_x": 1,
+    "pos_y": 2,
+    "pos_z": 3,
+    "scl_x": 10,
+    "scl_y": 20,
+    "scl_z": 30,
+    "rot_x": 100,
+    "rot_y": 200,
+    "rot_z": 300,
+    "entities": [
+      {
+        "pos_x": 11,
+        "pos_y": 22,
+        "pos_z": 33,
+        "scl_x": 110,
+        "scl_y": 220,
+        "scl_z": 330,
+        "rot_x": 1100,
+        "rot_y": 2200,
+        "rot_z": 3300
+      },
+      {
+        "pos_x": 111,
+        "pos_y": 222,
+        "pos_z": 333,
+        "scl_x": 1110,
+        "scl_y": 2220,
+        "scl_z": 3330,
+        "rot_x": 11100,
+        "rot_y": 22200,
+        "rot_z": 33300
+      }
+    ],
+    "components": [
+      {
+        "type": "TestComponent1",
+        "iunno": 5,
+        "dawg": 0.05
+      },
+      {
+        "type": "TestComponent2",
+        "bic": true,
+        "boi": false
+      }
+    ]
+  }

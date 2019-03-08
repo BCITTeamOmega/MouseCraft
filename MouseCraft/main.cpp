@@ -30,6 +30,7 @@
 #include "Cat.h"
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
+#include "Loading/PrefabLoader.h"
 
 #define GLEW_STATIC
 
@@ -41,13 +42,15 @@ extern "C" {
 
 void Test_Rendering()
 {
+	PrefabLoader::DumpLoaders();
+
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 	Model* m = ModelGen::makeCube(1, 1, 1);
 	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 100);
 	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
 	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
 
-	Image* i = ImageLoader::loadImage("res/models/test/test.jpg");
+	Image* i = ImageLoader::loadImage("res/textures/wood.png");
 	floorModel->setTexture(i);
 
 	Image* blank = ImageLoader::loadImage("res/models/test/blank.bmp");
@@ -73,7 +76,7 @@ void Test_Rendering()
 	rc2->setColor(Color(1.0, 0.25, 0.5));
 	rc2->setModel(*m);
 
-	floorRC->setColor(Color(0.6, 0.0, 0.75));
+	floorRC->setColor(Color(1.0, 1.0, 1.0));
 	floorRC->setModel(*floorModel);
 
 	cam->setFOV(90.0f);
@@ -174,6 +177,11 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+
+	// prefabs 
+
+	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	OmegaEngine::Instance().AddEntity(p_pot);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
@@ -384,8 +392,6 @@ void Test_ObserverPattern()
 
 int main(int argc, char* argv[]) 
 {
-	Test_ObserverPattern();
-
     //adding sound system
     noise = new SoundManager();
     //start initial music track, standard form for music selection
