@@ -2,10 +2,12 @@
 
 #include "Core/Entity.h"
 #include "Core/Component.h"
+#include "Core/OmegaEngine.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "Physics/PhysicsComponent.h"
 #include "Physics/PhysObjectType.h"
-
+#include "HealthComponent.h"
+#include "PlayerComponent.h"
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
 {

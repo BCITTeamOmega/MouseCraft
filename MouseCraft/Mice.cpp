@@ -1,7 +1,5 @@
 #include "Mice.h"
 
-#include "HealthComponent.h"
-
 Mice::Mice() : 
 	HandleOnCollide(this, &Mice::OnCollision),
 	HandleOnDeath(this, &Mice::OnDeath),

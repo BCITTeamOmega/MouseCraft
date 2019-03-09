@@ -1,5 +1,4 @@
 #include "Coil.h"
-#include "Core/OmegaEngine.h"
 
 Coil::Coil()
 {
