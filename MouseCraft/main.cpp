@@ -390,8 +390,69 @@ void Test_ObserverPattern()
 	health.Heal(100);	// nothing
 }
 
+#define GLM_EQUAL(v3a,v3b) glm::all(glm::epsilonEqual(v3a, v3b, glm::epsilon<float>()))
+
+void Test_Transform()
+{
+	// create some entities 
+	auto e_base = EntityManager::Instance().Create();
+	auto e_right = EntityManager::Instance().Create();
+	e_right->transform.setLocalRotation(glm::vec3(0, M_PI/2, 0));
+	e_right->transform.setLocalScale(glm::vec3(1, 2, 3));
+	auto e_left = EntityManager::Instance().Create();
+	e_left->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
+	e_right->AddChild(e_left);
+
+	// manually compute transform
+	e_base->transform.computeLocalTransformation();
+	e_base->transform.computeWorldTransformation();
+	e_right->transform.computeLocalTransformation();
+	e_right->transform.computeWorldTransformation();
+	e_left->transform.computeLocalTransformation();
+	e_left->transform.computeWorldTransformation(e_right->transform.getWorldTransformation());
+	
+	// base
+	SDL_assert(GLM_EQUAL(e_base->t().forward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_base->t().right(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().wForward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_base->t().wRight(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_base->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// right 
+	SDL_assert(GLM_EQUAL(e_right->t().forward(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().right(), glm::vec3(0, 0, -1)));
+	SDL_assert(GLM_EQUAL(e_right->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wForward(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wRight(), glm::vec3(0, 0, -1)));
+	SDL_assert(GLM_EQUAL(e_right->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// right + left 
+	auto asdf = e_left->t().wForward();
+	SDL_assert(GLM_EQUAL(e_left->t().forward(), glm::vec3(-1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().right(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().up(), glm::vec3(0, 1, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wForward(), glm::vec3(0, 0, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().wRight(), glm::vec3(1, 0, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wUp(), glm::vec3(0, 1, 0)));
+
+	// rotation
+	SDL_assert(GLM_EQUAL(e_right->t().rot(), glm::vec3(0, M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_right->t().wRot(), glm::vec3(0, M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().rot(), glm::vec3(0, -M_PI / 2, 0)));
+	SDL_assert(GLM_EQUAL(e_left->t().wRot(), glm::vec3(0, 0, 0)));
+
+	// scale
+	SDL_assert(GLM_EQUAL(e_right->t().scl(), glm::vec3(1, 2, 3)));
+	SDL_assert(GLM_EQUAL(e_right->t().wScl(), glm::vec3(1, 2, 3)));
+	SDL_assert(GLM_EQUAL(e_left->t().scl(), glm::vec3(1, 1, 1)));
+	SDL_assert(GLM_EQUAL(e_left->t().wScl(), glm::vec3(3, 2, 1)));
+}
+
 int main(int argc, char* argv[]) 
 {
+	Test_Transform();
+
     //adding sound system
     noise = new SoundManager();
     //start initial music track, standard form for music selection
