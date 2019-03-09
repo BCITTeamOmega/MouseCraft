@@ -1,0 +1,147 @@
+<root>
+  <component id="MenuScene" width="100%" height="100%" visible="true">
+    <component id="splashScreen" width="100%" height="100%" alpha="0.75" color="000000" visible="true">
+      <text size="20%" anchor="top center" offset="0 25%">The Farmi</text>
+      <text size="20%" anchor="top center" offset="0 65%">Paradox</text>
+      <component height="15%" width="scale" anchor="bottom center" offset="0 25%">
+        <text size="25%" anchor="top center">Players</text>
+        <text size="60%" id="playerNum" anchor="bottom center" offset="0 30%">2</text>
+        <component id="decButton" width="scale" height="15%" ar="2" color="E91717" anchor="bottom center" offset="-20% 0" visible="false" onclick="decrementPlayers">
+          <image src="Marker_Down.png" height="90%" width="scale" anchor="center center" />
+        </component>
+        <component id="incButton" width="scale" height="15%" ar="2" color="13BA13" anchor="bottom center" offset="20% 0" onclick="incrementPlayers">
+          <image src="Marker_Up.png" height="90%" width="scale" anchor="center center" />
+        </component>
+      </component>
+      <component id="playGame" width="scale" height="7.5%" ar="5" anchor="bottom center" offset="0 10%" color="3B86DB" onclick="playButton">
+        <text size="80%" anchor="center center" color="FFFFFF">Play</text>
+      </component>
+      <image id="karen" height="50%" width="scale" anchor="bottom right" offset="2% -47%" src="araragi_karen.png" onclick="toggleKaren" />
+    </component>
+    <component id="modelSelect" width="100%" height="100%" visible="false">
+      <text id="selectAnimal" size="10%" anchor="top center" offset="0 12.5%">Select Player 1's Animal</text>
+      <image src="Marker.png" height="5%" width="scale" anchor="center center" offset="25% 0" onclick="nextModel" />
+      <component id="nextPlayerModel" width="scale" height="7.5%" ar="5" anchor="bottom center" offset="0 10%" color="3B86DB" onclick="nextPlayerModel">
+        <text size="80%" anchor="center center" color="FFFFFF">Select</text>
+      </component>
+      <component id="startGame" width="scale" height="7.5%" ar="5" anchor="bottom center" offset="0 10%" color="3B86DB" visible="false" onclick="startGame">
+        <text size="80%" anchor="center center" color="FFFFFF">Start Game</text>
+      </component>
+    </component>
+    <component id="dataPNum" width="2" visible="false"></component>
+    <component id="dataP1Model" width="0" visible="false"></component>
+    <component id="dataP2Model" width="0" visible="false"></component>
+    <component id="dataP3Model" width="0" visible="false"></component>
+    <component id="dataP4Model" width="0" visible="false"></component>
+  </component>
+  <component id="MainScene" width="100%" height="100%" visible="false">
+    <component id="tBox" width="scale" height="9%" color="7219BE" anchor="top center" ar="3.333">
+      <component id="tBoxInner" width="95%" height="85%" color="2C2F33" anchor="center center">
+        <text id="timerText" size="90%" color="FFFFFF" anchor="center center">00:00</text>
+      </component>
+    </component>
+    <component anchor="top left" width="22.5%" height="scale" ar="1.8">
+      <component id="p1Container" width="100%" height="25%" visible="false">
+        <image id="p1Arrow" offset="1% 0" anchor="center left" width="scale" height="33%" color="E91717" src="marker.png"/>
+        <text id="p1Name" offset="15% 0" anchor="center left" size="50%" color="7219BE">P1</text>
+        <component offset="17.5% 0" height="50%" anchor="center left" width="80%" color="686E75">
+          <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+            <component id="p1Health" width="80%" height="100%" color="E91717"></component>
+          </component>
+        </component>
+      </component>
+      <component id="p2Container" offset="0 25%" width="100%" height="25%" visible="false">
+        <image id="p2Arrow" offset="1% 0" anchor="center left" width="scale" height="33%" color="E91717" src="marker.png" visible="false" />
+        <text id="p2Name" offset="15% 0" anchor="center left" size="50%" color="FF7111">P2</text>
+        <component offset="17.5% 0" height="50%" anchor="center left" width="80%" color="686E75">
+          <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+            <component id="p2Health" width="57%" height="100%" color="E91717"></component>
+          </component>
+        </component>
+      </component>
+      <component id="p3Container" offset="0 50%" width="100%" height="25%" visible="false">
+        <image id="p3Arrow" offset="1% 0" anchor="center left" width="scale" height="33%" color="E91717" src="marker.png" visible="false" />
+        <text id="p3Name" offset="15% 0" anchor="center left" size="50%" color="0CB69A">P3</text>
+        <component offset="17.5% 0" height="50%" anchor="center left" width="80%" color="686E75">
+          <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+            <component id="p3Health" width="20%" height="100%" color="E91717"></component>
+          </component>
+        </component>
+      </component>
+      <component id="p4Container" offset="0 75%" width="100%" height="25%" visible="false">
+        <image id="p4Arrow" offset="1% 0" anchor="center left" width="scale" height="33%" color="E91717" src="marker.png" visible="false" />
+        <text id="p4Name" offset="15% 0" anchor="center left" size="50%" color="FFF511">P4</text>
+        <component offset="17.5% 0" height="50%" anchor="center left" width="80%" color="686E75">
+          <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+            <component id="p4Health" width="100%" height="100%" color="E91717"></component>
+          </component>
+        </component>
+      </component>
+    </component>
+    <component id="detail" offset="1% 1.78%" anchor="bottom left" width="22.5%" height="scale" ar="0.66" color="45067B">
+      <component id="detailInner" anchor="center center" width="90%" height="93%" color="7219BE">
+        <text id="currPlayer" anchor="top center" size="6%" offset="0 2.5%">Player 1's Turn</text>
+        <component width="100%" height="27.5%" offset="0 10%">
+          <text size="20%" anchor="top center">Weapon</text>
+          <image src="Marker_Left.png" height="25%" width="scale" anchor="center left" offset="5% 0">
+            <text id="leftWeapon" size="60%" anchor="center right" offset="50% 0" color="7219BE">Q</text>
+          </image>
+          <text id="currWeapon" anchor="center center" size="17.5%">Rocket Launcher</text>
+          <image src="Marker.png" height="25%" width="scale" anchor="center right" offset="5% 0">
+            <text id="rightWeapon" size="60%" anchor="center left" offset="25% 0" color="7219BE">E</text>
+          </image>
+          <text offset="90% 0" anchor="bottom right" size="20%">Ammo:</text>
+          <text id="ammoCount" offset="110% 0" anchor="bottom left" size="20%">10</text>
+        </component>
+        <component id="c1Container" offset="0 38.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c1Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c1Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+        <component id="c2Container" offset="0 48.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c2Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c2Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+        <component id="c3Container" offset="0 58.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c3Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c3Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+        <component id="c4Container" offset="0 68.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c4Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c4Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+        <component id="c5Container" offset="0 78.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c5Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c5Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+        <component id="c6Container" offset="0 88.5%" anchor="top center" width="90%" height="10%" visible="false">
+          <image id="c6Arrow" anchor="center left" width="scale" height="33%" color="FFFFFF" src="marker.png"/>
+          <component offset="8% 0" height="50%" anchor="center left" width="92%" color="686E75">
+            <component anchor="center center" width="97.5%" height="75%" color="2C2F33">
+              <component id="c6Health" width="80%" height="100%" color="E91717"></component>
+            </component>
+          </component>
+        </component>
+      </component>
+    </component>
+  </component>
+</root>
