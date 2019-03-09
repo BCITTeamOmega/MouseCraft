@@ -181,7 +181,21 @@ void Test_Rendering()
 	// prefabs 
 
 	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	OmegaEngine::Instance().AddEntity(p_pot);
+
+	auto p_book = PrefabLoader::LoadPrefab("res/prefabs/book.json");
+	auto p_box  = PrefabLoader::LoadPrefab("res/prefabs/box.json");
+	auto p_vase = PrefabLoader::LoadPrefab("res/prefabs/vase.json");
+	auto p_lamp = PrefabLoader::LoadPrefab("res/prefabs/lamp.json");
+	auto p_ball = PrefabLoader::LoadPrefab("res/prefabs/ball.json");
+
+	//OmegaEngine::Instance().AddEntity(p_pot);
+
+	OmegaEngine::Instance().AddEntity(p_book);
+	OmegaEngine::Instance().AddEntity(p_box);
+	OmegaEngine::Instance().AddEntity(p_vase);
+	OmegaEngine::Instance().AddEntity(p_lamp);
+	OmegaEngine::Instance().AddEntity(p_ball);
+
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
