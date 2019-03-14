@@ -20,8 +20,8 @@ Model* ModelGen::makeQuad(ModelGen::Axis facing, float width, float height) {
 	{
 		vector<GLfloat> vertices = {
 			0, -halfheight, -halfwidth,
-			0, -halfheight, halfwidth,
 			0, halfheight, -halfwidth,
+			0, -halfheight, halfwidth,
 			0, halfheight, halfwidth
 		};
 		vector<GLfloat> normals = {
@@ -32,8 +32,8 @@ Model* ModelGen::makeQuad(ModelGen::Axis facing, float width, float height) {
 		};
 		vector<GLfloat> texCoord = {
 			0, 0,
-			0, 1,
 			1, 0,
+			0, 1,
 			1, 1
 		};
 		g->setVertexData(vertices);
@@ -57,8 +57,8 @@ Model* ModelGen::makeQuad(ModelGen::Axis facing, float width, float height) {
 		};
 		vector<GLfloat> texCoord = {
 			0, 0,
-			0, 1,
 			1, 0,
+			0, 1,
 			1, 1
 		};
 		g->setVertexData(vertices);
@@ -82,8 +82,8 @@ Model* ModelGen::makeQuad(ModelGen::Axis facing, float width, float height) {
 		};
 		vector<GLfloat> texCoord = {
 			0, 0,
-			0, 1,
 			1, 0,
+			0, 1,
 			1, 1
 		};
 		g->setVertexData(vertices);
@@ -101,7 +101,7 @@ Model* ModelGen::makeCube(float width, float height, float depth) {
 	float halfheight = height / 2.0f;
 	float halfdepth = depth / 2.0f;
 
-	const float sqrt3 = sqrt(3);
+	const float oneOverSqrt3 = 1.0f / sqrt(3);
 
 	vector<GLfloat> vertices = {
 		-halfwidth, -halfheight, halfdepth,
@@ -114,38 +114,38 @@ Model* ModelGen::makeCube(float width, float height, float depth) {
 		halfwidth, halfheight, -halfdepth
 	};
 	vector<GLfloat> normals = {
-		-sqrt3, -sqrt3, -sqrt3,
-		-sqrt3, -sqrt3, sqrt3,
-		-sqrt3, sqrt3, -sqrt3,
-		-sqrt3, sqrt3, sqrt3,
-		sqrt3, -sqrt3, -sqrt3,
-		sqrt3, -sqrt3, sqrt3,
-		sqrt3, sqrt3, -sqrt3,
-		sqrt3, sqrt3, sqrt3
+		-oneOverSqrt3, -oneOverSqrt3, oneOverSqrt3,
+		oneOverSqrt3, -oneOverSqrt3, oneOverSqrt3,
+		-oneOverSqrt3, oneOverSqrt3, oneOverSqrt3,
+		oneOverSqrt3, oneOverSqrt3, oneOverSqrt3,
+		-oneOverSqrt3, -oneOverSqrt3, -oneOverSqrt3,
+		oneOverSqrt3, -oneOverSqrt3, -oneOverSqrt3,
+		-oneOverSqrt3, oneOverSqrt3, -oneOverSqrt3,
+		oneOverSqrt3, oneOverSqrt3, -oneOverSqrt3
 	};
 	vector<GLfloat> texCoord = {
 		0, 0,
-		0, 0,
-		0, 0,
-		0, 0,
-		0, 0,
-		0, 0,
-		0, 0,
-		0, 0
+		1, 0,
+		0, 1,
+		1, 1,
+		0, -1,
+		1, -1,
+		0, 2,
+		1, 2
 	};
 	vector<GLuint> indices = {
-		0, 3, 1,
-		0, 2, 3,
-		0, 4, 2,
-		2, 4, 6,
-		4, 7, 6,
-		4, 5, 7,
-		3, 7, 5,
-		1, 3, 5,
-		0, 1, 4,
-		1, 5, 4,
-		2, 6, 3,
-		3, 6, 7
+		0, 1, 3,
+		0, 3, 2,
+		0, 2, 4,
+		2, 6, 4,
+		4, 6, 7,
+		4, 7, 5,
+		3, 5, 7,
+		1, 5, 3,
+		0, 4, 1,
+		1, 4, 5,
+		2, 3, 6,
+		3, 7, 6
 	};
 
 	Geometry* g = new Geometry();

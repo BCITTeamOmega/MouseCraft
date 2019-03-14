@@ -11,6 +11,8 @@
 #include "BufferObjects/VBO.h"
 #include "BufferObjects/EBO.h"
 #include "Camera.h"
+#include "GLTexture.h"
+#include "../Util/CpuProfiler.h"
 
 class RenderSystem : public System {
 public:
@@ -25,6 +27,7 @@ private:
 	void setShader(Shader& s);
 	void clearShader();
 	void accumulateList();
+	void setOutBuffers(std::vector<GLTexture> buffers);
 	glm::vec3 convertColor(Color c);
 
 	Window* _window;
@@ -35,6 +38,15 @@ private:
 
 	VAO* _vao;
 	VBO* _positionVBO;
+	VBO* _normalVBO;
+	VBO* _texCoordVBO;
 	EBO* _ebo;
 	Camera* _camera;
+	
+	GLTexture* _texture;
+	GLTexture* _geometryBuffer;
+	GLTexture* _normalBuffer;
+	GLTexture* _positionBuffer;
+
+	CpuProfiler profiler;
 };

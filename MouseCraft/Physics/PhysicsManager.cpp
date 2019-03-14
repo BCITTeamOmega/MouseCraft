@@ -1,5 +1,7 @@
 #include "PhysicsManager.h"
 
+PhysicsManager* PhysicsManager::pmInstance;
+
 PhysicsManager::PhysicsManager()
 {
 	b2Vec2 gravity(0, 0);
@@ -9,6 +11,9 @@ PhysicsManager::PhysicsManager()
 	cListener = new CContactListener();
 	cListener->setup();
 	world->SetContactListener(cListener);
+
+	profiler.InitializeTimers(4);
+	profiler.LogOutput("Physics.log");	// optional
 }
 
 PhysicsManager::~PhysicsManager()
@@ -17,13 +22,55 @@ PhysicsManager::~PhysicsManager()
 	delete(world);
 }
 
+PhysicsManager* PhysicsManager::instance()
+{
+	if (pmInstance == nullptr)
+		pmInstance = new PhysicsManager();
+	return pmInstance;
+}
+
+void PhysicsManager::destroy()
+{
+	if (pmInstance != nullptr)
+		delete(pmInstance);
+}
+
 void PhysicsManager::Update(float dt)
 {
+	profiler.StartTimer(0);
+
+	/* 
+	Resolve body status. This allows use to disable entities or components. 
+	Note: OmegaEngine guarantees that entity life/status will not change during system updates. 	
+	*/
+	auto physicComponents = ComponentManager<PhysicsComponent>::Instance().All();
+	for (auto& pc : physicComponents)
+	{
+		// performance should be ok referring to the latest revision of b2body.cpp 
+		// (there's fast return if this doesn't change active status)
+		pc->body->SetActive(pc->GetActive());
+	}
+
 	const float ts = 1.0f / 60.0f;
 	float t = 0;
 
-	//std::vector<PhysicsComponent*> objects = ComponentManager<PhysicsComponent>::Instance().All();
+	//update body velocities
+	b2Body* b = world->GetBodyList(); //points to the first body
+	
+	while (b != NULL)
+	{
+		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
 
+		if (pcomp != NULL)
+		{
+			//call set velocity on the body to set it to velocity in physics component
+			b->SetLinearVelocity(b2Vec2(pcomp->velocity.x, pcomp->velocity.y));
+		}
+
+		//get the next body
+		b = b->GetNext();
+	}
+	
 	//Step every 60th of a second
 	while (t + ts <= dt)
 	{
@@ -31,7 +78,7 @@ void PhysicsManager::Update(float dt)
 		world->Step(ts, 10, 10);
 
 		//Update the heights of characters based on gravity and jumping
-		updateHeights(dt);
+		updateHeights(ts);
 
 		//Check for collisions in each physics world
 		checkCollisions();
@@ -42,23 +89,49 @@ void PhysicsManager::Update(float dt)
 	if (t < dt)
 	{
 		world->Step(dt - t, 10, 10);
-		updateHeights(dt);
+		updateHeights(dt - t);
 		checkCollisions();
 	}
+	
+	//update all the components to match the bodies
+	b = world->GetBodyList(); //points to the first body
+
+	while (b != NULL)
+	{
+		if (b->GetType() == b2_staticBody)
+		{
+			b = b->GetNext();
+			continue;
+		}
+
+		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
+
+		if (pcomp != NULL)
+		{
+			//copy all relevant data from b to pcomp
+			pcomp->GetEntity()->transform.setLocalPosition(glm::vec3(b->GetPosition().x, pcomp->zPos, b->GetPosition().y));
+			pcomp->velocity = Vector2D(b->GetLinearVelocity().x, b->GetLinearVelocity().y);
+		}
+
+		//get the next body
+		b = b->GetNext();
+	}
+
+
+	profiler.StopTimer(0);
+	profiler.FrameFinish();
 }
 
-PhysicsComponent* PhysicsManager::createPlayer(float x, float y, float w, float h, bool floor)
+PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t,0,r);
 
 	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x, y);
-	bodyDef.angle = 0;
+	bodyDef.angle = r;
+	bodyDef.active = false;	// wait for component to be active (valid state)
 
-	b2Body* playerBody;
-
-	playerBody = world->CreateBody(&bodyDef);
+	b2Body* body;
 
 	b2PolygonShape shape;
 	shape.SetAsBox(w, h);
@@ -67,99 +140,215 @@ PhysicsComponent* PhysicsManager::createPlayer(float x, float y, float w, float 
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1;
 	fixtureDef.userData = physicsComp;
-	playerBody->CreateFixture(&fixtureDef);
 
-	players.push_back(playerBody);
+	switch (t)
+	{
+	case PhysObjectType::PART:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = PART_CATEGORY;
+		fixtureDef.filter.maskBits = PART_MASK;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = CONTRAPTION_UP_CATEGORY;
+		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::CONTRAPTION_DOWN:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::CAT_UP:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = CAT_UP_CATEGORY;
+		fixtureDef.filter.maskBits = CAT_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::CAT_DOWN:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = CAT_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = CAT_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::MOUSE_UP:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = MOUSE_UP_CATEGORY;
+		fixtureDef.filter.maskBits = MOUSE_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::MOUSE_DOWN:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = MOUSE_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = MOUSE_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::OBSTACLE_UP:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
+		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::OBSTACLE_DOWN:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::PLATFORM:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
+		fixtureDef.filter.maskBits = PLATFORM_MASK;
+		break;
+	case PhysObjectType::WALL:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = WALL_CATEGORY;
+		fixtureDef.filter.maskBits = WALL_MASK;
+	}
+
+	body = world->CreateBody(&bodyDef);
+	body->CreateFixture(&fixtureDef);
+
+	physicsComp->body = body;
+
+	body->SetUserData(physicsComp);
 
 	return physicsComp;
-}
 
-//Kinematics can be used for pushables, parts, contraptions, etc.
-PhysicsComponent* PhysicsManager::createKinematic(float x, float y, float w, float h, bool floor)
-{
-	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
-
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_kinematicBody;
-	bodyDef.position.Set(x, y);
-
-	b2Body* kinematicBody;
-
-	kinematicBody = world->CreateBody(&bodyDef);
-
-	b2PolygonShape shape;
-	shape.SetAsBox(w, h);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &shape;
-	fixtureDef.density = 1;
-	fixtureDef.userData = physicsComp;
-	kinematicBody->CreateFixture(&fixtureDef);
-
-	return physicsComp;
 	//NOTE: there is a bullet setting for projectiles that move exceptionally fast
 }
 
-PhysicsComponent* PhysicsManager::createPlatform(float x, float y, float w, float h)
-{
-	PhysicsComponent* physicsComp = new PhysicsComponent(x, y, 0, 0);
-
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_staticBody;
-	bodyDef.position.Set(x, y);
-	bodyDef.angle = 0;
-
-	b2Body* playerBody;
-
-	playerBody = world->CreateBody(&bodyDef);
-
-	b2PolygonShape shape;
-	shape.SetAsBox(w, h);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &shape;
-	fixtureDef.density = 1;
-	fixtureDef.userData = physicsComp;
-	playerBody->CreateFixture(&fixtureDef);
-
-	return physicsComp;
-}
-
-//Takes in a set of outer wall endpoints, makes a body out of them, and adds it to both worlds
-void PhysicsManager::setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls)
-{
-	//Make the walls
-	b2BodyDef wallsDef;
-	wallsDef.type = b2_staticBody;
-	wallsDef.position.Set(0, 0);
-
-	b2Body* wallsBody = world->CreateBody(&wallsDef);
-
-	//define fixture
-	b2EdgeShape edge;
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &edge;
-	fixtureDef.filter.categoryBits = (short)0;
-	fixtureDef.filter.maskBits = (short)1;
-
-	for (int i = 0; i < walls.size(); i++)
-	{
-		edge.Set(b2Vec2(walls[i].first.x, walls[i].first.y), b2Vec2(walls[i].second.x, walls[i].second.x));
-		wallsBody->CreateFixture(&fixtureDef);
-	}
-}
-
 //Move each physics object up or down based on gravity and jumping
-//Then, if any cross the height threshold, delete them from one world and add them to the other
-void PhysicsManager::updateHeights(float delta)
+//Then, if any cross the height threshold, change their filters
+//Possibly optimize this later
+void PhysicsManager::updateHeights(float step)
 {
-	//For each physics object, check if they are jumping
-	//If so, move them up by jump velocity * delta
-	//Otherwise check if they are on the floor
-	//If so, check if they are on a tall object/surface
-	//If not, move them by gravity * delta
+	b2Body* b = world->GetBodyList();
+	PhysicsComponent* comp;
 
-	//WHEN A Z THRESHOLD IS MET TO CHANGE LEVELS, MODIFY THE FILTERS
+	while (b != NULL)
+	{
+		//If the body can't move don't bother
+		if (b->GetType() == b2_staticBody)
+		{
+			b = b->GetNext();
+			continue;
+		}
+
+		comp = static_cast<PhysicsComponent*>(b->GetUserData());
+
+		if (comp == nullptr)
+		{
+			b = b->GetNext();
+			continue;
+		}
+
+		if (comp->isJumping)
+		{
+			comp->zPos += step * JUMP_VELOCITY;
+
+			if (comp->isUp)
+			{
+				//The object in the upper half
+				//Has it reached the platform yet?
+				if (comp->zPos >= Z_UPPER)
+				{
+					comp->isJumping = false;
+					comp->zPos = Z_UPPER;
+				}
+				
+			}
+			else if (comp->zPos >= Z_THRESHOLD)
+			{
+				//The object is in the lower half
+				//Has it reached the threshold yet?
+				comp->isUp = true;
+
+				b2Filter filter;
+
+				switch (comp->type)
+				{
+					case PhysObjectType::MOUSE_DOWN:
+						comp->type = PhysObjectType::MOUSE_UP;
+						filter.categoryBits = MOUSE_UP_CATEGORY;
+						filter.maskBits = MOUSE_UP_CATEGORY;
+						break;
+					case PhysObjectType::CAT_DOWN:
+						comp->type = PhysObjectType::CAT_UP;
+						filter.categoryBits = CAT_UP_CATEGORY;
+						filter.maskBits = CAT_UP_CATEGORY;
+						break;
+					case PhysObjectType::OBSTACLE_DOWN:
+						comp->type = PhysObjectType::OBSTACLE_UP;
+						filter.categoryBits = OBSTACLE_UP_CATEGORY;
+						filter.maskBits = OBSTACLE_UP_CATEGORY;
+						break;
+					default:
+						break; //you goofed
+				}
+
+				b->GetFixtureList()->SetFilterData(filter);
+			}
+		}
+		else if (comp->isFalling)
+		{
+			comp->zPos -= step * FALL_VELOCITY;
+
+			if (comp->isUp && comp->zPos <= Z_THRESHOLD)
+			{
+				//The object is in the upper half
+				//Has it reached the threshold yet?
+				comp->isUp == false;
+
+				b2Filter filter;
+
+				switch (comp->type)
+				{
+					case PhysObjectType::MOUSE_UP:
+						comp->type = PhysObjectType::MOUSE_DOWN;
+						filter.categoryBits = MOUSE_DOWN_CATEGORY;
+						filter.maskBits = MOUSE_DOWN_CATEGORY;
+						break;
+					case PhysObjectType::CAT_UP:
+						comp->type = PhysObjectType::CAT_DOWN;
+						filter.categoryBits = CAT_DOWN_CATEGORY;
+						filter.maskBits = CAT_DOWN_CATEGORY;
+						break;
+					case PhysObjectType::OBSTACLE_UP:
+						comp->type = PhysObjectType::OBSTACLE_DOWN;
+						filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
+						filter.maskBits = OBSTACLE_DOWN_CATEGORY;
+						break;
+					default:
+						break; //you goofed
+				}
+
+				b->GetFixtureList()->SetFilterData(filter);
+			}
+			else
+			{
+				//The object is in the lower half
+				//Has it reached the ground yet?
+				if (comp->zPos <= Z_LOWER)
+				{
+					comp->isFalling = false;
+					comp->zPos = Z_LOWER;
+				}
+			}
+		}
+
+		b = b->GetNext();
+	}
 }
 
 void PhysicsManager::checkCollisions()
@@ -168,19 +357,101 @@ void PhysicsManager::checkCollisions()
 	if (cListener->hasCollided() == 0)
 		return;
 
-	/*b2Body** dynamics = cListener->getDynamic();
-	b2Body** kinematics = cListener->getKinematic();
+	b2Body** collider1 = cListener->getColliders1();
+	b2Body** collider2 = cListener->getColliders2();
 
 	for (int c = 0; c < cListener->hasCollided(); c++)
 	{
-		b2Body* d = dynamics[c];
-		b2Body* k = kinematics[c];
+		b2Body* c1 = collider1[c];
+		b2Body* c2 = collider2[c];
+
+		PhysicsComponent* pComp1 = static_cast<PhysicsComponent*>(c1->GetUserData());
+		PhysicsComponent* pComp2 = static_cast<PhysicsComponent*>(c2->GetUserData());
 			
-		//Figure out how to check for collisions on each one properly
-		//Index dynamics like so, cListender->hasCollided() should be number of collisions
-		//How do you know the number of dynamics and kinematics?
-		//Is it a pair for each collision?
+		pComp1->onCollide.Notify(pComp2);
+		pComp2->onCollide.Notify(pComp1);
 	}
 
-	cListener->resetCollided();*/
+	cListener->resetCollided();
+}
+
+bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	bool objFound = false;
+
+	AreaQueryCallback callback;
+
+	b2AABB boundingBox;
+	boundingBox.lowerBound = b2Vec2(p1->x, p1->y);
+	boundingBox.upperBound = b2Vec2(p2->x, p2->y);
+
+	world->QueryAABB(&callback, boundingBox);
+
+	for (int i = 0; i < callback.foundBodies.size(); i++)
+	{
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
+
+		for (int j = 0; j < toCheck.size(); j++)
+		{
+			if (pComp->type == toCheck[j])
+			{
+				if (triggerHit)
+				{
+					pComp->onHit.Notify(checkedBy);
+					objFound = true;
+					break;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return objFound;
+}
+
+//returns whether it hit something or not
+Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+{
+	float32 frac = 1; //used to determine the closest object
+	PhysicsComponent* bestMatch = nullptr;
+	RayQueryCallback callback;
+
+	b2Vec2 point1 = b2Vec2(p1->x, p1->y);
+	b2Vec2 point2 = b2Vec2(p2->x, p2->y);
+
+	world->RayCast(&callback, point1, point2);
+
+	for (int i = 0; i < callback.hitBodies.size(); i++)
+	{
+		//if the object is further than the best match so far, move on
+		if (callback.fractions[i] > frac)
+			continue;
+
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
+
+		for (int j = 0; j < toCheck.size(); j++)
+		{
+			if (pComp->type == toCheck[j])
+			{
+				frac = callback.fractions[i];
+				bestMatch = pComp;
+			}
+		}
+	}
+
+	if (bestMatch == nullptr)
+	{
+		return nullptr;
+	}
+	else
+	{
+		if(triggerHit)
+			bestMatch->onHit.Notify(checkedBy);
+
+		b2Vec2 pos = bestMatch->body->GetPosition();
+		return new Vector2D(pos.x, pos.y);
+	}
 }

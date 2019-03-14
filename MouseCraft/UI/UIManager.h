@@ -2,6 +2,10 @@
 
 #include <map>
 #include <string>
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
+#include <windows.h>
 #include <tinyxml2/tinyxml2.h>
 #include "UIComponent.h"
 

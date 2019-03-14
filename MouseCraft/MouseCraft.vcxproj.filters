@@ -82,17 +82,20 @@
     <Filter Include="Source Files\Graphics\BufferObjects">
       <UniqueIdentifier>{9998886b-5b8d-4333-9856-59a2e6cdd3ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{a78e8ccf-9344-4b4d-b460-250414a2a24d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{92771a19-b580-4146-a54b-7eab8be19244}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{a78e8ccf-9344-4b4d-b460-250414a2a24d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Network">
-      <UniqueIdentifier>{aec74319-9c67-4de9-9ad0-24c85fbdd993}</UniqueIdentifier>
+    <Filter Include="Header Files\Contraptions">
+      <UniqueIdentifier>{ff659aa3-d49b-40cd-ab2f-6c594b9c0c44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Network">
-      <UniqueIdentifier>{1592bfcf-a6f3-4ab1-aa5a-7349e9028cd3}</UniqueIdentifier>
+    <Filter Include="Source Files\Contraptions">
+      <UniqueIdentifier>{40655de4-e5a8-47f6-89b9-3f8ce105b862}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +204,6 @@
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
       <Filter>Source Files\Core\Test</Filter>
     </ClCompile>
-    <ClCompile Include="MouseMovement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Vector2D.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -243,20 +243,80 @@
     <ClCompile Include="Input\InputSystem.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Network\Address.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\Socket.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\NetworkSystem.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\ModelGen.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Network\PacketData.cpp">
-      <Filter>Source Files\Network</Filter>
+    <ClCompile Include="Graphics\GLTexture.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\ImageLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugColliderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugColliderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSubObs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickupFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickupSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\Observer.cpp">
+      <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\Subject.cpp">
+      <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Overcharge.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Swords.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Mice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contraption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coil.cpp">
+      <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="ContraptionFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPrefab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\PrefabLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\Handler.cpp">
+      <Filter>Source Files\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +461,6 @@
     <ClInclude Include="Core\Scene.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="MouseMovement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Vector2D.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -446,29 +503,101 @@
     <ClInclude Include="Input\InputSystem.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Address.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Socket.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\NetworkSystem.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\ModelGen.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Network\PacketData.h">
-      <Filter>Header Files\Network</Filter>
+    <ClInclude Include="Graphics\GLTexture.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Network\NetDatum.h">
-      <Filter>Header Files\Network</Filter>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Util\TypePunners.h">
-      <Filter>Source Files\Util</Filter>
+    <ClInclude Include="Loading\ImageLoader.h">
+      <Filter>Header Files\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="Network\Connection.h">
-      <Filter>Header Files\Network</Filter>
+    <ClInclude Include="DebugColliderComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugColliderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSubObs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MOUSECRAFT_ENUMS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickupFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickupSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Subject.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Observer.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Coil.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Contraption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Overcharge.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Swords.h">
+      <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Mice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContraptionFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysObjectType.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\RayQueryCallback.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\AreaQueryCallback.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPrefab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\PrefabLoader.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Handler.h">
+      <Filter>Header Files\Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
