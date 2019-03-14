@@ -9,5 +9,8 @@ public:
 
 	void use() override;
 	void show() override;
+
+private:
+	float const range = 10.0;
 };
 

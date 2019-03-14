@@ -8,6 +8,7 @@
 #include "Physics/PhysObjectType.h"
 #include "HealthComponent.h"
 #include "PlayerComponent.h"
+#include "Mice.h"
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
 {
@@ -23,7 +24,7 @@ public:
 
 public:
 	CONTRAPTIONS type;
-private:
-
+protected:
+	Mice* mice;
 };
 

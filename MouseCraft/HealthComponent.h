@@ -33,10 +33,17 @@ public:
 	Subject<> OnDeath;
 
 
-	void CutSelf(int dmg)
+	void Damage(int dmg)
 	{
 		if (dmg == 0)
 			return;
+
+		if (_shield)
+		{
+			RemoveShield();
+			return;
+		}
+
 		if ((_health -= dmg) < 0)
 		{
 			_health = 0;
@@ -45,8 +52,30 @@ public:
 		OnHealthChanged.Notify(_health);
 	}
 
+	void SetHealth(int health)
+	{
+		_health = health;
+		if (health <= 0)
+		{
+			_health = 0;
+			OnDeath.Notify();
+		}
+		OnHealthChanged.Notify(_health);
+	}
+
+	void AddShield()
+	{
+		_shield = true;
+	}
+
+	void RemoveShield()
+	{
+		_shield = false;
+	}
+
 private:
 	int _health = 1;
+	bool _shield = false;
 
 	void Notify(EventName eventName, Param* params)
 	{

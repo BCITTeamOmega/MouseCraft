@@ -21,6 +21,8 @@ void Contraption::OnInitialized()
 		pComp->onCollide.Attach(this);
 		pComp->onHit.Attach(this);
 	}
+
+	mice = GetEntity()->GetParent()->GetComponent<Mice>();
 }
 
 void Contraption::use() {

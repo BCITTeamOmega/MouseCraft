@@ -13,7 +13,7 @@ void Overcharge::use() {
 	Contraption::use();	
 
 	std::cout << "OVERCHARGE is being used" << std::endl;
-	this->GetEntity()->GetParent()->GetComponent<HealthComponent>()->OnHealthChanged.Notify(30);
+	this->GetEntity()->GetParent()->GetComponent<HealthComponent>()->AddShield();
 	this->Drop();
 	this->GetEntity()->Destroy();
 }
