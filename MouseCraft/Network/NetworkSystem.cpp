@@ -80,12 +80,10 @@ void NetworkSystem::serverTick() {
     Address sender;
     int received;
 
-    PacketData rcv;
-
     while ((received = _socket.Receive(sender, _buffer, MAX_PACKET_SIZE)) > 0) {
-        rcv.Load(_buffer, received);
-        if (rcv.Verify())
-            processPacket(sender, &rcv);
+        _rcv.Load(_buffer, received);
+        if (_rcv.Verify())
+            processPacket(sender, &_rcv);
     }
 
     vector<Address> deleteList;
