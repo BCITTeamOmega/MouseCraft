@@ -3,29 +3,61 @@
 #include "../Core/System.h"
 #include "Address.h"
 #include "Socket.h"
+#include "PacketData.h"
+#include "Connection.h"
+#include "NetDatum.h"
+#include <map>
 
-#define MAX_PACKET_SIZE 256
+#include "../Event/EventManager.h"
 
-class NetworkSystem : public System {
+constexpr unsigned short DEFAULT_PORT = 8878;
+
+class NetworkSystem : public System, public ISubscriber {
 public:
-    NetworkSystem();
+    enum Role {
+        HOST,
+        CLIENT
+    };
+
+    NetworkSystem(const Role role = Role::HOST, const unsigned short port = DEFAULT_PORT);
     ~NetworkSystem();
 
-    void Update(float dt);
-private:
-    const unsigned short DEFAULT_PORT = 88888;
-    const float TICK_RATE = 1.f / 60;
+    void RequestConnection(const Address & address);
+    void SearchForServers();
+    void SetHost();
+
+    //Overrides System::Update
+    void Update(float dt) override;
+
+    //Overrides ISubscriber::Notify
+    void Notify(EventName eventName, Param *params) override;
+protected:
+    const int TICK_RATE = 30;
+    //TODO: change back to 1.f once delta time fixed by Jason
+    const float TICK_PERIOD = .1f / TICK_RATE;
+    const int POKE_TIME = 3 * TICK_RATE;
 
     void serverTick();
 
-    void processPacket(Address & sender, unsigned char * data, const int size) const;
+    void appendToPackets(const NetDatum & datum);
 
-    unsigned char _packetData[MAX_PACKET_SIZE];
-    unsigned int _dataSize = 0;
+    void processPacket(const Address & sender, PacketData * packet);
+    void processDatum(const Address & sender, PacketData * packet);
+
+    int liveConnections();
+    int maxConnections();
+
+    void processInput(std::string line);
+
+    PacketData _rcv;
+
+    unsigned char _buffer[MAX_PACKET_SIZE];
 
     unsigned short _tickNum;
     float _tickCount;
     Socket _socket;
-    Address _connection;
+    std::map<const Address, Connection> _connectionList;
+    Role _role;
+    const Address _broadcast = Address(255, 255, 255, 255, DEFAULT_PORT);
 };
 

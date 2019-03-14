@@ -246,17 +246,17 @@
     <ClCompile Include="Network\Address.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Network\NetworkManager.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Network\Socket.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="Network\NetworkSystem.cpp">
       <Filter>Source Files\Network</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Graphics\ModelGen.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\PacketData.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -449,17 +449,26 @@
     <ClInclude Include="Network\Address.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Network\NetworkManager.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Network\Socket.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="Network\NetworkSystem.h">
       <Filter>Header Files\Network</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Graphics\ModelGen.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\PacketData.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetDatum.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TypePunners.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Connection.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

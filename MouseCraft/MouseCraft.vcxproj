@@ -195,13 +195,13 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="MouseMovement.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Network\NetworkSystem.cpp" />
+    <ClCompile Include="Network\PacketData.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
     <ClCompile Include="Network\Address.cpp" />
-    <ClCompile Include="Network\NetworkManager.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
@@ -260,8 +260,10 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="MouseMovement.h" />
     <ClInclude Include="Network\Address.h" />
-    <ClInclude Include="Network\NetworkManager.h" />
+    <ClInclude Include="Network\Connection.h" />
+    <ClInclude Include="Network\NetDatum.h" />
     <ClInclude Include="Network\NetworkSystem.h" />
+    <ClInclude Include="Network\PacketData.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Physics\CContactListener.h" />
     <ClInclude Include="Physics\PhysicsComponent.h" />
@@ -278,6 +280,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Util\TypePunners.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

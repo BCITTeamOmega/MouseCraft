@@ -92,6 +92,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
     OmegaEngine::Instance().AddSystem(ns);
+
 	OmegaEngine::Instance().Loop();
 }
 

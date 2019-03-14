@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 class Address {
 public:
     Address();
@@ -14,7 +16,12 @@ public:
     unsigned char GetD() const;
 
     unsigned short GetPort() const;
+
+    bool operator <(const Address& rhs) const;
+
+    friend std::ostream& operator<<(std::ostream &strm, const Address& a);
 private:
     unsigned int _address;
     unsigned short _port;
 };
+

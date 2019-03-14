@@ -22,7 +22,8 @@ enum Button
 	PRIMARY,	// R1				(idx5)
 	SECONDARY,	// L1				(idx4)
 	AUX1,		// SOUTH BUTTON		(idx0)
-	AUX2,		// WEST BUTTON		(idx2)
+    AUX2,		// WEST BUTTON		(idx2)
+    OPTION,		// OPTION BUTTON	(idx6)
 };
 
 struct AxisEvent
@@ -170,6 +171,9 @@ public:
 				case 1:
 					b = Button::AUX2;
 					break;
+                case 6:
+                    b = Button::OPTION;
+                    break;
 				default:
 					continue;
 				}
@@ -197,6 +201,9 @@ public:
 				case 1:
 					b = Button::AUX2;
 					break;
+                case 6:
+                    b = Button::OPTION;
+                    break;
 				default:
 					continue;
 				}

@@ -1,7 +1,10 @@
 #include "Socket.h"
 
+#ifndef _WINSOCKAPI_
 #include <winsock2.h>
 #pragma comment(lib, "WS2_32.lib")
+#endif
+
 #include <iostream>
 
 WORD winsockVersion = 0x202;
@@ -19,6 +22,9 @@ Socket::Socket() {
     if (_sockHandle == INVALID_SOCKET) {
         std::cerr << "Socket Creation Failed: " << WSAGetLastError() << std::endl;
     }
+
+    const char broadcast = 1;
+    setsockopt(_sockHandle, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
 }
 
 Socket::~Socket() {
