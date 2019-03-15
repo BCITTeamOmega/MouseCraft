@@ -15,7 +15,6 @@ void Swords::use() {
 	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
 	std::vector<PhysObjectType::PhysObjectType> stuff;
 
-	// this must change depending on if the contraption is up or down
 	if (pc->type = PhysObjectType::CONTRAPTION_DOWN) {
 		stuff.push_back(PhysObjectType::CAT_DOWN);
 		stuff.push_back(PhysObjectType::OBSTACLE_DOWN);
