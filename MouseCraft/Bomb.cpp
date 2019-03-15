@@ -31,8 +31,11 @@ void Bomb::use() {
 		stuff.push_back(PhysObjectType::OBSTACLE_UP);
 	}
 
-	// need to deal damage to health 
-	if (pc->areaCheck(stuff, new Vector2D(fieldEntity->transform.getWorldPosition().x - 1, fieldEntity->transform.getWorldPosition().y - 1), new Vector2D(fieldEntity->transform.getWorldPosition().x + 1, fieldEntity->transform.getWorldPosition().y + 1), true)) {
+	auto p1 = fieldEntity->transform;
+	auto pos = p1.getWorldPosition();
+	auto bl = pos - glm::vec3(-1, 0, -1);
+	auto tr = pos - glm::vec3(1, 0, 1);
+	if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
 		this->Drop();
 		this->GetEntity()->Destroy();
 	}
