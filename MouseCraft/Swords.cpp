@@ -1,5 +1,7 @@
 #include "Swords.h"
 
+#include "Mice.h"
+
 Swords::Swords()
 {
 }

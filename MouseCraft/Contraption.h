@@ -8,7 +8,8 @@
 #include "Physics/PhysObjectType.h"
 #include "HealthComponent.h"
 #include "PlayerComponent.h"
-#include "Mice.h"
+
+class Mice;
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
 {

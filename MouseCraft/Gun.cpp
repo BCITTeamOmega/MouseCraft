@@ -1,5 +1,7 @@
 #include "Gun.h"
 
+#include "Mice.h"
+
 Gun::Gun()
 {
 }

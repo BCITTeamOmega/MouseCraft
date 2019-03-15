@@ -1,5 +1,7 @@
 #include "Bomb.h"
 
+#include "Mice.h"
+
 Bomb::Bomb()
 {
 }

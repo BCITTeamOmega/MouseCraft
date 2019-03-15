@@ -1,6 +1,6 @@
 #include "Contraption.h"
 
-
+#include "Mice.h"
 
 Contraption::Contraption()
 {
