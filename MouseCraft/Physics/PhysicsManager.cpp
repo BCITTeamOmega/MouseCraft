@@ -214,6 +214,8 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
 		fixtureDef.filter.maskBits = WALL_MASK;
+	default:
+		return nullptr; //if they input PhysicsObjectType::NOTHING
 	}
 
 	body = world->CreateBody(&bodyDef);
