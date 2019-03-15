@@ -18,7 +18,7 @@ public:
 	~Contraption();
 
 	virtual void OnInitialized() override;
-	virtual void use();
+	virtual bool use();
 	virtual void show();
 	void Grab();
 	void Drop();

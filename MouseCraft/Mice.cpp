@@ -115,7 +115,12 @@ void Mice::addItem(Pickup* item) {
 	else if (baseItem != nullptr && newItem == nullptr) {
 		std::cout << "Mouse will combine the " << baseItem << " and the " << item << std::endl;
 		combine(item);
+		
+		// destroy pickups
+		// baseItem destroyed in combine 
 		item->GetEntity()->Destroy();
+
+
 	}
 	else return;
 }
@@ -142,10 +147,12 @@ void Mice::dropItem() {
 }
 
 void Mice::use(Contraption* item) {
-	item->use();
-	// todo: determine if the contraption should be destroyed (ie. screw swords).
-	item->GetEntity()->Destroy();
-	newItem = nullptr;
+	
+	if (item->use())
+	{
+		// todo: this syntax is kinda weird. should pass reference to pointer or just use newItem directly
+		newItem = nullptr;	
+	}
 }
 
 void Mice::combine(Pickup *material) {

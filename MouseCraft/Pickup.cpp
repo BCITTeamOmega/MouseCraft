@@ -12,22 +12,15 @@ Pickup::~Pickup()
 
 void Pickup::OnInitialized()
 {
-	//Listens for collisions with the physics component
-	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-
-	if (pComp != nullptr)
-	{
-		pComp->onCollide.Attach(this);
-		pComp->onHit.Attach(this);
-	}
+	_physics = GetEntity()->GetComponent<PhysicsComponent>();
 }
 
 void Pickup::Grab()
 {
-	
+	_physics->SetEnabled(false);
 }
 
 void Pickup::Drop()
 {
-	
+	_physics->SetEnabled(true);
 }

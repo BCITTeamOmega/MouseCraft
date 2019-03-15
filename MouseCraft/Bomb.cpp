@@ -11,7 +11,7 @@ Bomb::~Bomb()
 {
 }
 
-void Bomb::use() {
+bool Bomb::use() {
 	Contraption::use();
 
 	// need to dissapear after exploding
@@ -37,10 +37,12 @@ void Bomb::use() {
 	auto pos = p1.getWorldPosition();
 	auto bl = pos - glm::vec3(-1, 0, -1);
 	auto tr = pos - glm::vec3(1, 0, 1);
-	if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
-		this->Drop();
-		this->GetEntity()->Destroy();
-	}
+	//if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
+	//	this->Drop();
+	//	this->GetEntity()->Destroy();
+	//}
+
+	return true;
 }
 
 void Bomb::show() {

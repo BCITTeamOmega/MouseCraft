@@ -11,7 +11,7 @@ Gun::~Gun()
 {
 }
 
-void Gun::use() {
+bool Gun::use() {
 	Contraption::use();
 
 	std::cout << "GUN is being used" << std::endl;
@@ -35,9 +35,11 @@ void Gun::use() {
 	auto p1 = GetEntity()->transform;
 	auto pos = p1.getWorldPosition();
 	auto end = pos + p1.getWorldForward() * range;
-	pc->rayCheck(stuff, new Vector2D(pos.x, pos.z), new Vector2D(end.x, end.z), true);
+	// pc->rayCheck(stuff, new Vector2D(pos.x, pos.z), new Vector2D(end.x, end.z), true);
 	mice->dropItem();
 	this->GetEntity()->Destroy();
+
+	return true;
 }
 
 void Gun::show() {

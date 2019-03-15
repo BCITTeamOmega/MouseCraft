@@ -25,8 +25,8 @@ void Contraption::OnInitialized()
 	mice = GetEntity()->GetParent()->GetComponent<Mice>();
 }
 
-void Contraption::use() {
-
+bool Contraption::use() {
+	return false;
 }
 
 void Contraption::show() {

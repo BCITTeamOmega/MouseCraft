@@ -11,7 +11,7 @@ Swords::~Swords()
 {
 }
 
-void Swords::use() {
+bool Swords::use() {
 	Contraption::use();
 	std::cout << "SWORDS is being used" << std::endl;
 	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
@@ -32,10 +32,12 @@ void Swords::use() {
 	pos += p1.getWorldForward();
 	auto bl = pos - glm::vec3(-1, 0, -1);
 	auto tr = pos - glm::vec3(1, 0, 1);
-	if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
-		mice->dropItem();
-		this->GetEntity()->Destroy();
-	}
+	//if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
+	//	mice->dropItem();
+	//	this->GetEntity()->Destroy();
+	//}
+
+	return false;
 }
 
 void Swords::show() {

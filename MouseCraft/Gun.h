@@ -7,7 +7,7 @@ public:
 	Gun();
 	~Gun();
 
-	void use() override;
+	bool use() override;
 	void show() override;
 
 private:

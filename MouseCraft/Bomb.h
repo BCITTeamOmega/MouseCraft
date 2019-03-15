@@ -7,7 +7,7 @@ public:
 	Bomb();
 	~Bomb();
 
-	void use() override;
+	bool use() override;
 	void show() override;
 
 	Entity* fieldEntity;
