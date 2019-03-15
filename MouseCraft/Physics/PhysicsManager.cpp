@@ -214,6 +214,8 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
 		fixtureDef.filter.maskBits = WALL_MASK;
+	default:
+		return nullptr; //if they input PhysicsObjectType::NOTHING
 	}
 
 	body = world->CreateBody(&bodyDef);
@@ -375,9 +377,10 @@ void PhysicsManager::checkCollisions()
 	cListener->resetCollided();
 }
 
-bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+//returns a list of the objects hit
+std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
-	bool objFound = false;
+	std::vector<PhysicsComponent*> foundObjects;
 
 	AreaQueryCallback callback;
 
@@ -391,29 +394,14 @@ bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObje
 	{
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
 
-		for (int j = 0; j < toCheck.size(); j++)
-		{
-			if (pComp->type == toCheck[j])
-			{
-				if (triggerHit)
-				{
-					pComp->onHit.Notify(checkedBy);
-					objFound = true;
-					break;
-				}
-				else
-				{
-					return true;
-				}
-			}
-		}
+		foundObjects.push_back(pComp);
 	}
 
-	return objFound;
+	return foundObjects;
 }
 
-//returns whether it hit something or not
-Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+//returns the first object hit
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -424,6 +412,7 @@ Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<Phys
 
 	world->RayCast(&callback, point1, point2);
 
+	//Find the closest object hit by the ray
 	for (int i = 0; i < callback.hitBodies.size(); i++)
 	{
 		//if the object is further than the best match so far, move on
@@ -443,15 +432,7 @@ Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<Phys
 	}
 
 	if (bestMatch == nullptr)
-	{
 		return nullptr;
-	}
 	else
-	{
-		if(triggerHit)
-			bestMatch->onHit.Notify(checkedBy);
-
-		b2Vec2 pos = bestMatch->body->GetPosition();
-		return new Vector2D(pos.x, pos.y);
-	}
+		return bestMatch;
 }
