@@ -94,10 +94,10 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		break;
 	}
 
-	auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
-	auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::CONTRAPTION_DOWN);
+	// auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
+	// auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::CONTRAPTION_DOWN);
 
 	contraption->AddComponent(c_renderable);
-	contraption->AddComponent(c_physics);
+	// contraption->AddComponent(c_physics);
 	return contraption;
 }

@@ -321,6 +321,9 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ContraptionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -603,6 +606,9 @@
       <Filter>Header Files\Event</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContraptionSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

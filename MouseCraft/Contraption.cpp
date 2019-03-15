@@ -25,6 +25,10 @@ void Contraption::OnInitialized()
 	mice = GetEntity()->GetParent()->GetComponent<Mice>();
 }
 
+void Contraption::Update(float dt)
+{
+}
+
 bool Contraption::use() {
 	return false;
 }

@@ -16,7 +16,7 @@ Entity (mice)
 */
 
 class Coil :
-	public Contraption, public ISubscriber
+	public Contraption 
 {
 public:
 	Coil();
@@ -26,8 +26,7 @@ public:
 	void show() override;
 	void OnCollision(PhysicsComponent* other);
 	virtual void OnInitialized() override;
-	virtual void Notify(EventName eventName, Param *params) override;
-	void update(float dt);
+	virtual void Update(float dt) override;
 
 	// reference to field visuals
 	Entity* fieldEntity;
@@ -41,8 +40,11 @@ private:
 
 	// todo: damage
 
-	// reference to physics component 
+	// reference to physics component (NOT USED)
 	PhysicsComponent* _phys;
+
+	// if the field has been placed
+	bool _isPlaced = false;
 
 	// cat speed before being slowed 
 	float _catSpeed;
@@ -50,5 +52,8 @@ private:
 	// the cat this field is currently colliding with
 	PlayerComponent* _collidedCat;
 
+	// the floor which to check the cat for
+	std::set<PhysObjectType::PhysObjectType> checkFor;
+	
 	Handler<Coil, PhysicsComponent*> HandleOnCollision;
 };

@@ -18,6 +18,7 @@ public:
 	~Contraption();
 
 	virtual void OnInitialized() override;
+	virtual void Update(float dt);
 	virtual bool use();
 	virtual void show();
 	void Grab();

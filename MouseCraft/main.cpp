@@ -32,6 +32,7 @@
 #include "HealthComponent.h"
 #include "Loading/PrefabLoader.h"
 #include "GameManager.h"
+#include "ContraptionSystem.h"
 
 #define GLEW_STATIC
 
@@ -194,6 +195,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 

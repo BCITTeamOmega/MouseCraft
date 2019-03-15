@@ -7,37 +7,31 @@
 Coil::Coil() :
 	HandleOnCollision(this, &Coil::OnCollision)
 {
-	// todo: Manually subscribing to component update 
-	EventManager::Subscribe(EventName::COMPONENT_UPDATE, this);
 }
 
 
 Coil::~Coil()
 {
-	EventManager::Unsubscribe(EventName::COMPONENT_UPDATE, this);
 }
 
 bool Coil::use() {
 	Contraption::use();
 	
+	std::cout << "COIL is being used" << std::endl;
+
 	// drop self
-	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
 	GetEntity()->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
+	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
 	fieldEntity->SetEnabled(true);
 
-	std::cout << "COIL is being used" << std::endl;
-	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
-	std::vector<PhysObjectType::PhysObjectType> stuff;
+	_isPlaced = true;
 
-	if (pc->type = PhysObjectType::CONTRAPTION_DOWN) {
-		stuff.push_back(PhysObjectType::CAT_DOWN);
-		stuff.push_back(PhysObjectType::OBSTACLE_DOWN);
-	}
-
-	if (pc->type = PhysObjectType::CONTRAPTION_UP) {
-		stuff.push_back(PhysObjectType::CAT_UP);
-		stuff.push_back(PhysObjectType::OBSTACLE_UP);
-	}
+	// determine which layer to check for 
+	auto micePhys = GetEntity()->GetParent()->GetComponent<PhysicsComponent>();
+	checkFor.insert(micePhys->isUp ? PhysObjectType::CAT_UP : PhysObjectType::CAT_DOWN);
+	
+	// create physics at the correct location 
+	// however we don't actually need physics body for coil so we skip it
 
 	return true;
 }
@@ -54,25 +48,17 @@ void Coil::OnCollision(PhysicsComponent * other)
 void Coil::OnInitialized()
 {
 	Contraption::OnInitialized();
-	GetEntity()->GetComponent<PhysicsComponent>()->onCollide.Attach(HandleOnCollision);
+	// GetEntity()->GetComponent<PhysicsComponent>()->onCollide.Attach(HandleOnCollision);
 }
 
-void Coil::Notify(EventName eventName, Param * params)
-{
-	if (eventName == EventName::COMPONENT_UPDATE)
-	{
-		auto dt = static_cast<TypeParam<float>*>(params)->Param;
-		update(dt);
-	}
-}
+void Coil::Update(float dt)
+{	
+	if (!_isPlaced) return;
 
-void Coil::update(float dt)
-{
 	auto pos = GetEntity()->transform.getWorldPosition();
 	auto bl = glm::vec2(pos.x, pos.z) + glm::vec2(-1, -1) * (FIELD_RANGE / 2);
 	auto tr = glm::vec2(pos.x, pos.z) + glm::vec2(1, 1) * (FIELD_RANGE / 2);
 
-	std::set<PhysObjectType::PhysObjectType> checkFor{ PhysObjectType::CAT_DOWN, PhysObjectType::CAT_UP };
 	auto hits = PhysicsManager::instance()->areaCheck(nullptr, checkFor, new Vector2D(bl), new Vector2D(tr));
 	bool hitCat = hits.size() > 0;
 
