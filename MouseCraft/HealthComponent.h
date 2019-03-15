@@ -31,6 +31,7 @@ public:
 
 	Subject<int> OnHealthChanged;
 	Subject<> OnDeath;
+	Subject<> OnRevive;
 
 
 	void Damage(int dmg)
@@ -54,12 +55,21 @@ public:
 
 	void SetHealth(int health)
 	{
+		auto old = _health;
 		_health = health;
+		
 		if (health <= 0)
 		{
+			// set health to dead 
 			_health = 0;
 			OnDeath.Notify();
 		}
+		else if (old == 0)
+		{
+			// set health to alive (and was dead)
+			OnRevive.Notify();
+		}
+
 		OnHealthChanged.Notify(_health);
 	}
 
