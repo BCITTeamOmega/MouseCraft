@@ -9,7 +9,8 @@ public:
 	void setImage(
 		Image& image,
 		bool mipmap = true,
-		GLuint storageFormat = GL_RGBA16F
+		GLuint storageFormat = GL_RGBA16F,
+		GLuint inputType = GL_FLOAT
 	);
 	void bind(GLenum slot);
 	void unbind(GLenum slot);

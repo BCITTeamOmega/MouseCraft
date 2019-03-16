@@ -7,8 +7,9 @@ public:
 	~FBO();
 	void bind();
 	void unbind();
-	void buffer(GLuint attachment, GLTexture texture);
+	void buffer(GLuint attachment, GLTexture& texture);
 	GLuint getID();
 private:
 	GLuint _id;
+	GLuint _rbo;
 };

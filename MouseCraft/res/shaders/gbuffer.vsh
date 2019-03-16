@@ -8,10 +8,13 @@ uniform mat4 invTransform;
 
 out vec3 fragNormal;
 out vec2 fragTexCoord;
+out vec3 fragPos;
 
 void main()
 {
-    gl_Position = transform * vec4(position, 1.0);
+    vec4 pos = transform * vec4(position, 1.0);
+    fragPos = pos.xyz;
     fragNormal = (invTransform * vec4(normal, 1.0)).xyz;
     fragTexCoord = texCoord;
+    gl_Position = pos;
 }
