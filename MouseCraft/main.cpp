@@ -153,6 +153,9 @@ void Test_Rendering()
 	DebugColliderSystem* dcs = new DebugColliderSystem();
 	InputSystem* is = new InputSystem();
 
+	//Tell the PhysicsManager how big the world is
+	PhysicsManager::instance()->setupGrid(100, 100);
+
 	// component_player1_physics 
 	auto c_p1_physics = PhysicsManager::instance()->createObject(10, 10, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
 
