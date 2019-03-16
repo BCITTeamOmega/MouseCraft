@@ -318,6 +318,9 @@
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
     </ClCompile>
+    <ClCompile Include="WorldGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -598,6 +601,9 @@
     </ClInclude>
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldGrid.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
