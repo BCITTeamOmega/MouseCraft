@@ -15,16 +15,16 @@ bool Swords::use() {
 	Contraption::use();
 	std::cout << "SWORDS is being used" << std::endl;
 	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
-	std::vector<PhysObjectType::PhysObjectType> stuff;
+	std::set<PhysObjectType::PhysObjectType> stuff;
 
 	if (pc->type = PhysObjectType::CONTRAPTION_DOWN) {
-		stuff.push_back(PhysObjectType::CAT_DOWN);
-		stuff.push_back(PhysObjectType::OBSTACLE_DOWN);
+		stuff.insert(PhysObjectType::CAT_DOWN);
+		stuff.insert(PhysObjectType::OBSTACLE_DOWN);
 	}
 
 	if (pc->type = PhysObjectType::CONTRAPTION_UP) {
-		stuff.push_back(PhysObjectType::CAT_UP);
-		stuff.push_back(PhysObjectType::OBSTACLE_UP);
+		stuff.insert(PhysObjectType::CAT_UP);
+		stuff.insert(PhysObjectType::OBSTACLE_UP);
 	}
 
 	auto p1 = GetEntity()->transform;
