@@ -32,10 +32,35 @@ bool Swords::use() {
 	pos += p1.getWorldForward();
 	auto bl = pos - glm::vec3(-1, 0, -1);
 	auto tr = pos - glm::vec3(1, 0, 1);
-	//if (pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z), true)) {
-	//	mice->dropItem();
-	//	this->GetEntity()->Destroy();
-	//}
+	auto target = pc->areaCheck(stuff, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+
+	if (pc->type = PhysObjectType::CONTRAPTION_DOWN) {
+		auto t1 = std::find_if(target.begin(), target.end(), [&stuff](const PhysicsComponent* p) {
+			return p->type == PhysObjectType::CAT_DOWN; });
+
+		auto t2 = std::find_if(target.begin(), target.end(), [&stuff](const PhysicsComponent* p) {
+			return p->type == PhysObjectType::OBSTACLE_DOWN; });
+
+		if (t1 != target.end()) {
+			(*t1)->GetEntity()->GetParent()->GetComponent<HealthComponent>()->Damage(50);
+			mice->dropItem();
+			this->GetEntity()->Destroy();
+		}
+	}
+
+	if (pc->type = PhysObjectType::CONTRAPTION_UP) {
+		auto t1 = std::find_if(target.begin(), target.end(), [&stuff](const PhysicsComponent* p) {
+			return p->type == PhysObjectType::CAT_UP; });
+
+		auto t2 = std::find_if(target.begin(), target.end(), [&stuff](const PhysicsComponent* p) {
+			return p->type == PhysObjectType::OBSTACLE_UP; });
+
+		if (t1 != target.end()) {
+			(*t1)->GetEntity()->GetParent()->GetComponent<HealthComponent>()->Damage(50);
+			mice->dropItem();
+			this->GetEntity()->Destroy();
+		}
+	}
 
 	return false;
 }
