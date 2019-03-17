@@ -21,7 +21,8 @@ void VAO::setBuffer(int id, VBO& vbo) {
 }
 
 void VAO::unsetBuffer(int buffID) {
-	glDisableVertexArrayAttrib(_id, buffID);
+	bind();
+	glEnableVertexAttribArray(0);
 	_vbos.erase(buffID);
 }
 

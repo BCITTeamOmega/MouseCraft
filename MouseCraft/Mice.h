@@ -18,6 +18,7 @@
 #include "Event/Handler.h"
 #include "Input/InputSystem.h"
 #include "Physics/PhysicsComponent.h"
+#include "HealthComponent.h"
 #include "PlayerComponent.h"
 
 class Mice : public UpdatableComponent

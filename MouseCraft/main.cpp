@@ -31,8 +31,8 @@
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
 #include "Loading/PrefabLoader.h"
-
-#define GLEW_STATIC
+#include "GameManager.h"
+#include "ContraptionSystem.h"
 
 SoundManager* noise;
 
@@ -171,6 +171,13 @@ void Test_Rendering()
 
 	// adjustments made in PlayerComponent 
 
+	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
+	c_gamemanager->AddMouse(c_p1_mice);
+	c_gamemanager->SetCat(c_p2_Cat);
+
+	auto e_gm = EntityManager::Instance().Create();
+	e_gm->AddComponent(c_gamemanager);
+
 	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
 
 	// add the entities 
@@ -180,6 +187,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+	OmegaEngine::Instance().AddEntity(e_gm);
 
 	// prefabs 
 
@@ -188,6 +196,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 

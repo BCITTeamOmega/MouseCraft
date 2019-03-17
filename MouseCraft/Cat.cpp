@@ -76,7 +76,7 @@ void Cat::OnCollision(PhysicsComponent * pc)
 	
 }
 
-void Cat::OnHit(PhysicsComponent* e)
+void Cat::OnHit(PhysicsComponent* other)
 {
 
 }
