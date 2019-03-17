@@ -86,12 +86,12 @@ void Test_Rendering()
 	Entity* e3 = EntityManager::Instance().Create();
 	Entity* floorEntity = EntityManager::Instance().Create();
 
-	e1->transform.setLocalPosition(glm::vec3(-2.0, 0, -2.5));
-	e2->transform.setLocalPosition(glm::vec3(3.5, 0, -3.0));
-	e3->transform.setLocalPosition(glm::vec3(0, 10, 5));
-	e3->transform.setLocalRotation(glm::vec3(-1.0f, 0, 0));
+	e1->transform.setLocalPosition(glm::vec3(60, 0, 55));
+	e2->transform.setLocalPosition(glm::vec3(50, 0, 50));
+	e3->transform.setLocalPosition(glm::vec3(50, 30, 55));
+	e3->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
 
-	floorEntity->transform.setLocalPosition(glm::vec3(0, 0, 0));
+	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
 	e1->AddComponent(rc);
 	e2->AddComponent(rc2);
@@ -155,14 +155,14 @@ void Test_Rendering()
 	PhysicsManager::instance()->setupGrid(100, 100);
 
 	// component_player1_physics 
-	auto c_p1_physics = PhysicsManager::instance()->createObject(10, 10, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
+	auto c_p1_physics = PhysicsManager::instance()->createObject(60, 55, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
 
 	// add to mouse entity
 	e1->AddComponent(c_p1_physics);
 
 	// component_player2_physics 
 
-	auto c_p2_physics = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::CAT_DOWN);
+	auto c_p2_physics = PhysicsManager::instance()->createObject(50, 50, 1, 1, 0, PhysObjectType::CAT_DOWN);
 
 	// add to cat entity
 	e2->AddComponent(c_p2_physics);
@@ -182,6 +182,7 @@ void Test_Rendering()
 	// prefabs 
 
 	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	p_pot->transform.setLocalPosition(glm::vec3(50, 0, 50));
 	OmegaEngine::Instance().AddEntity(p_pot);
 
 	OmegaEngine::Instance().AddSystem(rs);
@@ -452,7 +453,7 @@ void Test_Transform()
 
 int main(int argc, char* argv[]) 
 {
-	Test_Transform();
+	//Test_Transform();
 
     //adding sound system
     noise = new SoundManager();
