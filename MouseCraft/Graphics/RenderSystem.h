@@ -19,6 +19,9 @@ class RenderSystem : public System {
 public:
 	RenderSystem();
 	~RenderSystem();
+	void initVertexBuffers();
+	void initTextures();
+	void initRenderBuffers();
 	void setWindow(Window* window);
 	void Update(float dt) override;
 	void swapLists();
@@ -28,7 +31,10 @@ private:
 	void setShader(Shader& s);
 	void clearShader();
 	void accumulateList();
-	void setOutBuffers(std::vector<GLTexture*>& buffers);
+	void clearBuffers();
+	void renderScene();
+	void gBufferPass();
+	void lightingPass();
 	glm::vec3 convertColor(Color c);
 
 	Window* _window;
