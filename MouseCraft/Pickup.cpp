@@ -22,5 +22,7 @@ void Pickup::Grab()
 
 void Pickup::Drop()
 {
+	auto pos = GetEntity()->transform.getLocalPosition();
+	_physics->moveBody(new Vector2D(pos.x, pos.z), 0);
 	_physics->SetEnabled(true);
 }
