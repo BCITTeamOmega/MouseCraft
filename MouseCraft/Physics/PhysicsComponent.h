@@ -12,6 +12,7 @@ class PhysicsComponent : public Component
 public:
 	PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float vX = 0, float vY = 0);
 	~PhysicsComponent();
+	void moveBody(Vector2D* pos, float angle);
 	std::vector<PhysicsComponent*> areaCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 

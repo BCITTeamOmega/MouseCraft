@@ -15,6 +15,7 @@
 #include "AreaQueryCallback.h"
 #include "RayQueryCallback.h"
 #include "../Util/CpuProfiler.h"
+#include "../WorldGrid.h"
 
 #pragma region Awful macros
 constexpr auto FALL_VELOCITY = 10;
@@ -57,8 +58,10 @@ public:
 	static PhysicsManager* instance();
 	static void destroy();
 	void Update(float dt);
+	void setupGrid(int w, int h);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
+	PhysicsComponent* createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t);
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2);
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2);
@@ -68,6 +71,7 @@ private:
 	CpuProfiler profiler;
 	b2World *world;
 	CContactListener *cListener;
+	WorldGrid* grid;
 
 	PhysicsManager();
 	~PhysicsManager();
