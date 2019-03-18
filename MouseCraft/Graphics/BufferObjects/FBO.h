@@ -37,16 +37,17 @@ public:
 	void unbind();
 
 	/// <summary>
-	/// 
+	/// Attach a texture to the FBO on the specified attachment
+	/// This doesn't call glDrawElements
 	/// </summary>
-	/// <param name="attachment"></param>
-	/// <param name="texture"></param>
+	/// <param name="attachment">The attachment to attach the texture to</param>
+	/// <param name="texture">The texture to add</param>
 	void buffer(GLuint attachment, GLTexture& texture);
 
 	/// <summary>
-	/// 
+	/// Get the ID assigned by OpenGL for the FBO
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>The ID of the FBO</returns>
 	GLuint getID();
 private:
 	/// <summary>
