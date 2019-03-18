@@ -5,10 +5,11 @@
 #include "SoundParams.h"
 #include "TrackParams.h"
 #include <unordered_map>
+#include "../Core/System.h"
 #define MAX_SOUND_BUFFERS 5
 
 //actual Manager class, is an ISubScriber to use the event system
-class SoundManager : public ISubscriber {
+class SoundManager : public ISubscriber, public System {
 public:
     //constructor
 	SoundManager();
@@ -45,4 +46,7 @@ private:
     //Song and Sound Effect storage so we don't need to I/O everytime we want them.
     std::unordered_map<TrackList, AudioData> Music;
     std::unordered_map<SoundsList, AudioData> SoundEffects;
+
+    // Inherited via System
+    virtual void Update(float dt) override;
 };

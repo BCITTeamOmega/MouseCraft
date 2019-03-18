@@ -127,6 +127,11 @@ void Cat::Jump() {
         //Jump code
         std::cout << "Cat has jumped." << std::endl;
         GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+
+        GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
+        auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
+        GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x,pos.y,pos.z); //play sound
+        
         isJumping = true;
         return;
     }
