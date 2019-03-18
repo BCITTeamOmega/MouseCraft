@@ -26,7 +26,7 @@ public:
 
 protected:
 	Scene* _myScene;	// which scene this entity is in. null if not assigned.
-
+	
 private:
 	static unsigned int _curID;
 	unsigned int _id = 0;
@@ -68,6 +68,9 @@ public:
 	// on this entity and it's children. Moving the parent (even if not static) will not move this entity.
 	// ONLY call when you're done configuring it.
 	void SetStatic(bool torf);
+
+	// Alias to get transform
+	inline Transform& t() { return transform; } 
 
 	// Returns the parent entity. Can be null.
 	Entity* GetParent() const;

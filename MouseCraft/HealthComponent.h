@@ -6,9 +6,17 @@
 #include "Core/Entity.h"
 #include "Event/Subject.h"
 
+#include "json.hpp"
+using json = nlohmann::json;
+
 class HealthComponent : public Component, public ISubscriber
 {
 public:
+	HealthComponent()
+	{
+
+	}
+
 	virtual void OnInitialized()
 	{
 		EventManager::Subscribe(HEALTH_CHANGE, this);
@@ -53,4 +61,5 @@ private:
 			}
 		}
 	}
+
 };

@@ -4,14 +4,14 @@
 3. [Creating an Updatable (Systemless) Component](#Creating-an-updatable-component)
 
 For full details on each classes functionality, checkout the header file (or hover over the function in VS):
-- [Entity.h](Core/Entity.h)
-- [Component.h](Core/Component.h)
-- [UpdatableComponent.h](Core/UpdatableComponent.h)
-- [System.h](Core/System.h)
-- [Scene.h](Core/Scene.h)
-- [ComponentManager.h](Core/ComponentManager.h)
-- [Entitymanager.h](Core/Entitymanager.h)
-- [OmegaEngine.h](Core/OmegaEngine.h)
+- [Entity.h](../Core/Entity.h)
+- [Component.h](../Core/Component.h)
+- [UpdatableComponent.h](../Core/UpdatableComponent.h)
+- [System.h](../Core/System.h)
+- [Scene.h](../Core/Scene.h)
+- [ComponentManager.h](../Core/ComponentManager.h)
+- [Entitymanager.h](../Core/Entitymanager.h)
+- [OmegaEngine.h](../Core/OmegaEngine.h)
 
 ## Quick Start
 ```c++
