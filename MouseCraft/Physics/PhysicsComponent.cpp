@@ -14,12 +14,17 @@ PhysicsComponent::~PhysicsComponent()
 	body->GetWorld()->DestroyBody(body);
 }
 
-bool PhysicsComponent::areaCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+void PhysicsComponent::moveBody(Vector2D* pos, float angle)
 {
-	return PhysicsManager::instance()->areaCheck(this, toCheck, p1, p2, triggerHit);
+	body->SetTransform(b2Vec2(pos->x, pos->y), angle);
 }
 
-Vector2D* PhysicsComponent::rayCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+std::vector<PhysicsComponent*> PhysicsComponent::areaCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
-	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, triggerHit);
+	return PhysicsManager::instance()->areaCheck(this, toCheck, p1, p2);
+}
+
+PhysicsComponent* PhysicsComponent::rayCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+{
+	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2);
 }

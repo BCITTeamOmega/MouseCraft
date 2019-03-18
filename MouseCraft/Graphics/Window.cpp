@@ -24,9 +24,11 @@ Window::Window(string title, int width, int height) : _width(width), _height(hei
 	SDL_SetMainReady();
 	RenderUtil::sdlErrorOnNotSuccess(SDL_Init(SDL_INIT_VIDEO), "Initialization", 0);
 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, glMajorVer);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, glMinorVer);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, glDepthBufferSize);
+	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
 	SDL_GL_SetSwapInterval(1);
 
 	_sdlWindow = SDL_CreateWindow(cTitle, x, y, width, height, SDL_WINDOW_OPENGL);

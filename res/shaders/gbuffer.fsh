@@ -1,17 +1,18 @@
 #version 330 core
-out vec4 result;
+layout(location = 0) out vec4 albedo;
+layout(location = 1) out vec4 normal;
+layout(location = 2) out vec4 position;
 uniform vec3 color;
 
 in vec3 fragNormal;
 in vec2 fragTexCoord;
+in vec3 fragPos;
 
 uniform sampler2D texture0;
 
-const vec3 sunDirection = vec3(0.5773502691896258, -0.7071067811865475, -0.4082482904638631);
-const vec4 shadowedColor = vec4(0.2f, 0.3f, 0.45f, 1.0f);
-
 void main()
 {
-    //result = vec4(fragNormal, 1.0f);
-    result = mix(shadowedColor, vec4(1.0f, 1.0f, 1.0f, 1.0f), max(0.0f, -dot(fragNormal, sunDirection))) * vec4(color, 1.0f) * texture(texture0, fragTexCoord);
+    albedo = vec4(color, 1.0f) * texture(texture0, fragTexCoord);
+    normal = vec4(normalize(fragNormal), 1.0f);
+    position = vec4(fragPos, 1.0f);
 }
