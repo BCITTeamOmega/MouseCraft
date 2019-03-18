@@ -40,9 +40,6 @@
     <Filter Include="Header Files\Loading">
       <UniqueIdentifier>{5c0f7c31-531f-4033-a0e4-ba1deeb74c9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading">
-      <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{1533a3d5-613b-4ab4-84bf-6af19359b026}</UniqueIdentifier>
     </Filter>
@@ -97,6 +94,9 @@
     <Filter Include="Source Files\Contraptions">
       <UniqueIdentifier>{40655de4-e5a8-47f6-89b9-3f8ce105b862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI\Loading">
+      <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -127,16 +127,16 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Loading\SimpleParser.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ObjFileParser.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ModelLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\TextLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -247,7 +247,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ImageLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
@@ -310,7 +310,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loading\PrefabLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
