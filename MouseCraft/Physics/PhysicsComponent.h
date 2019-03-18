@@ -9,14 +9,14 @@
 class PhysicsComponent : public Component
 {
 public:
-	PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float vX = 0, float vY = 0);
+	PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float w, float h);
 	~PhysicsComponent();
 	void moveBody(Vector2D* pos, float angle);
 	std::vector<PhysicsComponent*> areaCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 
 	Vector2D velocity;
-	float zPos, rotation;
+	float zPos, rotation, width, height;
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 	PhysObjectType::PhysObjectType type;

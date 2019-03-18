@@ -81,18 +81,6 @@ void Cat::OnHit(PhysicsComponent* e)
 
 }
 
-//this function will call the physics/map system to determine if we're at a jump location (floor -> platform)
-bool Cat::canJump()
-{
-    //something something colt physics stuff
-
-    //temp
-    return true;
-    //int i = rand() % 2;
-    //
-    //return i == 1 ? true : false;
-}
-
 //check if we are doing something, then attack
 void Cat::Attack()
 {
@@ -122,17 +110,36 @@ void Cat::Jump() {
     if (isAttacking || isJumping || isPouncing) {
         return;
     }
-    //check if we are in a location we can jump in
-    if (canJump()) {
-        //Jump code
-        std::cout << "Cat has jumped." << std::endl;
-        GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
-        isJumping = true;
-        return;
-    }
+
+	PhysicsComponent* jumpTarget = canJump();
+
+	//check if we are in a location we can jump in
+	if (jumpTarget != nullptr) {
+		//Jump code
+		std::cout << "Cat has jumped." << std::endl;
+		GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+		isJumping = true;
+		return;
+	}
+
     //pounce code
     std::cout << "Cat has pounced." << std::endl;
     isPouncing = true;
+}
+
+PhysicsComponent* Cat::canJump()
+{
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+	Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
+	Vector2D* forward = new Vector2D(GetEntity()->transform.getLocalForward().x, GetEntity()->transform.getLocalForward().z);
+
+	if (pComp != nullptr)
+	{
+		std::vector<PhysObjectType::PhysObjectType> types;
+		types.push_back(PhysObjectType::PLATFORM);
+
+		PhysicsComponent* hit = pComp->rayCheck(types, 
+	}
 }
 
 // track the time since we launched the jump animation, and reset when finished
