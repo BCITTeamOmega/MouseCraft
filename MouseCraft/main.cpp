@@ -125,6 +125,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+    c_p1_health->SetHealth(2);
 	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
