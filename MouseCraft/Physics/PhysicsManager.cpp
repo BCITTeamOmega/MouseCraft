@@ -20,6 +20,7 @@ PhysicsManager::~PhysicsManager()
 {
 	delete(cListener);
 	delete(world);
+	delete(grid);
 }
 
 PhysicsManager* PhysicsManager::instance()
@@ -122,6 +123,11 @@ void PhysicsManager::Update(float dt)
 	profiler.FrameFinish();
 }
 
+void PhysicsManager::setupGrid(int w, int h)
+{
+	grid = new WorldGrid(w, h);
+}
+
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
 	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t,0,r);
@@ -191,29 +197,12 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;
-	case PhysObjectType::OBSTACLE_UP:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
-		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
-		physicsComp->isUp = true;
-		physicsComp->zPos = Z_UPPER;
-		break;
-	case PhysObjectType::OBSTACLE_DOWN:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
-		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
-		physicsComp->isUp = false;
-		physicsComp->zPos = Z_LOWER;
-		break;
-	case PhysObjectType::PLATFORM:
-		bodyDef.type = b2_staticBody;
-		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
-		fixtureDef.filter.maskBits = PLATFORM_MASK;
-		break;
 	case PhysObjectType::WALL:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
 		fixtureDef.filter.maskBits = WALL_MASK;
+	default:
+		return nullptr; //if they input something that needs a grid
 	}
 
 	body = world->CreateBody(&bodyDef);
@@ -224,8 +213,100 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 	body->SetUserData(physicsComp);
 
 	return physicsComp;
+}
 
-	//NOTE: there is a bullet setting for projectiles that move exceptionally fast
+//For this function the position should be the top left corner
+PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t)
+{
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0);
+
+	b2BodyDef bodyDef;
+	bodyDef.position.Set(x + (w / 2), y - (h / 2)); 
+	bodyDef.active = false;	//wait for component to be active (valid state)
+
+	b2Body* body;
+
+	b2PolygonShape shape;
+	shape.SetAsBox(w, h);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.density = 1;
+	fixtureDef.userData = physicsComp;
+
+	Vector2D *p1, *p2;
+
+	switch (t)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
+		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+
+		p1 = new Vector2D(x, y);
+		p2 = new Vector2D(x + w, y - h);
+
+		if (!grid->addArea(p1, p2, t))
+			return nullptr;
+		break;
+	case PhysObjectType::OBSTACLE_DOWN:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+
+		p1 = new Vector2D(x, y);
+		p2 = new Vector2D(x + w, y - h);
+
+		if (!grid->addArea(p1, p2, t))
+			return nullptr;
+		break;
+	case PhysObjectType::PLATFORM:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
+		fixtureDef.filter.maskBits = PLATFORM_MASK;
+
+		p1 = new Vector2D(x, y);
+		p2 = new Vector2D(x + w, y - h);
+
+		if (!grid->addArea(p1, p2, t))
+			return nullptr;
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = CONTRAPTION_UP_CATEGORY;
+		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
+		physicsComp->isUp = true;
+		physicsComp->zPos = Z_UPPER;
+		
+		if (!grid->addObject(x, y, t))
+			return nullptr;
+		break;
+	case PhysObjectType::CONTRAPTION_DOWN:
+		bodyDef.type = b2_kinematicBody;
+		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+
+		if (!grid->addObject(x, y, t))
+			return nullptr;
+		break;
+	default:
+		return nullptr; //if the input something that does use the grid
+	}
+
+	body = world->CreateBody(&bodyDef);
+	body->CreateFixture(&fixtureDef);
+
+	physicsComp->body = body;
+
+	body->SetUserData(physicsComp);
+
+	return physicsComp;
 }
 
 //Move each physics object up or down based on gravity and jumping
@@ -375,9 +456,10 @@ void PhysicsManager::checkCollisions()
 	cListener->resetCollided();
 }
 
-bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+//returns a list of the objects hit
+std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
-	bool objFound = false;
+	std::vector<PhysicsComponent*> foundObjects;
 
 	AreaQueryCallback callback;
 
@@ -391,29 +473,14 @@ bool PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObje
 	{
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
 
-		for (int j = 0; j < toCheck.size(); j++)
-		{
-			if (pComp->type == toCheck[j])
-			{
-				if (triggerHit)
-				{
-					pComp->onHit.Notify(checkedBy);
-					objFound = true;
-					break;
-				}
-				else
-				{
-					return true;
-				}
-			}
-		}
+		foundObjects.push_back(pComp);
 	}
 
-	return objFound;
+	return foundObjects;
 }
 
-//returns whether it hit something or not
-Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, bool triggerHit)
+//returns the first object hit
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -424,6 +491,7 @@ Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<Phys
 
 	world->RayCast(&callback, point1, point2);
 
+	//Find the closest object hit by the ray
 	for (int i = 0; i < callback.hitBodies.size(); i++)
 	{
 		//if the object is further than the best match so far, move on
@@ -443,15 +511,7 @@ Vector2D* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<Phys
 	}
 
 	if (bestMatch == nullptr)
-	{
 		return nullptr;
-	}
 	else
-	{
-		if(triggerHit)
-			bestMatch->onHit.Notify(checkedBy);
-
-		b2Vec2 pos = bestMatch->body->GetPosition();
-		return new Vector2D(pos.x, pos.y);
-	}
+		return bestMatch;
 }

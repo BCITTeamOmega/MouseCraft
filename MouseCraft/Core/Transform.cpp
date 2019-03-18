@@ -7,7 +7,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-glm::vec3 Transform::getLocalPosition()
+glm::vec3 Transform::getLocalPosition() const
 {
 	return _localPosition;
 }
@@ -17,7 +17,7 @@ void Transform::setLocalPosition(glm::vec3 position)
 	_localPosition = position;
 }
 
-glm::vec3 Transform::getLocalRotoation()
+glm::vec3 Transform::getLocalRotation() const
 {
 	return _localRotation;
 }
@@ -27,7 +27,7 @@ void Transform::setLocalRotation(glm::vec3 rotation)
 	_localRotation = rotation;
 }
 
-glm::vec3 Transform::getLocalScale()
+glm::vec3 Transform::getLocalScale() const
 {
 	return _localScale;
 }
@@ -37,7 +37,7 @@ void Transform::setLocalScale(glm::vec3 scale)
 	_localScale = scale;
 }
 
-glm::vec3 Transform::getWorldPosition()
+glm::vec3 Transform::getWorldPosition() const
 {
 	return glm::vec3(
 		_worldTransformation[3][0],
@@ -61,33 +61,87 @@ void Transform::scale(float amount)
 void Transform::rotate(glm::vec3 amount)
 {
 	if (amount == glm::vec3()) return;
-	setLocalRotation(getLocalRotoation() + amount);
+	setLocalRotation(getLocalRotation() + amount);
 }
 
 // WARNING: Entity::getWorldRotation() should be more performant (at the cost of memory locality?)
-glm::vec3 Transform::getWorldRotation()
+glm::vec3 Transform::getWorldRotation() const
 {
-	// https://gamedev.stackexchange.com/questions/50963/how-to-extract-euler-angles-from-transformation-matrix
-	std::cerr << "ERROR: Transform::getWorldRotation() is not implemented yet!" << std::endl;
-	return glm::vec3();
+	float y, x, z;
+	glm::extractEulerAngleYXZ(_worldTransformation, y, x, z);
+	return glm::vec3(x,y,z);
 }
 
 // WARNING: UNTESTED.
-glm::vec3 Transform::getWorldScale()
+glm::vec3 Transform::getWorldScale() const
 {
 	return glm::vec3(
-		_worldTransformation[0].length(),
-		_worldTransformation[1].length(),
-		_worldTransformation[2].length()
+		glm::length(glm::vec3(_worldTransformation[0])),
+		glm::length(glm::vec3(_worldTransformation[1])),
+		glm::length(glm::vec3(_worldTransformation[2]))
 	);
 }
 
-glm::mat4 Transform::getLocalTransformation()
+glm::vec3 Transform::getLocalForward() const
+{
+	return glm::normalize(glm::vec3(
+		_localTransformation[2][0],
+		_localTransformation[2][1],
+		_localTransformation[2][2]
+	));
+}
+
+glm::vec3 Transform::getLocalRight() const
+{
+	return glm::normalize(glm::vec3(
+		_localTransformation[0][0],
+		_localTransformation[0][1],
+		_localTransformation[0][2]
+	));
+}
+
+glm::vec3 Transform::getLocalUp() const
+{
+	return glm::normalize(glm::vec3(
+		_localTransformation[1][0],
+		_localTransformation[1][1],
+		_localTransformation[1][2]
+	));
+}
+
+glm::vec3 Transform::getWorldForward() const
+{
+	return glm::normalize(glm::vec3(
+		_worldTransformation[2][0],
+		_worldTransformation[2][1],
+		_worldTransformation[2][2]
+	));
+}
+
+glm::vec3 Transform::getWorldRight() const
+{
+	return glm::normalize(glm::vec3(
+		_worldTransformation[0][0],
+		_worldTransformation[0][1],
+		_worldTransformation[0][2]
+	));
+}
+
+glm::vec3 Transform::getWorldUp() const
+{
+	return glm::normalize(glm::vec3(
+		_worldTransformation[1][0],
+		_worldTransformation[1][1],
+		_worldTransformation[1][2]
+	));
+}
+
+glm::mat4 Transform::getLocalTransformation() const
 {
 	return _localTransformation;
 }
 
-glm::mat4 Transform::getWorldTransformation()
+glm::mat4 Transform::getWorldTransformation() const
 {
 	return _worldTransformation;
 }

@@ -215,8 +215,10 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Loading\PrefabLoader.cpp" />
     <ClCompile Include="Swords.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
+    <ClCompile Include="TestPrefab.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
@@ -227,6 +229,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\TextComponent.cpp" />
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="WorldGrid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
@@ -261,6 +264,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Graphics\RenderSystem.h" />
@@ -298,6 +302,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Physics\PhysicsComponent.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Physics\PhysObjectType.h" />
+    <ClInclude Include="Loading\PrefabLoader.h" />
     <ClInclude Include="Physics\RayQueryCallback.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Pickup.h" />
@@ -306,6 +311,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Swords.h" />
     <ClInclude Include="PlayerComponent.h" />
+    <ClInclude Include="TestPrefab.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
@@ -319,6 +325,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="WorldGrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

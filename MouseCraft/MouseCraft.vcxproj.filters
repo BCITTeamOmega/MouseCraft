@@ -306,7 +306,16 @@
     <ClCompile Include="ContraptionFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestPrefab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading\PrefabLoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
+      <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
@@ -581,7 +590,19 @@
     <ClInclude Include="Physics\AreaQueryCallback.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPrefab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\PrefabLoader.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
     <ClInclude Include="Event\Handler.h">
+      <Filter>Header Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">

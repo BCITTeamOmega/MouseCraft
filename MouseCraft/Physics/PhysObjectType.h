@@ -3,6 +3,7 @@ namespace PhysObjectType
 {
 	enum PhysObjectType
 	{
+		NOTHING,
 		PART,
 		CONTRAPTION_UP,
 		CONTRAPTION_DOWN,
