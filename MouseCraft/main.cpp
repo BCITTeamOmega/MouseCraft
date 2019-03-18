@@ -406,6 +406,8 @@ void Test_ObserverPattern()
 
 void Test_Transform()
 {
+	// OH NO THIS IS FOR LHS
+
 	// create some entities 
 	auto e_base = EntityManager::Instance().Create();
 	auto e_right = EntityManager::Instance().Create();
@@ -463,7 +465,7 @@ void Test_Transform()
 
 int main(int argc, char* argv[]) 
 {
-	Test_Transform();
+	//Test_Transform();
 
     //adding sound system
     noise = new SoundManager();

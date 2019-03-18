@@ -128,7 +128,7 @@ void Mice::addItem(Pickup* item) {
 void Mice::dropItem() {
 	
 	if (baseItem != nullptr) {
-		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * -5.0f;	// drop in front of mice
+		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of mice
 		auto e = baseItem->GetEntity();
 		e->SetParent(OmegaEngine::Instance().GetRoot(), true);	// forced (instant and unmanaged)	
 		e->transform.setLocalPosition(dropPos);
