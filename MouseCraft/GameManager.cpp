@@ -54,9 +54,12 @@ void GameManager::GameOver(GameOverParams winner)
 	std::cout << "GAMEOVER! THE WINNER IS: " << winner << std::endl;
 
 	// disable all players 
-	for (auto m : mice) m->SetEnabled(false);
-	cat->SetEnabled(false);
-		
+	for (auto m : mice)
+	{
+		m->GetEntity()->SetEnabled(false);
+	}
+	cat->GetEntity()->SetEnabled(false);
+
 	// notify any interested parties 
 	EventManager::Notify(EventName::GAMEOVER, new TypeParam<GameOverParams>(winner));
 }

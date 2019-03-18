@@ -11,6 +11,8 @@ public:
 	void show() override;
 
 private:
-	float const range = 10.0;
+	float const BULLET_LIFETIME = 2.0f;
+	float const BULLET_SPEED = 25.0f;
+	float const BULLET_SIZE = 1.0f;	// chonk for testing
 };
 
