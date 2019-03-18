@@ -1,6 +1,9 @@
 #include "Transform.h"
 #include <iostream>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #define GLM_ENABLE_EXPERIMENTAL	// I have no idea why we can't put this in main
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -84,7 +87,7 @@ glm::vec3 Transform::getWorldScale() const
 
 glm::vec3 Transform::getLocalForward() const
 {
-	return glm::normalize(glm::vec3(
+	return -glm::normalize(glm::vec3(
 		_localTransformation[2][0],
 		_localTransformation[2][1],
 		_localTransformation[2][2]
@@ -111,7 +114,7 @@ glm::vec3 Transform::getLocalUp() const
 
 glm::vec3 Transform::getWorldForward() const
 {
-	return glm::normalize(glm::vec3(
+	return -glm::normalize(glm::vec3(
 		_worldTransformation[2][0],
 		_worldTransformation[2][1],
 		_worldTransformation[2][2]
@@ -144,6 +147,20 @@ glm::mat4 Transform::getLocalTransformation() const
 glm::mat4 Transform::getWorldTransformation() const
 {
 	return _worldTransformation;
+}
+
+void Transform::face2D(glm::vec2 dir)
+{
+	auto rotation = glm::atan(dir.x / dir.y);
+	if (dir.y > 0) 
+		rotation -= M_PI;
+	setLocalRotation(glm::vec3(0, rotation, 0));
+
+}
+
+void Transform::face2D(glm::vec3 dir)
+{
+	face2D(glm::vec2(dir.x, dir.z));
 }
 
 void Transform::computeLocalTransformation()
