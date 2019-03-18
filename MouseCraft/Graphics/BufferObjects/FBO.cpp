@@ -30,6 +30,7 @@ void FBO::attachBuffers(std::vector<GLTexture*>& buffers) {
 		b->setImage(*img, false, GL_RGBA16F, GL_FLOAT);
 		GLuint attachment = GL_COLOR_ATTACHMENT0 + i;
 		attachments.push_back(attachment);
+		// Calls internal function to attach buffer
 		buffer(attachment, *b);
 	}
 	bind();
