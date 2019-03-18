@@ -312,6 +312,9 @@
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sound\SoundComponent.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -583,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundComponent.h">
+      <Filter>Header Files\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
