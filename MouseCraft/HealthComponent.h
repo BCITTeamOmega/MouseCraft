@@ -45,7 +45,7 @@ public:
 			return;
 		}
 
-		if ((_health -= dmg) < 0)
+		if ((_health -= dmg) <= 0)
 		{
 			_health = 0;
 			OnDeath.Notify();

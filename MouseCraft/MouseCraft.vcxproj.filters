@@ -327,6 +327,12 @@
     <ClCompile Include="ContraptionSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DamageOnCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimedDestruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -618,6 +624,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContraptionSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageOnCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimedDestruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
