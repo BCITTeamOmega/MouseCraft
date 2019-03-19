@@ -318,6 +318,9 @@
     <ClCompile Include="WorldGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sound\SoundComponent.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
@@ -604,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="WorldGrid.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundComponent.h">
+      <Filter>Header Files\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
