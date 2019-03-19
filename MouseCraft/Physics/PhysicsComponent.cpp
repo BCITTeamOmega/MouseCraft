@@ -26,7 +26,7 @@ std::vector<PhysicsComponent*> PhysicsComponent::areaCheck(std::set<PhysObjectTy
 	return PhysicsManager::instance()->areaCheck(this, toCheck, p1, p2);
 }
 
-PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit)
 {
-	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2);
+	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }

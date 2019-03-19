@@ -97,13 +97,13 @@ void Cat::Attack()
     std::set<PhysObjectType::PhysObjectType> targets;
     if (ourPhys->isUp) {
         //generate check type
-            targets = std::set<PhysObjectType::PhysObjectType>{
+        targets = std::set<PhysObjectType::PhysObjectType>{
             //PhysObjectType::OBSTACLE_UP,
             PhysObjectType::MOUSE_UP
         };
     } else {
         //generate check type
-            targets = std::set<PhysObjectType::PhysObjectType>{
+        targets = std::set<PhysObjectType::PhysObjectType>{
            // PhysObjectType::OBSTACLE_DOWN,
             PhysObjectType::MOUSE_DOWN
         };
@@ -158,12 +158,13 @@ void Cat::Jump() {
 		//vector in front of cat of length = JUMP_DIST
 		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
 
-		std::vector<PhysObjectType::PhysObjectType> types;
-		types.push_back(PhysObjectType::PLATFORM);
+		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+			PhysObjectType::PLATFORM
+		};
 
-		//Vector2D* 
+		Vector2D* hitPos = new Vector2D(0, 0);
 
-		PhysicsComponent* jumpTarget = pComp->rayCheck(types);
+		PhysicsComponent* jumpTarget =  pComp->rayCheck(types, curPos, jumpVec, *hitPos);
 
 		//check if we are in a location we can jump in
 		if (jumpTarget != nullptr) {

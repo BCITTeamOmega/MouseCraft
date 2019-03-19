@@ -3,11 +3,13 @@
 //Make sure scale divides into both the width and height otherwise the grid won't be as big as you intend
 WorldGrid::WorldGrid(int w, int h, int scale)
 {
-	grid = std::vector<std::vector<PhysObjectType::PhysObjectType>>(w / scale);
+	int gridW = w / scale;
+	int gridH = h / scale;
+	grid = std::vector<std::vector<PhysObjectType::PhysObjectType>>(gridW);
 
 	//Their default values should be NOTHING since it's at index 0 of the enum (I think)
-	for (int i = 0; i < w; i++)
-		grid[i] = std::vector<PhysObjectType::PhysObjectType>(h / scale);
+	for (int i = 0; i < gridW; i++)
+		grid[i] = std::vector<PhysObjectType::PhysObjectType>(gridH);
 }
 
 WorldGrid::~WorldGrid()

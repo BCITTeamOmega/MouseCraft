@@ -131,7 +131,7 @@ void PhysicsManager::setupGrid(int w, int h, int scale)
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t,0,r);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, r, w, h);
 
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
@@ -219,7 +219,7 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 //For this function the position should be the top left corner
 PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0, w, h);
 
 	b2BodyDef bodyDef;
 	bodyDef.active = false;	//wait for component to be active (valid state)
@@ -501,7 +501,7 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 }
 
 //returns the first object hit
-PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2)
+PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2, Vector2D& hit)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -528,7 +528,7 @@ PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector
 }
 
 //returns the first object hit
-PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -555,5 +555,13 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 		}
 	}
 
+	if (bestMatch == nullptr)
+		return nullptr;
+
+	b2Vec2 ray = point2 - point1;
+	ray *= frac;
+	ray = point1 + ray;
+
+	hit = Vector2D(ray.x, ray.y);
 	return bestMatch;
 }
