@@ -32,6 +32,8 @@
 #include "HealthComponent.h"
 #include "Sound/SoundComponent.h"
 #include "Loading/PrefabLoader.h"
+#include "GameManager.h"
+#include "ContraptionSystem.h"
 
 
 SoundManager* noise;
@@ -174,6 +176,13 @@ void Test_Rendering()
 
 	// adjustments made in PlayerComponent 
 
+	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
+	c_gamemanager->AddMouse(c_p1_mice);
+	c_gamemanager->SetCat(c_p2_Cat);
+
+	auto e_gm = EntityManager::Instance().Create();
+	e_gm->AddComponent(c_gamemanager);
+
 	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
 
 	// add the entities 
@@ -183,6 +192,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+	OmegaEngine::Instance().AddEntity(e_gm);
 
 	// prefabs 
 
@@ -191,6 +201,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 
@@ -400,6 +411,8 @@ void Test_ObserverPattern()
 
 void Test_Transform()
 {
+	// OH NO THIS IS FOR LHS
+
 	// create some entities 
 	auto e_base = EntityManager::Instance().Create();
 	auto e_right = EntityManager::Instance().Create();
@@ -457,7 +470,7 @@ void Test_Transform()
 
 int main(int argc, char* argv[]) 
 {
-	Test_Transform();
+	//Test_Transform();
 
     //adding sound system
     noise = new SoundManager();

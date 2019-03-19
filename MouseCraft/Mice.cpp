@@ -1,7 +1,5 @@
 #include "Mice.h"
 
-#include "HealthComponent.h"
-
 Mice::Mice() : 
 	HandleOnCollide(this, &Mice::OnCollision),
 	HandleOnDeath(this, &Mice::OnDeath),
@@ -117,7 +115,12 @@ void Mice::addItem(Pickup* item) {
 	else if (baseItem != nullptr && newItem == nullptr) {
 		std::cout << "Mouse will combine the " << baseItem << " and the " << item << std::endl;
 		combine(item);
+		
+		// destroy pickups
+		// baseItem destroyed in combine 
 		item->GetEntity()->Destroy();
+
+
 	}
 	else return;
 }
@@ -125,10 +128,10 @@ void Mice::addItem(Pickup* item) {
 void Mice::dropItem() {
 	
 	if (baseItem != nullptr) {
+		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of mice
 		auto e = baseItem->GetEntity();
-		e->SetParent(OmegaEngine::Instance().GetRoot());
-		e->transform.setLocalPosition(e->transform.getWorldPosition());
-
+		e->SetParent(OmegaEngine::Instance().GetRoot(), true);	// forced (instant and unmanaged)	
+		e->transform.setLocalPosition(dropPos);
 		baseItem->Drop();
 		baseItem = nullptr;
 	}
@@ -144,10 +147,12 @@ void Mice::dropItem() {
 }
 
 void Mice::use(Contraption* item) {
-	item->use();
-	// todo: determine if the contraption should be destroyed (ie. screw swords).
-	item->GetEntity()->Destroy();
-	newItem = nullptr;
+	
+	if (item->use())
+	{
+		// todo: this syntax is kinda weird. should pass reference to pointer or just use newItem directly
+		newItem = nullptr;	
+	}
 }
 
 void Mice::combine(Pickup *material) {

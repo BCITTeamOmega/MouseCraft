@@ -7,7 +7,7 @@ public:
 	Overcharge();
 	~Overcharge();
 
-	void use() override;
+	bool use() override;
 	void show() override;
 };
 

@@ -3,8 +3,9 @@
 #include "Core/Component.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "./Physics/PhysicsComponent.h"
+#include "Event/Handler.h"
 
-class Pickup : public Component, public Observer<PhysicsComponent*>
+class Pickup : public Component
 {
 // functions 
 public:
@@ -19,5 +20,6 @@ public:
 public:
 	PICKUPS type;
 private:
+	PhysicsComponent* _physics;
 };
 
