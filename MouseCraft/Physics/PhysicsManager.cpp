@@ -359,17 +359,17 @@ void PhysicsManager::updateHeights(float step)
 					case PhysObjectType::MOUSE_DOWN:
 						comp->type = PhysObjectType::MOUSE_UP;
 						filter.categoryBits = MOUSE_UP_CATEGORY;
-						filter.maskBits = MOUSE_UP_CATEGORY;
+						filter.maskBits = MOUSE_UP_MASK;
 						break;
 					case PhysObjectType::CAT_DOWN:
 						comp->type = PhysObjectType::CAT_UP;
 						filter.categoryBits = CAT_UP_CATEGORY;
-						filter.maskBits = CAT_UP_CATEGORY;
+						filter.maskBits = CAT_UP_MASK;
 						break;
 					case PhysObjectType::OBSTACLE_DOWN:
 						comp->type = PhysObjectType::OBSTACLE_UP;
 						filter.categoryBits = OBSTACLE_UP_CATEGORY;
-						filter.maskBits = OBSTACLE_UP_CATEGORY;
+						filter.maskBits = OBSTACLE_UP_MASK;
 						break;
 					default:
 						break; //you goofed
@@ -386,7 +386,7 @@ void PhysicsManager::updateHeights(float step)
 			{
 				//The object is in the upper half
 				//Has it reached the threshold yet?
-				comp->isUp == false;
+				comp->isUp = false;
 
 				b2Filter filter;
 
@@ -395,17 +395,17 @@ void PhysicsManager::updateHeights(float step)
 					case PhysObjectType::MOUSE_UP:
 						comp->type = PhysObjectType::MOUSE_DOWN;
 						filter.categoryBits = MOUSE_DOWN_CATEGORY;
-						filter.maskBits = MOUSE_DOWN_CATEGORY;
+						filter.maskBits = MOUSE_DOWN_MASK;
 						break;
 					case PhysObjectType::CAT_UP:
 						comp->type = PhysObjectType::CAT_DOWN;
 						filter.categoryBits = CAT_DOWN_CATEGORY;
-						filter.maskBits = CAT_DOWN_CATEGORY;
+						filter.maskBits = CAT_DOWN_MASK;
 						break;
 					case PhysObjectType::OBSTACLE_UP:
 						comp->type = PhysObjectType::OBSTACLE_DOWN;
 						filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
-						filter.maskBits = OBSTACLE_DOWN_CATEGORY;
+						filter.maskBits = OBSTACLE_DOWN_MASK;
 						break;
 					default:
 						break; //you goofed
