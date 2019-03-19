@@ -30,10 +30,9 @@ bool Swords::use() {
 	}
 
 	auto p1 = GetEntity()->transform;
-	auto pos = p1.getWorldPosition();
-	pos += p1.getWorldForward();
-	auto bl = pos - glm::vec3(-1, 0, -1);
-	auto tr = pos - glm::vec3(1, 0, 1);
+	auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
+	auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
+	auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
 
 	auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 	bool hit = hits.size() > 0;
@@ -49,8 +48,7 @@ bool Swords::use() {
 
 		std::cout << "Swords hit Object" << std::endl;
 		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->GetParent()->GetComponent<HealthComponent>()->Damage(3);
-		mice->dropItem();
+		_collidedObjects->GetEntity()->GetComponent<HealthComponent>()->Damage(DAMAGE);
 		this->GetEntity()->Destroy();
 
 		return true;
@@ -68,8 +66,7 @@ bool Swords::use() {
 
 		std::cout << "Swords hit Object" << std::endl;
 		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->GetParent()->GetComponent<HealthComponent>()->Damage(3);
-		mice->dropItem();
+		_collidedObjects->GetEntity()->GetComponent<HealthComponent>()->Damage(DAMAGE);
 		this->GetEntity()->Destroy();
 
 		return true;
