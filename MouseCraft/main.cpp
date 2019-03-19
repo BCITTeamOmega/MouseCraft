@@ -158,7 +158,7 @@ void Test_Rendering()
 	InputSystem* is = new InputSystem();
 
 	//Tell the PhysicsManager how big the world is
-	PhysicsManager::instance()->setupGrid(100, 100, 5);
+	PhysicsManager::instance()->setupGrid(100, 70, 5);
 
 	// component_player1_physics 
 	auto c_p1_physics = PhysicsManager::instance()->createObject(60, 55, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
