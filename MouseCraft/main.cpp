@@ -104,7 +104,7 @@ void Test_Rendering()
 	e3->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
 
 	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 30));
-    platformEntity->transform.setLocalPosition(glm::vec3(32.5, 0, 32.5));
+    platformEntity->transform.setLocalPosition(glm::vec3(35, 0, 30));
 
 	e1->AddComponent(rc);
 	e2->AddComponent(rc2);
@@ -185,8 +185,8 @@ void Test_Rendering()
 
     //add platform physics
 
-    auto c_plat_physics = PhysicsManager::instance()->createGridObject(60, 55, 1, 1, 0, PhysObjectType::PLATFORM);
-    //platformEntity->AddComponent(c_plat_physics);
+    auto c_plat_physics = PhysicsManager::instance()->createGridObject(35, 30, 10, 10, PhysObjectType::PLATFORM);
+    platformEntity->AddComponent(c_plat_physics);
 
 	// adjustments made in PlayerComponent 
 
