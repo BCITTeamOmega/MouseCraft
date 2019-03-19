@@ -82,9 +82,9 @@ void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectTy
 		y1 = temp;
 	}
 
-	for (int x = x1; x <= x2; x++)
+	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y <= y2; y++)
+		for (int y = y1; y < y2; y++)
 		{
 			grid[x][y] = type;
 		}

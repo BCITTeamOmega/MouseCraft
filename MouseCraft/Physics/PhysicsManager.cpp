@@ -217,7 +217,7 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 }
 
 //For this function the position should be the top left corner
-PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t)
+PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int h, PhysObjectType::PhysObjectType t)
 {
 	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0, w, h);
 
@@ -230,8 +230,8 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 	case PhysObjectType::OBSTACLE_UP:
 	case PhysObjectType::OBSTACLE_DOWN:
 	case PhysObjectType::PLATFORM:
-		p1 = new Vector2D(x, y);
-		p2 = new Vector2D(x + w, y - h);
+		p1 = new Vector2D(x - ((float)w / 2), y +((float)h / 2));
+		p2 = new Vector2D(x + ((float)w / 2), y - ((float)h / 2));
 
 		grid->addArea(*p1, *p2, t);
 

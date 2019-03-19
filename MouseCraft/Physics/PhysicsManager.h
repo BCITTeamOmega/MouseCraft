@@ -61,7 +61,7 @@ public:
 	void setupGrid(int w, int h, int scale);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
-	PhysicsComponent* createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t);
+	PhysicsComponent* createGridObject(float x, float y, int w, int h, PhysObjectType::PhysObjectType t);
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2);
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2, Vector2D& hit);
