@@ -1,8 +1,10 @@
 #include "PhysicsComponent.h"
 
-PhysicsComponent::PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float vX, float vY)
+PhysicsComponent::PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float w, float h)
 {
-	velocity = Vector2D(vX, vY);
+	velocity = Vector2D(0, 0);
+	width = w;
+	height = h;
 	zPos = z;
 	rotation = r;
 	isJumping = false;
@@ -24,7 +26,7 @@ std::vector<PhysicsComponent*> PhysicsComponent::areaCheck(std::set<PhysObjectTy
 	return PhysicsManager::instance()->areaCheck(this, toCheck, p1, p2);
 }
 
-PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit)
 {
-	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2);
+	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }

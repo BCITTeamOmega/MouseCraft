@@ -8,7 +8,9 @@
 #include "Event/Observer.h"
 #include "PlayerComponent.h"
 #include "Event/Handler.h"
+#include "Physics/PhysObjectType.h"
 
+constexpr auto JUMP_DIST = 5;
 
 class Cat : public UpdatableComponent, public Observer<PhysicsComponent*>
 {
@@ -34,9 +36,6 @@ private:
     bool isAttacking = false;
     bool isJumping = false;
     bool isPouncing = false;
-    
-    //bool function that let us know if we are in a zone where jumping is possible (Bother colt about this later)
-    bool canJump();
     
     //method that launches attack animation and effects, and function that tracks if attack cooldown has ended
     void Attack();
