@@ -123,14 +123,15 @@ void PhysicsManager::Update(float dt)
 	profiler.FrameFinish();
 }
 
-void PhysicsManager::setupGrid(int w, int h)
+//Make sure scale divides into w and h or your w and h will be less than you want
+void PhysicsManager::setupGrid(int w, int h, int scale)
 {
-	grid = new WorldGrid(w, h);
+	grid = new WorldGrid(w, h, scale);
 }
 
 PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t,0,r);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, r, w, h);
 
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
@@ -218,11 +219,33 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 //For this function the position should be the top left corner
 PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t)
 {
-	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0);
+	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0, w, h);
 
 	b2BodyDef bodyDef;
-	bodyDef.position.Set(x + (w / 2), y - (h / 2)); 
 	bodyDef.active = false;	//wait for component to be active (valid state)
+	Vector2D *p1, *p2;
+
+	switch (t)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_DOWN:
+	case PhysObjectType::PLATFORM:
+		p1 = new Vector2D(x, y);
+		p2 = new Vector2D(x + w, y - h);
+
+		grid->addArea(*p1, *p2, t);
+
+		bodyDef.position.Set(p1->x + (w / 2), p1->y - (h / 2));
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_DOWN:
+		p1 = new Vector2D(x, y);
+
+		grid->addObject(*p1, t);
+
+		bodyDef.position.Set(p1->x, p1->y);
+		break;
+	}
 
 	b2Body* body;
 
@@ -234,8 +257,6 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 	fixtureDef.density = 1;
 	fixtureDef.userData = physicsComp;
 
-	Vector2D *p1, *p2;
-
 	switch (t)
 	{
 	case PhysObjectType::OBSTACLE_UP:
@@ -244,12 +265,6 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
 		physicsComp->isUp = true;
 		physicsComp->zPos = Z_UPPER;
-
-		p1 = new Vector2D(x, y);
-		p2 = new Vector2D(x + w, y - h);
-
-		if (!grid->addArea(p1, p2, t))
-			return nullptr;
 		break;
 	case PhysObjectType::OBSTACLE_DOWN:
 		bodyDef.type = b2_kinematicBody;
@@ -257,23 +272,11 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
-
-		p1 = new Vector2D(x, y);
-		p2 = new Vector2D(x + w, y - h);
-
-		if (!grid->addArea(p1, p2, t))
-			return nullptr;
 		break;
 	case PhysObjectType::PLATFORM:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = PLATFORM_CATEGORY;
 		fixtureDef.filter.maskBits = PLATFORM_MASK;
-
-		p1 = new Vector2D(x, y);
-		p2 = new Vector2D(x + w, y - h);
-
-		if (!grid->addArea(p1, p2, t))
-			return nullptr;
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 		bodyDef.type = b2_kinematicBody;
@@ -281,9 +284,6 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
 		physicsComp->isUp = true;
 		physicsComp->zPos = Z_UPPER;
-		
-		if (!grid->addObject(x, y, t))
-			return nullptr;
 		break;
 	case PhysObjectType::CONTRAPTION_DOWN:
 		bodyDef.type = b2_kinematicBody;
@@ -291,9 +291,6 @@ PhysicsComponent* PhysicsManager::createGridObject(int x, int y, int w, int h, P
 		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
-
-		if (!grid->addObject(x, y, t))
-			return nullptr;
 		break;
 	default:
 		return nullptr; //if the input something that does use the grid
@@ -504,7 +501,7 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 }
 
 //returns the first object hit
-PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2)
+PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2, Vector2D& hit)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -531,7 +528,7 @@ PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector
 }
 
 //returns the first object hit
-PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -558,5 +555,13 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 		}
 	}
 
+	if (bestMatch == nullptr)
+		return nullptr;
+
+	b2Vec2 ray = point2 - point1;
+	ray *= frac;
+	ray = point1 + ray;
+
+	hit = Vector2D(ray.x, ray.y);
 	return bestMatch;
 }

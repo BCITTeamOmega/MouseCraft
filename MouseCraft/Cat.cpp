@@ -81,18 +81,6 @@ void Cat::OnHit(PhysicsComponent* other)
 
 }
 
-//this function will call the physics/map system to determine if we're at a jump location (floor -> platform)
-bool Cat::canJump()
-{
-    //something something colt physics stuff
-
-    //temp
-    return true;
-    //int i = rand() % 2;
-    //
-    //return i == 1 ? true : false;
-}
-
 //check if we are doing something, then attack
 void Cat::Attack()
 {
@@ -109,13 +97,13 @@ void Cat::Attack()
     std::set<PhysObjectType::PhysObjectType> targets;
     if (ourPhys->isUp) {
         //generate check type
-            targets = std::set<PhysObjectType::PhysObjectType>{
+        targets = std::set<PhysObjectType::PhysObjectType>{
             //PhysObjectType::OBSTACLE_UP,
             PhysObjectType::MOUSE_UP
         };
     } else {
         //generate check type
-            targets = std::set<PhysObjectType::PhysObjectType>{
+        targets = std::set<PhysObjectType::PhysObjectType>{
            // PhysObjectType::OBSTACLE_DOWN,
             PhysObjectType::MOUSE_DOWN
         };
@@ -160,19 +148,38 @@ void Cat::Jump() {
     if (isAttacking || isJumping || isPouncing) {
         return;
     }
-    //check if we are in a location we can jump in
-    if (canJump()) {
-        //Jump code
-        std::cout << "Cat has jumped." << std::endl;
-        GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
 
-        GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
-        auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
-        GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x,pos.y,pos.z); //play sound
-        
-        isJumping = true;
-        return;
-    }
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	if (pComp != nullptr)
+	{
+		//position of cat
+		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
+		//vector in front of cat of length = JUMP_DIST
+		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
+
+		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+			PhysObjectType::PLATFORM
+		};
+
+		Vector2D* hitPos = new Vector2D(0, 0);
+
+		PhysicsComponent* jumpTarget =  pComp->rayCheck(types, curPos, jumpVec, *hitPos);
+
+		//check if we are in a location we can jump in
+		if (jumpTarget != nullptr) {
+			//Jump code
+			std::cout << "Cat has jumped." << std::endl;
+			GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+			isJumping = true;
+
+			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
+			auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
+			GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x, pos.y, pos.z); //play sound
+			return;
+		}
+	}
+
     //pounce code
     std::cout << "Cat has pounced." << std::endl;
     isPouncing = true;
