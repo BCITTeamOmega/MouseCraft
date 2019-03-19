@@ -222,7 +222,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	PhysicsComponent* physicsComp = ComponentManager<PhysicsComponent>::Instance().Create<PhysicsComponent>(t, 0, 0, w, h);
 
 	b2BodyDef bodyDef;
-	bodyDef.active = false;	//wait for component to be active (valid state)
+	bodyDef.active = true;	//wait for component to be active (valid state)
 	Vector2D *p1, *p2;
 
 	switch (t)
@@ -230,12 +230,12 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	case PhysObjectType::OBSTACLE_UP:
 	case PhysObjectType::OBSTACLE_DOWN:
 	case PhysObjectType::PLATFORM:
-		p1 = new Vector2D(x - ((float)w / 2), y +((float)h / 2));
+		p1 = new Vector2D(x - ((float)w / 2), y + ((float)h / 2));
 		p2 = new Vector2D(x + ((float)w / 2), y - ((float)h / 2));
 
 		grid->addArea(*p1, *p2, t);
 
-		bodyDef.position.Set(p1->x + (w / 2), p1->y - (h / 2));
+		bodyDef.position.Set(p1->x + ((float)w / 2), p1->y - ((float)h / 2));
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 	case PhysObjectType::CONTRAPTION_DOWN:

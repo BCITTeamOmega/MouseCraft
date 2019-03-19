@@ -147,7 +147,7 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(1);
+	playerc->SetID(10);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();

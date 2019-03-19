@@ -8,6 +8,8 @@ void CContactListener::BeginContact(b2Contact* contact)
 	if (fa == NULL || fb == NULL)
 		return;
 
+	std::cout << "Collision" << std::endl;
+
 	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
 	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
 

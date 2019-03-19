@@ -7,7 +7,7 @@
 class WorldGrid
 {
 public:
-	WorldGrid(int w, int h, int scale);
+	WorldGrid(int w, int h, int s);
 	~WorldGrid();
 	void addObject(Vector2D& pos, PhysObjectType::PhysObjectType type);
 	void addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectType type);
