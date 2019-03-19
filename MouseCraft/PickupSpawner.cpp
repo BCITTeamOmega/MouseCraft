@@ -27,7 +27,7 @@ void PickupSpawner::Spawn()
 {
 	int i = rand() % 3;
 	float x = rand() % 100;
-	float z = rand() % 100;
+	float z = rand() % 70;
 
 	Entity* entity;
 

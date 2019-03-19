@@ -57,7 +57,7 @@ public:
 	static PhysicsManager* instance();
 	static void destroy();
 	void Update(float dt);
-	void setupGrid(int w, int h);
+	void setupGrid(int w, int h, int scale);
 	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
 	PhysicsComponent* createGridObject(int x, int y, int w, int h, PhysObjectType::PhysObjectType t);
