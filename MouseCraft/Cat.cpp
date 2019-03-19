@@ -149,39 +149,39 @@ void Cat::Jump() {
         return;
     }
 
-	PhysicsComponent* jumpTarget = canJump();
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 
-	//check if we are in a location we can jump in
-	if (jumpTarget != nullptr) {
-		//Jump code
-		std::cout << "Cat has jumped." << std::endl;
-		GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
-		isJumping = true;
+	if (pComp != nullptr)
+	{
+		//position of cat
+		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
+		//vector in front of cat of length = JUMP_DIST
+		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
 
-		GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
-		auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
-		GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x, pos.y, pos.z); //play sound
-		return;
+		std::vector<PhysObjectType::PhysObjectType> types;
+		types.push_back(PhysObjectType::PLATFORM);
+
+		//Vector2D* 
+
+		PhysicsComponent* jumpTarget = pComp->rayCheck(types);
+
+		//check if we are in a location we can jump in
+		if (jumpTarget != nullptr) {
+			//Jump code
+			std::cout << "Cat has jumped." << std::endl;
+			GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+			isJumping = true;
+
+			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
+			auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
+			GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x, pos.y, pos.z); //play sound
+			return;
+		}
 	}
 
     //pounce code
     std::cout << "Cat has pounced." << std::endl;
     isPouncing = true;
-}
-
-PhysicsComponent* Cat::canJump()
-{
-	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-	Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
-	Vector2D* forward = new Vector2D(GetEntity()->transform.getLocalForward().x, GetEntity()->transform.getLocalForward().z);
-
-	if (pComp != nullptr)
-	{
-		std::vector<PhysObjectType::PhysObjectType> types;
-		types.push_back(PhysObjectType::PLATFORM);
-
-		//PhysicsComponent* hit = pComp->rayCheck(types, 
-	}
 }
 
 // track the time since we launched the jump animation, and reset when finished

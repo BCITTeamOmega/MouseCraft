@@ -45,6 +45,5 @@ private:
     void Jump();
     void UpdateJump(float dt);
     void updatePounce(float dt);
-	PhysicsComponent* canJump();
 };
 
