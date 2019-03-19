@@ -16,7 +16,6 @@ Cat::Cat() :
     current_time = 0;
 }
 
-
 Cat::~Cat()
 {
 }
@@ -25,10 +24,32 @@ void Cat::Update(float dt) {
     if (isAttacking) {
         UpdateAttack(dt);
     }
+
     if (isJumping) {
         UpdateJump(dt);
     }
-    if (isPouncing) {
+
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	//check to see if you are on a platform
+	if (pComp != nullptr && !pComp->isJumping && pComp->isUp)
+	{
+		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+			PhysObjectType::PLATFORM
+		};
+			
+		auto compPos = pComp->body->GetPosition();
+		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y + (pComp->height / 2));
+		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y - (pComp->height / 2));
+
+		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
+
+		//if you aren't on a platform then fall
+		if(found.size() == 0)
+			pComp->isFalling = true;
+	}
+	
+	if (isPouncing) {
         updatePounce(dt);
     }
 }
@@ -143,20 +164,21 @@ void Cat::UpdateAttack(float dt) {
 }
 
 //check if we are doing something, then check if we can jump and either jump or pounce
-void Cat::Jump() {
-    //block if we are in an animation already
-    if (isAttacking || isJumping || isPouncing) {
-        return;
-    }
-
+void Cat::Jump()
+{
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
 
 	if (pComp != nullptr)
 	{
+		//block if we are in an animation already
+		if (isAttacking || pComp->isJumping || isPouncing)
+			return;
+
 		//position of cat
 		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
 		//vector in front of cat of length = JUMP_DIST
 		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
+		jumpVec = new Vector2D(*curPos + *jumpVec);
 
 		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
 			PhysObjectType::PLATFORM
@@ -182,30 +204,29 @@ void Cat::Jump() {
 
     //pounce code
     std::cout << "Cat has pounced." << std::endl;
-    isPouncing = true;
+    //isPouncing = true;
 }
 
 // track the time since we launched the jump animation, and reset when finished
 void Cat::UpdateJump(float dt)
 {
-    
-    if (current_time < JUMP_TIME) {
+    /*if (current_time < JUMP_TIME) {
         //advance time
         current_time += dt;
         return;
     }
     isJumping = false;
-    current_time = 0;
+    current_time = 0;*/
 }
 
 // track the time since we launched the pounce animation, and reset when finished
 void Cat::updatePounce(float dt)
 {
-    if (current_time < POUNCE_TIME) {
+    /*if (current_time < POUNCE_TIME) {
         //advance time
         current_time += dt;
         return;
     }
     isPouncing = false;
-    current_time = 0;
+    current_time = 0;*/
 }

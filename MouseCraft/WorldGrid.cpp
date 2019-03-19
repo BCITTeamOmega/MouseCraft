@@ -1,8 +1,9 @@
 #include "WorldGrid.h"
 
-//Make sure scale divides into both the width and height otherwise the grid won't be as big as you intend
-WorldGrid::WorldGrid(int w, int h, int scale)
+//Make sure scale (s) divides into both the width and height otherwise the grid won't be as big as you intend
+WorldGrid::WorldGrid(int w, int h, int s)
 {
+	scale = s;
 	int gridW = w / scale;
 	int gridH = h / scale;
 	grid = std::vector<std::vector<PhysObjectType::PhysObjectType>>(gridW);
@@ -32,10 +33,10 @@ void WorldGrid::addObject(Vector2D& pos, PhysObjectType::PhysObjectType object)
 	else if (yInd >= grid[0].size())
 		yInd = grid[0].size();
 
-	pos.x = xInd;
-	pos.y = yInd;
-
 	grid[xInd][yInd] = object;
+
+	pos.x = xInd * scale;
+	pos.y = yInd * scale;
 }
 
 void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectType type)
@@ -62,11 +63,6 @@ void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectTy
 	else if (y2 >= grid[0].size())
 		y2 = grid[0].size();
 
-	p1.x = x1;
-	p1.y = y1;
-	p2.x = x2;
-	p2.y = y2;
-
 	//Fix the points if the user input them in the wrong order or something
 	if (x1 > x2)
 	{
@@ -82,13 +78,18 @@ void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectTy
 		y1 = temp;
 	}
 
-	for (int x = x1; x <= x2; x++)
+	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y <= y2; y++)
+		for (int y = y1; y < y2; y++)
 		{
 			grid[x][y] = type;
 		}
 	}
+
+	p1.x = x1 * scale;
+	p1.y = y1 * scale;
+	p2.x = x2 * scale;
+	p2.y = y2 * scale;
 }
 
 bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)

@@ -48,7 +48,10 @@ void Test_Rendering()
 
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 	Model* m = ModelGen::makeCube(1, 1, 1);
+
+    Model* m2 = ModelGen::makeCube(10.0, 20.0, 10.0);
 	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 70);
+
 	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
 	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
 
@@ -69,7 +72,8 @@ void Test_Rendering()
 	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* floorRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	
+    Renderable* platRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
 
 	rc->setColor(Color(0.5, 1.0, 0.25));
@@ -81,6 +85,9 @@ void Test_Rendering()
 	floorRC->setColor(Color(1.0, 1.0, 1.0));
 	floorRC->setModel(*floorModel);
 
+    platRC->setColor(Color(1.0, 0.5, 0.0));
+    platRC->setModel(*m2);
+
 	cam->setFOV(90.0f);
 	cam->setCloseClip(0.01f);
 	cam->setFarClip(100.0f);
@@ -89,6 +96,7 @@ void Test_Rendering()
 	Entity* e2 = EntityManager::Instance().Create();
 	Entity* e3 = EntityManager::Instance().Create();
 	Entity* floorEntity = EntityManager::Instance().Create();
+    Entity* platformEntity = EntityManager::Instance().Create();
 
 	e1->transform.setLocalPosition(glm::vec3(60, 0, 35));
 	e2->transform.setLocalPosition(glm::vec3(50, 0, 30));
@@ -96,11 +104,13 @@ void Test_Rendering()
 	e3->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
 
 	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 30));
+    platformEntity->transform.setLocalPosition(glm::vec3(35, 0, 30));
 
 	e1->AddComponent(rc);
 	e2->AddComponent(rc2);
 	e3->AddComponent(cam);
 	floorEntity->AddComponent(floorRC);
+    platformEntity->AddComponent(platRC);
 
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
@@ -173,6 +183,11 @@ void Test_Rendering()
 	// add to cat entity
 	e2->AddComponent(c_p2_physics);
 
+    //add platform physics
+
+    auto c_plat_physics = PhysicsManager::instance()->createGridObject(35, 30, 10, 10, PhysObjectType::PLATFORM);
+    platformEntity->AddComponent(c_plat_physics);
+
 	// adjustments made in PlayerComponent 
 
 	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
@@ -191,6 +206,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+    OmegaEngine::Instance().AddEntity(platformEntity);
 	OmegaEngine::Instance().AddEntity(e_gm);
 
 	// prefabs 
