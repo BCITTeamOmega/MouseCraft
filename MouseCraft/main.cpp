@@ -30,9 +30,11 @@
 #include "Cat.h"
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
+#include "Sound/SoundComponent.h"
 #include "Loading/PrefabLoader.h"
 #include "GameManager.h"
 #include "ContraptionSystem.h"
+
 
 SoundManager* noise;
 
@@ -123,6 +125,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+    c_p1_health->SetHealth(2);
 	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
@@ -141,6 +144,9 @@ void Test_Rendering()
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	e2->AddComponent(healthc);
+
+    auto soundc = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+    e2->AddComponent(soundc);
 
 	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
 	e2->AddComponent(c_p2_collider);
