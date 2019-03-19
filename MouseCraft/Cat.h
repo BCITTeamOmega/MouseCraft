@@ -22,7 +22,6 @@ public:
     void Notify(EventName eventName, Param* param) override;
 	virtual void OnCollision(PhysicsComponent* e);
 	virtual void OnHit(PhysicsComponent* e);
-	void setPlayer(int ID) { playerID = ID; }
 
 	Handler<Cat, PhysicsComponent*> HandleOnCollide;
 	Handler<Cat, PhysicsComponent*> HandleOnHit;

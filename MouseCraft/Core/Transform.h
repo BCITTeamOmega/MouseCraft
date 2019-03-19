@@ -70,6 +70,10 @@ public:
 	// Gets the world transformation matrix. 
 	glm::mat4 getWorldTransformation() const;
 
+	// Face towards the direction vector 
+	void face2D(glm::vec2 dir);
+	void face2D(glm::vec3 dir);
+
 #pragma endregion
 
 	// computes the local transformation matrix using local position, rotation, scale.
