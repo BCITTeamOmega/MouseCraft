@@ -56,6 +56,7 @@ private:
 	CpuProfiler _profiler;
 	RootEntity transitionHolder;	// used to hold entities while transitioning scene.
 	std::deque<StatusActionParam*> _deferredActions;
+	std::deque<StatusActionParam*> _deferredActionsBack;
 	std::set<int> _destructionValidation;	// to ensure an entity is not deleted twice
 	std::mutex _deferredActionMtx;
 	std::vector<System*> _systems;

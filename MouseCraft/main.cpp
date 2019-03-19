@@ -112,7 +112,6 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_render);
 
 	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-	c_p1_mice->player = 0;
 	c_p1_mice->speed = 50.0f;
 	e1->AddComponent(c_p1_mice);
 
@@ -125,6 +124,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+    c_p1_health->SetHealth(2);
 	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
@@ -134,11 +134,10 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_render);
 
 	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
-	c_p2_Cat->setPlayer(1);
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(1);
+	playerc->SetID(10);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();

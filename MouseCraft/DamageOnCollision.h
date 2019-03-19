@@ -7,9 +7,11 @@
 class DamageOnCollision : public Component
 {
 public:
+	DamageOnCollision();
 	DamageOnCollision(std::set<PhysObjectType::PhysObjectType> checkFor);
 	~DamageOnCollision();
 	virtual void OnInitialized() override;
+	void SetLayers(std::set<PhysObjectType::PhysObjectType> checkFor);
 
 	int damage = 1;
 	bool destroyOnCollision = true;

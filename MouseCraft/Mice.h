@@ -39,7 +39,6 @@ public:
 	void combine(Pickup *material);
 
 public:
-	int player = 0;
 	float speed = 10.0f;
 	bool downed = false;
 	Handler<Mice, PhysicsComponent*> HandleOnCollide;
@@ -47,6 +46,7 @@ public:
 	Handler<Mice> HandleOnDeath;
 
 private:
+	int player = 0;
 	float moveX;
 	float moveY;
 	float aimX;

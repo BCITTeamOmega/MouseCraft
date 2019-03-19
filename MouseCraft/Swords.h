@@ -16,6 +16,8 @@ public:
 	virtual void Update(float dt) override;
 
 private:	
+	const float RADIUS = 5.0f;
+	const int DAMAGE = 3;
 	PhysicsComponent* _phys;
 	PhysicsComponent* _collidedObjects;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
