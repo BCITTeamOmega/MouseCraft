@@ -37,15 +37,15 @@ constexpr auto CONTRAPTION_UP_CATEGORY = 0x0200;
 constexpr auto PART_CATEGORY = 0x0400;
 
 constexpr auto PART_MASK = 0x0014;
-constexpr auto CONTRAPTION_UP_MASK = 0x0269;
+constexpr auto CONTRAPTION_UP_MASK = 0x02A9;
 constexpr auto CONTRAPTION_DOWN_MASK = 0x0157;
-constexpr auto CAT_UP_MASK = 0x022B;
+constexpr auto CAT_UP_MASK = 0x0229;
 constexpr auto CAT_DOWN_MASK = 0x0117;
-constexpr auto MOUSE_UP_MASK = 0x028B;
-constexpr auto MOUSE_DOWN_MASK = 0x0547;
+constexpr auto MOUSE_UP_MASK = 0x02A9;
+constexpr auto MOUSE_DOWN_MASK = 0x0557;
 constexpr auto OBSTACLE_UP_MASK = 0x02AA;
 constexpr auto OBSTACLE_DOWN_MASK = 0x0554;
-constexpr auto PLATFORM_MASK = 0x01F8;
+constexpr auto PLATFORM_MASK = 0x0150;
 constexpr auto WALL_MASK = 0x03F0;
 #pragma endregion
 

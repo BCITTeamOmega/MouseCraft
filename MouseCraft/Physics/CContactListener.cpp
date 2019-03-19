@@ -8,8 +8,6 @@ void CContactListener::BeginContact(b2Contact* contact)
 	if (fa == NULL || fb == NULL)
 		return;
 
-	std::cout << "Collision" << std::endl;
-
 	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
 	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
 
@@ -87,6 +85,8 @@ void CContactListener::EndContact(b2Contact* contact)
 	if (fa == NULL || fb == NULL)
 		return;
 
+	std::cout << "Collision" << std::endl;
+
 	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
 	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
 
@@ -117,29 +117,7 @@ void CContactListener::EndContact(b2Contact* contact)
 	}
 }
 
-void CContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
-{
-	b2Fixture* fa = contact->GetFixtureA();
-	b2Fixture* fb = contact->GetFixtureB();
-
-	if (fa == NULL || fb == NULL)
-		return;
-
-	PhysicsComponent* pCompA = static_cast<PhysicsComponent*>(fa->GetBody()->GetUserData());
-	PhysicsComponent* pCompB = static_cast<PhysicsComponent*>(fb->GetBody()->GetUserData());
-
-	if (pCompA == nullptr || pCompB == nullptr)
-		return;
-
-	//If an object is trying to land on a platform it should not be pushed away so disable the collision resolution for this step
-	if (pCompA->type == PhysObjectType::PLATFORM && (pCompB->type == PhysObjectType::CAT_UP
-		|| pCompB->type == PhysObjectType::MOUSE_UP || pCompB->type == PhysObjectType::OBSTACLE_UP)
-		|| pCompB->type == PhysObjectType::PLATFORM && (pCompA->type == PhysObjectType::CAT_UP
-		|| pCompA->type == PhysObjectType::MOUSE_UP || pCompA->type == PhysObjectType::OBSTACLE_UP))
-	{
-		contact->SetEnabled(false);
-	}
-}
+void CContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {};
 
 void CContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
 
