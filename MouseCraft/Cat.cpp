@@ -119,6 +119,10 @@ void Cat::Jump() {
 		std::cout << "Cat has jumped." << std::endl;
 		GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
 		isJumping = true;
+
+		GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
+		auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
+		GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x, pos.y, pos.z); //play sound
 		return;
 	}
 
@@ -130,16 +134,21 @@ void Cat::Jump() {
 PhysicsComponent* Cat::canJump()
 {
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-	Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
-	Vector2D* forward = new Vector2D(GetEntity()->transform.getLocalForward().x, GetEntity()->transform.getLocalForward().z);
 
 	if (pComp != nullptr)
 	{
+		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
+		Vector2D* forward = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
+		Vector2D* target = new Vector2D(*curPos + *forward);
+		Vector2D* hitPos;
+
 		std::vector<PhysObjectType::PhysObjectType> types;
 		types.push_back(PhysObjectType::PLATFORM);
 
-		PhysicsComponent* hit = pComp->rayCheck(types, 
+		PhysicsComponent* hit = pComp->rayCheck(types, curPos, target, *hitPos);
 	}
+
+	return nullptr;
 }
 
 // track the time since we launched the jump animation, and reset when finished

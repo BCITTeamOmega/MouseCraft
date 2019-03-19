@@ -4,6 +4,7 @@
 #include "Core\Entity.h"
 #include "Event\ISubscriber.h"
 #include "Physics/PhysicsComponent.h"
+#include "Sound\SoundComponent.h"
 #include "Event/Observer.h"
 #include "PlayerComponent.h"
 #include "Event/Handler.h"

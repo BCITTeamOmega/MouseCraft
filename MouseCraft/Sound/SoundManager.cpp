@@ -7,7 +7,7 @@
 #define WELCOME_BGM "../music/bgm3.wav"
 
 //defines for SoundEffect Names
-#define JUMP "../Sounds/jumpSE.wav"
+#define JUMP "../res/SoundEffects/jumpSE.wav"
 #define DAMAGE "../Sounds/damageSE.wav"
 #define GOAT_DEATH "../Sounds/goatDeath.wav"
 
@@ -34,7 +34,7 @@ SoundManager::SoundManager() {
     loadAudioData();
     //subscribe to events
 	EventManager::Subscribe(PLAY_SONG, this);
-	//EventManager::Subscribe(PLAY_SOUND, this);
+	EventManager::Subscribe(PLAY_SOUND, this);
 }
 
 //method that loads Audio Files into memory to minimize repeated file I/O
@@ -64,12 +64,12 @@ void SoundManager::loadAudioData() {
     //Music.insert(std::pair<TrackList, AudioData>(WelcomeBGM, temp));
 
     ////Load Sounds Section
-    ////Jump Sound
-    //temp = soundObject->GetAudioData(JUMP); //attempt to read file
-    //if (temp.data == NULL) {
-    //    std::cout << "Jump SE failed to store correctly." << std::endl; //handle failed file read
-    //}
-    //SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
+    //Jump Sound
+    temp = soundObject->GetAudioData(JUMP); //attempt to read file
+    if (temp.data == NULL) {
+        std::cout << "Jump SE failed to store correctly." << std::endl; //handle failed file read
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
 
     ////Explosion Sound, steps are identical to above but with different file and Handle
     //temp = soundObject->GetAudioData(DAMAGE);
@@ -86,11 +86,14 @@ void SoundManager::loadAudioData() {
     //SoundEffects.insert(std::pair<SoundsList, AudioData>(GoatDeath, temp));
 }
 
+void SoundManager::Update(float dt)
+{ }
+
 //destructor. Cleans up the engine object/ local memory and unsubscribes
 SoundManager::~SoundManager() {
     CleanUp();
 	EventManager::Unsubscribe(PLAY_SONG, this);
-	//EventManager::Unsubscribe(PLAY_SOUND, this);
+	EventManager::Unsubscribe(PLAY_SOUND, this);
 }
 
 //Method that plays the given song at the given position
@@ -158,18 +161,18 @@ void SoundManager::PlaySound(SoundsList soundEffect, float x, float y, float z) 
         soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
         soundObject->PlayAudio(seSource[selectedBuffer]);
         break;
-    case Damage:
-        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Damage)->second);
-        soundObject->ToggleLooping(seSource[selectedBuffer], false);
-        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
-        soundObject->PlayAudio(seSource[selectedBuffer]);
-        break;
-    case GoatDeath:
-        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(GoatDeath)->second);
-        soundObject->ToggleLooping(seSource[selectedBuffer], false);
-        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
-        soundObject->PlayAudio(seSource[selectedBuffer]);
-        break;
+    //case Damage:
+    //    soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Damage)->second);
+    //    soundObject->ToggleLooping(seSource[selectedBuffer], false);
+    //    soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+    //    soundObject->PlayAudio(seSource[selectedBuffer]);
+    //    break;
+    //case GoatDeath:
+    //    soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(GoatDeath)->second);
+    //    soundObject->ToggleLooping(seSource[selectedBuffer], false);
+    //    soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+    //    soundObject->PlayAudio(seSource[selectedBuffer]);
+    //    break;
     default:
         break;
     }
@@ -223,7 +226,6 @@ void SoundManager::Notify(EventName eventName, Param* param) {
                 PlaySound(SoundInfo->sound, SoundInfo->x, SoundInfo->y, SoundInfo->z);
                 //delete pointers so they don't stay in the heap
                 delete SoundInfo;
-                delete param;
             }
             break;
         }

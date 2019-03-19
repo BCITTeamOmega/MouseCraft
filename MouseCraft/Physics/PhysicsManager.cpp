@@ -480,7 +480,7 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 }
 
 //returns the first object hit
-PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -511,7 +511,16 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vec
 	}
 
 	if (bestMatch == nullptr)
+	{
 		return nullptr;
+	}
 	else
+	{
+		b2Vec2 ray = point2 - point1;
+		ray *= frac;
+		ray = point1 + ray;
+
+		hit = Vector2D(ray.x, ray.y);
 		return bestMatch;
+	}
 }
