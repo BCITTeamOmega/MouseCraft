@@ -76,7 +76,7 @@ void Cat::OnCollision(PhysicsComponent * pc)
 	
 }
 
-void Cat::OnHit(PhysicsComponent* e)
+void Cat::OnHit(PhysicsComponent* other)
 {
 
 }
@@ -101,6 +101,44 @@ void Cat::Attack()
         return;
     }
     //actually launch attack
+
+    //get our own physics component
+    auto ourPhys = GetEntity()->GetComponent<PhysicsComponent>();
+
+    //check which level we're on
+    std::set<PhysObjectType::PhysObjectType> targets;
+    if (ourPhys->isUp) {
+        //generate check type
+            targets = std::set<PhysObjectType::PhysObjectType>{
+            //PhysObjectType::OBSTACLE_UP,
+            PhysObjectType::MOUSE_UP
+        };
+    } else {
+        //generate check type
+            targets = std::set<PhysObjectType::PhysObjectType>{
+           // PhysObjectType::OBSTACLE_DOWN,
+            PhysObjectType::MOUSE_DOWN
+        };
+    }
+    //determine our position for area check
+    //get the section directly in front of our world position
+    auto p1 = GetEntity()->transform;
+    auto pos = p1.getWorldPosition();
+    pos += p1.getWorldForward();
+    //get the corners for our bounding box
+    auto bl = pos + glm::vec3(-10, 0, -10);
+    auto tr = pos + glm::vec3(10, 0, 10);
+
+    //launch area check
+    auto results = ourPhys->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+
+    //check if we hit something
+    if (results.size() > 0) {
+        for (size_t i = 0; i < targets.size(); i++) {
+            results[i]->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
+        }
+    }
+
     std::cout << "Cat has attacked." << std::endl;
     isAttacking = true;
 }

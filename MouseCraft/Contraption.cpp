@@ -1,6 +1,6 @@
 #include "Contraption.h"
 
-
+#include "Mice.h"
 
 Contraption::Contraption()
 {
@@ -21,10 +21,16 @@ void Contraption::OnInitialized()
 		pComp->onCollide.Attach(this);
 		pComp->onHit.Attach(this);
 	}
+
+	mice = GetEntity()->GetParent()->GetComponent<Mice>();
 }
 
-void Contraption::use() {
+void Contraption::Update(float dt)
+{
+}
 
+bool Contraption::use() {
+	return false;
 }
 
 void Contraption::show() {

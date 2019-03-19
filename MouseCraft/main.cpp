@@ -32,6 +32,8 @@
 #include "HealthComponent.h"
 #include "Sound/SoundComponent.h"
 #include "Loading/PrefabLoader.h"
+#include "GameManager.h"
+#include "ContraptionSystem.h"
 
 
 SoundManager* noise;
@@ -110,7 +112,6 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_render);
 
 	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-	c_p1_mice->player = 0;
 	c_p1_mice->speed = 50.0f;
 	e1->AddComponent(c_p1_mice);
 
@@ -123,6 +124,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+    c_p1_health->SetHealth(2);
 	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
@@ -132,11 +134,10 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_render);
 
 	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
-	c_p2_Cat->setPlayer(1);
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(1);
+	playerc->SetID(10);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -174,6 +175,13 @@ void Test_Rendering()
 
 	// adjustments made in PlayerComponent 
 
+	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
+	c_gamemanager->AddMouse(c_p1_mice);
+	c_gamemanager->SetCat(c_p2_Cat);
+
+	auto e_gm = EntityManager::Instance().Create();
+	e_gm->AddComponent(c_gamemanager);
+
 	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
 
 	// add the entities 
@@ -183,6 +191,7 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+	OmegaEngine::Instance().AddEntity(e_gm);
 
 	// prefabs 
 
@@ -192,6 +201,7 @@ void Test_Rendering()
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 
@@ -401,6 +411,8 @@ void Test_ObserverPattern()
 
 void Test_Transform()
 {
+	// OH NO THIS IS FOR LHS
+
 	// create some entities 
 	auto e_base = EntityManager::Instance().Create();
 	auto e_right = EntityManager::Instance().Create();

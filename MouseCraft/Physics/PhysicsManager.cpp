@@ -454,7 +454,7 @@ void PhysicsManager::checkCollisions()
 }
 
 //returns a list of the objects hit
-std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2)
 {
 	std::vector<PhysicsComponent*> foundObjects;
 
@@ -476,8 +476,59 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 	return foundObjects;
 }
 
+//returns a list of the objects hit
+std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+{
+	std::vector<PhysicsComponent*> foundObjects;
+
+	AreaQueryCallback callback;
+
+	b2AABB boundingBox;
+	boundingBox.lowerBound = b2Vec2(p1->x, p1->y);
+	boundingBox.upperBound = b2Vec2(p2->x, p2->y);
+
+	world->QueryAABB(&callback, boundingBox);
+
+	for (int i = 0; i < callback.foundBodies.size(); i++)
+	{
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
+
+		if (toCheck.find(pComp->type) != toCheck.end())
+			foundObjects.push_back(pComp);
+	}
+
+	return foundObjects;
+}
+
 //returns the first object hit
-PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vector<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
+PhysicsComponent * PhysicsManager::rayCheck(PhysicsComponent * checkedBy, Vector2D * p1, Vector2D * p2)
+{
+	float32 frac = 1; //used to determine the closest object
+	PhysicsComponent* bestMatch = nullptr;
+	RayQueryCallback callback;
+
+	b2Vec2 point1 = b2Vec2(p1->x, p1->y);
+	b2Vec2 point2 = b2Vec2(p2->x, p2->y);
+
+	world->RayCast(&callback, point1, point2);
+
+	//Find the closest object hit by the ray
+	for (int i = 0; i < callback.hitBodies.size(); i++)
+	{
+		//if the object is further than the best match so far, move on
+		if (callback.fractions[i] > frac)
+			continue;
+
+		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
+		frac = callback.fractions[i];
+		bestMatch = pComp;
+	}
+
+	return bestMatch;
+}
+
+//returns the first object hit
+PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2)
 {
 	float32 frac = 1; //used to determine the closest object
 	PhysicsComponent* bestMatch = nullptr;
@@ -497,18 +548,12 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::vec
 
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
 
-		for (int j = 0; j < toCheck.size(); j++)
+		if (toCheck.find(pComp->type) != toCheck.end())
 		{
-			if (pComp->type == toCheck[j])
-			{
-				frac = callback.fractions[i];
-				bestMatch = pComp;
-			}
+			frac = callback.fractions[i];
+			bestMatch = pComp;
 		}
 	}
 
-	if (bestMatch == nullptr)
-		return nullptr;
-	else
-		return bestMatch;
+	return bestMatch;
 }

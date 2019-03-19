@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "Core/EntityManager.h"
 #include "Core/ComponentManager.h"
+#include "Core/OmegaEngine.h"
 #include "Loading/ModelLoader.h"
 #include "Graphics/Renderable.h"
 #include "Graphics/Model.h"

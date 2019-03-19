@@ -2,10 +2,16 @@
 
 #include "Core/Entity.h"
 #include "Core/Component.h"
+#include "Core/OmegaEngine.h"
 #include "MOUSECRAFT_ENUMS.h"
 #include "Physics/PhysicsComponent.h"
-#include "Event/Observer.h"
+#include "Physics/PhysObjectType.h"
+#include "HealthComponent.h"
+#include "PlayerComponent.h"
+#include "DamageOnCollision.h"
+#include "TimedDestruction.h"
 
+class Mice;
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
 {
@@ -14,14 +20,15 @@ public:
 	~Contraption();
 
 	virtual void OnInitialized() override;
-	virtual void use();
+	virtual void Update(float dt);
+	virtual bool use();
 	virtual void show();
 	void Grab();
 	void Drop();
 
 public:
 	CONTRAPTIONS type;
-private:
-
+protected:
+	Mice* mice;
 };
 
