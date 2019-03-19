@@ -8,6 +8,8 @@
 #include "Physics/PhysObjectType.h"
 #include "HealthComponent.h"
 #include "PlayerComponent.h"
+#include "DamageOnCollision.h"
+#include "TimedDestruction.h"
 
 class Mice;
 
