@@ -151,11 +151,7 @@ glm::mat4 Transform::getWorldTransformation() const
 
 void Transform::face2D(glm::vec2 dir)
 {
-	auto rotation = glm::atan(dir.x / dir.y);
-	if (dir.y > 0) 
-		rotation -= M_PI;
-	setLocalRotation(glm::vec3(0, rotation, 0));
-
+	setLocalRotation(glm::vec3(0, getAngle2D(dir), 0));
 }
 
 void Transform::face2D(glm::vec3 dir)
@@ -200,6 +196,19 @@ void Transform::computeWorldTransformation(glm::mat4 parent)
 	_worldTransformation = parent * _localTransformation;
 }
 
+float Transform::getAngle2D(glm::vec2 dir)
+{
+	auto rotation = glm::atan(dir.x / dir.y);
+	if (dir.y > 0)
+		rotation -= M_PI;
+	return rotation;
+}
+
+float Transform::getAngle2D(glm::vec3 dir)
+{
+	return getAngle2D(glm::vec2(dir.x, dir.z));
+}
+
 /*
 #include <glm/gtx/matrix_decompose.hpp>
 void Transform::setLocalTransform(glm::mat4 matrix)
@@ -212,3 +221,88 @@ void Transform::setLocalTransform(glm::mat4 matrix)
 	rotation = glm::eulerAngles(rot);
 }
 */
+
+#pragma region Vector2D Interfaces
+
+Vector2D Transform::getLocalPosition2D() const
+{
+	auto pos = getLocalPosition();
+	return Vector2D(pos.x, pos.z);
+}
+
+float Transform::getLocalRotation2D() const
+{
+	return getAngle2D(getLocalForward());
+}
+
+Vector2D Transform::getLocalScale2D() const
+{
+	auto scl = getLocalScale();
+	return Vector2D(scl.x, scl.z);
+}
+
+Vector2D Transform::getLocalForward2D() const
+{
+	auto fwd = getLocalForward();
+	return Vector2D(fwd.x, fwd.z);
+}
+
+Vector2D Transform::getLocalRight2D() const
+{
+	auto rgt = getLocalRight();
+	return Vector2D(rgt.x, rgt.z);
+}
+
+Vector2D Transform::getWorldPosition2D() const
+{
+	auto pos = getWorldPosition();
+	return Vector2D(pos.x, pos.z);
+}
+
+float Transform::getWorldRotation2D() const
+{
+	return getAngle2D(getWorldForward());
+}
+
+Vector2D Transform::getWorldScale2D() const
+{
+	auto scl = getWorldScale();
+	return Vector2D(scl.x, scl.z);
+}
+
+Vector2D Transform::getWorldForward2D() const
+{
+	auto fwd = getWorldForward();
+	return Vector2D(fwd.x, fwd.z);
+}
+
+Vector2D Transform::getWorldRight2D() const
+{
+	auto rgt = getWorldRight();
+	return Vector2D(rgt.x, rgt.z);
+}
+
+void Transform::setLocalPosition2D(Vector2D pos)
+{
+	auto cur = getLocalPosition();
+	cur.x = pos.x;
+	cur.z = pos.y;
+	setLocalPosition(cur);
+}
+
+void Transform::setLocalRotation2D(float angle)
+{
+	auto cur = getLocalRotation();
+	cur.y = angle;
+	setLocalRotation(cur);
+}
+
+void Transform::setLocalScale2D(Vector2D scl)
+{
+	auto cur = getLocalScale();
+	cur.x = scl.x;
+	cur.z = scl.y;
+	setLocalScale(cur);
+}
+
+#pragma endregion
