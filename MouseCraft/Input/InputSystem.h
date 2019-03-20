@@ -13,14 +13,16 @@
 #define JOYSTICK_DEADZONE 0.1
 #define DEBUG_PLAYER 10
 
+// Defines the possible axis this game supports.
+// Note: Order matters, should always be Master, Horizontal, Vertical.
 enum Axis
 {
+	LEFT,		
 	LEFT_HOR,
 	LEFT_VER,
+	RIGHT,		
 	RIGHT_HOR,
 	RIGHT_VER,
-	LEFT,		// tentative
-	RIGHT,		// tentative
 };
 
 enum Button
@@ -187,6 +189,6 @@ public:
 	virtual void Update(float dt) override;
 
 private:
-	void NotifyAxis(Axis2DInput& axis, int player);
+	void NotifyAxis(Axis2DInput& axis, Axis which, int player);
 };
 
