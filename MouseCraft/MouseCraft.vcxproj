@@ -241,6 +241,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="Event\Handler.h" />
     <ClInclude Include="Graphics\BufferObjects\FBO.h" />
+    <ClInclude Include="Graphics\CombinedGeometry.h" />
     <ClInclude Include="Graphics\GLTexture.h" />
     <ClInclude Include="DebugColliderComponent.h" />
     <ClInclude Include="DebugColliderSystem.h" />

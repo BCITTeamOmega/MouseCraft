@@ -146,10 +146,18 @@ void RenderSystem::gBufferPass() {
 	mat4 projection = perspective(fov, windowRatio, closeClip, farClip);
 	mat4 vp = projection * view;
 
+	// Set up all of the vertex data for all objects to be rendered
+	CombinedGeometry* masterGeometry = combineGeometries(*_renderingList);
+	_positionVBO->buffer(masterGeometry->getVertexData());
+	_normalVBO->buffer(masterGeometry->getNormalData());
+	_texCoordVBO->buffer(masterGeometry->getTexCoordData());
+	_ebo->buffer(masterGeometry->getIndices());
+
 	setShader(_shaders["gbuffer"]);
 	_fbo->bind();
+
+	int index = 0;
 	for (RenderData render : *_renderingList) {
-		Geometry* g = render.getModel()->getGeometry();
 		int texID = getTexture(render.getModel()->getTexture());
 		vec3 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
@@ -157,10 +165,12 @@ void RenderSystem::gBufferPass() {
 		mat4 mvp = vp * model;
 		mat4 invMVP = transpose(inverse(view * model));
 
+		/*
 		_positionVBO->buffer(g->getVertexData());
 		_normalVBO->buffer(g->getNormalData());
 		_texCoordVBO->buffer(g->getTexCoordData());
 		_ebo->buffer(g->getIndices());
+		*/
 		_textures->bind(GL_TEXTURE0);
 
 		_shader->setUniformVec3("color", color);
@@ -170,9 +180,44 @@ void RenderSystem::gBufferPass() {
 		_shader->setUniformInt("textureID", texID);
 		_shader->setUniformTexture("albedoTex", 0);
 
-		glDrawElements(GL_TRIANGLES, g->getIndices().size(), GL_UNSIGNED_INT, 0);
+		int start = masterGeometry->getIndexStart(index);
+		int size = masterGeometry->getIndexEnd(index) - start + 1;
+		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
+
+		index++;
 	}
 	_fbo->unbind();
+	delete masterGeometry;
+}
+
+CombinedGeometry* RenderSystem::combineGeometries(vector<RenderData>& data) {
+	CombinedGeometry* result = new CombinedGeometry();
+	std::vector<GLfloat> vert;
+	std::vector<GLfloat> texCoord;
+	std::vector<GLfloat> normal;
+	std::vector<GLuint> indices;
+	for (RenderData render : data) {
+		Geometry* g = render.getModel()->getGeometry();
+
+		int startVertex = vert.size();
+		int startIndex = indices.size();
+		result->getIndexIndices().push_back(startIndex);
+
+		vert.insert(vert.end(), g->getVertexData().begin(), g->getVertexData().end());
+		texCoord.insert(texCoord.end(), g->getTexCoordData().begin(), g->getTexCoordData().end());
+		normal.insert(normal.end(), g->getNormalData().begin(), g->getNormalData().end());
+
+		std::vector<GLuint> objectIndices = g->getIndices();
+		int vertexOffset = startVertex / 3;
+		for (GLuint i : objectIndices) {
+			indices.push_back(i + vertexOffset);
+		}
+	}
+	result->setVertexData(vert);
+	result->setTexCoordData(texCoord);
+	result->setNormalData(normal);
+	result->setIndices(indices);
+	return result;
 }
 
 void RenderSystem::lightingPass() {

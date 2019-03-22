@@ -614,5 +614,8 @@
     <ClInclude Include="Graphics\GLTextureArray.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\CombinedGeometry.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

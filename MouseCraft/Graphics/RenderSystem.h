@@ -11,6 +11,7 @@
 #include "BufferObjects/VBO.h"
 #include "BufferObjects/EBO.h"
 #include "BufferObjects/FBO.h"
+#include "CombinedGeometry.h"
 #include "Camera.h"
 #include "GLTexture.h"
 #include "GLTextureArray.h"
@@ -36,6 +37,7 @@ private:
 	void renderScene();
 	void gBufferPass();
 	void lightingPass();
+	CombinedGeometry* combineGeometries(std::vector<RenderData>& data);
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
 	Image* scaleImage(Image* input, int width, int height);
