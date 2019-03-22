@@ -271,7 +271,19 @@ Image* RenderSystem::scaleImage(Image* input, int width, int height) {
 	GLTexture tmpTex, tmpTex2;
 	Image* tmpImg = new Image(NULL, width, height);
 
-	tmpTex.setImage(*input, false, GL_RGBA8, GL_UNSIGNED_BYTE);
+	GLuint imageFormat = GL_RGBA8;
+	switch (input->getChannels()) {
+	case 1:
+		imageFormat = GL_R8;
+		break;
+	case 2:
+		imageFormat = GL_RG8;
+		break;
+	case 3:
+		imageFormat = GL_RGB8;
+		break;
+	}
+	tmpTex.setImage(*input, false, imageFormat, GL_UNSIGNED_BYTE);
 	tmpTex2.setImage(*tmpImg, false, GL_RGBA8, GL_UNSIGNED_BYTE);
 	_resizeInFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex);
 	_resizeOutFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex2);
