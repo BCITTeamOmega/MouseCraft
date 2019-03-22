@@ -321,6 +321,9 @@
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GLTextureArray.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -607,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GLTextureArray.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

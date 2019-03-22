@@ -13,6 +13,7 @@
 #include "BufferObjects/FBO.h"
 #include "Camera.h"
 #include "GLTexture.h"
+#include "GLTextureArray.h"
 #include "../Util/CpuProfiler.h"
 
 class RenderSystem : public System {
@@ -35,6 +36,9 @@ private:
 	void renderScene();
 	void gBufferPass();
 	void lightingPass();
+	int getTexture(std::string* path);
+	int loadTexture(const std::string& path, bool scaleImage = true);
+	Image* scaleImage(Image* input, int width, int height);
 	glm::vec3 convertColor(Color c);
 
 	Window* _window;
@@ -50,13 +54,20 @@ private:
 	EBO* _ebo;
 	FBO* _fbo;
 	Camera* _camera;
+
+	FBO* _resizeInFBO;
+	FBO* _resizeOutFBO;
 	
-	GLTexture* _texture;
+	GLTextureArray* _textures;
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
 
 	Model* _screenQuad;
-
 	CpuProfiler profiler;
+
+	std::map<std::string, int> _texturePathToID;
+
+	std::vector<Geometry*>* _staticGeometries;
+	std::vector<Image*>* _staticTextures;
 };

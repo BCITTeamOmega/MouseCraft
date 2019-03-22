@@ -13,7 +13,9 @@ FBO::FBO(int width, int height, vector<GLTexture*>& textures) : _width(width), _
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1280, 720);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo);
-	attachBuffers(textures);
+	if (textures.size() > 0) {
+		attachBuffers(textures);
+	}
 }
 
 FBO::~FBO() {
@@ -42,13 +44,13 @@ void FBO::attachBuffers(std::vector<GLTexture*>& buffers) {
 	delete img;
 }
 
-void FBO::bind() {
-	glBindFramebuffer(GL_FRAMEBUFFER, _id);
+void FBO::bind(GLuint type) {
+	glBindFramebuffer(type, _id);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 
-void FBO::unbind() {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+void FBO::unbind(GLuint type) {
+	glBindFramebuffer(type, 0);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 

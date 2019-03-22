@@ -13,6 +13,7 @@ public:
 	void setUniformMatrix(std::string name, glm::mat4 matrix);
 	void setUniformVec3(std::string name, glm::vec3 vector);
 	void setUniformTexture(std::string name, GLuint index);
+	void setUniformInt(std::string name, GLint value);
 private:
 	void printShaderError(GLuint shader);
 	void printProgramError(GLuint program);

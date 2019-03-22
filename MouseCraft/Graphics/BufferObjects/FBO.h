@@ -27,14 +27,14 @@ public:
 	/// <summary>
 	/// Bind the FBO in OpenGL
 	/// </summary>
-	void bind();
+	void bind(GLuint type = GL_FRAMEBUFFER);
 
 	/// <summary>
 	/// Unbind the FBO in OpenGL
 	/// This effectively just calls glBindFrameBuffer(GL_FRAMEBUFFER, 0)
 	/// So it will unbind any FBO attached regardless of whether it is this one
 	/// </summary>
-	void unbind();
+	void unbind(GLuint type = GL_FRAMEBUFFER);
 
 	/// <summary>
 	/// Attach a texture to the FBO on the specified attachment

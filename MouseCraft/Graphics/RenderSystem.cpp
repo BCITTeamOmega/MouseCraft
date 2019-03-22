@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Renderable.h"
 #include "ModelGen.h"
+#include "../Loading/ImageLoader.h"
 
 using std::string;
 using std::vector;
@@ -33,6 +34,8 @@ RenderSystem::RenderSystem() : System() {
 	profiler.InitializeTimers(1);
 	profiler.LogOutput("Rendering.log");	// optional
 
+	loadTexture("res/models/test/blank.bmp");
+
 	_vao->bind();
 }
 
@@ -40,9 +43,17 @@ RenderSystem::~RenderSystem() {
 	delete _vao;
 	delete _positionVBO;
 	delete _ebo;
-	delete _texture;
+	delete _textures;
 	delete _fbo;
 	delete _screenQuad;
+
+	for (auto a : *_staticGeometries) {
+		delete a;
+	}
+
+	for (auto a : *_staticTextures) {
+		delete a;
+	}
 }
 
 void RenderSystem::initVertexBuffers() {
@@ -59,7 +70,8 @@ void RenderSystem::initVertexBuffers() {
 }
 
 void RenderSystem::initTextures() {
-	_texture = new GLTexture();
+	_staticTextures = new vector<Image*>();
+	_textures = new GLTextureArray(1024, 1024, 50, 2, GL_SRGB8_ALPHA8);
 }
 
 void RenderSystem::initRenderBuffers() {
@@ -69,6 +81,10 @@ void RenderSystem::initRenderBuffers() {
 
 	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer };
 	_fbo = new FBO(1280, 720, buffers);
+
+	vector<GLTexture*> noBuffers = {};
+	_resizeInFBO = new FBO(1024, 1024, noBuffers);
+	_resizeOutFBO = new FBO(1024, 1024, noBuffers);
 }
 
 void RenderSystem::setWindow(Window* window) {
@@ -133,27 +149,25 @@ void RenderSystem::gBufferPass() {
 	_fbo->bind();
 	for (RenderData render : *_renderingList) {
 		Geometry* g = render.getModel()->getGeometry();
-		Image* tex = render.getModel()->getTexture();
+		int texID = getTexture(render.getModel()->getTexture());
 		vec3 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
 		mat4 mvp = vp * model;
 		mat4 invMVP = transpose(inverse(view * model));
 
-		if (tex != nullptr) {
-			_texture->setImage(*tex, true, GL_SRGB_ALPHA, GL_UNSIGNED_BYTE);
-		}
-
 		_positionVBO->buffer(g->getVertexData());
 		_normalVBO->buffer(g->getNormalData());
 		_texCoordVBO->buffer(g->getTexCoordData());
 		_ebo->buffer(g->getIndices());
-		_texture->bind(GL_TEXTURE0);
+		_textures->bind(GL_TEXTURE0);
 
 		_shader->setUniformVec3("color", color);
 		_shader->setUniformMatrix("transform", mvp);
 		_shader->setUniformMatrix("invTransform", invMVP);
-		_shader->setUniformTexture("texture0", 0);
+
+		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformTexture("albedoTex", 0);
 
 		glDrawElements(GL_TRIANGLES, g->getIndices().size(), GL_UNSIGNED_INT, 0);
 	}
@@ -182,6 +196,53 @@ void RenderSystem::lightingPass() {
 void RenderSystem::swapLists() {
 	swap(_renderingList, _accumulatingList);
 	_accumulatingList->clear();
+}
+
+int RenderSystem::getTexture(string* path) {
+	if (path == nullptr) {
+		return 0; // Use the default texture
+	}
+	return (_texturePathToID.find(*path) != _texturePathToID.end()) ?
+		_texturePathToID[*path] : loadTexture(*path);
+}
+
+int RenderSystem::loadTexture(const string& path, bool scale) {
+	Image* img = ImageLoader::loadImage(path);
+	if (scale) {
+		Image* tmp = img;
+		img = scaleImage(tmp, _textures->getWidth(), _textures->getHeight());
+		delete tmp;
+	}
+	int id = _staticTextures->size();
+	_texturePathToID[path] = id;
+	_staticTextures->push_back(img);
+	_textures->setImage(id, *img, GL_UNSIGNED_BYTE);
+	return id;
+}
+
+Image* RenderSystem::scaleImage(Image* input, int width, int height) {
+	GLTexture tmpTex, tmpTex2;
+	Image* tmpImg = new Image(NULL, width, height);
+
+	tmpTex.setImage(*input, false, GL_RGBA8, GL_UNSIGNED_BYTE);
+	tmpTex2.setImage(*tmpImg, false, GL_RGBA8, GL_UNSIGNED_BYTE);
+	_resizeInFBO->buffer(GL_TEXTURE0, tmpTex);
+	_resizeOutFBO->buffer(GL_TEXTURE0, tmpTex2);
+	_resizeInFBO->bind(GL_READ_FRAMEBUFFER);
+	_resizeOutFBO->bind(GL_DRAW_FRAMEBUFFER);
+
+	glBlitFramebuffer(0, 0, input->getWidth(), input->getHeight(), 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	_resizeOutFBO->bind(GL_READ_FRAMEBUFFER);
+	delete tmpImg;
+	std::vector<unsigned char>* data = new std::vector<unsigned char>(width * height * 4);
+	glReadPixels(0, 0, width, height, GL_RGBA8, GL_UNSIGNED_BYTE, &(*data)[0]);
+	tmpImg = new Image(&(*data)[0], width, height, 4);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	_resizeOutFBO->unbind(GL_READ_FRAMEBUFFER);
+	_resizeOutFBO->unbind(GL_DRAW_FRAMEBUFFER);
+
+	return tmpImg;
 }
 
 bool RenderSystem::loadShader(string shaderName) {
