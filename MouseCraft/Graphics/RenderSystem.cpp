@@ -6,6 +6,7 @@
 #include "Renderable.h"
 #include "ModelGen.h"
 #include "../Loading/ImageLoader.h"
+#include "RenderUtil.h"
 
 using std::string;
 using std::vector;
@@ -217,6 +218,7 @@ int RenderSystem::loadTexture(const string& path, bool scale) {
 	_texturePathToID[path] = id;
 	_staticTextures->push_back(img);
 	_textures->setImage(id, *img, GL_UNSIGNED_BYTE);
+	_textures->genMipmaps();
 	return id;
 }
 
@@ -226,17 +228,19 @@ Image* RenderSystem::scaleImage(Image* input, int width, int height) {
 
 	tmpTex.setImage(*input, false, GL_RGBA8, GL_UNSIGNED_BYTE);
 	tmpTex2.setImage(*tmpImg, false, GL_RGBA8, GL_UNSIGNED_BYTE);
-	_resizeInFBO->buffer(GL_TEXTURE0, tmpTex);
-	_resizeOutFBO->buffer(GL_TEXTURE0, tmpTex2);
+	_resizeInFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex);
+	_resizeOutFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex2);
 	_resizeInFBO->bind(GL_READ_FRAMEBUFFER);
 	_resizeOutFBO->bind(GL_DRAW_FRAMEBUFFER);
 
 	glBlitFramebuffer(0, 0, input->getWidth(), input->getHeight(), 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	RenderUtil::checkGLError("glBlitFramebuffer");
 
 	_resizeOutFBO->bind(GL_READ_FRAMEBUFFER);
 	delete tmpImg;
 	std::vector<unsigned char>* data = new std::vector<unsigned char>(width * height * 4);
-	glReadPixels(0, 0, width, height, GL_RGBA8, GL_UNSIGNED_BYTE, &(*data)[0]);
+	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &(*data)[0]);
+	RenderUtil::checkGLError("glReadPixels");
 	tmpImg = new Image(&(*data)[0], width, height, 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	_resizeOutFBO->unbind(GL_READ_FRAMEBUFFER);

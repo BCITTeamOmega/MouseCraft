@@ -10,7 +10,7 @@ FBO::FBO(int width, int height, vector<GLTexture*>& textures) : _width(width), _
 	glGenRenderbuffers(1, &_rbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	glBindRenderbuffer(GL_RENDERBUFFER, _rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1280, 720);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo);
 	if (textures.size() > 0) {
