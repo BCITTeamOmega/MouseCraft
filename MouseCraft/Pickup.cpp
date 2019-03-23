@@ -12,22 +12,17 @@ Pickup::~Pickup()
 
 void Pickup::OnInitialized()
 {
-	//Listens for collisions with the physics component
-	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-
-	if (pComp != nullptr)
-	{
-		pComp->onCollide.Attach(this);
-		pComp->onHit.Attach(this);
-	}
+	_physics = GetEntity()->GetComponent<PhysicsComponent>();
 }
 
 void Pickup::Grab()
 {
-	
+	_physics->SetEnabled(false);
 }
 
 void Pickup::Drop()
 {
-	
+	auto pos = GetEntity()->transform.getLocalPosition();
+	_physics->moveBody(new Vector2D(pos.x, pos.z), 0);
+	_physics->SetEnabled(true);
 }

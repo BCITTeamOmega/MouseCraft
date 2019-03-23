@@ -30,7 +30,11 @@
 #include "Cat.h"
 #include "PlayerComponent.h"
 #include "HealthComponent.h"
+#include "Sound/SoundComponent.h"
 #include "Loading/PrefabLoader.h"
+#include "GameManager.h"
+#include "ContraptionSystem.h"
+
 
 SoundManager* noise;
 
@@ -44,7 +48,10 @@ void Test_Rendering()
 
 	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
 	Model* m = ModelGen::makeCube(1, 1, 1);
-	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 100);
+
+    Model* m2 = ModelGen::makeCube(10.0, 20.0, 10.0);
+	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 70);
+
 	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
 	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
 
@@ -60,7 +67,8 @@ void Test_Rendering()
 	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	Renderable* floorRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	
+    Renderable* platRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
 
 	rc->setColor(Color(0.5, 1.0, 0.25));
@@ -72,6 +80,9 @@ void Test_Rendering()
 	floorRC->setColor(Color(1.0, 1.0, 1.0));
 	floorRC->setModel(*floorModel);
 
+    platRC->setColor(Color(1.0, 0.5, 0.0));
+    platRC->setModel(*m2);
+
 	cam->setFOV(90.0f);
 	cam->setCloseClip(0.01f);
 	cam->setFarClip(100.0f);
@@ -80,18 +91,21 @@ void Test_Rendering()
 	Entity* e2 = EntityManager::Instance().Create();
 	Entity* e3 = EntityManager::Instance().Create();
 	Entity* floorEntity = EntityManager::Instance().Create();
+    Entity* platformEntity = EntityManager::Instance().Create();
 
-	e1->transform.setLocalPosition(glm::vec3(-2.0, 0, -2.5));
-	e2->transform.setLocalPosition(glm::vec3(3.5, 0, -3.0));
-	e3->transform.setLocalPosition(glm::vec3(0, 10, 5));
-	e3->transform.setLocalRotation(glm::vec3(-1.0f, 0, 0));
+	e1->transform.setLocalPosition(glm::vec3(60, 0, 35));
+	e2->transform.setLocalPosition(glm::vec3(50, 0, 30));
+	e3->transform.setLocalPosition(glm::vec3(50, 22, 35));
+	e3->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
 
-	floorEntity->transform.setLocalPosition(glm::vec3(0, 0, 0));
+	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 30));
+    platformEntity->transform.setLocalPosition(glm::vec3(35, 0, 30));
 
 	e1->AddComponent(rc);
 	e2->AddComponent(rc2);
 	e3->AddComponent(cam);
 	floorEntity->AddComponent(floorRC);
+    platformEntity->AddComponent(platRC);
 
 	RenderSystem* rs = new RenderSystem();
 	rs->setWindow(OmegaEngine::Instance().getWindow());
@@ -103,7 +117,6 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_render);
 
 	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-	c_p1_mice->player = 0;
 	c_p1_mice->speed = 50.0f;
 	e1->AddComponent(c_p1_mice);
 
@@ -116,6 +129,7 @@ void Test_Rendering()
 	e1->AddComponent(c_p1_collider);
 
 	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+    c_p1_health->SetHealth(2);
 	e1->AddComponent(c_p1_health);
 
 	// player 2 (cat)
@@ -125,15 +139,17 @@ void Test_Rendering()
 	e2->AddComponent(c_p2_render);
 
 	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
-	c_p2_Cat->setPlayer(1);
 	e2->AddComponent(c_p2_Cat);
 
 	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(1);
+	playerc->SetID(10);
 	e2->AddComponent(playerc);
 	
 	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	e2->AddComponent(healthc);
+
+    auto soundc = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+    e2->AddComponent(soundc);
 
 	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
 	e2->AddComponent(c_p2_collider);
@@ -147,22 +163,34 @@ void Test_Rendering()
 	InputSystem* is = new InputSystem();
 
 	//Tell the PhysicsManager how big the world is
-	PhysicsManager::instance()->setupGrid(100, 100);
+	PhysicsManager::instance()->setupGrid(100, 70, 5);
 
 	// component_player1_physics 
-	auto c_p1_physics = PhysicsManager::instance()->createObject(10, 10, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
+	auto c_p1_physics = PhysicsManager::instance()->createObject(60, 55, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
 
 	// add to mouse entity
 	e1->AddComponent(c_p1_physics);
 
 	// component_player2_physics 
 
-	auto c_p2_physics = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::CAT_DOWN);
+	auto c_p2_physics = PhysicsManager::instance()->createObject(50, 50, 1, 1, 0, PhysObjectType::CAT_DOWN);
 
 	// add to cat entity
 	e2->AddComponent(c_p2_physics);
 
+    //add platform physics
+
+    auto c_plat_physics = PhysicsManager::instance()->createGridObject(35, 30, 10, 10, PhysObjectType::PLATFORM);
+    platformEntity->AddComponent(c_plat_physics);
+
 	// adjustments made in PlayerComponent 
+
+	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
+	c_gamemanager->AddMouse(c_p1_mice);
+	c_gamemanager->SetCat(c_p2_Cat);
+
+	auto e_gm = EntityManager::Instance().Create();
+	e_gm->AddComponent(c_gamemanager);
 
 	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
 
@@ -173,14 +201,18 @@ void Test_Rendering()
 	OmegaEngine::Instance().AddEntity(e3);
 	OmegaEngine::Instance().AddEntity(e_spawner);
 	OmegaEngine::Instance().AddEntity(floorEntity);
+    OmegaEngine::Instance().AddEntity(platformEntity);
+	OmegaEngine::Instance().AddEntity(e_gm);
 
 	// prefabs 
 
 	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	p_pot->transform.setLocalPosition(glm::vec3(50, 0, 50));
 	OmegaEngine::Instance().AddEntity(p_pot);
 
 	OmegaEngine::Instance().AddSystem(rs);
 	OmegaEngine::Instance().AddSystem(is);
+	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	// OmegaEngine::Instance().AddSystem(dcs);
 	OmegaEngine::Instance().Loop();
 
@@ -390,6 +422,8 @@ void Test_ObserverPattern()
 
 void Test_Transform()
 {
+	// OH NO THIS IS FOR LHS
+
 	// create some entities 
 	auto e_base = EntityManager::Instance().Create();
 	auto e_right = EntityManager::Instance().Create();
@@ -447,7 +481,7 @@ void Test_Transform()
 
 int main(int argc, char* argv[]) 
 {
-	Test_Transform();
+	//Test_Transform();
 
     //adding sound system
     noise = new SoundManager();

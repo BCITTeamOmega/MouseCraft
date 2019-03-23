@@ -31,13 +31,21 @@ public:
 
 	Subject<int> OnHealthChanged;
 	Subject<> OnDeath;
+	Subject<> OnRevive;
 
 
-	void CutSelf(int dmg)
+	void Damage(int dmg)
 	{
 		if (dmg == 0)
 			return;
-		if ((_health -= dmg) < 0)
+
+		if (_shield)
+		{
+			RemoveShield();
+			return;
+		}
+
+		if ((_health -= dmg) <= 0)
 		{
 			_health = 0;
 			OnDeath.Notify();
@@ -45,8 +53,39 @@ public:
 		OnHealthChanged.Notify(_health);
 	}
 
+	void SetHealth(int health)
+	{
+		auto old = _health;
+		_health = health;
+		
+		if (health <= 0)
+		{
+			// set health to dead 
+			_health = 0;
+			OnDeath.Notify();
+		}
+		else if (old == 0)
+		{
+			// set health to alive (and was dead)
+			OnRevive.Notify();
+		}
+
+		OnHealthChanged.Notify(_health);
+	}
+
+	void AddShield()
+	{
+		_shield = true;
+	}
+
+	void RemoveShield()
+	{
+		_shield = false;
+	}
+
 private:
 	int _health = 1;
+	bool _shield = false;
 
 	void Notify(EventName eventName, Param* params)
 	{

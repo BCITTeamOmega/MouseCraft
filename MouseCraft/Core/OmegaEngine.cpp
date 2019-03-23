@@ -80,6 +80,7 @@ void OmegaEngine::DeferAction(StatusActionParam * action)
 	std::unique_lock<std::mutex> lock(_deferredActionMtx);
 	if (action->action == StatusActionType::Delete)
 	{
+		// WARNING: You can still double delete an entity by deleting the parent and child (passes validation).
 		const bool is_in = _destructionValidation.find(action->target->GetID()) != _destructionValidation.end();
 		if (is_in)
 		{
@@ -89,12 +90,12 @@ void OmegaEngine::DeferAction(StatusActionParam * action)
 		else
 		{
 			_destructionValidation.insert(action->target->GetID());
-			_deferredActions.push_back(action);
+			_deferredActionsBack.push_back(action);
 		}
 	}
 	else
 	{
-		_deferredActions.push_front(action);
+		_deferredActionsBack.push_front(action);
 	}
 }
 
@@ -138,6 +139,8 @@ void OmegaEngine::sequential_loop()
 
 		// PHASE 1: Status Change Resolution
 		_profiler.StartTimer(2);
+		// swap buffers 
+		std::swap(_deferredActions, _deferredActionsBack);
 		while (!_deferredActions.empty())
 		{
 			// WARNING: MEMORY LEAK - USE UNIQUE_POINTER 
@@ -206,6 +209,7 @@ void OmegaEngine::transitionScenes()
 		_activeScene->root.SetEnabled(false, true);
 	}
 	std::deque<StatusActionParam*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
+	std::deque<StatusActionParam*>().swap(_deferredActionsBack);
 	_sceneChangeRequested = false;
 	// load 
 	_activeScene = _nextScene;
