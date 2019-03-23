@@ -37,7 +37,7 @@ private:
 	void renderScene();
 	void gBufferPass();
 	void lightingPass();
-	CombinedGeometry* combineGeometries(std::vector<RenderData>& data);
+	void combineMasterGeometry(std::vector<RenderData>& data);
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
 	Image* scaleImage(Image* input, int width, int height);
@@ -64,6 +64,8 @@ private:
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
+
+	CombinedGeometry* _masterGeometry;
 
 	Model* _screenQuad;
 	CpuProfiler profiler;

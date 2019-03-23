@@ -29,6 +29,8 @@ RenderSystem::RenderSystem() : System() {
 	_renderingList = new vector<RenderData>();
 	_accumulatingList = new vector<RenderData>();
 
+	_masterGeometry = new CombinedGeometry();
+
 	glEnable(GL_FRAMEBUFFER_SRGB);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -47,6 +49,7 @@ RenderSystem::~RenderSystem() {
 	delete _textures;
 	delete _fbo;
 	delete _screenQuad;
+	delete _masterGeometry;
 
 	for (auto a : *_staticGeometries) {
 		delete a;
@@ -67,6 +70,7 @@ void RenderSystem::initVertexBuffers() {
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
 	_vao->setBuffer(2, *_texCoordVBO);
+
 	_vao->setElementBuffer(*_ebo);
 }
 
@@ -147,11 +151,11 @@ void RenderSystem::gBufferPass() {
 	mat4 vp = projection * view;
 
 	// Set up all of the vertex data for all objects to be rendered
-	CombinedGeometry* masterGeometry = combineGeometries(*_renderingList);
-	_positionVBO->buffer(masterGeometry->getVertexData());
-	_normalVBO->buffer(masterGeometry->getNormalData());
-	_texCoordVBO->buffer(masterGeometry->getTexCoordData());
-	_ebo->buffer(masterGeometry->getIndices());
+	combineMasterGeometry(*_renderingList);
+	_positionVBO->buffer(_masterGeometry->getVertexData());
+	_normalVBO->buffer(_masterGeometry->getNormalData());
+	_texCoordVBO->buffer(_masterGeometry->getTexCoordData());
+	_ebo->buffer(_masterGeometry->getIndices());
 
 	setShader(_shaders["gbuffer"]);
 	_fbo->bind();
@@ -165,6 +169,10 @@ void RenderSystem::gBufferPass() {
 		mat4 mvp = vp * model;
 		mat4 invMVP = transpose(inverse(view * model));
 
+		int loc = _masterGeometry->getVertexStart(index);
+		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
+		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
+		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
 		/*
 		_positionVBO->buffer(g->getVertexData());
 		_normalVBO->buffer(g->getNormalData());
@@ -180,47 +188,45 @@ void RenderSystem::gBufferPass() {
 		_shader->setUniformInt("textureID", texID);
 		_shader->setUniformTexture("albedoTex", 0);
 
-		int start = masterGeometry->getIndexStart(index);
-		int size = masterGeometry->getIndexEnd(index) - start + 1;
+		int start = _masterGeometry->getIndexStart(index);
+		int size = _masterGeometry->getIndexEnd(index) - start + 1;
 		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
 
 		index++;
 	}
 	_fbo->unbind();
-	delete masterGeometry;
 }
 
-CombinedGeometry* RenderSystem::combineGeometries(vector<RenderData>& data) {
-	CombinedGeometry* result = new CombinedGeometry();
-	std::vector<GLfloat> vert;
-	std::vector<GLfloat> texCoord;
-	std::vector<GLfloat> normal;
-	std::vector<GLuint> indices;
+void RenderSystem::combineMasterGeometry(vector<RenderData>& data) {
+	_masterGeometry->clear();
+	std::vector<GLfloat>& vert = _masterGeometry->getVertexData();
+	std::vector<GLfloat>& texCoord = _masterGeometry->getTexCoordData();
+	std::vector<GLfloat>& normal = _masterGeometry->getNormalData();
+	std::vector<GLuint>& indices = _masterGeometry->getIndices();
 	for (RenderData render : data) {
 		Geometry* g = render.getModel()->getGeometry();
 
-		int startVertex = vert.size();
+		int startVertex = vert.size() / 3;
 		int startIndex = indices.size();
-		result->getIndexIndices().push_back(startIndex);
+		_masterGeometry->getIndexIndices().push_back(startIndex);
+		_masterGeometry->getVertexIndices().push_back(startVertex);
 
 		vert.insert(vert.end(), g->getVertexData().begin(), g->getVertexData().end());
 		texCoord.insert(texCoord.end(), g->getTexCoordData().begin(), g->getTexCoordData().end());
 		normal.insert(normal.end(), g->getNormalData().begin(), g->getNormalData().end());
-
-		std::vector<GLuint> objectIndices = g->getIndices();
-		int vertexOffset = startVertex / 3;
-		for (GLuint i : objectIndices) {
-			indices.push_back(i + vertexOffset);
-		}
+		indices.insert(indices.end(), g->getIndices().begin(), g->getIndices().end());
 	}
-	result->setVertexData(vert);
-	result->setTexCoordData(texCoord);
-	result->setNormalData(normal);
-	result->setIndices(indices);
-	return result;
+	_masterGeometry->setVertexData(vert);
+	_masterGeometry->setTexCoordData(texCoord);
+	_masterGeometry->setNormalData(normal);
+	_masterGeometry->setIndices(indices);
 }
 
 void RenderSystem::lightingPass() {
+	_vao->setBuffer(0, *_positionVBO);
+	_vao->setBuffer(1, *_normalVBO);
+	_vao->setBuffer(2, *_texCoordVBO);
+
 	Geometry* quad = _screenQuad->getGeometry();
 	setShader(_shaders["lighting"]);
 
