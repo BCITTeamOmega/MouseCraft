@@ -209,7 +209,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
-    <ClCompile Include="Mice.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
@@ -305,7 +305,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
-    <ClInclude Include="Mice.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="OmegaTests.h" />
     <ClInclude Include="Overcharge.h" />

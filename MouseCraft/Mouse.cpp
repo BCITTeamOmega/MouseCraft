@@ -1,9 +1,9 @@
-#include "Mice.h"
+#include "Mouse.h"
 
-Mice::Mice() : 
-	HandleOnCollide(this, &Mice::OnCollision),
-	HandleOnDeath(this, &Mice::OnDeath),
-	HandleOnHit(this, &Mice::OnHit)
+Mouse::Mouse() : 
+	HandleOnCollide(this, &Mouse::OnCollision),
+	HandleOnDeath(this, &Mouse::OnDeath),
+	HandleOnHit(this, &Mouse::OnHit)
 {
 	std::cout << std::setprecision(2);
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
@@ -11,13 +11,13 @@ Mice::Mice() :
 }
 
 
-Mice::~Mice()
+Mouse::~Mouse()
 {
 	EventManager::Unsubscribe(EventName::INPUT_AXIS, this);
 	EventManager::Unsubscribe(EventName::INPUT_BUTTON, this);
 }
 
-void Mice::OnInitialized() 
+void Mouse::OnInitialized() 
 {
 	//Listens for collisions with the physics component
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
@@ -34,7 +34,7 @@ void Mice::OnInitialized()
     player = GetEntity()->GetComponent<PlayerComponent>()->GetID();
 }
 
-void Mice::Update(float deltaTime) 
+void Mouse::Update(float deltaTime) 
 {
 	if (shoot)
 	{
@@ -54,7 +54,7 @@ void Mice::Update(float deltaTime)
 	}	
 }
 
-void Mice::Notify(EventName eventName, Param * params)
+void Mouse::Notify(EventName eventName, Param * params)
 {
 	// for updatable
 	UpdatableComponent::Notify(eventName, params);
@@ -75,7 +75,7 @@ void Mice::Notify(EventName eventName, Param * params)
 	}
 }
 
-void Mice::OnCollision(PhysicsComponent * pc)
+void Mouse::OnCollision(PhysicsComponent * pc)
 {
 	if (pc->type == PhysObjectType::PART)
 	{
@@ -84,12 +84,12 @@ void Mice::OnCollision(PhysicsComponent * pc)
 	}
 }
 
-void Mice::OnHit(PhysicsComponent* e)
+void Mouse::OnHit(PhysicsComponent* e)
 {
 
 }
 
-void Mice::OnDeath()
+void Mouse::OnDeath()
 {
 	// on death
 	downed = true;
@@ -98,7 +98,7 @@ void Mice::OnDeath()
 
 
 
-void Mice::addItem(Pickup* item) {
+void Mouse::addItem(Pickup* item) {
 
 	if (newItem != nullptr) {
 		return;
@@ -125,10 +125,10 @@ void Mice::addItem(Pickup* item) {
 	else return;
 }
 
-void Mice::dropItem() {
+void Mouse::dropItem() {
 	
 	if (baseItem != nullptr) {
-		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of mice
+		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of Mouse
 		auto e = baseItem->GetEntity();
 		e->SetParent(OmegaEngine::Instance().GetRoot(), true);	// forced (instant and unmanaged)	
 		e->transform.setLocalPosition(dropPos);
@@ -146,7 +146,7 @@ void Mice::dropItem() {
 	}
 }
 
-void Mice::use(Contraption* item) {
+void Mouse::use(Contraption* item) {
 	
 	if (item->use())
 	{
@@ -155,7 +155,7 @@ void Mice::use(Contraption* item) {
 	}
 }
 
-void Mice::combine(Pickup *material) {
+void Mouse::combine(Pickup *material) {
 
 	Entity* entity;
 

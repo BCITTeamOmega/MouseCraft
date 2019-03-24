@@ -19,7 +19,7 @@
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
 #include "Input/InputSystem.h"
-#include "Mice.h"
+#include "Mouse.h"
 #include "Graphics/ModelGen.h"
 #include "Sound/SoundManager.h"
 #include "Loading/ImageLoader.h"
@@ -127,22 +127,22 @@ void MainTest()
 	//Create the renderables, set their model and colour, and add them to their entity
 	Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	mouse1Rend->setModel(*mouseModel);
-	mouse1Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse1Rend->setColor(Color(0.52, 0.24, 0.20));
 	mouse1Entity->AddComponent(mouse1Rend);
 
 	Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	mouse2Rend->setModel(*mouseModel);
-	mouse2Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse2Rend->setColor(Color(0.16, 0.18, 0.45));
 	mouse2Entity->AddComponent(mouse2Rend);
 
 	Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	mouse3Rend->setModel(*mouseModel);
-	mouse3Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse3Rend->setColor(Color(0.19, 0.42, 0.17));
 	mouse3Entity->AddComponent(mouse3Rend);
 
 	Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
 	catRend->setModel(*catModel);
-	catRend->setColor(Color(1.0, 0.25, 0.5)); //setColor(Color(0.99, 0.96, 0.88)); 253,245,226
+	catRend->setColor(Color(1.0, 0.25, 0.5));
 	catEntity->AddComponent(catRend);
 
 	Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -263,7 +263,7 @@ void MainTest()
 
 	//Create other miscellaneous components for things
 	//Mouse 1
-	Mice* mouse1Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	Mouse* mouse1Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse1Mouse->speed = 50.0f;
 	mouse1Entity->AddComponent(mouse1Mouse);
 
@@ -276,7 +276,7 @@ void MainTest()
 	mouse1Entity->AddComponent(mouse1Health);
 
 	//Mouse 2
-	Mice* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse2Mouse->speed = 50.0f;
 	mouse2Entity->AddComponent(mouse2Mouse);
 
@@ -289,7 +289,7 @@ void MainTest()
 	mouse2Entity->AddComponent(mouse2Health);
 
 	//Mouse 3
-	Mice* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse3Mouse->speed = 50.0f;
 	mouse3Entity->AddComponent(mouse3Mouse);
 
@@ -329,7 +329,7 @@ void MainTest()
 
 	//Don't forget the stupid teapots
 	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 45));
+	teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
 	//Add the entities to the game
 	OmegaEngine::Instance().AddEntity(mouse1Entity);

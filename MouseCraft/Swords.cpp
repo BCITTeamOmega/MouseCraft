@@ -1,6 +1,6 @@
 #include "Swords.h"
 
-#include "Mice.h"
+#include "Mouse.h"
 
 Swords::Swords() :
 	HandleOnCollision(this, &Swords::OnCollision)

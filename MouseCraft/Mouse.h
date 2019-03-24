@@ -21,11 +21,11 @@
 #include "HealthComponent.h"
 #include "PlayerComponent.h"
 
-class Mice : public UpdatableComponent
+class Mouse : public UpdatableComponent
 {
 public:
-	Mice();
-	~Mice();
+	Mouse();
+	~Mouse();
 
 	virtual void OnInitialized() override;
 	virtual void Update(float deltaTime);
@@ -41,9 +41,9 @@ public:
 public:
 	float speed = 10.0f;
 	bool downed = false;
-	Handler<Mice, PhysicsComponent*> HandleOnCollide;
-	Handler<Mice, PhysicsComponent*> HandleOnHit;
-	Handler<Mice> HandleOnDeath;
+	Handler<Mouse, PhysicsComponent*> HandleOnCollide;
+	Handler<Mouse, PhysicsComponent*> HandleOnHit;
+	Handler<Mouse> HandleOnDeath;
 
 private:
 	int player = 0;

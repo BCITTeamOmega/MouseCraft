@@ -5,7 +5,7 @@
 #include "Core/UpdatableComponent.h"
 #include "Event/Handler.h"
 #include "Event/EventManager.h"
-#include "Mice.h"
+#include "Mouse.h"
 #include "Cat.h"
 
 // Winner of the game
@@ -22,22 +22,22 @@ public:
 	GameManager();
 	~GameManager();
 	virtual void Update(float deltaTime) override;
-	void AddMouse(Mice* m);
+	void AddMouse(Mouse* m);
 	void SetCat(Cat* c);
 
 private:
-	void OnMiceDeath();
-	void OnMiceRevive();
+	void OnMouseDeath();
+	void OnMouseRevive();
 	void OnCatDeath();
 	void GameOver(GameOverParams winner);
 
 private:
-	std::vector<Mice*> mice;
+	std::vector<Mouse*> mice;
 	Cat* cat;
 
 	int aliveMice = 0;
 
-	Handler<GameManager> HandleMiceDeath;
-	Handler<GameManager> HandleMiceRevive;
+	Handler<GameManager> HandleMouseDeath;
+	Handler<GameManager> HandleMouseRevive;
 	Handler<GameManager> HandleCatDeath;
 };

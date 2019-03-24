@@ -7,7 +7,7 @@
 /*
 Layout of the coil 
 
-Entity (mice)
+Entity (Mouse)
 	Entity (contraption)
 	- Coil
 	- Physics
