@@ -55,13 +55,8 @@ void Test_Rendering()
 	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
 	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
 
-	Image* i = ImageLoader::loadImage("res/textures/wood.png");
+	std::string* i = new std::string("res/textures/wood.png");
 	floorModel->setTexture(i);
-
-	Image* blank = ImageLoader::loadImage("res/models/test/blank.bmp");
-	m->setTexture(blank);
-	miceModel->setTexture(blank);
-	catModel->setTexture(blank);
 
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();

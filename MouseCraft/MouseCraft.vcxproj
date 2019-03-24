@@ -188,6 +188,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Vector2D.cpp" />
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
@@ -247,6 +248,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="DamageOnCollision.h" />
     <ClInclude Include="Event\Handler.h" />
     <ClInclude Include="Graphics\BufferObjects\FBO.h" />
+    <ClInclude Include="Graphics\CombinedGeometry.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graphics\GLTexture.h" />
     <ClInclude Include="DebugColliderComponent.h" />
@@ -259,6 +261,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Event\ISubscriber.h" />
     <ClInclude Include="Graphics\BufferObjects\EBO.h" />
     <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\GLTextureArray.h" />
     <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\ModelGen.h" />

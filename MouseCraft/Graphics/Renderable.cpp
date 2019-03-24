@@ -48,8 +48,7 @@ Component* Renderable::CreateFromJson(json json)
 
 	// parse geometry and texture
 	c->_model = ModelLoader::loadModel(json["model_path"].get<std::string>());
-	Image* i = ImageLoader::loadImage(json["texture_path"].get<std::string>());
-	c->_model->setTexture(i);
+	c->_model->setTexture(new std::string(json["texture_path"].get<std::string>()));
 
 	return c;
 }

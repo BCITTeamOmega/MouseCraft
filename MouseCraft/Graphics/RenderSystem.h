@@ -11,14 +11,19 @@
 #include "BufferObjects/VBO.h"
 #include "BufferObjects/EBO.h"
 #include "BufferObjects/FBO.h"
+#include "CombinedGeometry.h"
 #include "Camera.h"
 #include "GLTexture.h"
+#include "GLTextureArray.h"
 #include "../Util/CpuProfiler.h"
 
 class RenderSystem : public System {
 public:
 	RenderSystem();
 	~RenderSystem();
+	void initVertexBuffers();
+	void initTextures();
+	void initRenderBuffers();
 	void setWindow(Window* window);
 	void Update(float dt) override;
 	void swapLists();
@@ -28,7 +33,14 @@ private:
 	void setShader(Shader& s);
 	void clearShader();
 	void accumulateList();
-	void setOutBuffers(std::vector<GLTexture*>& buffers);
+	void clearBuffers();
+	void renderScene();
+	void gBufferPass();
+	void lightingPass();
+	void combineMasterGeometry(std::vector<RenderData>& data);
+	int getTexture(std::string* path);
+	int loadTexture(const std::string& path, bool scaleImage = true);
+	Image* scaleImage(Image* input, int width, int height);
 	glm::vec3 convertColor(Color c);
 
 	Window* _window;
@@ -44,13 +56,22 @@ private:
 	EBO* _ebo;
 	FBO* _fbo;
 	Camera* _camera;
+
+	FBO* _resizeInFBO;
+	FBO* _resizeOutFBO;
 	
-	GLTexture* _texture;
+	GLTextureArray* _textures;
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
 
-	Model* _screenQuad;
+	CombinedGeometry* _masterGeometry;
 
+	Model* _screenQuad;
 	CpuProfiler profiler;
+
+	std::map<std::string, int> _texturePathToID;
+
+	std::vector<Geometry*>* _staticGeometries;
+	std::vector<Image*>* _staticTextures;
 };

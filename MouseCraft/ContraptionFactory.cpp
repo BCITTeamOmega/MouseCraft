@@ -17,15 +17,6 @@ ContraptionFactory::ContraptionFactory()
 	_overchargeModel = ModelLoader::loadModel("res/models/battery.obj");
 	_swordsModel = ModelLoader::loadModel("res/models/screw.obj");
 	_coilFieldModel = ModelGen::makeCube(16, 0.1, 16);
-	
-	_texture = ImageLoader::loadImage("res/models/test/blank.bmp");
-	_platformModel->setTexture(_texture);
-	_gunModel->setTexture(_texture);
-	_coilModel->setTexture(_texture);
-	_bombModel->setTexture(_texture);
-	_overchargeModel->setTexture(_texture);
-	_swordsModel->setTexture(_texture);
-	_coilFieldModel->setTexture(_texture);
 }
 
 

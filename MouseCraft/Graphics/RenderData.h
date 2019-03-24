@@ -5,7 +5,9 @@
 class RenderData {
 public:
 	RenderData(Model* m, glm::mat4 transform, Color c = Color(1.0f, 1.0f, 1.0f))
-		: _model(m), _transform(transform), _color(c) {}
+		:_transform(transform), _color(c) {
+		_model = new Model(*m);
+	}
 	Model* getModel() { return _model; }
 	glm::mat4 getTransform() { return _transform; }
 	Color getColor() { return _color; }

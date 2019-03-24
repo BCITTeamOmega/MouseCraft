@@ -324,6 +324,9 @@
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GLTextureArray.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -625,6 +628,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GLTextureArray.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CombinedGeometry.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
