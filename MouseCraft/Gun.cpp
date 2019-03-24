@@ -1,6 +1,6 @@
 #include "Gun.h"
 
-#include "Mice.h"
+#include "Mouse.h"
 #include "DamageOnCollision.h"
 #include "TimedDestruction.h"
 

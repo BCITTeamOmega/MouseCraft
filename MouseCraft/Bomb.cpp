@@ -1,6 +1,6 @@
 #include "Bomb.h"
 
-#include "Mice.h"
+#include "Mouse.h"
 
 const float Bomb::RADIUS	= 10.0f;
 const float Bomb::LIFETIME	= 2.0f;

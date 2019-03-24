@@ -3,8 +3,8 @@
 #include <iostream>
 
 GameManager::GameManager() :
-	HandleMiceDeath(this, &GameManager::OnMiceDeath),
-	HandleMiceRevive(this, &GameManager::OnMiceRevive),
+	HandleMouseDeath(this, &GameManager::OnMouseDeath),
+	HandleMouseRevive(this, &GameManager::OnMouseRevive),
 	HandleCatDeath(this, &GameManager::OnCatDeath)
 {
 }
@@ -18,12 +18,12 @@ void GameManager::Update(float deltaTime)
 {
 }
 
-void GameManager::AddMouse(Mice * m)
+void GameManager::AddMouse(Mouse * m)
 {
 	mice.push_back(m);
 	++aliveMice;
-	m->GetEntity()->GetComponent<HealthComponent>()->OnDeath.Attach(HandleMiceDeath);
-	m->GetEntity()->GetComponent<HealthComponent>()->OnRevive.Attach(HandleMiceRevive);
+	m->GetEntity()->GetComponent<HealthComponent>()->OnDeath.Attach(HandleMouseDeath);
+	m->GetEntity()->GetComponent<HealthComponent>()->OnRevive.Attach(HandleMouseRevive);
 }
 
 void GameManager::SetCat(Cat * c)
@@ -32,14 +32,14 @@ void GameManager::SetCat(Cat * c)
 	c->GetEntity()->GetComponent<HealthComponent>()->OnDeath.Attach(HandleCatDeath);
 }
 
-void GameManager::OnMiceDeath()
+void GameManager::OnMouseDeath()
 {
 	--aliveMice;
 	if (aliveMice == 0)
 		GameOver(GameOverParams::CAT_WON);
 }
 
-void GameManager::OnMiceRevive()
+void GameManager::OnMouseRevive()
 {
 	++aliveMice;
 }

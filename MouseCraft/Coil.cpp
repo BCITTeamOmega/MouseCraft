@@ -27,8 +27,8 @@ bool Coil::use() {
 	_isPlaced = true;
 
 	// determine which layer to check for 
-	auto micePhys = GetEntity()->GetParent()->GetComponent<PhysicsComponent>();
-	checkFor.insert(micePhys->isUp ? PhysObjectType::CAT_UP : PhysObjectType::CAT_DOWN);
+	auto mousePhys = GetEntity()->GetParent()->GetComponent<PhysicsComponent>();
+	checkFor.insert(mousePhys->isUp ? PhysObjectType::CAT_UP : PhysObjectType::CAT_DOWN);
 	
 	// create physics at the correct location 
 	// however we don't actually need physics body for coil so we skip it

@@ -11,7 +11,7 @@
 #include "DamageOnCollision.h"
 #include "TimedDestruction.h"
 
-class Mice;
+class Mouse;
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
 {
@@ -29,6 +29,6 @@ public:
 public:
 	CONTRAPTIONS type;
 protected:
-	Mice* mice;
+	Mouse* mouse;
 };
 

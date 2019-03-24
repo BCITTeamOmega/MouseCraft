@@ -16,6 +16,12 @@ PhysicsComponent::~PhysicsComponent()
 	body->GetWorld()->DestroyBody(body);
 }
 
+void PhysicsComponent::initPosition()
+{
+	//Make sure the initial position of the entity is the same as the position of the body
+	GetEntity()->transform.setLocalPosition(glm::vec3(body->GetPosition().x, zPos, body->GetPosition().y));
+}
+
 void PhysicsComponent::moveBody(Vector2D* pos, float angle)
 {
 	body->SetTransform(b2Vec2(pos->x, pos->y), angle);
