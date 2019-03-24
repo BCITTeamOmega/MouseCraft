@@ -76,7 +76,7 @@ void RenderSystem::initVertexBuffers() {
 
 void RenderSystem::initTextures() {
 	_staticTextures = new vector<Image*>();
-	_textures = new GLTextureArray(1024, 1024, 50, 2, GL_SRGB8_ALPHA8);
+	_textures = new GLTextureArray(1024, 1024, 50, 5, GL_SRGB8_ALPHA8);
 }
 
 void RenderSystem::initRenderBuffers() {
