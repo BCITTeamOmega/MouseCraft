@@ -18,11 +18,11 @@
 #include "../WorldGrid.h"
 
 #pragma region Awful macros
-constexpr auto FALL_VELOCITY = 10;
-constexpr auto JUMP_VELOCITY = 10;
-constexpr auto Z_UPPER = 10.0;
-constexpr auto Z_THRESHOLD = 6.0;
-constexpr auto Z_LOWER = 1.0;
+constexpr auto FALL_VELOCITY = 5;
+constexpr auto JUMP_VELOCITY = 5;
+constexpr auto Z_UPPER = 5.0;
+constexpr auto Z_THRESHOLD = 3.0;
+constexpr auto Z_LOWER = 0.5;
 
 constexpr auto WALL_CATEGORY = 0x0001;
 constexpr auto PLATFORM_CATEGORY = 0x0002;

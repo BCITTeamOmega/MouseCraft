@@ -39,8 +39,8 @@ void Cat::Update(float dt) {
 		};
 			
 		auto compPos = pComp->body->GetPosition();
-		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y + (pComp->height / 2));
-		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y - (pComp->height / 2));
+		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y - (pComp->height / 2));
+		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y + (pComp->height / 2));
 
 		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
 

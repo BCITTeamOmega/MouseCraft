@@ -141,7 +141,7 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 	b2Body* body;
 
 	b2PolygonShape shape;
-	shape.SetAsBox(w, h);
+	shape.SetAsBox(w/2, h/2);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
@@ -202,6 +202,8 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
 		fixtureDef.filter.maskBits = WALL_MASK;
+		physicsComp->zPos = Z_UPPER;
+		break;
 	default:
 		return nullptr; //if they input something that needs a grid
 	}
@@ -247,10 +249,29 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		break;
 	}
 
+	switch (t)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::OBSTACLE_DOWN:
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::PLATFORM:
+		physicsComp->zPos = Z_UPPER / 2;
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+		physicsComp->zPos = Z_UPPER;
+		break;
+	case PhysObjectType::CONTRAPTION_DOWN:
+		physicsComp->zPos = Z_LOWER;
+		break;
+	}
+
 	b2Body* body;
 
 	b2PolygonShape shape;
-	shape.SetAsBox(w, h);
+	shape.SetAsBox(w/2, h/2);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;

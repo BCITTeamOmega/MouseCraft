@@ -42,490 +42,328 @@ extern "C" {
 	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
 
-void Test_Rendering()
+void SetupSound()
+{
+	//adding sound system
+	noise = new SoundManager();
+	//start initial music track, standard form for music selection
+	//create Track Params for event
+	TrackParams * initial = new TrackParams();
+	//select song
+	initial->track = MainBGM;
+	//specify song location. Usually fine to leave with default values of 0
+	initial->x = 0;
+	initial->y = 0;
+	initial->z = 0;
+	//create a type Param from the track params and pass it into the event notifier
+	TypeParam<TrackParams*> param(initial);
+	EventManager::Notify(PLAY_SONG, &param);
+}
+
+void MainTest()
 {
 	PrefabLoader::DumpLoaders();
 
-	//Model* m = ModelLoader::loadModel("res/models/test/CubeModel.obj");
-	Model* m = ModelGen::makeCube(1, 1, 1);
-
-    Model* m2 = ModelGen::makeCube(10.0, 20.0, 10.0);
-	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 70);
-
-	Model* miceModel = ModelLoader::loadModel("res/models/rat_tri.obj");
-	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
-
-	std::string* i = new std::string("res/textures/wood.png");
-	floorModel->setTexture(i);
-
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();
 	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
 
-	// rendering 
+	InputSystem* inputSystem = new InputSystem();
 
-	Renderable* rc = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	Renderable* rc2 = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	Renderable* floorRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    Renderable* platRC = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	//Create PhysicsManager and tell it how big the world is
+	PhysicsManager::instance()->setupGrid(100, 75, 5);
 
+	//Make the entities
+	Entity* mouse1Entity = EntityManager::Instance().Create();
+	Entity* mouse2Entity = EntityManager::Instance().Create();
+	Entity* mouse3Entity = EntityManager::Instance().Create();
+	Entity* catEntity = EntityManager::Instance().Create();
+	Entity* floorEntity = EntityManager::Instance().Create();
+	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
+	Entity* counter1Entity = EntityManager::Instance().Create();
+	Entity* counter2Entity = EntityManager::Instance().Create();
+	Entity* islandEntity = EntityManager::Instance().Create();
+	Entity* tableEntity = EntityManager::Instance().Create();
+	Entity* couchEntity = EntityManager::Instance().Create();
+	Entity* catstandEntity = EntityManager::Instance().Create();
+	Entity* northWallEntity = EntityManager::Instance().Create();
+	Entity* southWallEntity = EntityManager::Instance().Create();
+	Entity* westWallEntity = EntityManager::Instance().Create();
+	Entity* eastWallEntity = EntityManager::Instance().Create();
+	Entity* cameraEntity = EntityManager::Instance().Create();
+	cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
+	cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
+	Entity* pSpawnerEntity = EntityManager::Instance().Create();
+	Entity* gmEntity = EntityManager::Instance().Create();
+
+	//Make the models
+	//Player Models
+	Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
+	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
+	//Map Models
+	Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 75);
+    Model* counter1Model = ModelGen::makeCube(10, 5, 40);
+	Model* counter2Model = ModelGen::makeCube(50, 5, 10);
+	Model* islandModel = ModelGen::makeCube(35, 5, 20);
+	Model* tableModel = ModelGen::makeCube(20, 5, 35);
+	Model* couchModel = ModelGen::makeCube(40, 5, 15);
+	Model* catstandModel = ModelGen::makeCube(15, 5, 15);
+	Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
+	Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
+
+	//Set the textures
+	std::string* woodTex = new std::string("res/textures/wood.png");
+	floorModel->setTexture(woodTex);
+	horizWallModel->setTexture(woodTex);
+	vertWallModel->setTexture(woodTex);
+
+	//Create the camera
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
-
-	rc->setColor(Color(0.5, 1.0, 0.25));
-	rc->setModel(*m);
-
-	rc2->setColor(Color(1.0, 0.25, 0.5));
-	rc2->setModel(*m);
-
-	floorRC->setColor(Color(1.0, 1.0, 1.0));
-	floorRC->setModel(*floorModel);
-
-    platRC->setColor(Color(1.0, 0.5, 0.0));
-    platRC->setModel(*m2);
-
 	cam->setFOV(90.0f);
 	cam->setCloseClip(0.01f);
 	cam->setFarClip(100.0f);
+	cameraEntity->AddComponent(cam);
 
-	Entity* e1 = EntityManager::Instance().Create();
-	Entity* e2 = EntityManager::Instance().Create();
-	Entity* e3 = EntityManager::Instance().Create();
-	Entity* floorEntity = EntityManager::Instance().Create();
-    Entity* platformEntity = EntityManager::Instance().Create();
+	//Create the renderables, set their model and colour, and add them to their entity
+	Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	mouse1Rend->setModel(*mouseModel);
+	mouse1Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse1Entity->AddComponent(mouse1Rend);
 
-	e1->transform.setLocalPosition(glm::vec3(60, 0, 35));
-	e2->transform.setLocalPosition(glm::vec3(50, 0, 30));
-	e3->transform.setLocalPosition(glm::vec3(50, 22, 35));
-	e3->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
+	Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	mouse2Rend->setModel(*mouseModel);
+	mouse2Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse2Entity->AddComponent(mouse2Rend);
 
-	floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 30));
-    platformEntity->transform.setLocalPosition(glm::vec3(35, 0, 30));
+	Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	mouse3Rend->setModel(*mouseModel);
+	mouse3Rend->setColor(Color(0.5, 1.0, 0.25));
+	mouse3Entity->AddComponent(mouse3Rend);
 
-	e1->AddComponent(rc);
-	e2->AddComponent(rc2);
-	e3->AddComponent(cam);
-	floorEntity->AddComponent(floorRC);
-    platformEntity->AddComponent(platRC);
+	Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	catRend->setModel(*catModel);
+	catRend->setColor(Color(1.0, 0.25, 0.5)); //setColor(Color(0.99, 0.96, 0.88)); 253,245,226
+	catEntity->AddComponent(catRend);
 
-	RenderSystem* rs = new RenderSystem();
-	rs->setWindow(OmegaEngine::Instance().getWindow());
+	Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	floorRend->setModel(*floorModel);
+	floorRend->setColor(Color(1.0, 1.0, 1.0));
+	floorEntity->AddComponent(floorRend);
 
-	// player 1 (mice)
-	auto c_p1_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	c_p1_render->setColor(Color(0.1, 0.1, 0.1));
-	c_p1_render->setModel(*miceModel);
-	e1->AddComponent(c_p1_render);
+	Renderable* counter1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	counter1Rend->setModel(*counter1Model);
+	counter1Rend->setColor(Color(1.0, 0.5, 0.0));
+	counter1Entity->AddComponent(counter1Rend);
 
-	auto c_p1_mice = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
-	c_p1_mice->speed = 50.0f;
-	e1->AddComponent(c_p1_mice);
+	Renderable* counter2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	counter2Rend->setModel(*counter2Model);
+	counter2Rend->setColor(Color(1.0, 0.5, 0.0));
+	counter2Entity->AddComponent(counter2Rend);
 
-	auto c_p1_movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	c_p1_movement->SetID(0);
-	e1->AddComponent(c_p1_movement);
+	Renderable* islandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	islandRend->setModel(*islandModel);
+	islandRend->setColor(Color(1.0, 0.5, 0.0));
+	islandEntity->AddComponent(islandRend);
 
-	auto c_p1_collider = ComponentManager<DebugColliderComponent>::Instance()
-		.Create<DebugColliderComponent>();
-	e1->AddComponent(c_p1_collider);
+    Renderable* tableRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	tableRend->setModel(*tableModel);
+	tableRend->setColor(Color(1.0, 0.5, 0.0));
+	tableEntity->AddComponent(tableRend);
 
-	auto c_p1_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    c_p1_health->SetHealth(2);
-	e1->AddComponent(c_p1_health);
+	Renderable* couchRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	couchRend->setModel(*couchModel);
+	couchRend->setColor(Color(1.0, 0.5, 0.0));
+	couchEntity->AddComponent(couchRend);
 
-	// player 2 (cat)
-	auto c_p2_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	c_p2_render->setColor(Color(0.99, 0.96, 0.88)); //253,245,226
-	c_p2_render->setModel(*catModel);
-	e2->AddComponent(c_p2_render);
+	Renderable* catstandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	catstandRend->setModel(*catstandModel);
+	catstandRend->setColor(Color(1.0, 0.5, 0.0));
+	catstandEntity->AddComponent(catstandRend);
 
-	auto c_p2_Cat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
-	e2->AddComponent(c_p2_Cat);
+	Renderable* northWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	northWallRend->setModel(*horizWallModel);
+	northWallRend->setColor(Color(1.0, 0.5, 0.0));
+	northWallEntity->AddComponent(northWallRend);
 
-	auto playerc = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	playerc->SetID(10);
-	e2->AddComponent(playerc);
+	Renderable* southWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	southWallRend->setModel(*horizWallModel);
+	southWallRend->setColor(Color(1.0, 0.5, 0.0));
+	southWallEntity->AddComponent(southWallRend);
+
+	Renderable* westWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	westWallRend->setModel(*vertWallModel);
+	westWallRend->setColor(Color(1.0, 0.5, 0.0));
+	westWallEntity->AddComponent(westWallRend);
+
+	Renderable* eastWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	eastWallRend->setModel(*vertWallModel);
+	eastWallRend->setColor(Color(1.0, 0.5, 0.0));
+	eastWallEntity->AddComponent(eastWallRend);
+
+	//Can this go at the top?
+	RenderSystem* renderSystem = new RenderSystem();
+	renderSystem->setWindow(OmegaEngine::Instance().getWindow());
+
+	//Create the physics components
+	PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+	mouse1Entity->AddComponent(mouse1Physics);
+	mouse1Physics->initPosition();
+
+	PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+	mouse2Entity->AddComponent(mouse2Physics);
+	mouse2Physics->initPosition();
+
+	PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+	mouse3Entity->AddComponent(mouse3Physics);
+	mouse3Physics->initPosition();
+
+	PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 8, 8, 0, PhysObjectType::CAT_UP);
+	catEntity->AddComponent(catPhysics);
+	catPhysics->initPosition();
+
+	PhysicsComponent* counter1Physics = PhysicsManager::instance()->createGridObject(5, 20, 10, 40, PhysObjectType::PLATFORM);
+	counter1Entity->AddComponent(counter1Physics);
+	counter1Physics->initPosition();
+
+	PhysicsComponent* counter2Physics = PhysicsManager::instance()->createGridObject(35, 5, 50, 10, PhysObjectType::PLATFORM);
+	counter2Entity->AddComponent(counter2Physics);
+	counter2Physics->initPosition();
+
+	PhysicsComponent* islandPhysics = PhysicsManager::instance()->createGridObject(37.5, 30, 35, 20, PhysObjectType::PLATFORM);
+	islandEntity->AddComponent(islandPhysics);
+	islandPhysics->initPosition();
+
+	PhysicsComponent* tablePhysics = PhysicsManager::instance()->createGridObject(80, 27.5, 20, 35, PhysObjectType::PLATFORM);
+	tableEntity->AddComponent(tablePhysics);
+	tablePhysics->initPosition();
+
+	PhysicsComponent* couchPhysics = PhysicsManager::instance()->createGridObject(30, 67.5, 40, 15, PhysObjectType::PLATFORM);
+	couchEntity->AddComponent(couchPhysics);
+	couchPhysics->initPosition();
+
+	PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
+	catstandEntity->AddComponent(catstandPhysics);
+	catstandPhysics->initPosition();
+
+	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
+	northWallEntity->AddComponent(northWallPhysics);
+	northWallPhysics->initPosition();
+
+	PhysicsComponent* southWallPhysics = PhysicsManager::instance()->createObject(50, 77.5, 110, 5, 0, PhysObjectType::WALL);
+	southWallEntity->AddComponent(southWallPhysics);
+	southWallPhysics->initPosition();
+
+	PhysicsComponent* westWallPhysics = PhysicsManager::instance()->createObject(-2.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	westWallEntity->AddComponent(westWallPhysics);
+	westWallPhysics->initPosition();
+
+	PhysicsComponent* eastWallPhysics = PhysicsManager::instance()->createObject(102.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	eastWallEntity->AddComponent(eastWallPhysics);
+	eastWallPhysics->initPosition();
+
+	//Create other miscellaneous components for things
+	//Mouse 1
+	Mice* mouse1Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	mouse1Mouse->speed = 50.0f;
+	mouse1Entity->AddComponent(mouse1Mouse);
+
+	PlayerComponent* mouse1Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	mouse1Movement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
+	mouse1Entity->AddComponent(mouse1Movement);
+
+	HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	mouse1Health->SetHealth(2);
+	mouse1Entity->AddComponent(mouse1Health);
+
+	//Mouse 2
+	Mice* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	mouse2Mouse->speed = 50.0f;
+	mouse2Entity->AddComponent(mouse2Mouse);
+
+	PlayerComponent* mouse2Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	mouse2Movement->SetID(1); //Sets which controller handles this player (10 is the keyboard)
+	mouse2Entity->AddComponent(mouse2Movement);
+
+	HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	mouse2Health->SetHealth(2);
+	mouse2Entity->AddComponent(mouse2Health);
+
+	//Mouse 3
+	Mice* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mice>();
+	mouse3Mouse->speed = 50.0f;
+	mouse3Entity->AddComponent(mouse3Mouse);
+
+	PlayerComponent* mouse3Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	mouse3Movement->SetID(2); //Sets which controller handles this player (10 is the keyboard)
+	mouse3Entity->AddComponent(mouse3Movement);
+
+	HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	mouse3Health->SetHealth(2);
+	mouse3Entity->AddComponent(mouse3Health);
+
+	//Cat
+	Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+	catEntity->AddComponent(catCat);
+
+	PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	catMovement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
+	catEntity->AddComponent(catMovement);
 	
-	auto healthc = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-	e2->AddComponent(healthc);
+	HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	catEntity->AddComponent(catHealth);
 
-    auto soundc = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
-    e2->AddComponent(soundc);
+	SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	catEntity->AddComponent(catJumpSound);
 
-	auto c_p2_collider = ComponentManager<DebugColliderComponent>::Instance().Create<DebugColliderComponent>();
-	e2->AddComponent(c_p2_collider);
-
-	// spawner 
-	auto e_spawner = EntityManager::Instance().Create();
-	auto c_spawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
-	e_spawner->AddComponent(c_spawner);
+	//Pickup Spawner
+	PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	pSpawnerEntity->AddComponent(pSpawnerSpawner);
 	
-	DebugColliderSystem* dcs = new DebugColliderSystem();
-	InputSystem* is = new InputSystem();
+	//Game Manager
+	GameManager* gmGameManager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
+	gmGameManager->AddMouse(mouse1Mouse);
+	gmGameManager->AddMouse(mouse2Mouse);
+	gmGameManager->AddMouse(mouse3Mouse);
+	gmGameManager->SetCat(catCat);
+	gmEntity->AddComponent(gmGameManager);
 
-	//Tell the PhysicsManager how big the world is
-	PhysicsManager::instance()->setupGrid(100, 70, 5);
+	//Don't forget the stupid teapots
+	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 45));
 
-	// component_player1_physics 
-	auto c_p1_physics = PhysicsManager::instance()->createObject(60, 55, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
-
-	// add to mouse entity
-	e1->AddComponent(c_p1_physics);
-
-	// component_player2_physics 
-
-	auto c_p2_physics = PhysicsManager::instance()->createObject(50, 50, 1, 1, 0, PhysObjectType::CAT_DOWN);
-
-	// add to cat entity
-	e2->AddComponent(c_p2_physics);
-
-    //add platform physics
-
-    auto c_plat_physics = PhysicsManager::instance()->createGridObject(35, 30, 10, 10, PhysObjectType::PLATFORM);
-    platformEntity->AddComponent(c_plat_physics);
-
-	// adjustments made in PlayerComponent 
-
-	auto c_gamemanager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
-	c_gamemanager->AddMouse(c_p1_mice);
-	c_gamemanager->SetCat(c_p2_Cat);
-
-	auto e_gm = EntityManager::Instance().Create();
-	e_gm->AddComponent(c_gamemanager);
-
-	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
-
-	// add the entities 
-
-	OmegaEngine::Instance().AddEntity(e1);
-	OmegaEngine::Instance().AddEntity(e2);
-	OmegaEngine::Instance().AddEntity(e3);
-	OmegaEngine::Instance().AddEntity(e_spawner);
+	//Add the entities to the game
+	OmegaEngine::Instance().AddEntity(mouse1Entity);
+	OmegaEngine::Instance().AddEntity(mouse2Entity);
+	OmegaEngine::Instance().AddEntity(mouse3Entity);
+	OmegaEngine::Instance().AddEntity(catEntity);
 	OmegaEngine::Instance().AddEntity(floorEntity);
-    OmegaEngine::Instance().AddEntity(platformEntity);
-	OmegaEngine::Instance().AddEntity(e_gm);
+	OmegaEngine::Instance().AddEntity(counter1Entity);
+	OmegaEngine::Instance().AddEntity(counter2Entity);
+	OmegaEngine::Instance().AddEntity(islandEntity);
+	OmegaEngine::Instance().AddEntity(tableEntity);
+	OmegaEngine::Instance().AddEntity(couchEntity);
+	OmegaEngine::Instance().AddEntity(catstandEntity);
+	OmegaEngine::Instance().AddEntity(northWallEntity);
+	OmegaEngine::Instance().AddEntity(southWallEntity);
+	OmegaEngine::Instance().AddEntity(westWallEntity);
+	OmegaEngine::Instance().AddEntity(eastWallEntity);
+	OmegaEngine::Instance().AddEntity(cameraEntity);
+	OmegaEngine::Instance().AddEntity(pSpawnerEntity);
+	OmegaEngine::Instance().AddEntity(gmEntity);
 
-	// prefabs 
-
-	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	p_pot->transform.setLocalPosition(glm::vec3(50, 0, 50));
-	OmegaEngine::Instance().AddEntity(p_pot);
-
-	OmegaEngine::Instance().AddSystem(rs);
-	OmegaEngine::Instance().AddSystem(is);
+	//Add the systems
+	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
+	OmegaEngine::Instance().AddSystem(renderSystem);
+	OmegaEngine::Instance().AddSystem(inputSystem);
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
-	// OmegaEngine::Instance().AddSystem(dcs);
+
+	//Start the game
 	OmegaEngine::Instance().Loop();
-
-
-}
-
-void Test_ECS()
-{
-	// NOTE: Use SDL_assert b/c SDL2 is manhandling everything.
-
-	/*
-	Test:
-	Entity should have instant action when not in active scene
-	- add/delete/move/enable/disable
-
-	Entity actions should propogate
-	- add (must call initialize())
-	- delete
-	- enable/disable
-
-	Entity should have deferred action when interacting with active scene
-	- add/delete/move/enable/disable
-
-	Special case
-	- non-initialized added onto initialized
-
-	Should be able to retrieve specific type of components
-
-	Component initialize test
-	- should be able to get reference
-	*/
-
-	EntityManager::Instance();
-
-	// testing componentmanager types
-	ComponentManager<TestComponent>& cm = ComponentManager<TestComponent>::Instance();
-	ComponentManager<UpdatableComponent>& ucm = ComponentManager<UpdatableComponent>::Instance();
-	ComponentManager<TestDerivedComponent>& tdm = ComponentManager<TestDerivedComponent>::Instance();
-	// ComponentManager<ExampleComponent>::Instance();	// lazy initialize
-	//ComponentManager<Component>& ccm = ComponentManager<Component>::Instance();
-	
-
-	// TESTS: transparent instant execution
-	Entity* parent1 = new Entity();
-	Entity* child1 = new Entity();
-	Entity* parent2 = new Entity();
-	Entity* child2 = new Entity();
-	TestComponent* tc = new TestComponent(nullptr);
-	TestDerivedComponent* tdc = new TestDerivedComponent();
-
-	auto sizeShouldBe4 = EntityManager::Instance().GetEntities();
-	SDL_assert(sizeShouldBe4.size() == 4 && "EntityManager failed (1)");
-
-	// test 
-	parent1->AddChild(child1);
-
-	SDL_assert(parent1->GetChildren().size() == 1, "Instant add failed.");
-
-	child1->SetParent(parent2);
-
-	SDL_assert(parent1->GetChildren().size() == 0, "Instant move failed (was not removed from existing parent).");
-	SDL_assert(parent2->GetChildren().size() == 1, "Instant move failed (was not moved to new parent).");
-
-	parent2->SetEnabled(false);
-
-	SDL_assert(parent2->GetEnabled() == false, "Instant disable failed");
-
-	// component test 
-	parent1->AddComponent(tc);
-	parent2->AddComponent(tdc);
-
-	SDL_assert(parent1->GetComponents().size() == 1 && "Component add failed (1)");
-	SDL_assert(parent2->GetComponents().size() == 1 && "Component add failed (2)");
-
-	parent1->RemoveComponent(tc);	
-	parent2->RemoveComponent<TestComponent>();	// should still work despite derived
-
-	SDL_assert(parent1->GetComponents().size() == 0 && "Component remove failed (1)");
-	SDL_assert(parent2->GetComponents().size() == 0 && "Component remove failed (2)");
-
-	// cleanup 
-	delete(parent1);
-	delete(child1);
-	delete(parent2);
-	delete(child2);
-
-	auto sizeShouldBe0 = EntityManager::Instance().GetEntities();
-	SDL_assert(sizeShouldBe0.size() == 0 && "EntityManager failed (1)");
-
-	// TESTS: deferred execution 
-	
-	// init 
-	OmegaEngine::Instance().initialize();
-
-	Scene* s = new MainScene();
-
-	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
-
-	parent1 = new Entity();
-	parent2 = new Entity();
-	child1 = new Entity();
-	child2 = new Entity();
-
-	parent1->AddChild(child1);
-	parent2->AddChild(child2);
-
-	auto testComponent = new TestComponent(parent2);
-	auto derivedComponent = new TestDerivedComponent();
-
-	parent1->AddComponent(testComponent);
-	parent2->AddComponent(derivedComponent);
-
-	// test
-	SDL_assert(s->root.GetChildren().size() == 0, "Deferred execution initial state failed.");
-
-	auto shouldBeNull = parent1->GetComponent<TestDerivedComponent>();
-	auto shouldBeOkay = parent2->GetComponent<TestComponent>();
-
-	SDL_assert(shouldBeNull == nullptr, "Component retrieval failed (1)");
-	SDL_assert(shouldBeOkay != nullptr, "Component retrieval failed (2)");
-
-	// deferred add 
-	s->root.AddChild(parent1);
-	s->root.AddChild(parent2);
-
-	SDL_assert(s->root.GetChildren().size() == 0, "Deferred execution failed.");
-
-	// component manager test
-	// this is how you should be creating components!
-	auto* t = ComponentManager<TestComponent>::Instance().Create<TestComponent>(new Entity());
-	auto* t1 = ComponentManager<TestComponent>::Instance().Create<TestDerivedComponent>(new Entity());
-	// not like this lol
-	TestComponent test(new Entity);
-	delete t;
-
-	//auto ec1 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	//auto ec2 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	//auto ec3 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-	//auto ec4 = ComponentManager<ExampleComponent>::Instance().Create<ExampleComponent>();
-
-	//parent1->AddComponent(ec1);
-	//parent2->AddComponent(ec2);
-	//child1->AddComponent(ec3);	// this is weird, don't move child too lol
-	//child2->AddComponent(ec4);
-
-	ExampleSystem exampleSystem;
-
-	OmegaEngine::Instance().AddSystem(&exampleSystem);
-
-	OmegaEngine::Instance().Loop();
-}
-
-void Test_ObserverPattern()
-{
-	// Test 1
-	FoobarSubject subject;
-	FoobarObserver observer;
-
-	subject.Attach(observer);
-	subject.Notify(4.0f, 2);
-
-	// Test 2
-	Subject<int> OnTemperatureChanged;
-	FreezingObserver obs1;
-	BoilingObserver obs2;
-
-	OnTemperatureChanged.Attach(obs1);
-	OnTemperatureChanged.Attach(obs2);
-
-	OnTemperatureChanged.Notify(-20);
-	OnTemperatureChanged.Notify(-10);
-	OnTemperatureChanged.Notify(0);
-	OnTemperatureChanged.Notify(50);
-	OnTemperatureChanged.Notify(100);
-	OnTemperatureChanged.Notify(200);
-
-	// Test 3 
-	Subject<int> thermostat;
-	FoobarRandom foobar(thermostat);
-
-	thermostat.Notify(100);
-	thermostat.Notify(-100);
-	int i = 0;
-
-	// Test 4 
-	Health health;
-
-	Dude* dude = new Dude(health);
-
-	health.Damage(50);	// ouch
-	health.Heal(50);	// nothing happens 
-	health.Damage(100);	// ouch + death
-	
-	delete(dude);		// stop listening 
-
-	Dudette* dudette = new Dudette(health);
-	health.Heal(100);	// thanks
-	health.Damage(50);	// ouch
-	health.Damage(50);	// sayonara
-
-	delete(dudette);
-
-	health.Heal(100);	// nothing
-}
-
-#define GLM_EQUAL(v3a,v3b) glm::all(glm::epsilonEqual(v3a, v3b, glm::epsilon<float>()))
-
-void Test_Transform()
-{
-	// OH NO THIS IS FOR LHS
-
-	// create some entities 
-	auto e_base = EntityManager::Instance().Create();
-	auto e_right = EntityManager::Instance().Create();
-	e_right->transform.setLocalRotation(glm::vec3(0, M_PI/2, 0));
-	e_right->transform.setLocalScale(glm::vec3(1, 2, 3));
-	auto e_left = EntityManager::Instance().Create();
-	e_left->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
-	e_right->AddChild(e_left);
-
-	// manually compute transform
-	e_base->transform.computeLocalTransformation();
-	e_base->transform.computeWorldTransformation();
-	e_right->transform.computeLocalTransformation();
-	e_right->transform.computeWorldTransformation();
-	e_left->transform.computeLocalTransformation();
-	e_left->transform.computeWorldTransformation(e_right->transform.getWorldTransformation());
-	
-	// base
-	SDL_assert(GLM_EQUAL(e_base->t().forward(), glm::vec3(0, 0, 1)));
-	SDL_assert(GLM_EQUAL(e_base->t().right(), glm::vec3(1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_base->t().up(), glm::vec3(0, 1, 0)));
-	SDL_assert(GLM_EQUAL(e_base->t().wForward(), glm::vec3(0, 0, 1)));
-	SDL_assert(GLM_EQUAL(e_base->t().wRight(), glm::vec3(1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_base->t().wUp(), glm::vec3(0, 1, 0)));
-
-	// right 
-	SDL_assert(GLM_EQUAL(e_right->t().forward(), glm::vec3(1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_right->t().right(), glm::vec3(0, 0, -1)));
-	SDL_assert(GLM_EQUAL(e_right->t().up(), glm::vec3(0, 1, 0)));
-	SDL_assert(GLM_EQUAL(e_right->t().wForward(), glm::vec3(1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_right->t().wRight(), glm::vec3(0, 0, -1)));
-	SDL_assert(GLM_EQUAL(e_right->t().wUp(), glm::vec3(0, 1, 0)));
-
-	// right + left 
-	auto asdf = e_left->t().wForward();
-	SDL_assert(GLM_EQUAL(e_left->t().forward(), glm::vec3(-1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_left->t().right(), glm::vec3(0, 0, 1)));
-	SDL_assert(GLM_EQUAL(e_left->t().up(), glm::vec3(0, 1, 0)));
-	SDL_assert(GLM_EQUAL(e_left->t().wForward(), glm::vec3(0, 0, 1)));
-	SDL_assert(GLM_EQUAL(e_left->t().wRight(), glm::vec3(1, 0, 0)));
-	SDL_assert(GLM_EQUAL(e_left->t().wUp(), glm::vec3(0, 1, 0)));
-
-	// rotation
-	SDL_assert(GLM_EQUAL(e_right->t().rot(), glm::vec3(0, M_PI / 2, 0)));
-	SDL_assert(GLM_EQUAL(e_right->t().wRot(), glm::vec3(0, M_PI / 2, 0)));
-	SDL_assert(GLM_EQUAL(e_left->t().rot(), glm::vec3(0, -M_PI / 2, 0)));
-	SDL_assert(GLM_EQUAL(e_left->t().wRot(), glm::vec3(0, 0, 0)));
-
-	// scale
-	SDL_assert(GLM_EQUAL(e_right->t().scl(), glm::vec3(1, 2, 3)));
-	SDL_assert(GLM_EQUAL(e_right->t().wScl(), glm::vec3(1, 2, 3)));
-	SDL_assert(GLM_EQUAL(e_left->t().scl(), glm::vec3(1, 1, 1)));
-	SDL_assert(GLM_EQUAL(e_left->t().wScl(), glm::vec3(3, 2, 1)));
 }
 
 int main(int argc, char* argv[]) 
 {
-	//Test_Transform();
+	SetupSound();
 
-    //adding sound system
-    noise = new SoundManager();
-    //start initial music track, standard form for music selection
-    //create Track Params for event
-    TrackParams * initial = new TrackParams();
-    //select song
-    initial->track = MainBGM;
-    //specify song location. Usually fine to leave with default values of 0
-    initial->x = 0;
-    initial->y = 0;
-    initial->z = 0;
-    //create a type Param from the track params and pass it into the event notifier
-    TypeParam<TrackParams*> param(initial);
-    EventManager::Notify(PLAY_SONG, &param);
-
-	Test_Rendering();
-	// Test_ECS();
-
-	/*
-	OmegaEngine::Instance().initialize();
-
-	OmegaEngine::Instance().AddSystem(new InputSystem());
-
-	// fast load 
-	Scene* s = new MainScene();
-	OmegaEngine::Instance().ChangeScene(s);	
-
-	// create some entities 
-	auto mouse = EntityManager::Instance().Create();
-	auto c_control = ComponentManager<UpdatableComponent>::Instance()
-		.Create<MouseMovement>();
-	c_control->player = 0;
-	mouse->AddComponent(c_control);
-
-	auto playerTwo = EntityManager::Instance().Create();
-	auto c_control2 = ComponentManager<UpdatableComponent>::Instance()
-		.Create<MouseMovement>();
-	c_control2->player = 1;
-	playerTwo->AddComponent(c_control2);
-
-	OmegaEngine::Instance().AddEntity(mouse);
-	OmegaEngine::Instance().AddEntity(playerTwo);
-
-	OmegaEngine::Instance().Loop();
-	*/
+	MainTest();
 }

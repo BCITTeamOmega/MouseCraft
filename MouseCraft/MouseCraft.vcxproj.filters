@@ -647,5 +647,8 @@
     <ClInclude Include="TimedDestruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OmegaTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

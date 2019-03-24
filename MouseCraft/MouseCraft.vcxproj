@@ -307,6 +307,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="Mice.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
+    <ClInclude Include="OmegaTests.h" />
     <ClInclude Include="Overcharge.h" />
     <ClInclude Include="Physics\AreaQueryCallback.h" />
     <ClInclude Include="Physics\CContactListener.h" />
