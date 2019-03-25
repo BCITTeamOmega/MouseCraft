@@ -105,18 +105,21 @@ void Cat::OnHit(PhysicsComponent* other)
 //check if we are doing something, then attack
 void Cat::Attack()
 {
+    //get our own physics component
+    PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+    
     //block if we are in an animation already
-    if (isAttacking || isJumping || isPouncing) {
+    if (isAttacking || pComp->isJumping || isPouncing) {
         return;
     }
     //actually launch attack
 
-    //get our own physics component
-    auto ourPhys = GetEntity()->GetComponent<PhysicsComponent>();
+    
+    
 
     //check which level we're on
     std::set<PhysObjectType::PhysObjectType> targets;
-    if (ourPhys->isUp) {
+    if (pComp->isUp) {
         //generate check type
         targets = std::set<PhysObjectType::PhysObjectType>{
             //PhysObjectType::OBSTACLE_UP,
@@ -139,7 +142,7 @@ void Cat::Attack()
     auto tr = pos + glm::vec3(10, 0, 10);
 
     //launch area check
-    auto results = ourPhys->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+    auto results = pComp->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 
     //check if we hit something
     if (results.size() > 0) {
@@ -147,6 +150,10 @@ void Cat::Attack()
             results[i]->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
         }
     }
+
+    GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Swipe); //set sound to swipe
+    auto ourPos = GetEntity()->transform.getLocalPosition(); //get our current position
+    GetEntity()->GetComponent<SoundComponent>()->PlaySound(ourPos.x, ourPos.y, ourPos.z); //play sound
 
     std::cout << "Cat has attacked." << std::endl;
     isAttacking = true;
