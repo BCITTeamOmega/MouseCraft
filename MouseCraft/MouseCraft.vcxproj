@@ -207,6 +207,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="Mice.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Network\NetworkComponent.cpp" />
     <ClCompile Include="Network\NetworkSystem.cpp" />
     <ClCompile Include="Network\PacketData.cpp" />
     <ClCompile Include="Overcharge.cpp" />
@@ -301,6 +302,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Network\Address.h" />
     <ClInclude Include="Network\Connection.h" />
     <ClInclude Include="Network\NetDatum.h" />
+    <ClInclude Include="Network\NetworkComponent.h" />
     <ClInclude Include="Network\NetworkSystem.h" />
     <ClInclude Include="Network\PacketData.h" />
     <ClInclude Include="Network\Socket.h" />
