@@ -37,6 +37,7 @@ public:
 	void dropItem();
 	void use(Contraption* item);
 	void combine(Pickup *material);
+	void revive();
 
 public:
 	float speed = 10.0f;
@@ -55,5 +56,8 @@ private:
 	bool drop;
 	Pickup* baseItem;
 	Contraption* newItem;
+	PhysicsComponent* _phys;
+	std::set<PhysObjectType::PhysObjectType> checkFor;
+	PhysicsComponent* _collidedObjects;
 };
 

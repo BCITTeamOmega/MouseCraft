@@ -1,11 +1,11 @@
 #pragma once
 #include "Contraption.h"
-class Platform :
+class Trampoline :
 	public Contraption
 {
 public:
-	Platform();
-	~Platform();
+	Trampoline();
+	~Trampoline();
 
 	bool use() override;
 	void show() override;
@@ -19,6 +19,6 @@ private:
 	bool _isPlaced = false;
 	PlayerComponent* _collidedMice;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
-	Handler<Platform, PhysicsComponent*> HandleOnCollision;
+	Handler<Trampoline, PhysicsComponent*> HandleOnCollision;
 };
 
