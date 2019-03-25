@@ -28,7 +28,9 @@ Sound::Sound() {
 
     //place our listener
     float f[] = { 1,0,0,0,1,0 };
-    alListenerfv(AL_ORIENTATION, f);
+    alListenerfv(AL_ORIENTATION, f);//determine where our listener is facing
+    alListener3f(AL_POSITION, 0, 0, 0); //place our listener
+    alListenerf(AL_GAIN, 0.5); //set the default volume
 }
 
 //clean up step. Undo Start up
