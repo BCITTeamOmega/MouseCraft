@@ -211,6 +211,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\UpdatableComponent.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
@@ -236,6 +237,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="WorldGrid.cpp" />
+    <ClCompile Include="YarnBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
@@ -307,6 +309,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Obstacles.h" />
     <ClInclude Include="OmegaTests.h" />
     <ClInclude Include="Overcharge.h" />
@@ -341,6 +344,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="WorldGrid.h" />
+    <ClInclude Include="YarnBall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

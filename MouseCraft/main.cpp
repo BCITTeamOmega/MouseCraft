@@ -34,7 +34,7 @@
 #include "Loading/PrefabLoader.h"
 #include "GameManager.h"
 #include "ContraptionSystem.h"
-
+#include "YarnBall.h"
 
 SoundManager* noise;
 
@@ -294,6 +294,10 @@ void MainTest()
 	PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
 	ballEntity->AddComponent(ballPhysics);
 	ballPhysics->initPosition();
+	YarnBall* ballBall = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
+	ballEntity->AddComponent(ballBall);
+	HealthComponent* ballHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	ballEntity->AddComponent(ballHealth);
 
 	OmegaEngine::Instance().AddEntity(bookEntity);
 	OmegaEngine::Instance().AddEntity(boxEntity);
@@ -324,7 +328,7 @@ void MainTest()
 	mouse1Entity->AddComponent(mouse1Mouse);
 
 	PlayerComponent* mouse1Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	mouse1Movement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
+	mouse1Movement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
 	mouse1Entity->AddComponent(mouse1Movement);
 
 	HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -362,7 +366,7 @@ void MainTest()
 	catEntity->AddComponent(catCat);
 
 	PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	catMovement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
+	catMovement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
 	catEntity->AddComponent(catMovement);
 	
 	HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
