@@ -13,11 +13,6 @@ PickupFactory::PickupFactory()
 	_screwModel = ModelLoader::loadModel("res/models/screw.obj");
 	_springModel = ModelLoader::loadModel("res/models/spring.obj");
 	_batteryModel = ModelLoader::loadModel("res/models/battery.obj");
-
-	_texture = ImageLoader::loadImage("res/models/test/blank.bmp");
-	_screwModel->setTexture(_texture);
-	_springModel->setTexture(_texture);
-	_batteryModel->setTexture(_texture);
 }
 
 PickupFactory::~PickupFactory()

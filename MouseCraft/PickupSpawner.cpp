@@ -26,8 +26,8 @@ void PickupSpawner::Update(float deltaTime)
 void PickupSpawner::Spawn()
 {
 	int i = rand() % 3;
-	float x = rand() % 50;
-	float z = -(rand() % 50);
+	float x = rand() % 100;
+	float z = rand() % 70;
 
 	Entity* entity;
 

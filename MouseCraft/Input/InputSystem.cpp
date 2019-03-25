@@ -273,33 +273,33 @@ void InputSystem::Update(float dt)
 		rightStick.Update();
 
 		// notify 
-		NotifyAxis(leftStick, player);
-		NotifyAxis(rightStick, player);
+		NotifyAxis(leftStick, Axis::LEFT, player);
+		NotifyAxis(rightStick, Axis::RIGHT, player);
 	}
 
 	// notify debug keyboard player 
 	debugPlayerAxis.Update();
-	NotifyAxis(debugPlayerAxis, DEBUG_PLAYER);
+	NotifyAxis(debugPlayerAxis, Axis::LEFT, DEBUG_PLAYER);
 
 	profiler.StopTimer(0);
 	profiler.FrameFinish();
 }
 
-void InputSystem::NotifyAxis(Axis2DInput& axis, int player)
+void InputSystem::NotifyAxis(Axis2DInput& axis, Axis which, int player)
 {
+	if (axis.HasAxisChanged())
+	{
+		EventManager::Notify(EventName::INPUT_AXIS_2D,
+			new TypeParam<Axis2DEvent>(Axis2DEvent(player, which, axis.GetAxis())));
+	}
 	if (axis.HasXChanged())
 	{
 		EventManager::Notify(EventName::INPUT_AXIS,
-			new TypeParam<AxisEvent>(AxisEvent(player, Axis::LEFT_HOR, axis.GetX())));
+			new TypeParam<AxisEvent>(AxisEvent(player, static_cast<Axis>(which + 1), axis.GetX())));
 	}
 	if (axis.HasYChanged())
 	{
 		EventManager::Notify(EventName::INPUT_AXIS,
-			new TypeParam<AxisEvent>(AxisEvent(player, Axis::LEFT_VER, axis.GetY())));
-	}
-	if (axis.HasAxisChanged())
-	{
-		EventManager::Notify(EventName::INPUT_AXIS_2D,
-			new TypeParam<Axis2DEvent>(Axis2DEvent(player, Axis::LEFT, axis.GetAxis())));
+			new TypeParam<AxisEvent>(AxisEvent(player, static_cast<Axis>(which + 2), axis.GetY())));
 	}
 }

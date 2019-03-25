@@ -10,7 +10,11 @@ using glm::mat4;
 using glm::vec3;
 using glm::value_ptr;
 
-Shader::Shader(string vertSrc, string fragSrc) : vertSrc(vertSrc), fragSrc(fragSrc), _program(0) {}
+Shader::Shader(string name, string vertSrc, string fragSrc) :
+	_name(name),
+	vertSrc(vertSrc),
+	fragSrc(fragSrc),
+	_program(0) {}
 
 Shader::Shader() : _program(0) {}
 
@@ -59,7 +63,10 @@ void Shader::printShaderError(GLuint shader) {
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
 	logText = (char*)malloc(logLen * sizeof(GLchar));
 	glGetShaderInfoLog(shader, logLen, &logLen, logText);
-	cerr << "Shader Compile Error: " << logText << endl;
+	cerr << "Shader Compile Error(s) in Shader \"" << _name << "\": " << endl
+		<< "==================" << endl
+		<< logText
+		<< "==================" << endl;
 	free(logText);
 }
 
@@ -69,7 +76,10 @@ void Shader::printProgramError(GLuint program) {
 	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLen);
 	logText = (char*)malloc(logLen * sizeof(GLchar));
 	glGetProgramInfoLog(program, logLen, &logLen, logText);
-	cerr << "Shader Program Link Error: " << logText << endl;
+	cerr << "Shader Program Link Error(s) in Shader \"" << _name << "\": " << endl
+		<< "==================" << endl
+		<< logText
+		<< "==================" << endl;
 	free(logText);
 }
 
@@ -87,4 +97,16 @@ void Shader::setUniformVec3(string name, vec3 vector) {
 	const char* cstr = name.c_str();
 	GLint pos = glGetUniformLocation(_program, cstr);
 	glUniform3f(pos, vector.r, vector.g, vector.b);
+}
+
+void Shader::setUniformTexture(string name, GLuint index) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform1i(pos, index);
+}
+
+void Shader::setUniformInt(string name, GLint value) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform1i(pos, value);
 }

@@ -12,16 +12,17 @@ GLuint VAO::getID() {
 	return _id;
 }
 
-void VAO::setBuffer(int id, VBO& vbo) {
+void VAO::setBuffer(int id, VBO& vbo, int offset) {
 	bind();
 	vbo.bind();
 	glEnableVertexAttribArray(id);
-	glVertexAttribPointer(id, vbo.getComponentsPerElement(), GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(id, vbo.getComponentsPerElement(), GL_FLOAT, GL_FALSE, 0, (void *)offset);
 	_vbos[id] = &vbo;
 }
 
 void VAO::unsetBuffer(int buffID) {
-	glDisableVertexArrayAttrib(_id, buffID);
+	bind();
+	glEnableVertexAttribArray(0);
 	_vbos.erase(buffID);
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Vector2D.h"
 
 class Transform
 {
@@ -70,6 +71,10 @@ public:
 	// Gets the world transformation matrix. 
 	glm::mat4 getWorldTransformation() const;
 
+	// Face towards the direction vector 
+	void face2D(glm::vec2 dir);
+	void face2D(glm::vec3 dir);
+
 #pragma endregion
 
 	// computes the local transformation matrix using local position, rotation, scale.
@@ -101,7 +106,32 @@ public:
 	inline void rot(glm::vec3 v) { setLocalRotation(v); }
 	inline void scl(glm::vec3 v) { setLocalScale(v); }
 
-#pragma endreigon
+#pragma endregion
+
+#pragma region Vector2D Interfaces
+
+	// local
+	Vector2D getLocalPosition2D() const;
+	float    getLocalRotation2D() const;
+	Vector2D getLocalScale2D()    const;
+	Vector2D getLocalForward2D()  const;
+	Vector2D getLocalRight2D()	  const;
+	// world 
+	Vector2D getWorldPosition2D() const;
+	float    getWorldRotation2D() const;
+	Vector2D getWorldScale2D()    const;
+	Vector2D getWorldForward2D()  const;
+	Vector2D getWorldRight2D()    const;
+	// setters
+	void setLocalPosition2D(Vector2D pos);	
+	void setLocalRotation2D(float angle);	
+	void setLocalScale2D(Vector2D scl);
+
+#pragma endregion
+
+private: 
+	static float getAngle2D(glm::vec2 dir);
+	static float getAngle2D(glm::vec3 dir);
 
 private:
 	glm::vec3 _localPosition;
