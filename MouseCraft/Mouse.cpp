@@ -36,6 +36,7 @@ void Mouse::OnInitialized()
 
 void Mouse::Update(float deltaTime) 
 {
+
 	if (shoot)
 	{
 		std::cout << std::endl << "Mouse[" << player << "] - Pew pew!" << std::endl;
@@ -44,6 +45,10 @@ void Mouse::Update(float deltaTime)
 		if (newItem != nullptr)
 		{
 			use(newItem);
+		}
+
+		if (baseItem == nullptr && newItem == nullptr) {
+			revive();
 		}
 	}
 
@@ -258,10 +263,10 @@ void Mouse::combine(Pickup *material) {
 				break;
 
 			case SPRING:
-				std::cout << "Mouse is creating the PLATFORM" << std::endl;
+				std::cout << "Mouse is creating the TRAMPOLINE" << std::endl;
 				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::PLATFORM, glm::vec3(0, 0, 1));
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::TRAMPOLINE, glm::vec3(0, 0, 1));
 				GetEntity()->AddChild(entity);
 				newItem = entity->GetComponent<Contraption>();
 				break;
@@ -274,5 +279,38 @@ void Mouse::combine(Pickup *material) {
 		default:
 			break;
 		}
+	}
+}
+
+void Mouse::revive() {
+	float RADIUS = 5.0f;
+	auto p1 = GetEntity()->transform;
+	auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
+	auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
+	auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
+	bool isUp = GetEntity()->GetComponent<PhysicsComponent>()->isUp;
+
+	if (isUp) {
+		checkFor.insert(PhysObjectType::CAT_UP);
+	}
+	else
+	{
+		checkFor.insert(PhysObjectType::CAT_DOWN);
+	}
+	
+	auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+	bool hit = hits.size() > 0;
+
+	if (isUp && !_collidedObjects && hit) {
+
+		std::cout << "Reviving fellow mouse" << std::endl;
+		_collidedObjects = hits[0];
+		_collidedObjects->GetEntity()->SetEnabled(true);
+	}
+	else if (!isUp && !_collidedObjects && hit)
+	{
+		std::cout << "Revivng fellow mouse" << std::endl;
+		_collidedObjects = hits[0];
+		_collidedObjects->GetEntity()->SetEnabled(true);
 	}
 }

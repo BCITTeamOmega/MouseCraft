@@ -1,18 +1,18 @@
-#include "Platform.h"
+#include "Trampoline.h"
 
-Platform::Platform() : HandleOnCollision(this, &Platform::OnCollision)
+Trampoline::Trampoline() : HandleOnCollision(this, &Trampoline::OnCollision)
 {
 }
 
 
-Platform::~Platform()
+Trampoline::~Trampoline()
 {
 }
 
-bool Platform::use() {
+bool Trampoline::use() {
 	Contraption::use();
 
-	std::cout << "PLATFORM is being used" << std::endl;
+	std::cout << "Trampoline is being used" << std::endl;
 
 	GetEntity()->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
@@ -27,20 +27,20 @@ bool Platform::use() {
 	
 }
 
-void Platform::show() {
+void Trampoline::show() {
 	Contraption::show();
 }
 
-void Platform::OnCollision(PhysicsComponent * other)
+void Trampoline::OnCollision(PhysicsComponent * other)
 {
 
 }
 
-void Platform::OnInitialized() {
+void Trampoline::OnInitialized() {
 	Contraption::OnInitialized();
 }
 
-void Platform::Update(float dt) {
+void Trampoline::Update(float dt) {
 	if (!_isPlaced) return;
 
 	auto pos = GetEntity()->transform.getWorldPosition();
