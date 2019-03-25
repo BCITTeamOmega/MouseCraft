@@ -218,7 +218,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
-    <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Trampoline.cpp" />
     <ClCompile Include="Sound\SoundComponent.cpp" />
     <ClCompile Include="Loading\PrefabLoader.cpp" />
     <ClCompile Include="Swords.cpp" />
@@ -321,7 +321,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />
     <ClInclude Include="PickupSpawner.h" />
-    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Trampoline.h" />
     <ClInclude Include="Swords.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="TestPrefab.h" />

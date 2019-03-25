@@ -32,7 +32,7 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
 
 	switch (type) {
-	case PLATFORM: {
+	case TRAMPOLINE: {
 		c_renderable->setModel(*_platformModel);
 		auto c_platform = ComponentManager<Contraption>::Instance().Create<Trampoline>();
 		contraption->AddComponent(c_platform);

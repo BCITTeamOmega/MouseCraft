@@ -12,7 +12,7 @@ Trampoline::~Trampoline()
 bool Trampoline::use() {
 	Contraption::use();
 
-	std::cout << "PLATFORM is being used" << std::endl;
+	std::cout << "Trampoline is being used" << std::endl;
 
 	GetEntity()->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());

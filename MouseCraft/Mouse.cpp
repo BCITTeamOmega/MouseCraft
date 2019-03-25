@@ -263,10 +263,10 @@ void Mouse::combine(Pickup *material) {
 				break;
 
 			case SPRING:
-				std::cout << "Mouse is creating the PLATFORM" << std::endl;
+				std::cout << "Mouse is creating the TRAMPOLINE" << std::endl;
 				baseItem->GetEntity()->Destroy();
 				baseItem = nullptr;
-				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::PLATFORM, glm::vec3(0, 0, 1));
+				entity = ContraptionFactory::Instance().Create(CONTRAPTIONS::TRAMPOLINE, glm::vec3(0, 0, 1));
 				GetEntity()->AddChild(entity);
 				newItem = entity->GetComponent<Contraption>();
 				break;
