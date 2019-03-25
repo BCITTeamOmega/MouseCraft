@@ -40,9 +40,6 @@
     <Filter Include="Header Files\Loading">
       <UniqueIdentifier>{5c0f7c31-531f-4033-a0e4-ba1deeb74c9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading">
-      <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{1533a3d5-613b-4ab4-84bf-6af19359b026}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{c9b6b0e4-6965-4865-8b9b-4d40f1c68bab}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Source Files\UI\Loading">
+      <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,16 +133,16 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Loading\SimpleParser.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ObjFileParser.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ModelLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\TextLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -253,7 +253,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ImageLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
@@ -297,9 +297,6 @@
     <ClCompile Include="Swords.cpp">
       <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
-    <ClCompile Include="Mice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -316,7 +313,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loading\PrefabLoader.cpp">
-      <Filter>Source Files\Loading</Filter>
+      <Filter>Source Files\UI\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
@@ -336,11 +333,32 @@
     <ClCompile Include="WorldGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sound\SoundComponent.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
     <ClCompile Include="Network\NetworkComponent.cpp">
       <Filter>Source Files\Network</Filter>
+	</ClCompile>
+    <ClCompile Include="Graphics\GLTextureArray.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContraptionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageOnCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimedDestruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -593,9 +611,6 @@
     <ClInclude Include="Swords.h">
       <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
-    <ClInclude Include="Mice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Cat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -647,11 +662,38 @@
     <ClInclude Include="WorldGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sound\SoundComponent.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>
     <ClInclude Include="Network\NetworkComponent.h">
       <Filter>Header Files\Network</Filter>
+	</ClInclude>
+    <ClInclude Include="Graphics\GLTextureArray.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CombinedGeometry.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContraptionSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageOnCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimedDestruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OmegaTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

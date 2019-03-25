@@ -2,15 +2,20 @@
 #include "../RenderUtil.h"
 #include <iostream>
 
-FBO::FBO() {
+using std::vector;
+
+FBO::FBO(int width, int height, vector<GLTexture*>& textures) : _width(width), _height(height) {
 	glGenFramebuffers(1, &_id);
 	RenderUtil::checkGLError("glGenFramebuffers");
 	glGenRenderbuffers(1, &_rbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	glBindRenderbuffer(GL_RENDERBUFFER, _rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1280, 720);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo);
+	if (textures.size() > 0) {
+		attachBuffers(textures);
+	}
 }
 
 FBO::~FBO() {
@@ -19,13 +24,33 @@ FBO::~FBO() {
 	glDeleteRenderbuffers(1, &_rbo);
 }
 
-void FBO::bind() {
-	glBindFramebuffer(GL_FRAMEBUFFER, _id);
+void FBO::attachBuffers(std::vector<GLTexture*>& buffers) {
+	Image* img = new Image(NULL, _width, _height); // Temp image so we can use GLtextures
+	vector<GLuint> attachments;
+	for (int i = 0; i < buffers.size(); i++) {
+		GLTexture* b = buffers[i];
+		b->setImage(*img, false, GL_RGBA16F, GL_FLOAT);
+		GLuint attachment = GL_COLOR_ATTACHMENT0 + i;
+		attachments.push_back(attachment);
+		// Calls internal function to attach buffer
+		buffer(attachment, *b);
+	}
+	bind();
+	auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (fboStatus != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "Framebuffer not complete: " << fboStatus << std::endl;
+	}
+	glDrawBuffers(attachments.size(), &attachments[0]);
+	delete img;
+}
+
+void FBO::bind(GLuint type) {
+	glBindFramebuffer(type, _id);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 
-void FBO::unbind() {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+void FBO::unbind(GLuint type) {
+	glBindFramebuffer(type, 0);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 

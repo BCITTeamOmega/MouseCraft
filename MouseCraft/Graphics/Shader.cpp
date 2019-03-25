@@ -104,3 +104,9 @@ void Shader::setUniformTexture(string name, GLuint index) {
 	GLint pos = glGetUniformLocation(_program, cstr);
 	glUniform1i(pos, index);
 }
+
+void Shader::setUniformInt(string name, GLint value) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform1i(pos, value);
+}

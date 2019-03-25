@@ -5,6 +5,7 @@ layout(location = 2) in vec2 texCoord;
 uniform vec3 color;
 uniform mat4 transform;
 uniform mat4 invTransform;
+uniform int textureID;
 
 out vec3 fragNormal;
 out vec2 fragTexCoord;

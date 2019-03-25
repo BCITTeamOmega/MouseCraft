@@ -8,7 +8,7 @@ public:
 	VAO();
 	~VAO();
 	GLuint getID();
-	void setBuffer(int id, VBO& vbo);
+	void setBuffer(int id, VBO& vbo, int offset = 0);
 	void unsetBuffer(int id);
 	void setElementBuffer(EBO& ebo);
 	void bind();

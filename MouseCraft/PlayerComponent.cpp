@@ -49,9 +49,6 @@ void PlayerComponent::Update(float deltaTime)
 	// rotation
 	if (_move.x != 0 && _move.y != 0)
 	{
-		auto rotation = glm::atan(_move.x / _move.y);
-		if (_move.y > 0)
-			rotation -= M_PI;
-		_entity->transform.setLocalRotation(glm::vec3(0, rotation, 0));
+		_entity->transform.face2D(_move);
 	}
 }
