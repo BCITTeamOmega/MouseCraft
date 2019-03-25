@@ -57,7 +57,7 @@ void SetupSound()
 	initial->z = 0;
 	//create a type Param from the track params and pass it into the event notifier
 	TypeParam<TrackParams*> param(initial);
-	EventManager::Notify(PLAY_SONG, &param);
+	//EventManager::Notify(PLAY_SONG, &param);
 }
 
 void MainTest()
@@ -110,6 +110,11 @@ void MainTest()
 	Model* catstandModel = ModelGen::makeCube(15, 5, 15);
 	Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
 	Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
+	//Obstacle Models
+	Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
+	Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
+	Model* box = ModelGen::makeCube(2, 2, 2);
+	Model* book = ModelGen::makeCube(2, 2, 1);
 
 	//Set the textures
 	std::string* woodTex = new std::string("res/textures/wood.png");
@@ -241,30 +246,61 @@ void MainTest()
 	couchEntity->AddComponent(couchPhysics);
 	couchPhysics->initPosition();
 
-	auto p_pot = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 	PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
 	catstandEntity->AddComponent(catstandPhysics);
 	catstandPhysics->initPosition();
 
-	auto p_book = PrefabLoader::LoadPrefab("res/prefabs/book.json");
-	auto p_box  = PrefabLoader::LoadPrefab("res/prefabs/box.json");
-	auto p_vase = PrefabLoader::LoadPrefab("res/prefabs/vase.json");
-	auto p_lamp = PrefabLoader::LoadPrefab("res/prefabs/lamp.json");
-	auto p_ball = PrefabLoader::LoadPrefab("res/prefabs/ball.json");
+	auto bookEntity = EntityManager::Instance().Create();
+	Renderable* bookRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	bookRend->setModel(*book);
+	bookRend->setColor(Color(1.0, 0.0, 1.0));
+	bookEntity->AddComponent(bookRend);
+	PhysicsComponent* bookPhysics = PhysicsManager::instance()->createGridObject(25, 5, 5, 5, PhysObjectType::OBSTACLE_UP);
+	bookEntity->AddComponent(bookPhysics);
+	bookPhysics->initPosition();
 
-	//OmegaEngine::Instance().AddEntity(p_pot);
+	auto boxEntity = EntityManager::Instance().Create();
+	Renderable* boxRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	boxRend->setModel(*box);
+	boxRend->setColor(Color(1.0, 0.0, 0.0));
+	boxEntity->AddComponent(boxRend);
+	PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(25, 40, 5, 5, PhysObjectType::OBSTACLE_DOWN);
+	boxEntity->AddComponent(boxPhysics);
+	boxPhysics->initPosition();
 
-	OmegaEngine::Instance().AddEntity(p_book);
-	OmegaEngine::Instance().AddEntity(p_box);
-	OmegaEngine::Instance().AddEntity(p_vase);
-	OmegaEngine::Instance().AddEntity(p_lamp);
-	OmegaEngine::Instance().AddEntity(p_ball);
+	auto vaseEntity = EntityManager::Instance().Create();
+	Renderable* vaseRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	vaseRend->setModel(*cylinder);
+	vaseRend->setColor(Color(0.0, 1.0, 0.0));
+	vaseEntity->AddComponent(vaseRend);
+	PhysicsComponent* vasePhysics = PhysicsManager::instance()->createGridObject(30, 50, 5, 5, PhysObjectType::OBSTACLE_DOWN);
+	vaseEntity->AddComponent(vasePhysics);
+	vasePhysics->initPosition();
 
+	auto lampEntity = EntityManager::Instance().Create();
+	Renderable* lampRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	lampRend->setModel(*cylinder);
+	lampRend->setColor(Color(1.0, 1.0, 0.0));
+	lampEntity->AddComponent(lampRend);
+	PhysicsComponent* lampPhysics = PhysicsManager::instance()->createGridObject(35, 20, 5, 5, PhysObjectType::OBSTACLE_UP);
+	lampEntity->AddComponent(lampPhysics);
+	lampPhysics->initPosition();
 
-	OmegaEngine::Instance().AddSystem(rs);
-	OmegaEngine::Instance().AddSystem(is);
-	// OmegaEngine::Instance().AddSystem(dcs);
-	OmegaEngine::Instance().Loop();
+	auto ballEntity = EntityManager::Instance().Create();
+	Renderable* ballRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	ballRend->setModel(*ball);
+	ballRend->setColor(Color(1.0, 0.5, 0.5));
+	ballEntity->AddComponent(ballRend);
+	PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
+	ballEntity->AddComponent(ballPhysics);
+	ballPhysics->initPosition();
+
+	OmegaEngine::Instance().AddEntity(bookEntity);
+	OmegaEngine::Instance().AddEntity(boxEntity);
+	OmegaEngine::Instance().AddEntity(vaseEntity);
+	OmegaEngine::Instance().AddEntity(lampEntity);
+	OmegaEngine::Instance().AddEntity(ballEntity);
+
 	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 	northWallEntity->AddComponent(northWallPhysics);
 	northWallPhysics->initPosition();
