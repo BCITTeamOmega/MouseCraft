@@ -113,7 +113,7 @@ void MainTest()
 	//Obstacle Models
 	Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
 	Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
-	Model* box = ModelGen::makeCube(2, 2, 2);
+	Model* box = ModelGen::makeCube(4, 4, 4);
 	Model* book = ModelGen::makeCube(2, 2, 1);
 
 	//Set the textures
@@ -264,7 +264,7 @@ void MainTest()
 	boxRend->setModel(*box);
 	boxRend->setColor(Color(1.0, 0.0, 0.0));
 	boxEntity->AddComponent(boxRend);
-	PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(25, 40, 5, 5, PhysObjectType::OBSTACLE_DOWN);
+	PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(50, 50, 7, 7, PhysObjectType::OBSTACLE_DOWN);
 	boxEntity->AddComponent(boxPhysics);
 	boxPhysics->initPosition();
 
