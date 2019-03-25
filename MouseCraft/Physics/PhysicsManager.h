@@ -35,6 +35,8 @@ constexpr auto CAT_UP_CATEGORY = 0x0080;
 constexpr auto CONTRAPTION_DOWN_CATEGORY = 0x0100;
 constexpr auto CONTRAPTION_UP_CATEGORY = 0x0200;
 constexpr auto PART_CATEGORY = 0x0400;
+constexpr auto PROJECTILE_DOWN_CATEGORY = 0x0800;
+constexpr auto PROJECTILE_UP_CATEGORY = 0x1000;
 
 constexpr auto PART_MASK = 0x0014;
 constexpr auto CONTRAPTION_UP_MASK = 0x02A9;
@@ -47,6 +49,8 @@ constexpr auto OBSTACLE_UP_MASK = 0x02AA;
 constexpr auto OBSTACLE_DOWN_MASK = 0x0554;
 constexpr auto PLATFORM_MASK = 0x0150;
 constexpr auto WALL_MASK = 0x03F0;
+constexpr auto PROJECTILE_DOWN_MASK = 0x0047;
+constexpr auto PROJECTILE_UP_MASK = 0x0089;
 #pragma endregion
 
 class PhysicsComponent;
@@ -59,7 +63,6 @@ public:
 	static void destroy();
 	void Update(float dt);
 	void setupGrid(int w, int h, int scale);
-	void setOuterWalls(std::vector<std::pair<Vector2D, Vector2D>> walls);
 	PhysicsComponent* createObject(float x, float y, float w, float h, float r, PhysObjectType::PhysObjectType t);
 	PhysicsComponent* createGridObject(float x, float y, int w, int h, PhysObjectType::PhysObjectType t);
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2);
