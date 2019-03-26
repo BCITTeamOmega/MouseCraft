@@ -9,6 +9,7 @@
 #include "Core/Test/TestDerivedComponent.h"
 #include "Core/ComponentManager.h"
 #include "MainScene.h"
+#include "MenuScene.h"
 #include "Core/EntityManager.h"
 #include "Core/Example/ExampleComponent.h"
 #include "Core/Example/ExampleSystem.h"
@@ -18,6 +19,7 @@
 #include "Graphics/Model.h"
 #include "Graphics/RenderSystem.h"
 #include "Graphics/Renderable.h"
+#include "Graphics/UIRenderable.h"
 #include "Input/InputSystem.h"
 #include "Mouse.h"
 #include "Graphics/ModelGen.h"
@@ -34,6 +36,7 @@
 #include "Loading/PrefabLoader.h"
 #include "GameManager.h"
 #include "ContraptionSystem.h"
+#include "MenuController.h"
 
 
 SoundManager* noise;
@@ -66,7 +69,9 @@ void MainTest()
 
 	OmegaEngine::Instance().initialize();
 	Scene* s = new MainScene();
-	OmegaEngine::Instance().ChangeScene(s);	// use fast transition
+	Scene* s0 = new MenuScene();
+	OmegaEngine::Instance().ChangeScene(s0);
+	//OmegaEngine::Instance().ChangeScene(s);	// use fast transition
 
 	InputSystem* inputSystem = new InputSystem();
 
@@ -122,12 +127,40 @@ void MainTest()
 	horizWallModel->setTexture(woodTex);
 	vertWallModel->setTexture(woodTex);
 
+	std::string* menuGameStartTex = new std::string("res/textures/menu1.png");
+	std::string* menuQuitTex = new std::string("res/textures/menu2.png");
+
 	//Create the camera
 	Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
 	cam->setFOV(90.0f);
 	cam->setCloseClip(0.01f);
 	cam->setFarClip(100.0f);
 	cameraEntity->AddComponent(cam);
+
+	// Set up menu entities
+	Entity* menuEntity = EntityManager::Instance().Create();
+	Entity* startGameEntity = EntityManager::Instance().Create();
+	Entity* quitEntity = EntityManager::Instance().Create();
+	menuEntity->transform.setLocalPosition(glm::vec3(0.5, 0.6, 0));
+
+	UIRenderable* startGameUIRend = ComponentManager<UIRenderable>::Instance().Create<UIRenderable>();
+	startGameUIRend->setSize(0.6f, 0.2f);
+	startGameUIRend->setTexture(menuGameStartTex);
+	startGameUIRend->setColor(Color(1.0, 1.0, 1.0));
+	startGameEntity->AddComponent(startGameUIRend);
+
+	UIRenderable* quitUIRend = ComponentManager<UIRenderable>::Instance().Create<UIRenderable>();
+	quitUIRend->setSize(0.6f, 0.2f);
+	quitUIRend->setTexture(menuQuitTex);
+	quitUIRend->setColor(Color(1.0, 1.0, 1.0));
+	quitEntity->AddComponent(quitUIRend);
+
+	//Create the menu component
+	MenuController* mc = ComponentManager<MenuController>::Instance().Create<MenuController>();
+	menuEntity->AddComponent(mc);
+	mc->addMenuItem(startGameEntity);
+	mc->addMenuItem(quitEntity);
+	// NOTE: The menu controller's callback is set up at the end
 
 	//Create the renderables, set their model and colour, and add them to their entity
 	Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -396,25 +429,35 @@ void MainTest()
 	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 	teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
-	//Add the entities to the game
-	OmegaEngine::Instance().AddEntity(mouse1Entity);
-	OmegaEngine::Instance().AddEntity(mouse2Entity);
-	OmegaEngine::Instance().AddEntity(mouse3Entity);
-	OmegaEngine::Instance().AddEntity(catEntity);
-	OmegaEngine::Instance().AddEntity(floorEntity);
-	OmegaEngine::Instance().AddEntity(counter1Entity);
-	OmegaEngine::Instance().AddEntity(counter2Entity);
-	OmegaEngine::Instance().AddEntity(islandEntity);
-	OmegaEngine::Instance().AddEntity(tableEntity);
-	OmegaEngine::Instance().AddEntity(couchEntity);
-	OmegaEngine::Instance().AddEntity(catstandEntity);
-	OmegaEngine::Instance().AddEntity(northWallEntity);
-	OmegaEngine::Instance().AddEntity(southWallEntity);
-	OmegaEngine::Instance().AddEntity(westWallEntity);
-	OmegaEngine::Instance().AddEntity(eastWallEntity);
-	OmegaEngine::Instance().AddEntity(cameraEntity);
-	OmegaEngine::Instance().AddEntity(pSpawnerEntity);
-	OmegaEngine::Instance().AddEntity(gmEntity);
+	mc->onSelect([&](int scene) {
+		std::cout << "Scene switch" << std::endl;
+		switch (scene) {
+		case 0:
+			OmegaEngine::Instance().ChangeScene(s);
+			OmegaEngine::Instance().AddEntity(mouse1Entity);
+			OmegaEngine::Instance().AddEntity(mouse2Entity);
+			OmegaEngine::Instance().AddEntity(mouse3Entity);
+			OmegaEngine::Instance().AddEntity(catEntity);
+			OmegaEngine::Instance().AddEntity(floorEntity);
+			OmegaEngine::Instance().AddEntity(counter1Entity);
+			OmegaEngine::Instance().AddEntity(counter2Entity);
+			OmegaEngine::Instance().AddEntity(islandEntity);
+			OmegaEngine::Instance().AddEntity(tableEntity);
+			OmegaEngine::Instance().AddEntity(couchEntity);
+			OmegaEngine::Instance().AddEntity(catstandEntity);
+			OmegaEngine::Instance().AddEntity(northWallEntity);
+			OmegaEngine::Instance().AddEntity(southWallEntity);
+			OmegaEngine::Instance().AddEntity(westWallEntity);
+			OmegaEngine::Instance().AddEntity(eastWallEntity);
+			OmegaEngine::Instance().AddEntity(pSpawnerEntity);
+			OmegaEngine::Instance().AddEntity(gmEntity);
+			OmegaEngine::Instance().AddEntity(cameraEntity);
+			menuEntity->Destroy();
+			break;
+		}
+	});
+
+	OmegaEngine::Instance().AddEntity(menuEntity);
 
 	//Add the systems
 	OmegaEngine::Instance().AddSystem(PhysicsManager::instance());
