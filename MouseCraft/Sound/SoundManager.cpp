@@ -8,7 +8,7 @@
 
 //defines for SoundEffect Names
 #define JUMP "../res/SoundEffects/jumpSE.wav"
-#define DAMAGE "../Sounds/damageSE.wav"
+#define SWIPE "../res/SoundEffects/swipe.wav"
 #define GOAT_DEATH "../Sounds/goatDeath.wav"
 
 //private mutex variable
@@ -71,12 +71,12 @@ void SoundManager::loadAudioData() {
     }
     SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
 
-    ////Explosion Sound, steps are identical to above but with different file and Handle
-    //temp = soundObject->GetAudioData(DAMAGE);
-    //if (temp.data == NULL) {
-    //    std::cout << "Explosion SE failed to store correctly." << std::endl;
-    //}
-    //SoundEffects.insert(std::pair<SoundsList, AudioData>(Damage, temp));
+    //Cat Attacking Sound, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(SWIPE);
+    if (temp.data == NULL) {
+        std::cout << "Swiping SE failed to store correctly." << std::endl;
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Swipe, temp));
 
     ////death Sound 1, steps are identical to above but with different file and Handle
     //temp = soundObject->GetAudioData(GOAT_DEATH);
@@ -161,12 +161,12 @@ void SoundManager::PlaySound(SoundsList soundEffect, float x, float y, float z) 
         soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
         soundObject->PlayAudio(seSource[selectedBuffer]);
         break;
-    //case Damage:
-    //    soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Damage)->second);
-    //    soundObject->ToggleLooping(seSource[selectedBuffer], false);
-    //    soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
-    //    soundObject->PlayAudio(seSource[selectedBuffer]);
-    //    break;
+    case Swipe:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Swipe)->second);
+        soundObject->ToggleLooping(seSource[selectedBuffer], false);
+        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->PlayAudio(seSource[selectedBuffer]);
+        break;
     //case GoatDeath:
     //    soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(GoatDeath)->second);
     //    soundObject->ToggleLooping(seSource[selectedBuffer], false);

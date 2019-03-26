@@ -13,7 +13,7 @@
 #include "Coil.h"
 #include "Gun.h"
 #include "Overcharge.h"
-#include "Platform.h"
+#include "Trampoline.h"
 #include "Swords.h"
 
 class ContraptionFactory

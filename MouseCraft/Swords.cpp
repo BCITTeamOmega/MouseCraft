@@ -13,8 +13,7 @@ Swords::~Swords()
 {
 }
 
-bool Swords::use() {
-	Contraption::use();
+bool Swords::use(Mouse* m) {
 	std::cout << "SWORDS is being used" << std::endl;
 	_phys = GetEntity()->GetComponent<PhysicsComponent>();
 	bool isUp = GetEntity()->GetParent()->GetComponent<PhysicsComponent>()->isUp;

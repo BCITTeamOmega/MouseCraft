@@ -21,19 +21,20 @@ Bomb::~Bomb()
 void Bomb::OnInitialized()
 {
 	Contraption::OnInitialized();
-	_physics = GetEntity()->GetComponent<PhysicsComponent>();
 	_timed = GetEntity()->GetComponent<TimedDestruction>();
 	_dcollision = GetEntity()->GetComponent<DamageOnCollision>();
 }
 
-bool Bomb::use() {
-	Contraption::use();
-
+bool Bomb::use(Mouse* m) {
 	std::cout << "BOMB is being used" << std::endl;
 
 	// launching position
 	auto dir = GetEntity()->t().wForward();
 	auto pos = GetEntity()->t().wPos() + dir * 5.0f;
+	auto up = GetEntity()->GetParent()->GetComponent<PhysicsComponent>()->isUp;
+
+	auto ptype = up ? PhysObjectType::PROJECTILE_UP : PhysObjectType::PROJECTILE_DOWN;
+	_physics = PhysicsManager::instance()->createObject(pos.x, pos.y, 4, 4, 0, ptype);
 
 	// need to dissapear after exploding
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
@@ -62,7 +63,7 @@ bool Bomb::use() {
 }
 
 void Bomb::show() {
-	Contraption::use();
+	//Contraption::use();
 }
 
 void Bomb::Explode()
