@@ -212,6 +212,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="ObstacleFactory.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
@@ -310,6 +311,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="ObstacleFactory.h" />
     <ClInclude Include="Obstacles.h" />
     <ClInclude Include="OmegaTests.h" />
     <ClInclude Include="Overcharge.h" />
