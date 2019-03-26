@@ -8,8 +8,9 @@
 #include "Physics/PhysicsManager.h"
 #include "Physics/PhysicsComponent.h"
 #include "Loading/ModelLoader.h"
-#include "YarnBall.h"
 #include "HealthComponent.h"
+#include "YarnBall.h"
+#include "Lamp.h"
 
 ObstacleFactory::ObstacleFactory()
 {
@@ -23,7 +24,7 @@ ObstacleFactory::~ObstacleFactory()
 {
 }
 
-Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos)
+Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 {
 	auto e = EntityManager::Instance().Create();
 	Renderable* c_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -36,14 +37,14 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos)
 	{
 		c_render->setModel(*_bookModel);
 		c_render->setColor(Color(1.0, 0.0, 1.0));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, PhysObjectType::OBSTACLE_UP);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		break;
 	}
 	case YARNBALL:
 	{
 		c_render->setModel(*_ballModel);
 		c_render->setColor(Color(1.0, 0.5, 0.5));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, PhysObjectType::OBSTACLE_UP);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		YarnBall* c_ball = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
 		e->AddComponent(c_ball);
 		break;
@@ -52,21 +53,35 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos)
 	{
 		c_render->setModel(*_cylinderModel);
 		c_render->setColor(Color(0.0, 1.0, 0.0));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, PhysObjectType::OBSTACLE_UP);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		break;
 	}
 	case BOX:
 	{
 		c_render->setModel(*_boxModel);
 		c_render->setColor(Color(1.0, 0.0, 0.0));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 7, 7, PhysObjectType::OBSTACLE_UP);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 7, 7, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		break;
 	}
 	case LAMP:
 	{	
-		c_render->setModel(*_cylinderModel);
+		auto fieldModel = ModelGen::makeCube(16, 0.1, 16);
+		c_render->setModel(*fieldModel);
 		c_render->setColor(Color(1.0, 1.0, 0.0));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, PhysObjectType::OBSTACLE_UP);
+		c_render->SetEnabled(false);	// this is the field 
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		Lamp* c_lamp = ComponentManager<UpdatableComponent>::Instance().Create<Lamp>();
+		e->AddComponent(c_lamp);
+
+		// this is the lamp visual
+		auto e_lampModel = EntityManager::Instance().Create();
+		auto c_lampRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_lampRender->setModel(*_cylinderModel);
+		c_lampRender->setColor(Color(1.0, 1.0, 0.0));
+		e_lampModel->AddComponent(c_lampRender);
+		e->AddChild(e_lampModel);
+
+		c_lamp->visualsEntity = e_lampModel;
 		break;
 	}
 	default:

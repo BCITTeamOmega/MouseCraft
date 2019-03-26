@@ -246,17 +246,19 @@ void MainTest()
 	catstandEntity->AddComponent(catstandPhysics);
 	catstandPhysics->initPosition();
 
-	auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5));
-	auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50));
-	auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50));
-	auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 20));
-	auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30));
-
+	auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5), true);
+	auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+	auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+	auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 20), true);
+	auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+	auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+	
 	OmegaEngine::Instance().AddEntity(bookEntity);
 	OmegaEngine::Instance().AddEntity(boxEntity);
 	OmegaEngine::Instance().AddEntity(vaseEntity);
 	OmegaEngine::Instance().AddEntity(lampEntity);
 	OmegaEngine::Instance().AddEntity(ballEntity);
+	OmegaEngine::Instance().AddEntity(lampEntity2);
 
 	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 	northWallEntity->AddComponent(northWallPhysics);

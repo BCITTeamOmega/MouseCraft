@@ -198,6 +198,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\Renderable.cpp" />
     <ClCompile Include="Graphics\RenderSystem.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
+    <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="Loading\ImageLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -279,6 +280,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="Lamp.h" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
     <ClInclude Include="Graphics\RenderSystem.h" />
