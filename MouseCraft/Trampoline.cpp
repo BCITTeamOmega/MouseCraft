@@ -25,8 +25,8 @@ bool Trampoline::use(Mouse* m) {
 
 	_isPlaced = true;
 
-	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
-	checkFor.insert(PhysObjectType::MOUSE_DOWN);
+	auto ctype = up ? PhysObjectType::MOUSE_UP : PhysObjectType::MOUSE_DOWN;
+	checkFor.insert(ctype);
 
 	GetEntity()->AddComponent(c_physics);
 
@@ -57,12 +57,16 @@ void Trampoline::Update(float dt) {
 	auto hits = PhysicsManager::instance()->areaCheck(nullptr, checkFor, new Vector2D(bl), new Vector2D(tr));
 	bool hitMice = hits.size() > 0;
 
-	if (!_collidedMice && hitMice)
+	if (hits.size() > 0)
 	{
-		std::cout << "Mouse touched platform" << std::endl;
-		_collidedMice = hits[0]->GetEntity()->GetComponent<PlayerComponent>();
-		// Insert jump code
+		//for now i'm just going to destroy the trampoline after 1 jump
+		std::cout << "Mouse touched trampoline" << std::endl;
+		
+		for (int i = 0; i < hits.size(); i++)
+		{
+			hits[i]->GetEntity()->GetComponent<PhysicsComponent>()->onBounce.Notify(GetEntity()->GetComponent<PhysicsComponent>());
+		}
+
+		//destroy trampoline
 	}
-	else if (_collidedMice && !hitMice)
-		_collidedMice = nullptr;
 }

@@ -1,10 +1,10 @@
 #pragma once
 #include "Contraption.h"
+#include "Mouse.h"
 
 class Mouse;
 
-class Trampoline :
-	public Contraption
+class Trampoline : public Contraption
 {
 public:
 	Trampoline();
@@ -20,7 +20,6 @@ public:
 
 private: 
 	bool _isPlaced = false;
-	PlayerComponent* _collidedMice;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	Handler<Trampoline, PhysicsComponent*> HandleOnCollision;
 };

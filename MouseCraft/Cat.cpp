@@ -181,7 +181,7 @@ void Cat::Jump()
 		//position of cat
 		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
 		//vector in front of cat of length = JUMP_DIST
-		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
+		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * CAT_JUMP_DIST, GetEntity()->transform.getLocalForward().z * CAT_JUMP_DIST);
 		jumpVec = new Vector2D(*curPos + *jumpVec);
 
 		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
