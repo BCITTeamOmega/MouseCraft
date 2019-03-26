@@ -242,7 +242,9 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
         case NetDatum::DataType::PLAYER_AXIS:
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
                 Axis axis = (Axis)packet->ReadInt();
-                glm::vec2 value(packet->ReadFloat(), packet->ReadFloat());
+                float x = packet->ReadFloat();
+                float y = packet->ReadFloat();
+                glm::vec2 value(x, y);
 
                 Axis2DEvent eventData(_connectionList[sender].PlayerID, axis, value);
                 EventManager::Notify(EventName::INPUT_AXIS_2D, new TypeParam<Axis2DEvent>(eventData));
