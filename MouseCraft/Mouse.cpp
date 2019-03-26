@@ -153,7 +153,7 @@ void Mouse::dropItem() {
 
 void Mouse::use(Contraption* item) {
 	
-	if (item->use())
+	if (item->use(this))
 	{
 		// todo: this syntax is kinda weird. should pass reference to pointer or just use newItem directly
 		newItem = nullptr;	
@@ -168,6 +168,8 @@ void Mouse::combine(Pickup *material) {
 		return;
 	}
 	else {
+		PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
 		switch (baseItem->type)
 		{
 

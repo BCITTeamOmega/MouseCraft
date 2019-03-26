@@ -9,12 +9,17 @@ Trampoline::~Trampoline()
 {
 }
 
-bool Trampoline::use() {
-	Contraption::use();
-
+bool Trampoline::use(Mouse* m) {
 	std::cout << "Trampoline is being used" << std::endl;
 
-	GetEntity()->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
+	auto pos = GetEntity()->transform.getWorldPosition();
+	auto up = GetEntity()->GetParent()->GetComponent<PhysicsComponent>()->isUp;
+
+	//physics
+	auto ptype = up ? PhysObjectType::CONTRAPTION_UP : PhysObjectType::CONTRAPTION_DOWN;
+	auto c_physics = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, ptype);
+
+	GetEntity()->transform.setLocalPosition(pos);
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
 	fieldEntity->SetEnabled(true);
 
@@ -22,6 +27,8 @@ bool Trampoline::use() {
 
 	PhysicsComponent* pc = GetEntity()->GetComponent<PhysicsComponent>();
 	checkFor.insert(PhysObjectType::MOUSE_DOWN);
+
+	GetEntity()->AddComponent(c_physics);
 
 	return true;
 	

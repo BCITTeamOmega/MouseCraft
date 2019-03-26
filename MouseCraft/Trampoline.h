@@ -1,5 +1,8 @@
 #pragma once
 #include "Contraption.h"
+
+class Mouse;
+
 class Trampoline :
 	public Contraption
 {
@@ -7,7 +10,7 @@ public:
 	Trampoline();
 	~Trampoline();
 
-	bool use() override;
+	bool use(Mouse* m) override;
 	void show() override;
 	void OnCollision(PhysicsComponent* other);
 	virtual void OnInitialized() override;
