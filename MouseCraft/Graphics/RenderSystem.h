@@ -37,6 +37,7 @@ private:
 	void renderScene();
 	void gBufferPass();
 	void lightingPass();
+	void uiPass();
 	void combineMasterGeometry(std::vector<RenderData>& data);
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
@@ -48,6 +49,10 @@ private:
 	std::vector<RenderData>* _accumulatingList;
 	std::map<std::string, Shader> _shaders;
 	Shader* _shader;
+
+
+	std::vector<RenderData>* _uiRenderingList;
+	std::vector<RenderData>* _uiAccumulatingList;
 
 	VAO* _vao;
 	VBO* _positionVBO;
