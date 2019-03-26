@@ -167,11 +167,6 @@ void MainTest()
 			Model* catstandModel = ModelGen::makeCube(15, 5, 15);
 			Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
 			Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
-			//Obstacle Models
-			Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
-			Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
-			Model* box = ModelGen::makeCube(4, 4, 4);
-			Model* book = ModelGen::makeCube(2, 2, 1);
 
 			//Set the textures
 			std::string* woodTex = new std::string("res/textures/wood.png");
@@ -256,9 +251,6 @@ void MainTest()
 			westWallRend->setModel(*vertWallModel);
 			westWallRend->setColor(Color(1.0, 0.5, 0.0));
 			westWallEntity->AddComponent(westWallRend);
-	PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 5, 5, 0, PhysObjectType::CAT_UP);
-	catEntity->AddComponent(catPhysics);
-	catPhysics->initPosition();
 
 			Renderable* eastWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
 			eastWallRend->setModel(*vertWallModel);
@@ -306,76 +298,16 @@ void MainTest()
 			catstandEntity->AddComponent(catstandPhysics);
 			catstandPhysics->initPosition();
 
-			auto bookEntity = EntityManager::Instance().Create();
-			Renderable* bookRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-			bookRend->setModel(*book);
-			bookRend->setColor(Color(1.0, 0.0, 1.0));
-			bookEntity->AddComponent(bookRend);
-			PhysicsComponent* bookPhysics = PhysicsManager::instance()->createGridObject(25, 5, 5, 5, PhysObjectType::OBSTACLE_UP);
-			bookEntity->AddComponent(bookPhysics);
-			bookPhysics->initPosition();
-	auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5), true);
-	auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-	auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-	auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-	auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-	auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
-	
-	OmegaEngine::Instance().AddEntity(bookEntity);
-	OmegaEngine::Instance().AddEntity(boxEntity);
-	OmegaEngine::Instance().AddEntity(vaseEntity);
-	OmegaEngine::Instance().AddEntity(lampEntity);
-	OmegaEngine::Instance().AddEntity(ballEntity);
-	OmegaEngine::Instance().AddEntity(lampEntity2);
-
-			auto boxEntity = EntityManager::Instance().Create();
-			Renderable* boxRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-			boxRend->setModel(*box);
-			boxRend->setColor(Color(1.0, 0.0, 0.0));
-			boxEntity->AddComponent(boxRend);
-			PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(50, 50, 7, 7, PhysObjectType::OBSTACLE_DOWN);
-			boxEntity->AddComponent(boxPhysics);
-			boxPhysics->initPosition();
-
-			auto vaseEntity = EntityManager::Instance().Create();
-			Renderable* vaseRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-			vaseRend->setModel(*cylinder);
-			vaseRend->setColor(Color(0.0, 1.0, 0.0));
-			vaseEntity->AddComponent(vaseRend);
-			PhysicsComponent* vasePhysics = PhysicsManager::instance()->createGridObject(30, 50, 5, 5, PhysObjectType::OBSTACLE_DOWN);
-			vaseEntity->AddComponent(vasePhysics);
-			vasePhysics->initPosition();
-
-			auto lampEntity = EntityManager::Instance().Create();
-			Renderable* lampRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-			lampRend->setModel(*cylinder);
-			lampRend->setColor(Color(1.0, 1.0, 0.0));
-			lampEntity->AddComponent(lampRend);
-			PhysicsComponent* lampPhysics = PhysicsManager::instance()->createGridObject(35, 20, 5, 5, PhysObjectType::OBSTACLE_UP);
-			lampEntity->AddComponent(lampPhysics);
-			lampPhysics->initPosition();
-
-			auto ballEntity = EntityManager::Instance().Create();
-			Renderable* ballRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-			ballRend->setModel(*ball);
-			ballRend->setColor(Color(1.0, 0.5, 0.5));
-			ballEntity->AddComponent(ballRend);
-			PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
-			ballEntity->AddComponent(ballPhysics);
-			ballPhysics->initPosition();
-
-			OmegaEngine::Instance().AddEntity(bookEntity);
-			OmegaEngine::Instance().AddEntity(boxEntity);
-			OmegaEngine::Instance().AddEntity(vaseEntity);
-			OmegaEngine::Instance().AddEntity(lampEntity);
-			OmegaEngine::Instance().AddEntity(ballEntity);
-
+			auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5), true);
+			auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+			auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+			auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+			auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+			auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+			
 			PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 			northWallEntity->AddComponent(northWallPhysics);
 			northWallPhysics->initPosition();
-	PlayerComponent* mouse1Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	mouse1Movement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
-	mouse1Entity->AddComponent(mouse1Movement);
 
 			PhysicsComponent* southWallPhysics = PhysicsManager::instance()->createObject(50, 77.5, 110, 5, 0, PhysObjectType::WALL);
 			southWallEntity->AddComponent(southWallPhysics);
@@ -414,12 +346,6 @@ void MainTest()
 			PlayerComponent* mouse2Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
 			mouse2Movement->SetID(1); //Sets which controller handles this player (10 is the keyboard)
 			mouse2Entity->AddComponent(mouse2Movement);
-	PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-	catMovement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
-	catEntity->AddComponent(catMovement);
-	
-	HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-	catEntity->AddComponent(catHealth);
 
 			HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 			mouse2Health->SetHealth(2);
@@ -471,10 +397,17 @@ void MainTest()
 			gmEntity->AddComponent(gmGameManager);
 
 			//Don't forget the stupid teapots
-			Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-			teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+			
+			//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+			//teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
 			OmegaEngine::Instance().ChangeScene(s);
+			OmegaEngine::Instance().AddEntity(bookEntity);
+			OmegaEngine::Instance().AddEntity(boxEntity);
+			OmegaEngine::Instance().AddEntity(vaseEntity);
+			OmegaEngine::Instance().AddEntity(lampEntity);
+			OmegaEngine::Instance().AddEntity(ballEntity);
+			OmegaEngine::Instance().AddEntity(lampEntity2);
 			OmegaEngine::Instance().AddEntity(mouse1Entity);
 			OmegaEngine::Instance().AddEntity(mouse2Entity);
 			OmegaEngine::Instance().AddEntity(mouse3Entity);
