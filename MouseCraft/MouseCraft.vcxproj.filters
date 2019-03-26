@@ -351,6 +351,12 @@
     <ClCompile Include="Lamp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -675,6 +681,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Lamp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

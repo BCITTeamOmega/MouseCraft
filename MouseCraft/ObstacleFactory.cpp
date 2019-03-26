@@ -11,6 +11,8 @@
 #include "HealthComponent.h"
 #include "YarnBall.h"
 #include "Lamp.h"
+#include "Obstruction.h"
+#include "Vase.h"
 
 ObstacleFactory::ObstacleFactory()
 {
@@ -38,6 +40,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 		c_render->setModel(*_bookModel);
 		c_render->setColor(Color(1.0, 0.0, 1.0));
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 2, 2, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
+		e->AddComponent(c_obs);
 		break;
 	}
 	case YARNBALL:
@@ -54,6 +58,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 		c_render->setModel(*_cylinderModel);
 		c_render->setColor(Color(0.0, 1.0, 0.0));
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 2, 2, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		Vase* c_vase = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
+		e->AddComponent(c_vase);
 		break;
 	}
 	case BOX:
@@ -61,6 +67,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 		c_render->setModel(*_boxModel);
 		c_render->setColor(Color(1.0, 0.0, 0.0));
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 7, 7, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
+		e->AddComponent(c_obs);
 		break;
 	}
 	case LAMP:

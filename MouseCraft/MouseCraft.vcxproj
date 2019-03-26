@@ -214,6 +214,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstacleFactory.cpp" />
+    <ClCompile Include="Obstruction.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
@@ -238,6 +239,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="UI\TextComponent.cpp" />
     <ClCompile Include="UI\UIComponent.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="Vase.cpp" />
     <ClCompile Include="WorldGrid.cpp" />
     <ClCompile Include="YarnBall.cpp" />
   </ItemGroup>
@@ -315,6 +317,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstacleFactory.h" />
     <ClInclude Include="Obstacles.h" />
+    <ClInclude Include="Obstruction.h" />
     <ClInclude Include="OmegaTests.h" />
     <ClInclude Include="Overcharge.h" />
     <ClInclude Include="Physics\AreaQueryCallback.h" />
@@ -347,6 +350,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Vase.h" />
     <ClInclude Include="WorldGrid.h" />
     <ClInclude Include="YarnBall.h" />
   </ItemGroup>
