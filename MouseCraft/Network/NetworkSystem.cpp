@@ -8,6 +8,13 @@
 
 using namespace std;
 
+NetworkSystem & NetworkSystem::Instance() {
+    if (_instance == nullptr) {
+        _instance = new NetworkSystem();
+    }
+    return *_instance;
+}
+
 NetworkSystem::NetworkSystem(const Role role, const unsigned short port) : _tickCount(0), _role(role) {
     unsigned short portNum = port;
     while (!_socket.Open(portNum)) {

@@ -6,6 +6,7 @@
 #include "PacketData.h"
 #include "Connection.h"
 #include "NetDatum.h"
+#include "NetworkComponent.h"
 #include <map>
 
 #include "../Event/EventManager.h"
@@ -19,8 +20,9 @@ public:
         CLIENT
     };
 
-    NetworkSystem(const Role role = Role::HOST, const unsigned short port = DEFAULT_PORT);
-    ~NetworkSystem();
+    static NetworkSystem & Instance();
+
+    NetworkComponent & CreateComponent();
 
     void RequestConnection(const Address & address);
     void SearchForServers();
@@ -31,7 +33,10 @@ public:
 
     //Overrides ISubscriber::Notify
     void Notify(EventName eventName, Param *params) override;
-protected:
+private:
+    NetworkSystem(const Role role = Role::HOST, const unsigned short port = DEFAULT_PORT);
+    ~NetworkSystem();
+
     const int TICK_RATE = 30;
     //TODO: change back to 1.f once delta time fixed by Jason
     const float TICK_PERIOD = .1f / TICK_RATE;
@@ -59,5 +64,7 @@ protected:
     std::map<const Address, Connection> _connectionList;
     Role _role;
     const Address _broadcast = Address(255, 255, 255, 255, DEFAULT_PORT);
+
+    static NetworkSystem *_instance;
 };
 
