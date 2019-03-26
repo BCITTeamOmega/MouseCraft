@@ -9,9 +9,7 @@ Overcharge::~Overcharge()
 {
 }
 
-bool Overcharge::use() {
-	Contraption::use();	
-
+bool Overcharge::use(Mouse* m) {
 	std::cout << "OVERCHARGE is being used" << std::endl;
 	this->GetEntity()->GetParent()->GetComponent<HealthComponent>()->AddShield();
 	this->Drop();

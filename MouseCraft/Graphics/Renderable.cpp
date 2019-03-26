@@ -18,7 +18,9 @@ void Renderable::setModel(Model& model) {
 
 Transform Renderable::getTransform() {
 	Entity* e = GetEntity();
-	return e->transform;
+	if (e != nullptr) {
+		return e->transform;
+	}
 }
 
 Color Renderable::getColor() {

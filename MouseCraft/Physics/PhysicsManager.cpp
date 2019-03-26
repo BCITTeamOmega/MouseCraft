@@ -156,17 +156,17 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		fixtureDef.filter.maskBits = PART_MASK;
 		physicsComp->zPos = Z_LOWER;
 		break;
-	case PhysObjectType::CONTRAPTION_UP:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = CONTRAPTION_UP_CATEGORY;
-		fixtureDef.filter.maskBits = CONTRAPTION_UP_MASK;
+	case PhysObjectType::PROJECTILE_UP:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = PROJECTILE_UP_CATEGORY;
+		fixtureDef.filter.maskBits = PROJECTILE_UP_MASK;
 		physicsComp->isUp = true;
 		physicsComp->zPos = Z_UPPER;
 		break;
-	case PhysObjectType::CONTRAPTION_DOWN:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
-		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
+	case PhysObjectType::PROJECTILE_DOWN:
+		bodyDef.type = b2_dynamicBody;
+		fixtureDef.filter.categoryBits = PROJECTILE_DOWN_CATEGORY;
+		fixtureDef.filter.maskBits = PROJECTILE_DOWN_MASK;
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;

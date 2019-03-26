@@ -24,6 +24,7 @@ public:
 	PhysObjectType::PhysObjectType type;
 	Subject<PhysicsComponent*> onCollide; //for collision between bodies
 	Subject<PhysicsComponent*> onHit; //for hitbox checking
+	Subject<PhysicsComponent*> onBounce; //for hitbox checking
 private:
 	
 };
