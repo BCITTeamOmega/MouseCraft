@@ -218,7 +218,7 @@ void MainTest()
 	mouse3Entity->AddComponent(mouse3Physics);
 	mouse3Physics->initPosition();
 
-	PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 8, 8, 0, PhysObjectType::CAT_UP);
+	PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 5, 5, 0, PhysObjectType::CAT_UP);
 	catEntity->AddComponent(catPhysics);
 	catPhysics->initPosition();
 
@@ -249,7 +249,7 @@ void MainTest()
 	auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5), true);
 	auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
 	auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-	auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 20), true);
+	auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
 	auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
 	auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 	
