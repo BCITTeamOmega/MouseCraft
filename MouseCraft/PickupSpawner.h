@@ -11,7 +11,7 @@ public:
 	void Spawn();
 
 public:
-	float spawnDelay = 5.0f;
+	float spawnDelay = 4.0f;
 private:
 	float _counter = 0.0f;
 };

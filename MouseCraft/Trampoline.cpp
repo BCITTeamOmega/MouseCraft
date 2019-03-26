@@ -52,7 +52,7 @@ void Trampoline::Update(float dt) {
 
 	if (!_collidedMice && hitMice)
 	{
-		std::cout << "mice touched platform" << std::endl;
+		std::cout << "Mouse touched platform" << std::endl;
 		_collidedMice = hits[0]->GetEntity()->GetComponent<PlayerComponent>();
 		// Insert jump code
 	}

@@ -4,6 +4,8 @@ namespace PhysObjectType
 	enum PhysObjectType
 	{
 		NOTHING,
+		PROJECTILE_UP,
+		PROJECTILE_DOWN,
 		PART,
 		CONTRAPTION_UP,
 		CONTRAPTION_DOWN,
