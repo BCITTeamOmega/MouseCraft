@@ -614,6 +614,9 @@
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files\Event</Filter>
     </ClInclude>
+    <ClInclude Include="Obstacles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="WorldGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
