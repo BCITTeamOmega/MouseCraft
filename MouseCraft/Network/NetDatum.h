@@ -17,6 +17,7 @@ public:
         TRANSFORM_STATE_UPDATE = 0x10,
         EVENT_TRIGGER = 0x20,
         PLAYER_AXIS = 0x30,
+        PLAYER_BUTTON = 0x31,
     };
 
     const unsigned char GetType() const { return IntChar{_type}.c[0]; }
@@ -92,6 +93,22 @@ public:
         writePos += sizeof(x);
 
         std::copy(y.c, y.c + sizeof(y), _data + writePos);
+    }
+
+    const bool IsReliable() const override { return false; }
+};
+
+class PlayerButtonDatum : public NetDatum {
+public:
+    PlayerButtonDatum(ButtonEvent *eventData) : NetDatum(NetDatum::PLAYER_BUTTON, sizeof(int) + sizeof(bool)) {
+        BoolChar isDown = { eventData->isDown };
+        IntChar button = { eventData->button };
+
+        size_t writePos = 0;
+        std::copy(button.c, button.c + sizeof(button), _data);
+        writePos += sizeof(button);
+
+        std::copy(isDown.c, isDown.c + sizeof(isDown), _data + writePos);
     }
 
     const bool IsReliable() const override { return false; }

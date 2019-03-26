@@ -89,8 +89,9 @@ void NetworkSystem::Notify(EventName name, Param * params) {
                 char buffer[256];
                 cin.getline(buffer, sizeof(buffer));
                 processInput(buffer);
-            } else {
-                //appendToPackets(message, sizeof(message));
+            } else if(_role == CLIENT){
+                PlayerButtonDatum netData(&data);
+                appendToPackets(netData);
             }
         }
         break;
@@ -146,7 +147,7 @@ void NetworkSystem::serverTick() {
 }
 
 void NetworkSystem::appendToPackets(const NetDatum & datum) {
-    for (auto connection : _connectionList)
+    for (auto & connection : _connectionList)
         if (connection.second.GetState() == Connection::State::LIVE)
             connection.second.Append(datum);
 }
@@ -245,6 +246,15 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
 
                 Axis2DEvent eventData(_connectionList[sender].PlayerID, axis, value);
                 EventManager::Notify(EventName::INPUT_AXIS_2D, new TypeParam<Axis2DEvent>(eventData));
+            }
+            break;
+        case NetDatum::DataType::PLAYER_BUTTON:
+            if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
+                Button button = (Button)packet->ReadInt();
+                bool down = packet->ReadByte();
+
+                ButtonEvent eventData(_connectionList[sender].PlayerID, button, down);
+                EventManager::Notify(EventName::INPUT_BUTTON, new TypeParam<ButtonEvent>(eventData));
             }
             break;
         default:

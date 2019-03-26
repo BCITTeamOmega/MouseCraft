@@ -24,3 +24,8 @@ union FloatChar {
     float f;
     unsigned char c[4];
 };
+
+union BoolChar {
+    bool b;
+    unsigned char c[1];
+};
