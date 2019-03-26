@@ -1,7 +1,7 @@
 #pragma once
 //for referencing sounds. These are the internal names of each.
 enum SoundsList {
-    Jump,Damage,GoatDeath
+    Jump,Swipe,GoatDeath
 };
 
 //for notifying the sound event, basically exists to let us use event system easily.

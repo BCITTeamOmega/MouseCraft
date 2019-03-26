@@ -60,7 +60,7 @@ void SetupSound()
 	initial->z = 0;
 	//create a type Param from the track params and pass it into the event notifier
 	TypeParam<TrackParams*> param(initial);
-	EventManager::Notify(PLAY_SONG, &param);
+	//EventManager::Notify(PLAY_SONG, &param);
 }
 
 void MainTest()
@@ -115,6 +115,11 @@ void MainTest()
 	Model* catstandModel = ModelGen::makeCube(15, 5, 15);
 	Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
 	Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
+	//Obstacle Models
+	Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
+	Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
+	Model* box = ModelGen::makeCube(4, 4, 4);
+	Model* book = ModelGen::makeCube(2, 2, 1);
 
 	//Set the textures
 	std::string* woodTex = new std::string("res/textures/wood.png");
@@ -278,6 +283,57 @@ void MainTest()
 	catstandEntity->AddComponent(catstandPhysics);
 	catstandPhysics->initPosition();
 
+	auto bookEntity = EntityManager::Instance().Create();
+	Renderable* bookRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	bookRend->setModel(*book);
+	bookRend->setColor(Color(1.0, 0.0, 1.0));
+	bookEntity->AddComponent(bookRend);
+	PhysicsComponent* bookPhysics = PhysicsManager::instance()->createGridObject(25, 5, 5, 5, PhysObjectType::OBSTACLE_UP);
+	bookEntity->AddComponent(bookPhysics);
+	bookPhysics->initPosition();
+
+	auto boxEntity = EntityManager::Instance().Create();
+	Renderable* boxRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	boxRend->setModel(*box);
+	boxRend->setColor(Color(1.0, 0.0, 0.0));
+	boxEntity->AddComponent(boxRend);
+	PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(50, 50, 7, 7, PhysObjectType::OBSTACLE_DOWN);
+	boxEntity->AddComponent(boxPhysics);
+	boxPhysics->initPosition();
+
+	auto vaseEntity = EntityManager::Instance().Create();
+	Renderable* vaseRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	vaseRend->setModel(*cylinder);
+	vaseRend->setColor(Color(0.0, 1.0, 0.0));
+	vaseEntity->AddComponent(vaseRend);
+	PhysicsComponent* vasePhysics = PhysicsManager::instance()->createGridObject(30, 50, 5, 5, PhysObjectType::OBSTACLE_DOWN);
+	vaseEntity->AddComponent(vasePhysics);
+	vasePhysics->initPosition();
+
+	auto lampEntity = EntityManager::Instance().Create();
+	Renderable* lampRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	lampRend->setModel(*cylinder);
+	lampRend->setColor(Color(1.0, 1.0, 0.0));
+	lampEntity->AddComponent(lampRend);
+	PhysicsComponent* lampPhysics = PhysicsManager::instance()->createGridObject(35, 20, 5, 5, PhysObjectType::OBSTACLE_UP);
+	lampEntity->AddComponent(lampPhysics);
+	lampPhysics->initPosition();
+
+	auto ballEntity = EntityManager::Instance().Create();
+	Renderable* ballRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	ballRend->setModel(*ball);
+	ballRend->setColor(Color(1.0, 0.5, 0.5));
+	ballEntity->AddComponent(ballRend);
+	PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
+	ballEntity->AddComponent(ballPhysics);
+	ballPhysics->initPosition();
+
+	OmegaEngine::Instance().AddEntity(bookEntity);
+	OmegaEngine::Instance().AddEntity(boxEntity);
+	OmegaEngine::Instance().AddEntity(vaseEntity);
+	OmegaEngine::Instance().AddEntity(lampEntity);
+	OmegaEngine::Instance().AddEntity(ballEntity);
+
 	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 	northWallEntity->AddComponent(northWallPhysics);
 	northWallPhysics->initPosition();
@@ -308,6 +364,9 @@ void MainTest()
 	mouse1Health->SetHealth(2);
 	mouse1Entity->AddComponent(mouse1Health);
 
+	SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse1Entity->AddComponent(mouse1JumpSound);
+
 	//Mouse 2
 	Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse2Mouse->speed = 50.0f;
@@ -321,6 +380,9 @@ void MainTest()
 	mouse2Health->SetHealth(2);
 	mouse2Entity->AddComponent(mouse2Health);
 
+	SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse2Entity->AddComponent(mouse2JumpSound);
+
 	//Mouse 3
 	Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse3Mouse->speed = 50.0f;
@@ -333,6 +395,9 @@ void MainTest()
 	HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	mouse3Health->SetHealth(2);
 	mouse3Entity->AddComponent(mouse3Health);
+
+	SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse3Entity->AddComponent(mouse3JumpSound);
 
 	//Cat
 	Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();

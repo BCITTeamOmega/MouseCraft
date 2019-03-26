@@ -14,13 +14,18 @@ Coil::~Coil()
 {
 }
 
-bool Coil::use() {
-	Contraption::use();
-	
+bool Coil::use(Mouse* m) {
 	std::cout << "COIL is being used" << std::endl;
 
+	auto pos = GetEntity()->transform.getWorldPosition();
+	auto up = GetEntity()->GetParent()->GetComponent<PhysicsComponent>()->isUp;
+
+	//physics
+	auto ptype = up ? PhysObjectType::CONTRAPTION_UP : PhysObjectType::CONTRAPTION_DOWN;
+	auto c_physics = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, ptype);
+
 	// drop self
-	GetEntity()->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
+	GetEntity()->transform.setLocalPosition(pos);
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
 	fieldEntity->SetEnabled(true);
 
@@ -29,9 +34,8 @@ bool Coil::use() {
 	// determine which layer to check for 
 	auto mousePhys = GetEntity()->GetParent()->GetComponent<PhysicsComponent>();
 	checkFor.insert(mousePhys->isUp ? PhysObjectType::CAT_UP : PhysObjectType::CAT_DOWN);
-	
-	// create physics at the correct location 
-	// however we don't actually need physics body for coil so we skip it
+
+	GetEntity()->AddComponent(c_physics);
 
 	return true;
 }

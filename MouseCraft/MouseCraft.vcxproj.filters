@@ -276,9 +276,6 @@
     <ClCompile Include="PlayerComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Platform.cpp">
-      <Filter>Source Files\Contraptions</Filter>
-    </ClCompile>
     <ClCompile Include="Gun.cpp">
       <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
@@ -350,6 +347,9 @@
     </ClCompile>
     <ClCompile Include="MenuItem.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Trampoline.cpp">
+      <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,9 +581,6 @@
     <ClInclude Include="PlayerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform.h">
-      <Filter>Header Files\Contraptions</Filter>
-    </ClInclude>
     <ClInclude Include="Gun.h">
       <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
@@ -629,6 +626,9 @@
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files\Event</Filter>
     </ClInclude>
+    <ClInclude Include="Obstacles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="WorldGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -673,6 +673,9 @@
     </ClInclude>
     <ClInclude Include="MenuItem.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Trampoline.h">
+      <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

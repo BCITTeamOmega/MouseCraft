@@ -29,8 +29,8 @@ void Contraption::Update(float dt)
 {
 }
 
-bool Contraption::use() {
-	return false;
+bool Contraption::use(Mouse* m) {
+	return true;
 }
 
 void Contraption::show() {
