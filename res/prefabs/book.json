@@ -1,0 +1,41 @@
+{
+    "pos_x": 0,
+    "pos_y": 0,
+    "pos_z": 0,
+    "scl_x": 1,
+    "scl_y": 1,
+    "scl_z": 1,
+    "rot_x": 0,
+    "rot_y": 0,
+    "rot_z": 0,
+    "entities": [
+      {
+        "pos_x": 10,
+        "pos_y": 0,
+        "pos_z": -10,
+        "scl_x": 1,
+        "scl_y": 0.5,
+        "scl_z": 1,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 0,
+        "entities": [
+        ],
+        "components": [
+          {
+            "type": "Renderable",
+            "model_path": "res/models/test/CubeModel.obj",
+            "texture_path": "res/models/test/blank.bmp",
+            "color":
+            {
+              "r":1.0,
+              "g":0.0,
+              "b":1.0
+            }
+          }
+        ]
+      }
+    ],
+    "components": [
+    ]
+  }
