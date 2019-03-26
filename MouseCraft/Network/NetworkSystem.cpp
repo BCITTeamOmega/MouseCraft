@@ -1,18 +1,40 @@
 #include "NetworkSystem.h"
 
+#include "../Core/ComponentManager.h"
 #include "../Input/InputSystem.h"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
+#include <random>
 
 using namespace std;
 
-NetworkSystem & NetworkSystem::Instance() {
+NetworkSystem * NetworkSystem::_instance = nullptr;
+
+NetworkSystem * NetworkSystem::Instance() {
     if (_instance == nullptr) {
         _instance = new NetworkSystem();
     }
-    return *_instance;
+    return _instance;
+}
+
+NetworkComponent * NetworkSystem::CreateComponent() {
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<unsigned int> dist;
+    unsigned int id;
+    NetworkComponent::NetAuthority auth = _role == HOST ? NetworkComponent::NetAuthority::AUTHORITATIVE : NetworkComponent::NetAuthority::SIMULATED;
+
+    do {
+        id = dist(eng);
+    } while (_componentList.find(id) != _componentList.end());
+
+
+    NetworkComponent *comp = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(id, auth);
+    _componentList[id] = comp;
+
+    return comp;
 }
 
 NetworkSystem::NetworkSystem(const Role role, const unsigned short port) : _tickCount(0), _role(role) {
@@ -21,11 +43,11 @@ NetworkSystem::NetworkSystem(const Role role, const unsigned short port) : _tick
         cerr << "Failed to create socket on " << portNum << ", trying " << ++portNum << endl;
     }
     EventManager::Subscribe(EventName::INPUT_BUTTON, this);
-    EventManager::Subscribe(EventName::INPUT_AXIS, this);
+    EventManager::Subscribe(EventName::INPUT_AXIS_2D, this);
 }
 
 NetworkSystem::~NetworkSystem() {
-    EventManager::Unsubscribe(EventName::INPUT_AXIS, this);
+    EventManager::Unsubscribe(EventName::INPUT_AXIS_2D, this);
     EventManager::Unsubscribe(EventName::INPUT_BUTTON, this);
     _socket.Close();
 }
@@ -73,9 +95,13 @@ void NetworkSystem::Notify(EventName name, Param * params) {
         }
         break;
     }
-    case EventName::INPUT_AXIS: {
-        const char message[] = "Axis Changed";
-        //appendToPackets(message, sizeof(message));
+    case EventName::INPUT_AXIS_2D: {
+        if (_role == CLIENT) {
+            auto data = static_cast<TypeParam<Axis2DEvent>*>(params)->Param;
+
+            PlayerAxisDatum netData(&data);
+            appendToPackets(netData);
+        }
         break;
     }
     default:
@@ -157,6 +183,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
             }
             if (liveConnections() < maxConnections()) {
                 cout << sender << " has connected." << endl;
+                _connectionList[sender].PlayerID = liveConnections();
                 _connectionList[sender].SetLive();
                 _connectionList[sender].Append(ConnAccDatum(_tickNum));
             }
@@ -209,6 +236,15 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
                 cout << "Received Event from " << sender << endl;
                 _connectionList[sender].Append(AckDatum(packet->GetTick()));
+            }
+            break;
+        case NetDatum::DataType::PLAYER_AXIS:
+            if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
+                Axis axis = (Axis)packet->ReadInt();
+                glm::vec2 value(packet->ReadFloat(), packet->ReadFloat());
+
+                Axis2DEvent eventData(_connectionList[sender].PlayerID, axis, value);
+                EventManager::Notify(EventName::INPUT_AXIS_2D, new TypeParam<Axis2DEvent>(eventData));
             }
             break;
         default:

@@ -20,9 +20,9 @@ public:
         CLIENT
     };
 
-    static NetworkSystem & Instance();
+    static NetworkSystem * Instance();
 
-    NetworkComponent & CreateComponent();
+    NetworkComponent * CreateComponent();
 
     void RequestConnection(const Address & address);
     void SearchForServers();
@@ -55,7 +55,6 @@ private:
     void processInput(std::string line);
 
     PacketData _rcv;
-
     unsigned char _buffer[MAX_PACKET_SIZE];
 
     unsigned short _tickNum;
@@ -64,6 +63,8 @@ private:
     std::map<const Address, Connection> _connectionList;
     Role _role;
     const Address _broadcast = Address(255, 255, 255, 255, DEFAULT_PORT);
+
+    std::map<unsigned int, NetworkComponent*> _componentList;
 
     static NetworkSystem *_instance;
 };

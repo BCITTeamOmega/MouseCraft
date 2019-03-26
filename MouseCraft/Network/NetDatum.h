@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Util/TypePunners.h"
+#include "../Input/InputSystem.h"
 #include <algorithm>
 
 constexpr size_t MAX_DATUM_SIZE = 128;
@@ -14,7 +15,8 @@ public:
         HOST_INFO_REQUEST = 0x03,
         HOST_INFO_RESPONSE = 0x04,
         TRANSFORM_STATE_UPDATE = 0x10,
-        EVENT_TRIGGER = 0x20
+        EVENT_TRIGGER = 0x20,
+        PLAYER_AXIS = 0x30,
     };
 
     const unsigned char GetType() const { return IntChar{_type}.c[0]; }
@@ -70,6 +72,26 @@ public:
     InfoResDatum(const unsigned short numPlayers) : NetDatum(NetDatum::HOST_INFO_RESPONSE, sizeof(numPlayers)) {
         UShortChar players = { numPlayers };
         std::copy(players.c, players.c + _size, _data);
+    }
+
+    const bool IsReliable() const override { return false; }
+};
+
+class PlayerAxisDatum : public NetDatum {
+public:
+    PlayerAxisDatum(Axis2DEvent *eventData) : NetDatum(NetDatum::PLAYER_AXIS, sizeof(int) + sizeof(float) + sizeof(float)) {
+        IntChar axis = { eventData->axis };
+        FloatChar x = { eventData->value.x };
+        FloatChar y = { eventData->value.y };
+
+        size_t writePos = 0;
+        std::copy(axis.c, axis.c + sizeof(axis), _data);
+        writePos += sizeof(axis);
+
+        std::copy(x.c, x.c + sizeof(x), _data + writePos);
+        writePos += sizeof(x);
+
+        std::copy(y.c, y.c + sizeof(y), _data + writePos);
     }
 
     const bool IsReliable() const override { return false; }

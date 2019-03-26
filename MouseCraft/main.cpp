@@ -332,6 +332,8 @@ void MainTest()
 	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 	teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
+    NetworkComponent *netComp = NetworkSystem::Instance()->CreateComponent();
+
 	//Add the entities to the game
 	OmegaEngine::Instance().AddEntity(mouse1Entity);
 	OmegaEngine::Instance().AddEntity(mouse2Entity);
@@ -357,7 +359,7 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(renderSystem);
 	OmegaEngine::Instance().AddSystem(inputSystem);
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
-    OmegaEngine::Instance().AddSystem(new NetworkSystem());
+    OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
 
 	//Start the game
 	OmegaEngine::Instance().Loop();

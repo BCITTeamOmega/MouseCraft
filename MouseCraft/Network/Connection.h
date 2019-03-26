@@ -15,7 +15,7 @@ public:
     };
 
     Connection() {}
-    Connection(Address location, State state = POTENTIAL) : _remote(location), _timeTillDeath(DEATH_TIME), _connState(state) {}
+    Connection(Address location, State state = POTENTIAL) : _remote(location), _timeTillDeath(DEATH_TIME), _connState(state), PlayerID(-1) {}
 
     void GotUpdate() { _timeTillDeath = DEATH_TIME; }
 
@@ -53,6 +53,8 @@ public:
 
     const PacketData & GetPacket() const { return _send; }
     const PacketData * GetExtra() const { return _extraPacket; }
+
+    int PlayerID;
 private:
     const short DEATH_TIME = 600;
     const short RELIABILITY_RESEND = 600;
