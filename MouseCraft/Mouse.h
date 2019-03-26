@@ -19,7 +19,10 @@
 #include "Input/InputSystem.h"
 #include "Physics/PhysicsComponent.h"
 #include "HealthComponent.h"
+#include "Sound\SoundComponent.h"
 #include "PlayerComponent.h"
+
+constexpr auto MOUSE_JUMP_DIST = 10;
 
 class Mouse : public UpdatableComponent
 {
@@ -32,7 +35,8 @@ public:
 	virtual void Notify(EventName eventName, Param *params) override;
 	virtual void OnCollision(PhysicsComponent* e);
 	virtual void OnHit(PhysicsComponent* e);
-	virtual void OnDeath();	
+	virtual void OnBounce(PhysicsComponent* e);
+	virtual void OnDeath();
 	void addItem(Pickup* item);
 	void dropItem();
 	void use(Contraption* item);
@@ -44,6 +48,7 @@ public:
 	bool downed = false;
 	Handler<Mouse, PhysicsComponent*> HandleOnCollide;
 	Handler<Mouse, PhysicsComponent*> HandleOnHit;
+	Handler<Mouse, PhysicsComponent*> HandleOnBounce;
 	Handler<Mouse> HandleOnDeath;
 
 private:

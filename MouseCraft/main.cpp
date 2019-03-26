@@ -331,6 +331,9 @@ void MainTest()
 	mouse1Health->SetHealth(2);
 	mouse1Entity->AddComponent(mouse1Health);
 
+	SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse1Entity->AddComponent(mouse1JumpSound);
+
 	//Mouse 2
 	Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse2Mouse->speed = 50.0f;
@@ -344,6 +347,9 @@ void MainTest()
 	mouse2Health->SetHealth(2);
 	mouse2Entity->AddComponent(mouse2Health);
 
+	SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse2Entity->AddComponent(mouse2JumpSound);
+
 	//Mouse 3
 	Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
 	mouse3Mouse->speed = 50.0f;
@@ -356,6 +362,9 @@ void MainTest()
 	HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	mouse3Health->SetHealth(2);
 	mouse3Entity->AddComponent(mouse3Health);
+
+	SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
+	mouse3Entity->AddComponent(mouse3JumpSound);
 
 	//Cat
 	Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();

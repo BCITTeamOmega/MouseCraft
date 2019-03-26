@@ -2,6 +2,8 @@
 #include "Contraption.h"
 #include "Physics/PhysObjectType.h"
 
+class Mouse;
+
 class Swords :
 	public Contraption
 {
@@ -9,7 +11,7 @@ public:
 	Swords();
 	~Swords();
 
-	bool use() override;
+	bool use(Mouse* m) override;
 	void show() override;
 	void OnCollision(PhysicsComponent* other);
 	virtual void OnInitialized() override;

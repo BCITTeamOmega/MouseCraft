@@ -13,9 +13,7 @@ Gun::~Gun()
 {
 }
 
-bool Gun::use() {
-	Contraption::use();
-
+bool Gun::use(Mouse* m) {
 	std::cout << "GUN is being used" << std::endl;
 
 	auto dir = GetEntity()->transform.getWorldForward();
@@ -43,13 +41,13 @@ bool Gun::use() {
 	{
 		targets.insert(PhysObjectType::CAT_UP);
 		targets.insert(PhysObjectType::OBSTACLE_UP);
-		floor = PhysObjectType::CONTRAPTION_UP;
+		floor = PhysObjectType::PROJECTILE_UP;
 	}
 	else
 	{
 		targets.insert(PhysObjectType::CAT_DOWN);
 		targets.insert(PhysObjectType::OBSTACLE_DOWN);
-		floor = PhysObjectType::CONTRAPTION_DOWN;
+		floor = PhysObjectType::PROJECTILE_DOWN;
 	}
 	// ... damage on hit 
 	auto c_damage = ComponentManager<DamageOnCollision>::Instance().Create<DamageOnCollision>(targets);

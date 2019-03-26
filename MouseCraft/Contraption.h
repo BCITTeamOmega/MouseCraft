@@ -21,7 +21,7 @@ public:
 
 	virtual void OnInitialized() override;
 	virtual void Update(float dt);
-	virtual bool use();
+	virtual bool use(Mouse* m);
 	virtual void show();
 	void Grab();
 	void Drop();

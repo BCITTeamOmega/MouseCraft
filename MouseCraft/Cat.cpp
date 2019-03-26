@@ -112,10 +112,6 @@ void Cat::Attack()
     if (isAttacking || pComp->isJumping || isPouncing) {
         return;
     }
-    //actually launch attack
-
-    
-    
 
     //check which level we're on
     std::set<PhysObjectType::PhysObjectType> targets;
@@ -132,6 +128,7 @@ void Cat::Attack()
             PhysObjectType::MOUSE_DOWN
         };
     }
+
     //determine our position for area check
     //get the section directly in front of our world position
     auto p1 = GetEntity()->transform;
@@ -145,11 +142,11 @@ void Cat::Attack()
     auto results = pComp->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 
     //check if we hit something
-    if (results.size() > 0) {
-        for (size_t i = 0; i < targets.size(); i++) {
-            results[i]->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
-        }
+    for (size_t i = 0; i < results.size(); i++) {
+        results[i]->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
     }
+
+	//MIGHT BE COOL TO PLAY A WHACK SOUND EFFECT IF SOMETHING IS HIT
 
     GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Swipe); //set sound to swipe
     auto ourPos = GetEntity()->transform.getLocalPosition(); //get our current position
@@ -184,7 +181,7 @@ void Cat::Jump()
 		//position of cat
 		Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
 		//vector in front of cat of length = JUMP_DIST
-		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * JUMP_DIST, GetEntity()->transform.getLocalForward().z * JUMP_DIST);
+		Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * CAT_JUMP_DIST, GetEntity()->transform.getLocalForward().z * CAT_JUMP_DIST);
 		jumpVec = new Vector2D(*curPos + *jumpVec);
 
 		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{

@@ -15,6 +15,8 @@ Entity (Mouse)
 		- Renderable 
 */
 
+class Mouse;
+
 class Coil :
 	public Contraption 
 {
@@ -22,7 +24,7 @@ public:
 	Coil();
 	~Coil();
 
-	bool use() override;
+	bool use(Mouse* m) override;
 	void show() override;
 	void OnCollision(PhysicsComponent* other);
 	virtual void OnInitialized() override;

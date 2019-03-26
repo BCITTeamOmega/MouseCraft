@@ -3,7 +3,8 @@
 Mouse::Mouse() : 
 	HandleOnCollide(this, &Mouse::OnCollision),
 	HandleOnDeath(this, &Mouse::OnDeath),
-	HandleOnHit(this, &Mouse::OnHit)
+	HandleOnHit(this, &Mouse::OnHit),
+	HandleOnBounce(this, &Mouse::OnBounce)
 {
 	std::cout << std::setprecision(2);
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
@@ -25,6 +26,7 @@ void Mouse::OnInitialized()
 	{
 		HandleOnCollide.Observe(pComp->onCollide);
 		HandleOnHit.Observe(pComp->onHit);
+		HandleOnBounce.Observe(pComp->onBounce);
 	}
 
 	// Listen for death 
@@ -56,7 +58,27 @@ void Mouse::Update(float deltaTime)
 	{
 		drop = false;
 		dropItem();
-	}	
+	}
+
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	//check to see if you are on a platform
+	if (pComp != nullptr && !pComp->isJumping && pComp->isUp)
+	{
+		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+			PhysObjectType::PLATFORM
+		};
+
+		auto compPos = pComp->body->GetPosition();
+		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y - (pComp->height / 2));
+		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y + (pComp->height / 2));
+
+		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
+
+		//if you aren't on a platform then fall
+		if (found.size() == 0)
+			pComp->isFalling = true;
+	}
 }
 
 void Mouse::Notify(EventName eventName, Param * params)
@@ -94,14 +116,43 @@ void Mouse::OnHit(PhysicsComponent* e)
 
 }
 
+void Mouse::OnBounce(PhysicsComponent* e)
+{
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	//position of mouse
+	Vector2D* curPos = new Vector2D(GetEntity()->transform.getLocalPosition().x, GetEntity()->transform.getLocalPosition().z);
+	//vector in front of cat of length = JUMP_DIST
+	Vector2D* jumpVec = new Vector2D(GetEntity()->transform.getLocalForward().x * MOUSE_JUMP_DIST, GetEntity()->transform.getLocalForward().z * MOUSE_JUMP_DIST);
+	jumpVec = new Vector2D(*curPos + *jumpVec);
+
+	std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+		PhysObjectType::PLATFORM
+	};
+
+	Vector2D* hitPos = new Vector2D(0, 0);
+
+	PhysicsComponent* jumpTarget = pComp->rayCheck(types, curPos, jumpVec, *hitPos);
+
+	//check if we are in a location we can jump in
+	if (jumpTarget != nullptr) {
+		//Jump code
+		std::cout << "Mouse has jumped." << std::endl;
+		GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+
+		GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
+		auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
+		GetEntity()->GetComponent<SoundComponent>()->PlaySound(pos.x, pos.y, pos.z); //play sound
+		return;
+	}
+}
+
 void Mouse::OnDeath()
 {
 	// on death
 	downed = true;
 	GetEntity()->SetEnabled(false);
 }
-
-
 
 void Mouse::addItem(Pickup* item) {
 
@@ -153,7 +204,7 @@ void Mouse::dropItem() {
 
 void Mouse::use(Contraption* item) {
 	
-	if (item->use())
+	if (item->use(this))
 	{
 		// todo: this syntax is kinda weird. should pass reference to pointer or just use newItem directly
 		newItem = nullptr;	
@@ -168,6 +219,8 @@ void Mouse::combine(Pickup *material) {
 		return;
 	}
 	else {
+		PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
 		switch (baseItem->type)
 		{
 
