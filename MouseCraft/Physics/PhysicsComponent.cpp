@@ -36,3 +36,27 @@ PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObject
 {
 	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }
+
+bool PhysicsComponent::updateFalling()
+{
+	if (!isJumping && isUp)
+	{
+		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
+			PhysObjectType::PLATFORM
+		};
+
+		auto compPos = body->GetPosition();
+		Vector2D* p1 = new Vector2D(compPos.x - (width / 2), compPos.y - (height / 2));
+		Vector2D* p2 = new Vector2D(compPos.x + (width / 2), compPos.y + (height / 2));
+
+		std::vector<PhysicsComponent*> found = areaCheck(types, p1, p2);
+
+		//if you aren't on a platform then fall
+		if (found.size() == 0)
+		{
+			isFalling = true;
+			return true;
+		}
+	}
+	return false;
+}
