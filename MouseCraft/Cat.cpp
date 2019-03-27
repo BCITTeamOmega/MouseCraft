@@ -133,10 +133,10 @@ void Cat::Attack()
 		facing = Vector2D(0, -1);
 	else if (angle > M_PI/4 && angle < M_PI*3/4)	// left
 		facing = Vector2D(-1, 0);	
-	else if (angle > M_PI*3/4 && angle < M_PI*5/4)	// down 
-		facing = Vector2D(0, 1);	
 	else if (angle > -M_PI*3/4 && angle < -M_PI/4)	// right 
 		facing = Vector2D(1, 0);
+	else 											// down 
+		facing = Vector2D(0, 1);
 
 	std::cout << angle << std::endl;
 	std::cout << facing.x << "," << facing.y << std::endl;
