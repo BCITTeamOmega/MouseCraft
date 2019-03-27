@@ -14,7 +14,13 @@ YarnBall::~YarnBall()
 void YarnBall::OnInitialized()
 {
 	Obstacle::OnInitialized();
-	GetEntity()->GetComponent<PhysicsComponent>()->onCollide.Attach(HandleMouseCollide);
+	_physics = GetEntity()->GetComponent<PhysicsComponent>();
+	_physics->onCollide.Attach(HandleMouseCollide);
+}
+
+void YarnBall::Update(float deltaTime)
+{
+	_physics->updateFalling();
 }
 
 void YarnBall::HitByCat(Vector2D dir)
