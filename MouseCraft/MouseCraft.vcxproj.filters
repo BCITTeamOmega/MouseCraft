@@ -276,9 +276,6 @@
     <ClCompile Include="PlayerComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Platform.cpp">
-      <Filter>Source Files\Contraptions</Filter>
-    </ClCompile>
     <ClCompile Include="Gun.cpp">
       <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
@@ -338,6 +335,21 @@
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\UIRenderable.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Trampoline.cpp">
+      <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
     <ClCompile Include="YarnBall.cpp">
       <Filter>Source Files</Filter>
@@ -587,9 +599,6 @@
     <ClInclude Include="PlayerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform.h">
-      <Filter>Header Files\Contraptions</Filter>
-    </ClInclude>
     <ClInclude Include="Gun.h">
       <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
@@ -670,6 +679,21 @@
     </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\UIRenderable.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Trampoline.h">
+      <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
     <ClInclude Include="YarnBall.h">
       <Filter>Header Files</Filter>

@@ -4,6 +4,8 @@
 #include "TimedDestruction.h"
 #include "Physics/PhysicsComponent.h"
 
+class Mouse;
+
 class Bomb :
 	public Contraption
 {
@@ -18,7 +20,7 @@ public:
 
 	virtual void OnInitialized() override;
 
-	bool use() override;
+	bool use(Mouse* m) override;
 	
 	void show() override;
 

@@ -190,6 +190,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
+    <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
@@ -210,6 +211,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Core\Test\TestComponent.cpp" />
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
     <ClCompile Include="Core\UpdatableComponent.cpp" />
+    <ClCompile Include="MenuController.cpp" />
+    <ClCompile Include="MenuItem.cpp" />
+    <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Obstacle.cpp" />
@@ -222,7 +226,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
-    <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Trampoline.cpp" />
     <ClCompile Include="Sound\SoundComponent.cpp" />
     <ClCompile Include="Loading\PrefabLoader.cpp" />
     <ClCompile Include="Swords.cpp" />
@@ -277,6 +281,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VAO.h" />
     <ClInclude Include="Graphics\BufferObjects\VBO.h" />
+    <ClInclude Include="Graphics\UIRenderable.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
@@ -312,6 +317,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="MenuController.h" />
+    <ClInclude Include="MenuItem.h" />
+    <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MOUSECRAFT_ENUMS.h" />
     <ClInclude Include="Obstacle.h" />
@@ -332,7 +340,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PickupFactory.h" />
     <ClInclude Include="PickupSpawner.h" />
-    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Trampoline.h" />
     <ClInclude Include="Swords.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="TestPrefab.h" />

@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Renderable.h"
+#include "UIRenderable.h"
 #include "ModelGen.h"
 #include "../Loading/ImageLoader.h"
 #include "RenderUtil.h"
@@ -28,6 +29,9 @@ RenderSystem::RenderSystem() : System() {
 
 	_renderingList = new vector<RenderData>();
 	_accumulatingList = new vector<RenderData>();
+
+	_uiRenderingList = new vector<RenderData>();
+	_uiAccumulatingList = new vector<RenderData>();
 
 	_masterGeometry = new CombinedGeometry();
 
@@ -99,6 +103,7 @@ void RenderSystem::setWindow(Window* window) {
 void RenderSystem::initShaders() {
 	loadShader("gbuffer");
 	loadShader("lighting");
+	loadShader("ui");
 }
 
 void RenderSystem::setShader(Shader& shader) {
@@ -136,6 +141,7 @@ void RenderSystem::renderScene() {
 		gBufferPass();
 		lightingPass();
 	}
+	uiPass();
 }
 
 void RenderSystem::gBufferPass() {
@@ -245,9 +251,56 @@ void RenderSystem::lightingPass() {
 	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 
+void RenderSystem::uiPass() {
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	float windowRatio = (float)_window->getWidth() / _window->getHeight();
+
+	setShader(_shaders["ui"]);
+
+	int index = 0;
+	for (RenderData render : *_uiRenderingList) {
+		int texID = getTexture(render.getModel()->getTexture());
+		Geometry* g = render.getModel()->getGeometry();
+		vec3 color = convertColor(render.getColor());
+		mat4 model = render.getTransform();
+
+		mat4 matrix = 2.0f * glm::translate(model, vec3(-0.5, -0.5, 0));
+		matrix[3][3] = 1.0f; // To fix the scaling to be what we want
+
+		int loc = 0;
+		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
+		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
+		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
+		
+		_positionVBO->buffer(g->getVertexData());
+		_normalVBO->buffer(g->getNormalData());
+		_texCoordVBO->buffer(g->getTexCoordData());
+		_ebo->buffer(g->getIndices());
+
+		_textures->bind(GL_TEXTURE0);
+
+		_shader->setUniformVec3("color", color);
+		_shader->setUniformMatrix("transform", matrix);
+
+		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformTexture("tex", 0);
+
+		int start = 0;
+		int size = g->getIndices().size();
+		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
+
+		index++;
+	}
+	glDisable(GL_BLEND);
+}
+
 void RenderSystem::swapLists() {
 	swap(_renderingList, _accumulatingList);
+	swap(_uiRenderingList, _uiAccumulatingList);
 	_accumulatingList->clear();
+	_uiAccumulatingList->clear();
 }
 
 int RenderSystem::getTexture(string* path) {
@@ -326,11 +379,22 @@ vec3 RenderSystem::convertColor(Color c) {
 
 void RenderSystem::accumulateList() {
 	auto renderables = ComponentManager<Renderable>::Instance().All();
+	auto uiRenderables = ComponentManager<UIRenderable>::Instance().All();
 	auto cameras = ComponentManager<Camera>::Instance().All();
 	for (Renderable* r : renderables) {
 		if (!r->GetActive()) continue;
 		Transform t = r->getTransform();
 		_accumulatingList->push_back(
+			RenderData(
+				r->getModel(),
+				t.getWorldTransformation(),
+				r->getColor()
+			)
+		);
+	}
+	for (UIRenderable* r : uiRenderables) {
+		Transform t = r->getTransform();
+		_uiAccumulatingList->push_back(
 			RenderData(
 				r->getModel(),
 				t.getWorldTransformation(),

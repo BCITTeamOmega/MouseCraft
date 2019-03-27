@@ -32,10 +32,20 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
 
 	switch (type) {
-	case PLATFORM: {
+	case TRAMPOLINE: {
 		c_renderable->setModel(*_platformModel);
-		auto c_platform = ComponentManager<Contraption>::Instance().Create<Platform>();
-		contraption->AddComponent(c_platform);
+		auto c_trampoline = ComponentManager<Contraption>::Instance().Create<Trampoline>();
+		contraption->AddComponent(c_trampoline);	
+
+		auto e_trampolineField = EntityManager::Instance().Create();
+		e_trampolineField->SetEnabled(false);
+		auto c_trampolineRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_trampolineRender->setModel(*_coilFieldModel);
+		c_trampolineRender->setColor(Color(0.9f, 1.0f, 0.9f));
+		e_trampolineField->AddComponent(c_trampolineRender);
+
+		contraption->AddChild(e_trampolineField);
+		c_trampoline->fieldEntity = e_trampolineField;
 		break;
 	}
 
@@ -99,11 +109,8 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 	default:
 		break;
 	}
-
-	// auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
-	// auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::CONTRAPTION_DOWN);
-
+	
 	contraption->AddComponent(c_renderable);
-	// contraption->AddComponent(c_physics);
+
 	return contraption;
 }
