@@ -7,10 +7,10 @@
 #include <map>
 #include "Shader.h"
 #include "RenderData.h"
-#include "BufferObjects/VAO.h"
-#include "BufferObjects/VBO.h"
-#include "BufferObjects/EBO.h"
-#include "BufferObjects/FBO.h"
+#include "BufferObjects/VertexArrayObject.h"
+#include "BufferObjects/VertexBufferObject.h"
+#include "BufferObjects/ElementBufferObject.h"
+#include "BufferObjects/FrameBufferObject.h"
 #include "CombinedGeometry.h"
 #include "Camera.h"
 #include "GLTexture.h"
@@ -54,16 +54,16 @@ private:
 	std::vector<RenderData>* _uiRenderingList;
 	std::vector<RenderData>* _uiAccumulatingList;
 
-	VAO* _vao;
-	VBO* _positionVBO;
-	VBO* _normalVBO;
-	VBO* _texCoordVBO;
-	EBO* _ebo;
-	FBO* _fbo;
+	VertexArrayObject* _vao;
+	VertexBufferObject* _positionVBO;
+	VertexBufferObject* _normalVBO;
+	VertexBufferObject* _texCoordVBO;
+	ElementBufferObject* _ebo;
+	FrameBufferObject* _fbo;
 	Camera* _camera;
 
-	FBO* _resizeInFBO;
-	FBO* _resizeOutFBO;
+	FrameBufferObject* _resizeInFBO;
+	FrameBufferObject* _resizeOutFBO;
 	
 	GLTextureArray* _textures;
 	GLTexture* _albedoBuffer;

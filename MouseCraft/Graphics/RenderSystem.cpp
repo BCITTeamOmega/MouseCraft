@@ -65,11 +65,11 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::initVertexBuffers() {
-	_vao = new VAO();
-	_positionVBO = new VBO(3);
-	_normalVBO = new VBO(3);
-	_texCoordVBO = new VBO(2);
-	_ebo = new EBO();
+	_vao = new VertexArrayObject();
+	_positionVBO = new VertexBufferObject(3);
+	_normalVBO = new VertexBufferObject(3);
+	_texCoordVBO = new VertexBufferObject(2);
+	_ebo = new ElementBufferObject();
 
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
@@ -89,11 +89,11 @@ void RenderSystem::initRenderBuffers() {
 	_positionBuffer = new GLTexture();
 
 	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer };
-	_fbo = new FBO(1280, 720, buffers);
+	_fbo = new FrameBufferObject(1280, 720, buffers);
 
 	vector<GLTexture*> noBuffers = {};
-	_resizeInFBO = new FBO(1024, 1024, noBuffers);
-	_resizeOutFBO = new FBO(1024, 1024, noBuffers);
+	_resizeInFBO = new FrameBufferObject(1024, 1024, noBuffers);
+	_resizeOutFBO = new FrameBufferObject(1024, 1024, noBuffers);
 }
 
 void RenderSystem::setWindow(Window* window) {
