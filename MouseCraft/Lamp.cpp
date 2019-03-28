@@ -16,6 +16,11 @@ Lamp::~Lamp()
 
 void Lamp::OnInitialized()
 {
+	auto physics = GetEntity()->GetComponent<PhysicsComponent>();
+	if (physics->isUp)
+		_checkFor = { PhysObjectType::MOUSE_UP };
+	else
+		_checkFor = { PhysObjectType::MOUSE_DOWN };
 }
 
 void Lamp::Update(float deltaTime)
@@ -45,15 +50,9 @@ void Lamp::HitByCat(Vector2D dir)
 	visualsEntity->transform.rotate(glm::vec3(0, 0, M_PI / 2));
 	GetEntity()->GetComponent<Renderable>()->SetEnabled(true);
 	_isPlaced = true;
-
-	// todo: check floor 
-	_checkFor =
-	{
-		PhysObjectType::MOUSE_DOWN,
-		PhysObjectType::MOUSE_UP,
-	};
 }
 
 void Lamp::DestroyedByMouse()
 {
+	GetEntity()->Destroy();
 }
