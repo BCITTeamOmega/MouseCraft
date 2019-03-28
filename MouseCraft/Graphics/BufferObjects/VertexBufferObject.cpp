@@ -1,20 +1,20 @@
-#include "VBO.h"
+#include "VertexBufferObject.h"
 
 using std::vector;
 
-VBO::VBO(int componentsPerElement) : _componentsPerElement(componentsPerElement) {
+VertexBufferObject::VertexBufferObject(int componentsPerElement) : _componentsPerElement(componentsPerElement) {
 	glGenBuffers(1, &_id);
 }
 
-VBO::~VBO() {
+VertexBufferObject::~VertexBufferObject() {
 	glDeleteBuffers(1, &_id);
 }
 
-GLuint VBO::getID() {
+GLuint VertexBufferObject::getID() {
 	return _id;
 }
 
-void VBO::buffer(vector<GLfloat>& values) {
+void VertexBufferObject::buffer(vector<GLfloat>& values) {
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
 	glBufferData(
 		GL_ARRAY_BUFFER,
@@ -24,14 +24,14 @@ void VBO::buffer(vector<GLfloat>& values) {
 	);
 }
 
-int VBO::getComponentsPerElement() {
+int VertexBufferObject::getComponentsPerElement() {
 	return _componentsPerElement;
 }
 
-void VBO::bind() {
+void VertexBufferObject::bind() {
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
 }
 
-void VBO::unbind() {
+void VertexBufferObject::unbind() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -1,16 +1,16 @@
-#include "EBO.h"
+#include "ElementBufferObject.h"
 
 using std::vector;
 
-EBO::EBO() {
+ElementBufferObject::ElementBufferObject() {
 	glGenBuffers(1, &_id);
 }
 
-EBO::~EBO() {
+ElementBufferObject::~ElementBufferObject() {
 	glDeleteBuffers(1, &_id);
 }
 
-void EBO::buffer(vector<GLuint>& elements) {
+void ElementBufferObject::buffer(vector<GLuint>& elements) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
 	glBufferData(
 		GL_ELEMENT_ARRAY_BUFFER,
@@ -20,14 +20,14 @@ void EBO::buffer(vector<GLuint>& elements) {
 	);
 }
 
-GLuint EBO::getID() {
+GLuint ElementBufferObject::getID() {
 	return _id;
 }
 
-void EBO::bind() {
+void ElementBufferObject::bind() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
 }
 
-void EBO::unbind() {
+void ElementBufferObject::unbind() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

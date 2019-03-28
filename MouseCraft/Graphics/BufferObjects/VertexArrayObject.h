@@ -1,7 +1,7 @@
 #pragma once
 #include "../../GL/glad.h"
-#include "VBO.h"
-#include "EBO.h"
+#include "VertexBufferObject.h"
+#include "ElementBufferObject.h"
 #include <map>
 class VertexArrayObject {
 public:

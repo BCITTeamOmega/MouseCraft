@@ -159,8 +159,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="ContraptionSystem.cpp" />
     <ClCompile Include="DamageOnCollision.cpp" />
     <ClCompile Include="Event\Handler.cpp" />
-    <ClCompile Include="Graphics\BufferObjects\FBO.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\FrameBufferObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\UniformBufferObject.cpp" />
     <ClCompile Include="Graphics\GLTexture.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Coil.cpp" />
@@ -193,9 +194,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
-    <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
-    <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
-    <ClCompile Include="Graphics\BufferObjects\VBO.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VertexArrayObject.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VertexBufferObject.cpp" />
     <ClCompile Include="Graphics\Renderable.cpp" />
     <ClCompile Include="Graphics\RenderSystem.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
@@ -251,7 +252,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\Vector2D.h" />
     <ClInclude Include="DamageOnCollision.h" />
     <ClInclude Include="Event\Handler.h" />
-    <ClInclude Include="Graphics\BufferObjects\FBO.h" />
+    <ClInclude Include="Graphics\BufferObjects\FrameBufferObject.h" />
+    <ClInclude Include="Graphics\BufferObjects\UniformBufferObject.h" />
     <ClInclude Include="Graphics\CombinedGeometry.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graphics\GLTexture.h" />
@@ -263,7 +265,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="Event\EventName.h" />
     <ClInclude Include="Event\ISubscriber.h" />
-    <ClInclude Include="Graphics\BufferObjects\EBO.h" />
+    <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\GLTextureArray.h" />
     <ClInclude Include="Graphics\Image.h" />
@@ -273,8 +275,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\RenderUtil.h" />
     <ClInclude Include="Graphics\Shader.h" />
-    <ClInclude Include="Graphics\BufferObjects\VAO.h" />
-    <ClInclude Include="Graphics\BufferObjects\VBO.h" />
+    <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
+    <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
     <ClInclude Include="Graphics\UIRenderable.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />

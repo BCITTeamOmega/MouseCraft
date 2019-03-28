@@ -1,18 +1,18 @@
-#include "VAO.h"
+#include "VertexArrayObject.h"
 
-VAO::VAO() {
+VertexArrayObject::VertexArrayObject() {
 	glGenVertexArrays(1, &_id);
 }
 
-VAO::~VAO() {
+VertexArrayObject::~VertexArrayObject() {
 	glDeleteVertexArrays(1, &_id);
 }
 
-GLuint VAO::getID() {
+GLuint VertexArrayObject::getID() {
 	return _id;
 }
 
-void VAO::setBuffer(int id, VBO& vbo, int offset) {
+void VertexArrayObject::setBuffer(int id, VertexBufferObject& vbo, int offset) {
 	bind();
 	vbo.bind();
 	glEnableVertexAttribArray(id);
@@ -20,22 +20,22 @@ void VAO::setBuffer(int id, VBO& vbo, int offset) {
 	_vbos[id] = &vbo;
 }
 
-void VAO::unsetBuffer(int buffID) {
+void VertexArrayObject::unsetBuffer(int buffID) {
 	bind();
 	glEnableVertexAttribArray(0);
 	_vbos.erase(buffID);
 }
 
-void VAO::setElementBuffer(EBO& ebo) {
+void VertexArrayObject::setElementBuffer(ElementBufferObject& ebo) {
 	bind();
 	ebo.bind();
 	_ebo = &ebo;
 }
 
-void VAO::bind() {
+void VertexArrayObject::bind() {
 	glBindVertexArray(_id);
 }
 
-void VAO::unbind() {
+void VertexArrayObject::unbind() {
 	glBindVertexArray(0);
 }
