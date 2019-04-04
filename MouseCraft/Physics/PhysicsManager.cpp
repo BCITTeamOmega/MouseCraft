@@ -346,24 +346,30 @@ void PhysicsManager::updateHeights(float step)
 
 		comp = static_cast<PhysicsComponent*>(b->GetUserData());
 
-		if (comp == nullptr)
+		if (comp == nullptr || (!comp->isJumping && !comp->isFalling))
 		{
 			b = b->GetNext();
 			continue;
 		}
 
-		if(comp)
+		//If the body is falling or jumping, then we must handle z physics
+		//Update z position based on gravity, velocity, and time since last frame
+		comp->zPos = comp->zPos + (comp->zVelocity * step) + (GRAVITY * step * step / 2);
+
+		//Update velocity based on gravity and time since last frame
+		comp->zVelocity = comp->zVelocity + (GRAVITY * step);
 
 		//The object in the upper half
 		if (comp->isUp)
 		{
 			//Has it reached the platform?
-			if (comp->zPos >= Z_UPPER)
+			if (comp->zPos > Z_UPPER)
 			{
 				comp->isJumping = false;
+				comp->isFalling = false;
 				comp->zPos = Z_UPPER;
 			} //Has it reached the height threshold?
-			else if (comp->zPos <= Z_THRESHOLD)
+			else if (comp->zPos < Z_THRESHOLD)
 			{
 				comp->isUp = false;
 
@@ -397,14 +403,9 @@ void PhysicsManager::updateHeights(float step)
 		else
 		{
 			//Has it reached the height threshold?
-			if (comp->zPos >= Z_THRESHOLD)
+			if (comp->zPos > Z_THRESHOLD)
 			{
 				comp->isUp = true;
-			} //Has it reached the ground?
-			else if (comp->zPos <= Z_LOWER)
-			{
-				comp->isFalling = false;
-				comp->zPos = Z_LOWER;
 
 				//Update the filters and categories to be the upper level versions
 				b2Filter filter;
@@ -431,6 +432,12 @@ void PhysicsManager::updateHeights(float step)
 				}
 
 				b->GetFixtureList()->SetFilterData(filter);
+			} //Has it reached the ground?
+			else if (comp->zPos < Z_LOWER)
+			{
+				comp->isFalling = false;
+				comp->isJumping = false;
+				comp->zPos = Z_LOWER;
 			}
 		}
 

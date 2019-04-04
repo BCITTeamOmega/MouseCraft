@@ -77,7 +77,7 @@ void Mouse::Update(float deltaTime)
 
 		//if you aren't on a platform then fall
 		if (found.size() == 0)
-			pComp->isFalling = true;
+			pComp->fall();
 	}
 }
 
@@ -138,7 +138,7 @@ void Mouse::OnBounce(PhysicsComponent* e)
 	if (jumpTarget != nullptr) {
 		//Jump code
 		std::cout << "Mouse has jumped." << std::endl;
-		GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+		GetEntity()->GetComponent<PhysicsComponent>()->jump();
 
 		GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
 		auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
