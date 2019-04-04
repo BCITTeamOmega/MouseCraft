@@ -8,17 +8,17 @@
 /// Used for the VAO typically
 /// Acts as a wrapper around the OpenGL EBO
 /// </summary>
-class EBO {
+class ElementBufferObject {
 public:
 	/// <summary>
 	/// Initializes the EBO object. This creates it in OpenGL using glCreateBuffers
 	/// </summary>
-	EBO();
+	ElementBufferObject();
 
 	/// <summary>
 	///	Destructs the EBO object. This destroys it in OpenGL using glDeleteBuffers
 	/// </summary>
-	~EBO();
+	~ElementBufferObject();
 
 	/// <summary>
 	/// Get the ID of the EBO

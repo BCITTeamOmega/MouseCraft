@@ -1,10 +1,10 @@
-#include "FBO.h"
+#include "FrameBufferObject.h"
 #include "../RenderUtil.h"
 #include <iostream>
 
 using std::vector;
 
-FBO::FBO(int width, int height, vector<GLTexture*>& textures) : _width(width), _height(height) {
+FrameBufferObject::FrameBufferObject(int width, int height, vector<GLTexture*>& textures) : _width(width), _height(height) {
 	glGenFramebuffers(1, &_id);
 	RenderUtil::checkGLError("glGenFramebuffers");
 	glGenRenderbuffers(1, &_rbo);
@@ -18,13 +18,13 @@ FBO::FBO(int width, int height, vector<GLTexture*>& textures) : _width(width), _
 	}
 }
 
-FBO::~FBO() {
+FrameBufferObject::~FrameBufferObject() {
 	glDeleteFramebuffers(1, &_id);
 	RenderUtil::checkGLError("glDeleteFramebuffers");
 	glDeleteRenderbuffers(1, &_rbo);
 }
 
-void FBO::attachBuffers(std::vector<GLTexture*>& buffers) {
+void FrameBufferObject::attachBuffers(std::vector<GLTexture*>& buffers) {
 	Image* img = new Image(NULL, _width, _height); // Temp image so we can use GLtextures
 	vector<GLuint> attachments;
 	for (int i = 0; i < buffers.size(); i++) {
@@ -44,22 +44,22 @@ void FBO::attachBuffers(std::vector<GLTexture*>& buffers) {
 	delete img;
 }
 
-void FBO::bind(GLuint type) {
+void FrameBufferObject::bind(GLuint type) {
 	glBindFramebuffer(type, _id);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 
-void FBO::unbind(GLuint type) {
+void FrameBufferObject::unbind(GLuint type) {
 	glBindFramebuffer(type, 0);
 	RenderUtil::checkGLError("glBindFramebuffer");
 }
 
-void FBO::buffer(GLuint attachment, GLTexture& texture) {
+void FrameBufferObject::buffer(GLuint attachment, GLTexture& texture) {
 	bind();
 	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getID(), 0);
 	RenderUtil::checkGLError("glFrameBufferTexture2D");
 }
 
-GLuint FBO::getID() {
+GLuint FrameBufferObject::getID() {
 	return _id;
 }
