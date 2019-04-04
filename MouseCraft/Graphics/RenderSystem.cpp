@@ -34,7 +34,9 @@ RenderSystem::RenderSystem() : System() {
 	_uiAccumulatingList = new vector<RenderData>();
 
 	_lightRenderingList = new vector<LightData>();
+	_lightRenderingList->reserve(MAX_LIGHTS);
 	_lightAccumulatingList = new vector<LightData>();
+	_lightAccumulatingList->reserve(MAX_LIGHTS);
 
 	_masterGeometry = new CombinedGeometry();
 
