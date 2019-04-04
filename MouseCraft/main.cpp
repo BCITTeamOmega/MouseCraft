@@ -61,7 +61,7 @@ void SetupSound()
 	initial->z = 0;
 	//create a type Param from the track params and pass it into the event notifier
 	TypeParam<TrackParams*> param(initial);
-	//EventManager::Notify(PLAY_SONG, &param);
+	EventManager::Notify(PLAY_SONG, &param);
 }
 
 void MainTest()
@@ -297,13 +297,6 @@ void MainTest()
 			PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
 			catstandEntity->AddComponent(catstandPhysics);
 			catstandPhysics->initPosition();
-
-			auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(25, 0, 5), true);
-			auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-			auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-			auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-			auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-			auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 			
 			PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 			northWallEntity->AddComponent(northWallPhysics);
@@ -396,18 +389,13 @@ void MainTest()
 			gmGameManager->SetCat(catCat);
 			gmEntity->AddComponent(gmGameManager);
 
-			//Don't forget the stupid teapots
-			
-			//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-			//teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
-
 			//Obstacles
-			auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
-			auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-			auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-			auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-			auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-			auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+			auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+			auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+			auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+			auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+			auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+			auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 
 
 			OmegaEngine::Instance().ChangeScene(s);
@@ -435,13 +423,6 @@ void MainTest()
 			OmegaEngine::Instance().AddEntity(pSpawnerEntity);
 			OmegaEngine::Instance().AddEntity(gmEntity);
 			OmegaEngine::Instance().AddEntity(cameraEntity);
-
-			OmegaEngine::Instance().AddEntity(bookEntity);
-			OmegaEngine::Instance().AddEntity(boxEntity);
-			OmegaEngine::Instance().AddEntity(vaseEntity);
-			OmegaEngine::Instance().AddEntity(lampEntity);
-			OmegaEngine::Instance().AddEntity(ballEntity);
-			OmegaEngine::Instance().AddEntity(lampEntity2);
 
 			menuEntity->Destroy();
 			break;

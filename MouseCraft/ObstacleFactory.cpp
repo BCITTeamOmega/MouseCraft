@@ -55,11 +55,23 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	}
 	case VASE:
 	{
-		c_render->setModel(*_cylinderModel);
-		c_render->setColor(Color(0.0, 1.0, 0.0));
+		auto fieldModel = ModelGen::makeCube(16, 0.1, 16);
+		c_render->setModel(*fieldModel);
+		c_render->setColor(Color(0.0, 0.0, 1.0));
+		c_render->SetEnabled(false);	// this is the field 
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 2, 2, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		
 		Vase* c_vase = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
 		e->AddComponent(c_vase);
+
+		auto e_vaseModel = EntityManager::Instance().Create();
+		auto c_vaseRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_vaseRender->setModel(*_cylinderModel);
+		c_vaseRender->setColor(Color(0.0, 1.0, 0.0));
+		e_vaseModel->AddComponent(c_vaseRender);
+		e->AddChild(e_vaseModel);
+
+		c_vase->visualsEntity = e_vaseModel;
 		break;
 	}
 	case BOX:

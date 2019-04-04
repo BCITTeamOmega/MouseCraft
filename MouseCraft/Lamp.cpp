@@ -47,9 +47,12 @@ void Lamp::Update(float deltaTime)
 
 void Lamp::HitByCat(Vector2D dir)
 {
-	visualsEntity->transform.rotate(glm::vec3(0, 0, M_PI / 2));
-	GetEntity()->GetComponent<Renderable>()->SetEnabled(true);
-	_isPlaced = true;
+	if (!_isPlaced)
+	{
+		visualsEntity->transform.rotate(glm::vec3(0, 0, M_PI / 2));
+		GetEntity()->GetComponent<Renderable>()->SetEnabled(true);
+		_isPlaced = true;
+	}
 }
 
 void Lamp::DestroyedByMouse()

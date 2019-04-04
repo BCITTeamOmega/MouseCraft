@@ -37,6 +37,8 @@ void PlayerComponent::Notify(EventName eventName, Param* params)
 
 void PlayerComponent::Update(float deltaTime)
 {
+	if (_isDisabled)
+		return;
 	// backwards compatibility for now 
 	if (_physicsComponent == nullptr)
 	{
