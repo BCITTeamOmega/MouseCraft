@@ -160,8 +160,9 @@ void NetworkSystem::processPacket(const Address &sender, PacketData *packet) {
         _connectionList[sender].GotUpdate();
     }
 
-    cout << "[" << sender << "] " <<
-        packet->GetPointer() << '\0' << endl;
+    // Dump Packet data to console
+    /*cout << "[" << sender << "] " <<
+        packet->GetPointer() << '\0' << endl;*/
 }
 
 void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
