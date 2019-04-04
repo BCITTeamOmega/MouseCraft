@@ -328,7 +328,7 @@ void MainTest()
 			mouse1Entity->AddComponent(mouse1Mouse);
 
 			PlayerComponent* mouse1Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-			mouse1Movement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
+			mouse1Movement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
 			mouse1Entity->AddComponent(mouse1Movement);
 
 			HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -375,7 +375,7 @@ void MainTest()
 			catEntity->AddComponent(catCat);
 
 			PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-			catMovement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
+			catMovement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
 			catEntity->AddComponent(catMovement);
 
 			HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -400,6 +400,15 @@ void MainTest()
 			
 			//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 			//teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+
+			//Obstacles
+			auto bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+			auto boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+			auto vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+			auto lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+			auto ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+			auto lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+
 
 			OmegaEngine::Instance().ChangeScene(s);
 			OmegaEngine::Instance().AddEntity(bookEntity);
@@ -426,6 +435,14 @@ void MainTest()
 			OmegaEngine::Instance().AddEntity(pSpawnerEntity);
 			OmegaEngine::Instance().AddEntity(gmEntity);
 			OmegaEngine::Instance().AddEntity(cameraEntity);
+
+			OmegaEngine::Instance().AddEntity(bookEntity);
+			OmegaEngine::Instance().AddEntity(boxEntity);
+			OmegaEngine::Instance().AddEntity(vaseEntity);
+			OmegaEngine::Instance().AddEntity(lampEntity);
+			OmegaEngine::Instance().AddEntity(ballEntity);
+			OmegaEngine::Instance().AddEntity(lampEntity2);
+
 			menuEntity->Destroy();
 			break;
 		}

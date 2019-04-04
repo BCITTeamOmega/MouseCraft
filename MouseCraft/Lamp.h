@@ -43,6 +43,4 @@ private:
 	std::set<PhysObjectType::PhysObjectType> _checkFor;
 
 	float _counter = 0;
-
-	// Handler<Lamp, PhysicsComponent*> HandleOnCollision;
 };

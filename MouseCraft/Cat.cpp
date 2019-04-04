@@ -31,25 +31,8 @@ void Cat::Update(float dt) {
     }
 
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+	pComp->updateFalling();
 
-	//check to see if you are on a platform
-	if (pComp != nullptr && !pComp->isJumping && pComp->isUp)
-	{
-		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
-			PhysObjectType::PLATFORM
-		};
-			
-		auto compPos = pComp->body->GetPosition();
-		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y - (pComp->height / 2));
-		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y + (pComp->height / 2));
-
-		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
-
-		//if you aren't on a platform then fall
-		if(found.size() == 0)
-			pComp->isFalling = true;
-	}
-	
 	if (isPouncing) {
         updatePounce(dt);
     }
@@ -150,10 +133,10 @@ void Cat::Attack()
 		facing = Vector2D(0, -1);
 	else if (angle > M_PI/4 && angle < M_PI*3/4)	// left
 		facing = Vector2D(-1, 0);	
-	else if (angle > M_PI*3/4 && angle < M_PI*5/4)	// down 
-		facing = Vector2D(0, 1);	
 	else if (angle > -M_PI*3/4 && angle < -M_PI/4)	// right 
 		facing = Vector2D(1, 0);
+	else 											// down 
+		facing = Vector2D(0, 1);
 
 	std::cout << angle << std::endl;
 	std::cout << facing.x << "," << facing.y << std::endl;
