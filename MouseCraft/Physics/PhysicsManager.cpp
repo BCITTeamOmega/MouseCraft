@@ -352,97 +352,85 @@ void PhysicsManager::updateHeights(float step)
 			continue;
 		}
 
-		if (comp->isJumping)
+		if(comp)
+
+		//The object in the upper half
+		if (comp->isUp)
 		{
-			comp->zPos += step * JUMP_VELOCITY;
-
-			if (comp->isUp)
+			//Has it reached the platform?
+			if (comp->zPos >= Z_UPPER)
 			{
-				//The object in the upper half
-				//Has it reached the platform yet?
-				if (comp->zPos >= Z_UPPER)
-				{
-					comp->isJumping = false;
-					comp->zPos = Z_UPPER;
-				}
-				
-			}
-			else if (comp->zPos >= Z_THRESHOLD)
+				comp->isJumping = false;
+				comp->zPos = Z_UPPER;
+			} //Has it reached the height threshold?
+			else if (comp->zPos <= Z_THRESHOLD)
 			{
-				//The object is in the lower half
-				//Has it reached the threshold yet?
-				comp->isUp = true;
-
-				b2Filter filter;
-
-				switch (comp->type)
-				{
-					case PhysObjectType::MOUSE_DOWN:
-						comp->type = PhysObjectType::MOUSE_UP;
-						filter.categoryBits = MOUSE_UP_CATEGORY;
-						filter.maskBits = MOUSE_UP_MASK;
-						break;
-					case PhysObjectType::CAT_DOWN:
-						comp->type = PhysObjectType::CAT_UP;
-						filter.categoryBits = CAT_UP_CATEGORY;
-						filter.maskBits = CAT_UP_MASK;
-						break;
-					case PhysObjectType::OBSTACLE_DOWN:
-						comp->type = PhysObjectType::OBSTACLE_UP;
-						filter.categoryBits = OBSTACLE_UP_CATEGORY;
-						filter.maskBits = OBSTACLE_UP_MASK;
-						break;
-					default:
-						break; //you goofed
-				}
-
-				b->GetFixtureList()->SetFilterData(filter);
-			}
-		}
-		else if (comp->isFalling)
-		{
-			comp->zPos -= step * FALL_VELOCITY;
-
-			if (comp->isUp && comp->zPos <= Z_THRESHOLD)
-			{
-				//The object is in the upper half
-				//Has it reached the threshold yet?
 				comp->isUp = false;
 
+				//Update the filters and categories to be the lower level versions
 				b2Filter filter;
 
 				switch (comp->type)
 				{
-					case PhysObjectType::MOUSE_UP:
-						comp->type = PhysObjectType::MOUSE_DOWN;
-						filter.categoryBits = MOUSE_DOWN_CATEGORY;
-						filter.maskBits = MOUSE_DOWN_MASK;
-						break;
-					case PhysObjectType::CAT_UP:
-						comp->type = PhysObjectType::CAT_DOWN;
-						filter.categoryBits = CAT_DOWN_CATEGORY;
-						filter.maskBits = CAT_DOWN_MASK;
-						break;
-					case PhysObjectType::OBSTACLE_UP:
-						comp->type = PhysObjectType::OBSTACLE_DOWN;
-						filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
-						filter.maskBits = OBSTACLE_DOWN_MASK;
-						break;
-					default:
-						break; //you goofed
+				case PhysObjectType::MOUSE_UP:
+					comp->type = PhysObjectType::MOUSE_DOWN;
+					filter.categoryBits = MOUSE_DOWN_CATEGORY;
+					filter.maskBits = MOUSE_DOWN_MASK;
+					break;
+				case PhysObjectType::CAT_UP:
+					comp->type = PhysObjectType::CAT_DOWN;
+					filter.categoryBits = CAT_DOWN_CATEGORY;
+					filter.maskBits = CAT_DOWN_MASK;
+					break;
+				case PhysObjectType::OBSTACLE_UP:
+					comp->type = PhysObjectType::OBSTACLE_DOWN;
+					filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
+					filter.maskBits = OBSTACLE_DOWN_MASK;
+					break;
+				default:
+					break; //you goofed
 				}
 
 				b->GetFixtureList()->SetFilterData(filter);
 			}
-			else
+		} //The object is in the lower half
+		else
+		{
+			//Has it reached the height threshold?
+			if (comp->zPos >= Z_THRESHOLD)
 			{
-				//The object is in the lower half
-				//Has it reached the ground yet?
-				if (comp->zPos <= Z_LOWER)
+				comp->isUp = true;
+			} //Has it reached the ground?
+			else if (comp->zPos <= Z_LOWER)
+			{
+				comp->isFalling = false;
+				comp->zPos = Z_LOWER;
+
+				//Update the filters and categories to be the upper level versions
+				b2Filter filter;
+
+				switch (comp->type)
 				{
-					comp->isFalling = false;
-					comp->zPos = Z_LOWER;
+				case PhysObjectType::MOUSE_DOWN:
+					comp->type = PhysObjectType::MOUSE_UP;
+					filter.categoryBits = MOUSE_UP_CATEGORY;
+					filter.maskBits = MOUSE_UP_MASK;
+					break;
+				case PhysObjectType::CAT_DOWN:
+					comp->type = PhysObjectType::CAT_UP;
+					filter.categoryBits = CAT_UP_CATEGORY;
+					filter.maskBits = CAT_UP_MASK;
+					break;
+				case PhysObjectType::OBSTACLE_DOWN:
+					comp->type = PhysObjectType::OBSTACLE_UP;
+					filter.categoryBits = OBSTACLE_UP_CATEGORY;
+					filter.maskBits = OBSTACLE_UP_MASK;
+					break;
+				default:
+					break; //you goofed
 				}
+
+				b->GetFixtureList()->SetFilterData(filter);
 			}
 		}
 
