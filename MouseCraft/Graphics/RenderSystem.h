@@ -11,11 +11,15 @@
 #include "BufferObjects/VertexBufferObject.h"
 #include "BufferObjects/ElementBufferObject.h"
 #include "BufferObjects/FrameBufferObject.h"
+#include "BufferObjects/UniformBufferObject.h"
 #include "CombinedGeometry.h"
 #include "Camera.h"
 #include "GLTexture.h"
 #include "GLTextureArray.h"
+#include "Light.h"
 #include "../Util/CpuProfiler.h"
+
+#define MAX_LIGHTS 50
 
 class RenderSystem : public System {
 public:
@@ -27,7 +31,18 @@ public:
 	void setWindow(Window* window);
 	void Update(float dt) override;
 	void swapLists();
-private:
+private:						        // Data Alignment
+	struct LightData {        // (Total: 16N)
+		Light::LightType type;	// 1N
+		int blank1;				// 1N
+		int blank2;				// 1N
+		int blank3;				// 1N
+		glm::vec4 color;		// 4N
+		glm::vec4 position;		// 4N
+		glm::vec4 direction;	// 4N
+		glm::vec4 attenuation;  // 4N (Constant, Linear, Quadratic, unused)
+	};
+
 	bool loadShader(std::string shaderName);
 	void initShaders();
 	void setShader(Shader& s);
@@ -35,10 +50,11 @@ private:
 	void accumulateList();
 	void clearBuffers();
 	void renderScene();
-	void gBufferPass();
+	void gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	void lightingPass();
 	void uiPass();
 	void combineMasterGeometry(std::vector<RenderData>& data);
+	void makeLightsViewSpace(glm::mat4 viewMatrix);
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
 	Image* scaleImage(Image* input, int width, int height);
@@ -60,6 +76,7 @@ private:
 	VertexBufferObject* _texCoordVBO;
 	ElementBufferObject* _ebo;
 	FrameBufferObject* _fbo;
+	UniformBufferObject* _ubo;
 	Camera* _camera;
 
 	FrameBufferObject* _resizeInFBO;
@@ -79,4 +96,7 @@ private:
 
 	std::vector<Geometry*>* _staticGeometries;
 	std::vector<Image*>* _staticTextures;
+
+	std::vector<LightData>* _lightRenderingList;
+	std::vector<LightData>* _lightAccumulatingList;
 };

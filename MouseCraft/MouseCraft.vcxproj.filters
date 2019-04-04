@@ -94,7 +94,7 @@
     <Filter Include="Source Files\Contraptions">
       <UniqueIdentifier>{40655de4-e5a8-47f6-89b9-3f8ce105b862}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI\Loading">
+    <Filter Include="Source Files\Loading">
       <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -127,16 +127,16 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Loading\SimpleParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ObjFileParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ModelLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\TextLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -238,7 +238,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ImageLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
@@ -295,7 +295,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loading\PrefabLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
@@ -353,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\UniformBufferObject.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Light.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -682,6 +685,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Light.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

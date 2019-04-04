@@ -37,7 +37,7 @@
 #include "GameManager.h"
 #include "ContraptionSystem.h"
 #include "MenuController.h"
-
+#include "Graphics/Light.h"
 
 SoundManager* noise;
 
@@ -137,6 +137,8 @@ void MainTest()
 			cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
 			Entity* pSpawnerEntity = EntityManager::Instance().Create();
 			Entity* gmEntity = EntityManager::Instance().Create();
+			Entity* light1Entity = EntityManager::Instance().Create();
+			Entity* light2Entity = EntityManager::Instance().Create();
 
 			//Make the models
 			//Player Models
@@ -430,6 +432,20 @@ void MainTest()
 			gmGameManager->SetCat(catCat);
 			gmEntity->AddComponent(gmGameManager);
 
+			// Lights
+			Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
+			light1->setType(Light::LightType::Directional);
+			light1->setColor(Color(1.2f, 1.25f, 0.8f));
+			light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
+			light1Entity->AddComponent(light1);
+
+			Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
+			light2->setType(Light::LightType::Point);
+			light2->setColor(Color(10.0f, 60.0f, 300.0f));
+			light2->setAttenuation(1, 0.8, 0.32);
+			light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
+			light2Entity->AddComponent(light2);
+
 			//Don't forget the stupid teapots
 			Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 			teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
@@ -453,6 +469,8 @@ void MainTest()
 			OmegaEngine::Instance().AddEntity(pSpawnerEntity);
 			OmegaEngine::Instance().AddEntity(gmEntity);
 			OmegaEngine::Instance().AddEntity(cameraEntity);
+			OmegaEngine::Instance().AddEntity(light1Entity);
+			OmegaEngine::Instance().AddEntity(light2Entity);
 			menuEntity->Destroy();
 			break;
 		}

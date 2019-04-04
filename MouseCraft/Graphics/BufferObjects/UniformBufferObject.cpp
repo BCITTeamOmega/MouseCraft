@@ -9,12 +9,10 @@ UniformBufferObject::~UniformBufferObject() {
 }
 
 void UniformBufferObject::bind(int bindingPoint) {
-	glBindBuffer(GL_UNIFORM_BUFFER, _id);
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, _id);
 }
 
 void UniformBufferObject::unbind(int bindingPoint) {
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, 0);
 }
 

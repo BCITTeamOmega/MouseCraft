@@ -190,6 +190,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="GL\glad.c" />
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
+    <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
@@ -269,6 +270,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\GLTextureArray.h" />
     <ClInclude Include="Graphics\Image.h" />
+    <ClInclude Include="Graphics\Light.h" />
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\ModelGen.h" />
     <ClInclude Include="Graphics\Renderable.h" />
