@@ -7,7 +7,7 @@
 #include "../Event/Subject.h"
 #include "PhysicsManager.h"
 
-constexpr auto JUMP_VELOCITY = 10;
+constexpr auto JUMP_VELOCITY = 14;
 
 class PhysicsComponent : public Component
 {

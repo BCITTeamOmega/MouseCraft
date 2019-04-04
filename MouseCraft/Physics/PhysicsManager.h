@@ -18,7 +18,7 @@
 #include "../WorldGrid.h"
 
 #pragma region Awful macros
-constexpr auto GRAVITY = -8;
+constexpr auto GRAVITY = -12;
 constexpr auto Z_UPPER = 5.0;
 constexpr auto Z_THRESHOLD = 3.0;
 constexpr auto Z_LOWER = 0.5;
