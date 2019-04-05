@@ -186,6 +186,9 @@ void InputSystem::Update(float dt)
 			case 1:
 				b = Button::AUX2;
 				break;
+            case 6:
+                b = Button::OPTION;
+                break;
 			default:
 				continue;
 			}
@@ -213,6 +216,9 @@ void InputSystem::Update(float dt)
 			case 1:
 				b = Button::AUX2;
 				break;
+            case 6:
+                b = Button::OPTION;
+                break;
 			default:
 				continue;
 			}
@@ -257,7 +263,11 @@ void InputSystem::Update(float dt)
 				EventManager::Notify(EventName::INPUT_BUTTON,
 					new TypeParam<ButtonEvent>(ButtonEvent(player, Button::AUX2, isDown)));
 				break;
-			}
+            case SDLK_RETURN:
+                EventManager::Notify(EventName::INPUT_BUTTON,
+                    new TypeParam<ButtonEvent>(ButtonEvent(player, Button::OPTION, isDown)));
+                break;
+            }
 		}
 	} // end while 
 

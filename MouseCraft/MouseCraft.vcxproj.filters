@@ -85,7 +85,13 @@
     <Filter Include="Source Files\Contraptions">
       <UniqueIdentifier>{40655de4-e5a8-47f6-89b9-3f8ce105b862}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI\Loading">
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{8e01d580-d6e3-43c5-94ad-5704d6c32074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{c9b6b0e4-6965-4865-8b9b-4d40f1c68bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading">
       <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Core">
@@ -127,16 +133,16 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Loading\SimpleParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ObjFileParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ModelLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\TextLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -219,15 +225,6 @@
     <ClCompile Include="Graphics\RenderSystem.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\VAO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\VBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\EBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Renderable.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -247,7 +244,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ImageLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
@@ -304,10 +301,22 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loading\PrefabLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\NetworkSystem.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Address.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\PacketData.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Socket.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="WorldGrid.cpp">
       <Filter>Source Files</Filter>
@@ -317,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\NetworkComponent.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\GLTextureArray.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -350,6 +362,27 @@
     </ClCompile>
     <ClCompile Include="Trampoline.cpp">
       <Filter>Source Files\Contraptions</Filter>
+    </ClCompile>
+    <ClCompile Include="HostScene.cpp">
+      <Filter>Source Files</Filter>
+	</ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\FrameBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VertexArrayObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VertexBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\UniformBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Light.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -515,15 +548,6 @@
     <ClInclude Include="Graphics\RenderSystem.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\EBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\VBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\VAO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Color.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
@@ -626,6 +650,27 @@
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files\Event</Filter>
     </ClInclude>
+    <ClInclude Include="Util\TypePunners.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Address.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Connection.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetDatum.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetworkSystem.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\PacketData.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Socket.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
     <ClInclude Include="Obstacles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -637,6 +682,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\FBO.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetworkComponent.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\GLTextureArray.h">
       <Filter>Header Files\Graphics</Filter>
@@ -676,6 +724,27 @@
     </ClInclude>
     <ClInclude Include="Trampoline.h">
       <Filter>Header Files\Contraptions</Filter>
+    </ClInclude>
+    <ClInclude Include="HostScene.h">
+      <Filter>Header Files</Filter>
+	</ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\FrameBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\UniformBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Light.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
