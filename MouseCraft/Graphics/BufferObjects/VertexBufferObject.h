@@ -1,10 +1,10 @@
 #pragma once
 #include "../../GL/glad.h"
 #include <vector>
-class VBO {
+class VertexBufferObject {
 public:
-	VBO(int componentsPerElement);
-	~VBO();
+	VertexBufferObject(int componentsPerElement);
+	~VertexBufferObject();
 	GLuint getID();
 	int getComponentsPerElement();
 	void buffer(std::vector<GLfloat>& values);

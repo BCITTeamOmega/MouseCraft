@@ -13,7 +13,6 @@
 #include "ContraptionSystem.h"
 #include "MenuScene.h"
 
-
 SoundManager* noise;
 
 extern "C" {

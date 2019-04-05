@@ -30,25 +30,8 @@ void Cat::Update(float dt) {
     }
 
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+	pComp->updateFalling();
 
-	//check to see if you are on a platform
-	if (pComp != nullptr && !pComp->isJumping && pComp->isUp)
-	{
-		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
-			PhysObjectType::PLATFORM
-		};
-			
-		auto compPos = pComp->body->GetPosition();
-		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y - (pComp->height / 2));
-		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y + (pComp->height / 2));
-
-		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
-
-		//if you aren't on a platform then fall
-		if(found.size() == 0)
-			pComp->isFalling = true;
-	}
-	
 	if (isPouncing) {
         updatePounce(dt);
     }
@@ -196,7 +179,7 @@ void Cat::Jump()
 		if (jumpTarget != nullptr) {
 			//Jump code
 			std::cout << "Cat has jumped." << std::endl;
-			GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+			GetEntity()->GetComponent<PhysicsComponent>()->jump();
 			isJumping = true;
 
 			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump

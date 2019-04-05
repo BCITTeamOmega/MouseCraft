@@ -100,7 +100,7 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{c9b6b0e4-6965-4865-8b9b-4d40f1c68bab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI\Loading">
+    <Filter Include="Source Files\Loading">
       <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -133,16 +133,16 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Loading\SimpleParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ObjFileParser.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ModelLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Loading\TextLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -225,15 +225,6 @@
     <ClCompile Include="Graphics\RenderSystem.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\VAO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\VBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\EBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Renderable.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -253,7 +244,7 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Loading\ImageLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="DebugColliderComponent.cpp">
       <Filter>Source Files</Filter>
@@ -310,7 +301,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loading\PrefabLoader.cpp">
-      <Filter>Source Files\UI\Loading</Filter>
+      <Filter>Source Files\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
@@ -374,6 +365,24 @@
     </ClCompile>
     <ClCompile Include="HostScene.cpp">
       <Filter>Source Files</Filter>
+	</ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\FrameBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VertexArrayObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\VertexBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\UniformBufferObject.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Light.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -538,15 +547,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\RenderSystem.h">
       <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\EBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\VBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\VAO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Color.h">
       <Filter>Header Files\Graphics</Filter>
@@ -727,6 +727,24 @@
     </ClInclude>
     <ClInclude Include="HostScene.h">
       <Filter>Header Files</Filter>
+	</ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\FrameBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\UniformBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Light.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
