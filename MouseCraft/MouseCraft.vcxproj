@@ -194,6 +194,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp" />
     <ClCompile Include="Graphics\BufferObjects\VertexArrayObject.cpp" />
@@ -217,6 +218,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Network\NetworkComponent.cpp" />
+    <ClCompile Include="Network\NetworkSystem.cpp" />
+    <ClCompile Include="Network\PacketData.cpp" />
     <ClCompile Include="Overcharge.cpp" />
     <ClCompile Include="Physics\CContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsComponent.cpp" />
@@ -234,6 +238,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="TimedDestruction.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
+    <ClCompile Include="Network\Address.cpp" />
+    <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Loading\TextLoader.cpp" />
@@ -284,6 +290,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HostScene.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
@@ -314,6 +321,13 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
     <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="Network\Address.h" />
+    <ClInclude Include="Network\Connection.h" />
+    <ClInclude Include="Network\NetDatum.h" />
+    <ClInclude Include="Network\NetworkComponent.h" />
+    <ClInclude Include="Network\NetworkSystem.h" />
+    <ClInclude Include="Network\PacketData.h" />
+    <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="MenuItem.h" />
     <ClInclude Include="MenuScene.h" />
@@ -352,6 +366,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="UI\TextComponent.h" />
     <ClInclude Include="UI\UIComponent.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Util\TypePunners.h" />
     <ClInclude Include="WorldGrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

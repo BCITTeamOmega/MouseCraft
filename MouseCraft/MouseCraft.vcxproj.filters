@@ -94,6 +94,12 @@
     <Filter Include="Source Files\Contraptions">
       <UniqueIdentifier>{40655de4-e5a8-47f6-89b9-3f8ce105b862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{8e01d580-d6e3-43c5-94ad-5704d6c32074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{c9b6b0e4-6965-4865-8b9b-4d40f1c68bab}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Loading">
       <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
     </Filter>
@@ -297,11 +303,29 @@
     <ClCompile Include="Event\Handler.cpp">
       <Filter>Source Files\Event</Filter>
     </ClCompile>
+    <ClCompile Include="Network\NetworkSystem.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Address.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\PacketData.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Socket.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
     <ClCompile Include="WorldGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sound\SoundComponent.cpp">
       <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
+      <Filter>Source Files\Graphics\BufferObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\NetworkComponent.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\GLTextureArray.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -336,6 +360,9 @@
     <ClCompile Include="Trampoline.cpp">
       <Filter>Source Files\Contraptions</Filter>
     </ClCompile>
+    <ClCompile Include="HostScene.cpp">
+      <Filter>Source Files</Filter>
+	</ClCompile>
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
@@ -620,6 +647,27 @@
     <ClInclude Include="Event\Handler.h">
       <Filter>Header Files\Event</Filter>
     </ClInclude>
+    <ClInclude Include="Util\TypePunners.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Address.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Connection.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetDatum.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetworkSystem.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\PacketData.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Socket.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
     <ClInclude Include="Obstacles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -628,6 +676,12 @@
     </ClInclude>
     <ClInclude Include="Sound\SoundComponent.h">
       <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BufferObjects\FBO.h">
+      <Filter>Header Files\Graphics\BufferObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetworkComponent.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\GLTextureArray.h">
       <Filter>Header Files\Graphics</Filter>
@@ -668,6 +722,9 @@
     <ClInclude Include="Trampoline.h">
       <Filter>Header Files\Contraptions</Filter>
     </ClInclude>
+    <ClInclude Include="HostScene.h">
+      <Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>
