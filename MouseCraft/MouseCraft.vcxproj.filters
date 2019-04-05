@@ -43,20 +43,11 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{1533a3d5-613b-4ab4-84bf-6af19359b026}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{8f9e7435-3d8d-40c5-9d22-99e168c5f71d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Example">
-      <UniqueIdentifier>{8f1156c6-e7b0-48ce-98e5-0a8199af9cf5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core\Example">
       <UniqueIdentifier>{83e0b0d4-0776-4684-bbd1-5c430c604c74}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Core\Test">
       <UniqueIdentifier>{850fdfe3-e82a-4dd5-9e1d-6b76a8b4742b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Test">
-      <UniqueIdentifier>{2e0bc802-8f7f-4fea-9c8b-171cd452f934}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{5dcd4e8d-ddf1-42d4-b352-46fe0c952be0}</UniqueIdentifier>
@@ -96,6 +87,15 @@
     </Filter>
     <Filter Include="Source Files\UI\Loading">
       <UniqueIdentifier>{6a9e72b2-8bab-46a7-b77a-0655e6561f4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Core">
+      <UniqueIdentifier>{8f9e7435-3d8d-40c5-9d22-99e168c5f71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Core\Example">
+      <UniqueIdentifier>{8f1156c6-e7b0-48ce-98e5-0a8199af9cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Core\Test">
+      <UniqueIdentifier>{2e0bc802-8f7f-4fea-9c8b-171cd452f934}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -142,22 +142,22 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Component.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Entity.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\System.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Transform.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\TaskScheduler.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Handle.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Util\CpuProfiler.cpp">
       <Filter>Source Files\Util</Filter>
@@ -166,43 +166,43 @@
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Core\Task.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\OmegaEngine.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="GL\glad.c">
       <Filter>Header Files\GL</Filter>
     </ClCompile>
     <ClCompile Include="Core\StatusAction.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\UpdatableComponent.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\EntityManager.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Example\ExampleComponent.cpp">
-      <Filter>Source Files\Core\Example</Filter>
+      <Filter>Resource Files\Core\Example</Filter>
     </ClCompile>
     <ClCompile Include="Core\Example\ExampleSystem.cpp">
-      <Filter>Source Files\Core\Example</Filter>
+      <Filter>Resource Files\Core\Example</Filter>
     </ClCompile>
     <ClCompile Include="Core\Example\ExampleSystemComponent.cpp">
-      <Filter>Source Files\Core\Example</Filter>
+      <Filter>Resource Files\Core\Example</Filter>
     </ClCompile>
     <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp">
-      <Filter>Source Files\Core\Example</Filter>
+      <Filter>Resource Files\Core\Example</Filter>
     </ClCompile>
     <ClCompile Include="Core\Test\TestComponent.cpp">
-      <Filter>Source Files\Core\Test</Filter>
+      <Filter>Resource Files\Core\Test</Filter>
     </ClCompile>
     <ClCompile Include="Core\Test\TestDerivedComponent.cpp">
-      <Filter>Source Files\Core\Test</Filter>
+      <Filter>Resource Files\Core\Test</Filter>
     </ClCompile>
     <ClCompile Include="Core\Vector2D.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Resource Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Physics\PhysicsManager.cpp">
       <Filter>Source Files\Physics</Filter>

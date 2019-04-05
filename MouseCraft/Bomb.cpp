@@ -10,6 +10,7 @@ const int Bomb::DAMAGE		= 2;
 
 Bomb::Bomb()
 {
+	Contraption::type = CONTRAPTIONS::BOMB;
 }
 
 

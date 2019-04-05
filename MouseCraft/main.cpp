@@ -362,7 +362,7 @@ void MainTest()
 			mouse1Entity->AddComponent(mouse1Mouse);
 
 			PlayerComponent* mouse1Movement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-			mouse1Movement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
+			mouse1Movement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
 			mouse1Entity->AddComponent(mouse1Movement);
 
 			HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
@@ -409,7 +409,7 @@ void MainTest()
 			catEntity->AddComponent(catCat);
 
 			PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
-			catMovement->SetID(10); //Sets which controller handles this player (10 is the keyboard)
+			catMovement->SetID(0); //Sets which controller handles this player (10 is the keyboard)
 			catEntity->AddComponent(catMovement);
 
 			HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();

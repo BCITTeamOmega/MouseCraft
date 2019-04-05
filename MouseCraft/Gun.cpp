@@ -6,6 +6,7 @@
 
 Gun::Gun()
 {
+	Contraption::type = CONTRAPTIONS::GUN;
 }
 
 

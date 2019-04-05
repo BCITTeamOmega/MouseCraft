@@ -41,16 +41,41 @@ void Mouse::Update(float deltaTime)
 
 	if (shoot)
 	{
-		std::cout << std::endl << "Mouse[" << player << "] - Pew pew!" << std::endl;
 		shoot = false;
-		
-		if (newItem != nullptr)
+		float RADIUS = 5.0f;
+		auto p1 = GetEntity()->transform;
+		auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
+		auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
+		auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
+		bool isUp = GetEntity()->GetComponent<PhysicsComponent>()->isUp;
+
+		if (isUp) {
+			checkFor.insert(PhysObjectType::MOUSE_UP);
+		}
+		else
 		{
-			use(newItem);
+			checkFor.insert(PhysObjectType::MOUSE_DOWN);
 		}
 
-		if (baseItem == nullptr && newItem == nullptr) {
-			revive();
+		auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+		bool hit = hits.size() > 0;
+
+		if (isUp && !_collidedObjects && hit) {
+
+			std::cout << "Reviving fellow mouse" << std::endl;
+			_collidedObjects = hits[0];
+			revive(_collidedObjects);
+		}
+		else if (!isUp && !_collidedObjects && hit)
+		{
+			std::cout << "Revivng fellow mouse" << std::endl;
+			_collidedObjects = hits[0];
+			revive(_collidedObjects);
+		} 
+		
+		if (!hit && newItem != nullptr)
+		{
+			use(newItem);
 		}
 	}
 
@@ -193,11 +218,48 @@ void Mouse::dropItem() {
 	}
 
 	if (newItem != nullptr) {
-		auto e = newItem->GetEntity();
-		e->SetParent(OmegaEngine::Instance().GetRoot());
-		e->transform.setLocalPosition(e->transform.getWorldPosition());
+		Entity* part1;
+		Entity* part2;
+		auto pos = GetEntity()->transform.getWorldPosition() + GetEntity()->transform.getWorldForward() * 10.0f;
+		auto p1 = pos + glm::vec3(-10.0f, 0, 0);
+		auto p2 = pos + glm::vec3(10.0f, 0, 0);
 
-		newItem->Drop();
+		auto type = newItem->type;
+
+		if (type == CONTRAPTIONS::BOMB) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
+		} 
+		else if (type == CONTRAPTIONS::COIL) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		} 
+		else if (type == CONTRAPTIONS::GUN) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		} 
+		else if (type == CONTRAPTIONS::OVERCHARGE) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
+		} 
+		else if (type == CONTRAPTIONS::SWORDS) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SCREW,  p2);
+		} 
+		else 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SPRING, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		}
+
+		OmegaEngine::Instance().AddEntity(part1);
+		OmegaEngine::Instance().AddEntity(part2);
+		newItem->GetEntity()->Destroy();
 		newItem = nullptr;
 	}
 }
@@ -335,35 +397,8 @@ void Mouse::combine(Pickup *material) {
 	}
 }
 
-void Mouse::revive() {
-	float RADIUS = 5.0f;
-	auto p1 = GetEntity()->transform;
-	auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
-	auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
-	auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
-	bool isUp = GetEntity()->GetComponent<PhysicsComponent>()->isUp;
-
-	if (isUp) {
-		checkFor.insert(PhysObjectType::CAT_UP);
-	}
-	else
-	{
-		checkFor.insert(PhysObjectType::CAT_DOWN);
-	}
+void Mouse::revive(PhysicsComponent* mouse) {
 	
-	auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
-	bool hit = hits.size() > 0;
-
-	if (isUp && !_collidedObjects && hit) {
-
-		std::cout << "Reviving fellow mouse" << std::endl;
-		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->SetEnabled(true);
-	}
-	else if (!isUp && !_collidedObjects && hit)
-	{
-		std::cout << "Revivng fellow mouse" << std::endl;
-		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->SetEnabled(true);
-	}
+		mouse->GetEntity()->SetEnabled(true);
 }
+

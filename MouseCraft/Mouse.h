@@ -20,6 +20,7 @@
 #include "Physics/PhysicsComponent.h"
 #include "HealthComponent.h"
 #include "Sound\SoundComponent.h"
+#include "PickupFactory.h"
 #include "PlayerComponent.h"
 
 constexpr auto MOUSE_JUMP_DIST = 10;
@@ -41,7 +42,7 @@ public:
 	void dropItem();
 	void use(Contraption* item);
 	void combine(Pickup *material);
-	void revive();
+	void revive(PhysicsComponent* mouse);
 
 public:
 	float speed = 10.0f;
