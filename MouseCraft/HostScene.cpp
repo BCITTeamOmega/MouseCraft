@@ -373,8 +373,8 @@ void HostScene::InitScene() {
     root.AddChild(pSpawnerEntity);
     root.AddChild(gmEntity);
     root.AddChild(cameraEntity);
-    OmegaEngine::Instance().AddEntity(light1Entity);
-    OmegaEngine::Instance().AddEntity(light2Entity);
+    root.AddChild(light1Entity);
+    root.AddChild(light2Entity);
 }
 
 void HostScene::CleanUp() {
