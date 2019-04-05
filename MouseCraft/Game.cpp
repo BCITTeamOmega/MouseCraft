@@ -3,6 +3,8 @@
 #include "Loading/ModelLoader.h"
 #include "Graphics/RenderData.h"
 #include <thread>
+#include <chrono>
+#include <iostream>
 
 Game::Game() {
     _currScene = new MainScene();
@@ -45,7 +47,7 @@ void fadeOut(Game* game) {
 	game->Black = UIManager::GetComponentById("BlackOverlay");
 	game->FadeOut = true;
 	while (game->FadeOut) {
-		Sleep(1);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }
 
@@ -53,8 +55,8 @@ void fadeIn(Game* game) {
 	game->Black = UIManager::GetComponentById("BlackOverlay");
 	game->FadeIn = true;
 	while (game->FadeIn) {
-		Sleep(1);
-	}
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
 }
 
 void Game::transition(Scene *nextScene) {
