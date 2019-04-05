@@ -39,6 +39,8 @@ void Vase::Update(float deltaTime)
 		{
 			if (_affected.find(p) != _affected.end())
 			{
+				if (_affected[p]->x == 0 && _affected[p]->y == 0)
+					_affected[p]->x = 50;
 				p->velocity = *_affected[p];
 				p->GetEntity()->GetComponent<PlayerComponent>()->SetDisabled(true);
 			}
