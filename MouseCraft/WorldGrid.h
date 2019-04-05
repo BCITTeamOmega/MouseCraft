@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Physics\PhysObjectType.h"
+#include "Physics\PhysicsComponent.h"
 #include <math.h>
 #include "Core\Vector2D.h"
 
@@ -9,13 +9,14 @@ class WorldGrid
 public:
 	WorldGrid(int w, int h, int s);
 	~WorldGrid();
-	void addObject(Vector2D& pos, PhysObjectType::PhysObjectType type);
-	void addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectType type);
+	bool positionObject(Vector2D& pos);
+	bool positionArea(Vector2D& p1, Vector2D& p2);
+	void createObject(Vector2D& pos, PhysicsComponent* pcomp);
+	void createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp);
 	bool removeArea(Vector2D* p1, Vector2D* p2);
-	PhysObjectType::PhysObjectType objectAt(float xPos, float yPos);
+	PhysicsComponent* objectAt(float xPos, float yPos);
 private:
-	std::vector<std::vector<PhysObjectType::PhysObjectType>> grid;
+	std::vector<std::vector<bool>> baseGrid;
+	std::vector<std::vector<PhysicsComponent*>> objectGrid;
 	int scale;
-
-	PhysObjectType::PhysObjectType replaceType(PhysObjectType::PhysObjectType type);
 };
