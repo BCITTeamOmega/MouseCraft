@@ -208,7 +208,7 @@ void Cat::Jump()
 		if (jumpTarget != nullptr) {
 			//Jump code
 			std::cout << "Cat has jumped." << std::endl;
-			GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+			GetEntity()->GetComponent<PhysicsComponent>()->jump();
 			isJumping = true;
 
 			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump

@@ -8,7 +8,7 @@
 /// This acts as a wrapper around framebuffer functions in OpenGL
 /// This also contains textures to render to, and by default generates a depth buffer automatically.
 /// </summary>
-class FBO {
+class FrameBufferObject {
 public:
 	/// <summary>
 	/// Initializes the FBO with necessary information, preparing it in OpenGL
@@ -17,12 +17,12 @@ public:
 	/// <param name="width">The width of the FBO</param>
 	/// <param name="height">The height of the FBO</param>
 	/// <param name="textures">The color attachments to put in the FBO</param>
-	FBO(int width, int height, std::vector<GLTexture*>& textures);
+	FrameBufferObject(int width, int height, std::vector<GLTexture*>& textures);
 	
 	/// <summary>
 	/// Destructs the FBO, destroying it in OpenGL
 	/// </summary>
-	~FBO();
+	~FrameBufferObject();
 
 	/// <summary>
 	/// Bind the FBO in OpenGL
