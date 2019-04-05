@@ -192,6 +192,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\EBO.cpp" />
     <ClCompile Include="Graphics\BufferObjects\VAO.cpp" />
@@ -285,6 +286,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HostScene.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Loading\ObjFileParser.h" />
     <ClInclude Include="Loading\ModelLoader.h" />
