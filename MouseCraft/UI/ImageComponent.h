@@ -10,6 +10,8 @@ public:
     ImageComponent(std::string imagePath, float width, float height, float x, float y);
 
     bool IsTransparent();
+	std::string GetImagePath();
+	void SetImagePath(std::string path);
 private:
     std::string _imagePath;
 };

@@ -102,9 +102,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Event\EventManager.cpp">
       <Filter>Source Files\Event</Filter>
     </ClCompile>
@@ -357,12 +354,12 @@
     <ClCompile Include="Graphics\Light.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Loading\UILoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event\EventManager.h">
@@ -688,6 +685,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Light.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\UILoader.h">
+      <Filter>Header Files\Loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

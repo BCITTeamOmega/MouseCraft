@@ -202,8 +202,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\RenderSystem.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Loading\ImageLoader.cpp" />
+    <ClCompile Include="Loading\UILoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Loading\SimpleParser.cpp" />
     <ClCompile Include="Loading\ObjFileParser.cpp" />
     <ClCompile Include="Loading\ModelLoader.cpp" />
@@ -308,8 +308,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="GL\khrplatform.h" />
     <ClInclude Include="Input\InputSystem.h" />
     <ClInclude Include="Loading\ImageLoader.h" />
+    <ClInclude Include="Loading\UILoader.h" />
     <ClInclude Include="MainScene.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />

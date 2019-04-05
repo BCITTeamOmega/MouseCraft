@@ -5,6 +5,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include "../Core/Component.h"
+#include "../Core/Entity.h"
+#include "../Graphics/Model.h"
 
 enum VerticalAnchor {
     ANCHOR_TOP, ANCHOR_VCENTER, ANCHOR_BOTTOM
@@ -28,7 +31,7 @@ enum UnitType {
 Basic UI panel that makes up all of the UI system.
 UI systems are made by creating multiple of these nested within each other
 */
-class UIComponent {
+class UIComponent : public Component {
 public:
     UIComponent(float width, float height, float x, float y);
     ~UIComponent();
@@ -38,9 +41,6 @@ public:
 
 	// Determine whether this panel uses transparency
     virtual bool IsTransparent() const;
-
-	// Add a child element to this UI Component
-    void Add(UIComponent* child);
 
 	// String id used for uniquely identifying this UIComponent
 	std::string			id;
@@ -79,16 +79,8 @@ public:
 	// Blank string if no action
     std::string         ClickAction;
 
-	// List of this UIComponent's children
-    std::vector<UIComponent*> children;
-
-	//TODO replace temp placeholder variables once renderer implemented
-	std::vector<glm::vec3> positions;
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> UVs;
-	std::vector<int> elements;
+	std::vector<Model*>* models;
 protected:
-	void generateBuffers();
-	void repopulateBuffers();
 	void calculateScreenPosition();
+	virtual void setupModels();
 };

@@ -1,4 +1,5 @@
 #include "UIComponent.h"
+#include "../Graphics/ModelGen.h"
 
 UIComponent::UIComponent(float width, float height, float x, float y) :
     size(width, height), anchor(x, y) {
@@ -24,18 +25,14 @@ UIComponent::UIComponent(float width, float height, float x, float y) :
 	color = { 0,0,0,0 };
 
     // Initialize Renderable data with a standard quad
-	positions = { { -2.5,2.5,0 },{ 2.5,2.5,0 },{ -2.5,-2.5,0 },{ 2.5,-2.5,0 } };
-    normals = { { 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 } };
-    UVs = { { 0, 1 },{ 1, 1 },{ 0, 0 },{ 1, 0 } };
-	elements = { 1, 0, 2, 1, 2, 3 };
-
-    // Generate buffers for this panel
-	generateBuffers();
+	models = new std::vector<Model*>();
+	ModelGen::makeQuad(ModelGen::Axis::Z, 1, 1);
 }
 
 UIComponent::~UIComponent() {
-    for (UIComponent *child : children)
-        delete child;
+	for (Model* model : *models) {
+		delete model;
+	}
 }
 
 void UIComponent::Resize() {
@@ -68,40 +65,30 @@ void UIComponent::Resize() {
     }
     
     // Generate vertices of quad from position and size of panel
-    positions = {
-        { screenPosition.x, screenPosition.y + screenSize.y, 0 }, // Top Left
-        { screenPosition + screenSize, 0 }, // Top Right
-        { screenPosition, 0 }, // Bottom Left
-        { screenPosition.x + screenSize.x, screenPosition.y, 0 }  // Bottom Right
-    };
-
-    // Tell Renderer to recreate buffers with new position data
-	repopulateBuffers();
+	setupModels();
 
     // Iterate resize on child panels
-    for (UIComponent *child : children) {
-        child->Resize();
+	auto children = this->GetEntity()->GetChildren();
+    for (Entity *child : children) {
+		UIComponent* comp = child->GetComponent<UIComponent>();
+		if (comp != nullptr) {
+			comp->Resize();
+		}
     }
 
 	valid = true;
 }
 
-void UIComponent::Add(UIComponent* child) {
-    child->parent = this;
-    children.push_back(child);
-    child->Resize();
+void UIComponent::setupModels() {
+	(*models)[0] = ModelGen::makeQuad(ModelGen::Axis::Z, screenSize.x, screenSize.y);
+	this->GetEntity()->transform.setLocalPosition(glm::vec3(
+		screenPosition.x + screenSize.x / 2,
+		screenPosition.y + screenSize.y / 2,
+		z));
 }
 
 bool UIComponent::IsTransparent() const {
     return color.a < 1.0f;
-}
-
-void UIComponent::generateBuffers() {
-	// TODO Update once renderer in place 
-}
-
-void UIComponent::repopulateBuffers() {
-	// TODO Update once renderer in place 
 }
 
 void UIComponent::calculateScreenPosition() {
