@@ -18,8 +18,7 @@
 #include "../WorldGrid.h"
 
 #pragma region Awful macros
-constexpr auto FALL_VELOCITY = 5;
-constexpr auto JUMP_VELOCITY = 5;
+constexpr auto GRAVITY = -12;
 constexpr auto Z_UPPER = 5.0;
 constexpr auto Z_THRESHOLD = 3.0;
 constexpr auto Z_LOWER = 0.5;
@@ -38,17 +37,17 @@ constexpr auto PART_CATEGORY = 0x0400;
 constexpr auto PROJECTILE_DOWN_CATEGORY = 0x0800;
 constexpr auto PROJECTILE_UP_CATEGORY = 0x1000;
 
-constexpr auto PART_MASK = 0x0014;
+constexpr auto PART_MASK = 0x0010;
 constexpr auto CONTRAPTION_UP_MASK = 0x02A9;
 constexpr auto CONTRAPTION_DOWN_MASK = 0x0157;
 constexpr auto CAT_UP_MASK = 0x0229;
 constexpr auto CAT_DOWN_MASK = 0x0117;
 constexpr auto MOUSE_UP_MASK = 0x02A9;
 constexpr auto MOUSE_DOWN_MASK = 0x0557;
-constexpr auto OBSTACLE_UP_MASK = 0x02AA;
-constexpr auto OBSTACLE_DOWN_MASK = 0x0554;
-constexpr auto PLATFORM_MASK = 0x0150;
-constexpr auto WALL_MASK = 0x03F0;
+constexpr auto OBSTACLE_UP_MASK = 0x02A9;
+constexpr auto OBSTACLE_DOWN_MASK = 0x0157;
+constexpr auto PLATFORM_MASK = 0x0154;
+constexpr auto WALL_MASK = 0x03FC;
 constexpr auto PROJECTILE_DOWN_MASK = 0x0047;
 constexpr auto PROJECTILE_UP_MASK = 0x0089;
 #pragma endregion

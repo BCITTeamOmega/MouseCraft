@@ -33,6 +33,11 @@ RenderSystem::RenderSystem() : System() {
 	_uiRenderingList = new vector<RenderData>();
 	_uiAccumulatingList = new vector<RenderData>();
 
+	_lightRenderingList = new vector<LightData>();
+	_lightRenderingList->reserve(MAX_LIGHTS);
+	_lightAccumulatingList = new vector<LightData>();
+	_lightAccumulatingList->reserve(MAX_LIGHTS);
+
 	_masterGeometry = new CombinedGeometry();
 
 	glEnable(GL_FRAMEBUFFER_SRGB);
@@ -54,6 +59,7 @@ RenderSystem::~RenderSystem() {
 	delete _fbo;
 	delete _screenQuad;
 	delete _masterGeometry;
+	delete _ubo;
 
 	for (auto a : *_staticGeometries) {
 		delete a;
@@ -65,11 +71,11 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::initVertexBuffers() {
-	_vao = new VAO();
-	_positionVBO = new VBO(3);
-	_normalVBO = new VBO(3);
-	_texCoordVBO = new VBO(2);
-	_ebo = new EBO();
+	_vao = new VertexArrayObject();
+	_positionVBO = new VertexBufferObject(3);
+	_normalVBO = new VertexBufferObject(3);
+	_texCoordVBO = new VertexBufferObject(2);
+	_ebo = new ElementBufferObject();
 
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
@@ -89,11 +95,13 @@ void RenderSystem::initRenderBuffers() {
 	_positionBuffer = new GLTexture();
 
 	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer };
-	_fbo = new FBO(1280, 720, buffers);
+	_fbo = new FrameBufferObject(1280, 720, buffers);
 
 	vector<GLTexture*> noBuffers = {};
-	_resizeInFBO = new FBO(1024, 1024, noBuffers);
-	_resizeOutFBO = new FBO(1024, 1024, noBuffers);
+	_resizeInFBO = new FrameBufferObject(1024, 1024, noBuffers);
+	_resizeOutFBO = new FrameBufferObject(1024, 1024, noBuffers);
+
+	_ubo = new UniformBufferObject();
 }
 
 void RenderSystem::setWindow(Window* window) {
@@ -138,23 +146,24 @@ void RenderSystem::clearBuffers() {
 
 void RenderSystem::renderScene() {
 	if (_camera != nullptr) {
-		gBufferPass();
+		float windowRatio = (float)_window->getWidth() / _window->getHeight();
+		Transform viewTransform = _camera->getTransform();
+		mat4 view = inverse(viewTransform.getWorldTransformation());
+
+		float fov = _camera->getFOV();
+		float closeClip = _camera->getCloseClip();
+		float farClip = _camera->getFarClip();
+
+		mat4 projection = perspective(fov, windowRatio, closeClip, farClip);
+
+		gBufferPass(view, projection);
+		makeLightsViewSpace(view);
 		lightingPass();
 	}
 	uiPass();
 }
 
-void RenderSystem::gBufferPass() {
-	float windowRatio = (float)_window->getWidth() / _window->getHeight();
-	Transform viewTransform = _camera->getTransform();
-	mat4 view = inverse(viewTransform.getWorldTransformation());
-
-	float fov = _camera->getFOV();
-	float closeClip = _camera->getCloseClip();
-	float farClip = _camera->getFarClip();
-
-	mat4 projection = perspective(fov, windowRatio, closeClip, farClip);
-	mat4 vp = projection * view;
+void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {
 
 	// Set up all of the vertex data for all objects to be rendered
 	combineMasterGeometry(*_renderingList);
@@ -172,23 +181,20 @@ void RenderSystem::gBufferPass() {
 		vec3 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
-		mat4 mvp = vp * model;
-		mat4 invMVP = transpose(inverse(view * model));
+		mat4 mv =  viewMatrix * model;
+		mat4 mvp = projectionMatrix * mv;
+		mat4 invMVP = transpose(inverse(viewMatrix * model));
 
 		int loc = _masterGeometry->getVertexStart(index);
 		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
-		/*
-		_positionVBO->buffer(g->getVertexData());
-		_normalVBO->buffer(g->getNormalData());
-		_texCoordVBO->buffer(g->getTexCoordData());
-		_ebo->buffer(g->getIndices());
-		*/
+
 		_textures->bind(GL_TEXTURE0);
 
 		_shader->setUniformVec3("color", color);
 		_shader->setUniformMatrix("transform", mvp);
+		_shader->setUniformMatrix("transformNoPerspective", mv);
 		_shader->setUniformMatrix("invTransform", invMVP);
 
 		_shader->setUniformInt("textureID", texID);
@@ -228,6 +234,14 @@ void RenderSystem::combineMasterGeometry(vector<RenderData>& data) {
 	_masterGeometry->setIndices(indices);
 }
 
+void RenderSystem::makeLightsViewSpace(glm::mat4 viewMatrix) {
+	glm::mat4 normalMatrix = transpose(inverse(viewMatrix));
+	for (LightData& l : *_lightRenderingList) {
+		l.position = viewMatrix * l.position;
+		l.direction = normalMatrix * l.direction;
+	}
+}
+
 void RenderSystem::lightingPass() {
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
@@ -244,11 +258,19 @@ void RenderSystem::lightingPass() {
 	_shader->setUniformTexture("normalTex", 1);
 	_shader->setUniformTexture("positionTex", 2);
 
+	_shader->setUniformInt("numLights", _lightRenderingList->size());
+	_shader->setUniformVec3("ambientColor", vec3(0.06f, 0.17f, 0.27f));
+
+	_ubo->bind(0);
+	_shader->setBindingPoint("Lights", 0);
+	_ubo->buffer((*_lightRenderingList)[0], MAX_LIGHTS);
+
 	_positionVBO->buffer(quad->getVertexData());
 	_normalVBO->buffer(quad->getNormalData());
 	_texCoordVBO->buffer(quad->getTexCoordData());
 	_ebo->buffer(quad->getIndices());
 	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
+	_ubo->unbind(0);
 }
 
 void RenderSystem::uiPass() {
@@ -299,8 +321,10 @@ void RenderSystem::uiPass() {
 void RenderSystem::swapLists() {
 	swap(_renderingList, _accumulatingList);
 	swap(_uiRenderingList, _uiAccumulatingList);
+	swap(_lightRenderingList, _lightAccumulatingList);
 	_accumulatingList->clear();
 	_uiAccumulatingList->clear();
+	_lightAccumulatingList->clear();
 }
 
 int RenderSystem::getTexture(string* path) {
@@ -381,6 +405,7 @@ void RenderSystem::accumulateList() {
 	auto renderables = ComponentManager<Renderable>::Instance().All();
 	auto uiRenderables = ComponentManager<UIRenderable>::Instance().All();
 	auto cameras = ComponentManager<Camera>::Instance().All();
+	auto lights = ComponentManager<Light>::Instance().All();
 	for (Renderable* r : renderables) {
 		Transform t = r->getTransform();
 		_accumulatingList->push_back(
@@ -406,5 +431,26 @@ void RenderSystem::accumulateList() {
 		// For now we will just take the first camera and leave;
 		_camera = c;
 		break;
+	}
+	for (int i = 0; i < lights.size() && i < MAX_LIGHTS; i++) {
+		Light* l = lights[i];
+		Entity* e = l->GetEntity();
+
+		LightData internalLight; // The light used by the rendering system
+		internalLight.type = l->getType();
+		internalLight.blank1 = 0;
+		internalLight.blank2 = 0;
+		internalLight.blank3 = 0;
+		internalLight.color = glm::vec4(convertColor(l->getColor()), 1.0f);
+		internalLight.attenuation = glm::vec4(
+			l->getConstantAttenuation(),
+			l->getLinearAttenuation(),
+			l->getQuadraticAttenuation(),
+			0.0f
+		);
+		internalLight.position = glm::vec4(e->transform.getWorldPosition(), 0.0f);
+		internalLight.direction = glm::vec4(e->transform.getWorldForward(), 0.0f);
+
+		_lightAccumulatingList->push_back(internalLight);
 	}
 }
