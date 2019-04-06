@@ -9,23 +9,14 @@
 #include "json.hpp"
 using json = nlohmann::json;
 
-class HealthComponent : public Component, public ISubscriber
+class HealthComponent : public Component
 {
 public:
-	HealthComponent()
-	{
+	HealthComponent() {}
 
-	}
+	virtual void OnInitialized() {}
 
-	virtual void OnInitialized()
-	{
-		EventManager::Subscribe(HEALTH_CHANGE, this);
-	}
-
-	virtual ~HealthComponent()
-	{
-		EventManager::Unsubscribe(HEALTH_CHANGE, this);
-	}
+	virtual ~HealthComponent() {}
 
 	int GetHealth() { return _health; }
 
@@ -86,19 +77,4 @@ public:
 private:
 	int _health = 1;
 	bool _shield = false;
-
-	void Notify(EventName eventName, Param* params)
-	{
-		if (eventName == HEALTH_CHANGE)
-		{
-			auto p = static_cast<TypeParam<std::pair<int, int>>*>(params)->Param;
-			if (p.first != GetEntity()->GetID())
-				return;
-			if ((_health += p.second) <= 0)
-			{
-				//notify death
-			}
-		}
-	}
-
 };

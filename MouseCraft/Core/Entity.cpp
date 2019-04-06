@@ -12,14 +12,14 @@ Entity::Entity() :_id(++Entity::_curID)
 
 Entity::Entity(unsigned int id) : _id(id)
 {
-	// do not notify entity manager
 	std::cout << "Entity created with custom ID: " << _id << std::endl;
+	if (_id != 0) EventManager::Notify(EventName::ENTITY_CREATED, new TypeParam<Entity*>(this));
 }
 
 Entity::~Entity()
 {
-	EventManager::Notify(EventName::ENTITY_DESTROYED, new TypeParam<Entity*>(this));
 	std::cout << "Entity: " << _id << " destroyed" << std::endl;
+	if (_id != 0) EventManager::Notify(EventName::ENTITY_DESTROYED, new TypeParam<Entity*>(this));
 }
 
 unsigned int Entity::GetID() const
