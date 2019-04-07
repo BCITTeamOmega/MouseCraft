@@ -8,6 +8,8 @@
 
 #include "DamageOnCollision.h"
 
+#include "TransformAnimator.h"
+
 ContraptionFactory::ContraptionFactory()
 {
 	_platformModel = ModelLoader::loadModel("res/models/spring.obj");
@@ -17,6 +19,14 @@ ContraptionFactory::ContraptionFactory()
 	_overchargeModel = ModelLoader::loadModel("res/models/battery.obj");
 	_swordsModel = ModelLoader::loadModel("res/models/screw.obj");
 	_coilFieldModel = ModelGen::makeCube(16, 0.1, 16);
+	_explosionModel = ModelLoader::loadModel("res/models/sphere.obj");
+
+	_explosionAnim = new Animation();
+	_explosionAnim->name = "explosion";
+	_explosionAnim->duration = Bomb::EXPLOSION_LIFETIME;
+	_explosionAnim->AddScale(0.0f, glm::vec3(0));
+	_explosionAnim->AddScale(Bomb::EXPLOSION_LIFETIME * 0.4f, glm::vec3(Bomb::RADIUS * 0.8f));
+	_explosionAnim->AddScale(Bomb::EXPLOSION_LIFETIME * 1.0f, glm::vec3(Bomb::RADIUS * 1.0f));
 }
 
 
@@ -89,6 +99,19 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		c_dcol->damage = 0;
 		c_dcol->SetEnabled(false);
 		contraption->AddComponent(c_dcol);
+
+		auto e_explosion = EntityManager::Instance().Create();
+		c_bomb->explosion = e_explosion;
+		auto c_expRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_expRender->setModel(*_explosionModel);
+		c_expRender->setColor(Color(1.0f, 0.0f, 0.0f));
+		e_explosion->AddComponent(c_expRender);
+		auto c_expAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+		c_expAnim->AddAnimation(_explosionAnim);
+		e_explosion->AddComponent(c_expAnim);
+		auto c_expTimed = ComponentManager<UpdatableComponent>::Instance().Create<TimedDestruction>();
+		c_expTimed->delay = Bomb::EXPLOSION_LIFETIME;
+		e_explosion->AddComponent(c_expTimed);
 		break;
 	}
 

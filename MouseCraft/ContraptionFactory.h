@@ -15,6 +15,7 @@
 #include "Overcharge.h"
 #include "Trampoline.h"
 #include "Swords.h"
+#include "Animation.h"
 
 class ContraptionFactory
 {
@@ -42,9 +43,9 @@ private:
 	Model* _bombModel;
 	Model* _overchargeModel;
 	Model* _swordsModel;
-
 	Model* _coilFieldModel;
-
+	Model* _explosionModel;
 	Image* _texture;	// generic default texture
+	Animation* _explosionAnim;
 };
 

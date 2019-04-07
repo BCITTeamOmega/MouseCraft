@@ -6,7 +6,7 @@ const float Bomb::RADIUS	= 10.0f;
 const float Bomb::LIFETIME	= 2.0f;
 const float Bomb::SPEED		= 12.5f;
 const int Bomb::DAMAGE		= 2;
-
+const float Bomb::EXPLOSION_LIFETIME = 0.6f;
 
 Bomb::Bomb()
 {
@@ -78,4 +78,7 @@ void Bomb::Explode()
 		auto health = p->GetEntity()->GetComponent<HealthComponent>();
 		if (health) health->Damage(DAMAGE);
 	}
+
+	OmegaEngine::Instance().AddEntity(explosion);
+	explosion->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
 }
