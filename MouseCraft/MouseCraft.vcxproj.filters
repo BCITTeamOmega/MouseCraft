@@ -324,9 +324,6 @@
     <ClCompile Include="Sound\SoundComponent.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Network\NetworkComponent.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -365,7 +362,7 @@
     </ClCompile>
     <ClCompile Include="HostScene.cpp">
       <Filter>Source Files</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
@@ -680,9 +677,6 @@
     <ClInclude Include="Sound\SoundComponent.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\FBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Network\NetworkComponent.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -727,7 +721,7 @@
     </ClInclude>
     <ClInclude Include="HostScene.h">
       <Filter>Header Files</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>
