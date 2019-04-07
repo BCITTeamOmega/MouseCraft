@@ -29,6 +29,9 @@ public:
 	// Takes value 0 to 1.
 	void SetProgress(float percent);
 
+	// Changes the playback speed of the animation
+	void SetSpeed(float multiplier);
+
 private:
 	std::map<std::string, Animation*> _anims;
 	float _counter;

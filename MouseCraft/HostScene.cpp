@@ -364,6 +364,7 @@ void HostScene::InitScene() {
 	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
 	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
 	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
+	squishSquashAnim->SetCurve(new SineConverter());
 
 	TransformAnimator* mouse1Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 	mouse1Anim->AddAnimation(squishSquashAnim);

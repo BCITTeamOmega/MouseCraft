@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <glm/gtx/compatibility.hpp>
 
+LinearConverter* Animation::defaultConverter = new LinearConverter();
+
 void Animation::AddPosition(float time, glm::vec3 position)
 {
 	_keyframesPos.push_back(Vec3Keyframe{ time, position });
@@ -54,6 +56,12 @@ int Animation::GetScalesCount() const
 	return _keyframesScl.size();
 }
 
+void Animation::SetCurve(LinearConverter * converter)
+{
+	if (converter != nullptr)
+		_converter = converter;
+}
+
 glm::vec3 Animation::GetPosition(float time) const
 {
 	// WARNING: no keyframes
@@ -78,7 +86,7 @@ glm::vec3 Animation::GetPosition(float time) const
 			auto& prev = _keyframesPos[i - 1];
 			auto& next = _keyframesPos[i];
 			float percent = (time - prev.time) / (next.time - prev.time);
-			ret = glm::lerp(prev.value, next.value, percent);
+			ret = glm::lerp(prev.value, next.value, _converter->Convert(percent));
 			break;
 		}
 	}
@@ -106,7 +114,7 @@ glm::quat Animation::GetRotation(float time) const
 			auto& prev = _keyframesRot[i - 1];
 			auto& next = _keyframesRot[i];
 			float percent = (time - prev.time) / (next.time - prev.time);
-			ret = glm::lerp(prev.value, next.value, percent);
+			ret = glm::lerp(prev.value, next.value, _converter->Convert(percent));
 			break;
 		}
 	}
@@ -134,7 +142,7 @@ glm::vec3 Animation::GetScale(float time) const
 			auto& prev = _keyframesScl[i - 1];
 			auto& next = _keyframesScl[i];
 			float percent = (time - prev.time) / (next.time - prev.time);
-			ret = glm::lerp(prev.value, next.value, percent);
+			ret = glm::lerp(prev.value, next.value, _converter->Convert(percent));
 			break;
 		}
 	}

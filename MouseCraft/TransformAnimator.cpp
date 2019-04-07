@@ -59,3 +59,8 @@ void TransformAnimator::SetProgress(float percent)
 
 	_counter = _currentAnim->duration * percent;
 }
+
+void TransformAnimator::SetSpeed(float multiplier)
+{
+	_speed = multiplier;
+}

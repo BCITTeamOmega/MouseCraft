@@ -9,6 +9,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <iostream>
 
 struct Vec3Keyframe 
 {
@@ -30,6 +31,27 @@ struct QuatKeyframe
 	{
 		return time < other.time;
 	}
+};
+
+class LinearConverter
+{
+public:
+	virtual float Convert(float t) { return t; };
+protected:
+	static float Expand(float v) { return v * 2 - 1; }
+	static float Linearize(float v) { return v * 0.5f + 0.5f; }
+};
+
+class SineConverter : public LinearConverter
+{
+public:
+	float Convert(float t) override 
+	{
+		auto input = LinearConverter::Expand(t) * glm::pi<float>() / 2.0f;	// convert 0...1 to -pi/2...pi/2
+		auto output = LinearConverter::Linearize( glm::sin(input) );				// return 0...1
+		std::cout << "original: " << t << " modified: " << output << std::endl;
+		return output;
+	};
 };
 
 class Animation
@@ -63,8 +85,12 @@ public:
 
 	int GetScalesCount() const;
 
+	void SetCurve(LinearConverter* converter);
+
 private:
 	std::vector<Vec3Keyframe> _keyframesPos;
 	std::vector<QuatKeyframe> _keyframesRot;
 	std::vector<Vec3Keyframe> _keyframesScl;
+	LinearConverter* _converter = defaultConverter;
+	static LinearConverter* defaultConverter;
 };
