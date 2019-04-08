@@ -7,6 +7,8 @@
 #include "../Event/Subject.h"
 #include "PhysicsManager.h"
 
+constexpr auto JUMP_VELOCITY = 14;
+
 class PhysicsComponent : public Component
 {
 public:
@@ -17,9 +19,12 @@ public:
 	std::vector<PhysicsComponent*> areaCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit);
 	bool updateFalling();
+	void makeDynamic();
+	void jump();
+	void fall();
 
 	Vector2D velocity;
-	float zPos, rotation, width, height;
+	float zPos, zVelocity, rotation, width, height;
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 	PhysObjectType::PhysObjectType type;

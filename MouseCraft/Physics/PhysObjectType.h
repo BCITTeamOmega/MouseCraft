@@ -16,6 +16,8 @@ namespace PhysObjectType
 		OBSTACLE_UP,
 		OBSTACLE_DOWN,
 		PLATFORM,
-		WALL
+		WALL,
+		BALL_UP,
+		BALL_DOWN
 	};
 }

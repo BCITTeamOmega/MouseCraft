@@ -1,6 +1,7 @@
 #include "Cat.h"
 #include "Event\EventManager.h"
 #include "Input\InputSystem.h"
+#include "Obstacle.h"
 #include <iostream>
 
 #define ATTACK_TIME 5
@@ -101,13 +102,13 @@ void Cat::Attack()
     if (pComp->isUp) {
         //generate check type
         targets = std::set<PhysObjectType::PhysObjectType>{
-            //PhysObjectType::OBSTACLE_UP,
+            PhysObjectType::OBSTACLE_UP,
             PhysObjectType::MOUSE_UP
         };
     } else {
         //generate check type
         targets = std::set<PhysObjectType::PhysObjectType>{
-           // PhysObjectType::OBSTACLE_DOWN,
+            PhysObjectType::OBSTACLE_DOWN,
             PhysObjectType::MOUSE_DOWN
         };
     }
@@ -124,9 +125,37 @@ void Cat::Attack()
     //launch area check
     auto results = pComp->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 
+	//calculate which direction we're attacking (locked to the 4 cardinal directions)
+	auto angle = GetEntity()->transform.getWorldRotation2D();
+	
+	Vector2D facing;
+	if (angle > -M_PI/4 && angle < M_PI/4)			// up
+		facing = Vector2D(0, -1);
+	else if (angle > M_PI/4 && angle < M_PI*3/4)	// left
+		facing = Vector2D(-1, 0);	
+	else if (angle > -M_PI*3/4 && angle < -M_PI/4)	// right 
+		facing = Vector2D(1, 0);
+	else 											// down 
+		facing = Vector2D(0, 1);
+
+	std::cout << angle << std::endl;
+	std::cout << facing.x << "," << facing.y << std::endl;
+
     //check if we hit something
-    for (size_t i = 0; i < results.size(); i++) {
-        results[i]->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
+    if (results.size() > 0) {
+
+		for (auto& p : results)
+		{
+			if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
+			{
+				p->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
+			}
+			else
+			{
+				auto e = p->GetEntity();
+				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
+			}
+		}
     }
 
 	//MIGHT BE COOL TO PLAY A WHACK SOUND EFFECT IF SOMETHING IS HIT
@@ -179,7 +208,7 @@ void Cat::Jump()
 		if (jumpTarget != nullptr) {
 			//Jump code
 			std::cout << "Cat has jumped." << std::endl;
-			GetEntity()->GetComponent<PhysicsComponent>()->isJumping = true;
+			GetEntity()->GetComponent<PhysicsComponent>()->jump();
 			isJumping = true;
 
 			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump

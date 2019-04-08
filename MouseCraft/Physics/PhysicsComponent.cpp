@@ -3,6 +3,7 @@
 PhysicsComponent::PhysicsComponent(PhysObjectType::PhysObjectType t, float z, float r, float w, float h)
 {
 	velocity = Vector2D(0, 0);
+	zVelocity = 0;
 	width = w;
 	height = h;
 	zPos = z;
@@ -37,9 +38,20 @@ PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObject
 	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }
 
+void PhysicsComponent::jump()
+{
+	zVelocity = JUMP_VELOCITY;
+	isJumping = true;
+}
+
+void PhysicsComponent::fall()
+{
+	isFalling = true;
+}
+
 bool PhysicsComponent::updateFalling()
 {
-	if (!isJumping && isUp)
+	if (!isJumping && isUp && !isFalling)
 	{
 		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
 			PhysObjectType::PLATFORM
@@ -54,9 +66,15 @@ bool PhysicsComponent::updateFalling()
 		//if you aren't on a platform then fall
 		if (found.size() == 0)
 		{
-			isFalling = true;
+			fall();
 			return true;
 		}
 	}
 	return false;
+}
+
+void PhysicsComponent::makeDynamic()
+{
+	body->SetType(b2BodyType::b2_dynamicBody);
+	body->SetAwake(true);
 }

@@ -37,6 +37,8 @@ void PlayerComponent::Notify(EventName eventName, Param* params)
 
 void PlayerComponent::Update(float deltaTime)
 {
+	if (_isDisabled)
+		return;
 	// backwards compatibility for now 
 	if (_physicsComponent == nullptr)
 	{
@@ -47,7 +49,7 @@ void PlayerComponent::Update(float deltaTime)
 		_physicsComponent->velocity = _move * _speed;
 	}
 	// rotation
-	if (_move.x != 0 && _move.y != 0)
+	if (_move.x != 0 || _move.y != 0)
 	{
 		_entity->transform.face2D(_move);
 	}

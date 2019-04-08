@@ -37,7 +37,7 @@ void OmegaEngine::initialize()
 
 void OmegaEngine::ChangeScene(Scene* scene)
 {
-	std::cerr << "WARNING: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
+	//std::cerr << "WARNING: Engine::changeScene(scene) is not recommended, use changeScene<Scene>()" << std::endl;
 	_nextScene = scene;
 	transitionScenes();
 }

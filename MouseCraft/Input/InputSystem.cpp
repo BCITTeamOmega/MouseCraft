@@ -1,16 +1,7 @@
 #include "InputSystem.h"
+#include "../Core/OmegaEngine.h"
 
-void InputSystem::Axis2DInput::SetX(float x)
-{
-	xSet = true;
-	rawX = x;
-}
-
-void InputSystem::Axis2DInput::SetY(float y)
-{
-	ySet = true;
-	rawY = y;
-}
+#pragma region Class::Axis2DInput
 
 void InputSystem::Axis2DInput::Update()
 {
@@ -90,15 +81,8 @@ void InputSystem::Axis2DInput::Update()
 		}
 		else
 		{
-			// active, check if died
-			if (length < deadzone)
-			{
-				lastAxis = glm::vec2();
-			}
-			else
-			{
-				lastAxis = glm::vec2(rawX, rawY);
-			}
+			// active, check if died, else normal input.
+			lastAxis = (length < deadzone) ? glm::vec2() : glm::vec2(rawX, rawY);
 			axisChanged = true;
 		}
 	}
@@ -107,6 +91,10 @@ void InputSystem::Axis2DInput::Update()
 	xSet = false;
 	ySet = false;
 }
+
+#pragma endregion
+
+#pragma region Class::InputSystem
 
 void InputSystem::Update(float dt)
 {
@@ -117,8 +105,7 @@ void InputSystem::Update(float dt)
 	{
 		if (e.type == SDL_QUIT)
 		{
-			// todo: omegaengine quit. 
-			SDL_Quit();
+			OmegaEngine::Instance().Stop();
 		}
 		else if (e.type == SDL_JOYAXISMOTION)
 		{
@@ -136,7 +123,6 @@ void InputSystem::Update(float dt)
 			*/
 
 			int player = e.jaxis.which;
-			Axis axis;
 			float value = (float)e.jaxis.value / (float)INT16_MAX;
 
 			if (player >= MAX_PLAYERS)
@@ -167,9 +153,10 @@ void InputSystem::Update(float dt)
 				continue;
 			}
 		}
-		else if (e.type == SDL_JOYBUTTONDOWN)
+		else if (e.type == SDL_JOYBUTTONDOWN || e.type == SDL_JOYBUTTONUP)
 		{
 			int player = e.jbutton.which;
+			bool isDown = e.jbutton.state == SDL_PRESSED;
 			Button b;
 
 			switch (e.jbutton.button)
@@ -186,40 +173,16 @@ void InputSystem::Update(float dt)
 			case 1:
 				b = Button::AUX2;
 				break;
+            case 6:
+                b = Button::OPTION;
+                break;
 			default:
 				continue;
 			}
 
 			// notify
 			EventManager::Notify(EventName::INPUT_BUTTON,
-				new TypeParam<ButtonEvent>(ButtonEvent(player, b, true)));
-		}
-		else if (e.type == SDL_JOYBUTTONUP)
-		{
-			int player = e.jbutton.which;
-			Button b;
-
-			switch (e.jbutton.button)
-			{
-			case 5:
-				b = Button::PRIMARY;
-				break;
-			case 4:
-				b = Button::SECONDARY;
-				break;
-			case 0:
-				b = Button::AUX1;
-				break;
-			case 1:
-				b = Button::AUX2;
-				break;
-			default:
-				continue;
-			}
-
-			// notify
-			EventManager::Notify(EventName::INPUT_BUTTON,
-				new TypeParam<ButtonEvent>(ButtonEvent(player, b, false)));
+				new TypeParam<ButtonEvent>(ButtonEvent{ player, b, isDown }));
 		}
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
@@ -243,21 +206,56 @@ void InputSystem::Update(float dt)
 				break;
 			case SDLK_j:
 				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, Button::PRIMARY, isDown)));
+					new TypeParam<ButtonEvent>(ButtonEvent{ player, Button::PRIMARY, isDown }));
 				break;
 			case SDLK_k:
 				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, Button::SECONDARY, isDown)));
+					new TypeParam<ButtonEvent>(ButtonEvent{ player, Button::SECONDARY, isDown }));
 				break;
 			case SDLK_l:
 				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, Button::AUX1, isDown)));
+					new TypeParam<ButtonEvent>(ButtonEvent{ player, Button::AUX1, isDown }));
 				break;
 			case SDLK_SEMICOLON:
 				EventManager::Notify(EventName::INPUT_BUTTON,
-					new TypeParam<ButtonEvent>(ButtonEvent(player, Button::AUX2, isDown)));
+					new TypeParam<ButtonEvent>(ButtonEvent{ player, Button::AUX2, isDown }));
 				break;
+            case SDLK_RETURN:
+                EventManager::Notify(EventName::INPUT_BUTTON,
+					new TypeParam<ButtonEvent>(ButtonEvent{ player, Button::OPTION, isDown }));
+                break;
+            }
+		}
+		else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+		{
+			bool isDown = e.button.state == SDL_PRESSED;
+			bool isRight;
+			glm::ivec2 pos;
+
+			if (e.button.button == SDL_BUTTON_LEFT)
+			{
+				isRight = false;
 			}
+			else if (e.button.button == SDL_BUTTON_RIGHT)
+			{
+				isRight = true;
+			}
+			else
+			{
+				// some other button - ignore. 
+				continue;
+			}
+
+			SDL_GetMouseState(&pos.x, &pos.y);
+
+			// notify 
+			EventManager::Notify(EventName::INPUT_MOUSE_CLICK,
+				new TypeParam<MouseButtonEvent>(MouseButtonEvent{ pos, isRight, isDown }));
+		}
+		else if (e.type == SDL_MOUSEMOTION)
+		{
+			EventManager::Notify(EventName::INPUT_MOUSE_MOVE,
+				new TypeParam<glm::ivec2>(glm::ivec2(e.motion.x, e.motion.y)));
 		}
 	} // end while 
 
@@ -290,16 +288,18 @@ void InputSystem::NotifyAxis(Axis2DInput& axis, Axis which, int player)
 	if (axis.HasAxisChanged())
 	{
 		EventManager::Notify(EventName::INPUT_AXIS_2D,
-			new TypeParam<Axis2DEvent>(Axis2DEvent(player, which, axis.GetAxis())));
+			new TypeParam<Axis2DEvent>(Axis2DEvent{ player, which, axis.GetAxis() }));
 	}
 	if (axis.HasXChanged())
 	{
 		EventManager::Notify(EventName::INPUT_AXIS,
-			new TypeParam<AxisEvent>(AxisEvent(player, static_cast<Axis>(which + 1), axis.GetX())));
+			new TypeParam<AxisEvent>(AxisEvent{ player, static_cast<Axis>(which + 1), axis.GetX() }));
 	}
 	if (axis.HasYChanged())
 	{
 		EventManager::Notify(EventName::INPUT_AXIS,
-			new TypeParam<AxisEvent>(AxisEvent(player, static_cast<Axis>(which + 2), axis.GetY())));
+			new TypeParam<AxisEvent>(AxisEvent{ player, static_cast<Axis>(which + 2), axis.GetY() }));
 	}
 }
+
+#pragma endregion

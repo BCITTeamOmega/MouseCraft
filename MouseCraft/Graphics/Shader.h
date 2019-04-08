@@ -14,6 +14,7 @@ public:
 	void setUniformVec3(std::string name, glm::vec3 vector);
 	void setUniformTexture(std::string name, GLuint index);
 	void setUniformInt(std::string name, GLint value);
+	void setBindingPoint(std::string name, GLint value);
 private:
 	void printShaderError(GLuint shader);
 	void printProgramError(GLuint program);
