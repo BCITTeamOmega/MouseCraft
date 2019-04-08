@@ -5,13 +5,14 @@
 const float Bomb::RADIUS	= 10.0f;
 const float Bomb::LIFETIME	= 2.0f;
 const float Bomb::SPEED		= 12.5f;
-const int Bomb::DAMAGE		= 2;
+const int   Bomb::DAMAGE	= 2;
 const float Bomb::EXPLOSION_LIFETIME = 0.6f;
+// curve isn't perfect as it cannot go over 3 height (threshold).
+const float Bomb::VER_VEL = 8.8f;
 
 Bomb::Bomb()
 {
 }
-
 
 Bomb::~Bomb()
 {
@@ -24,6 +25,7 @@ void Bomb::OnInitialized()
 	_physics = GetEntity()->GetComponent<PhysicsComponent>();
 	_timed = GetEntity()->GetComponent<TimedDestruction>();
 	_dcollision = GetEntity()->GetComponent<DamageOnCollision>();
+	_rotator = GetEntity()->GetComponent<Rotator>();
 }
 
 bool Bomb::use(Mouse* m) {
@@ -44,6 +46,7 @@ bool Bomb::use(Mouse* m) {
 	_physics->SetEnabled(true);
 	_timed->SetEnabled(true);
 	_dcollision->SetEnabled(true);
+	_rotator->SetEnabled(true);
 	
 	// configure final settings 
 	_checkFor =  
@@ -58,7 +61,8 @@ bool Bomb::use(Mouse* m) {
 	_physics->moveBody(new Vector2D(pos.x, pos.z), 0);
 	auto vel = glm::vec2(dir.x, dir.z) * SPEED;
 	_physics->velocity = Vector2D(vel);
-
+	_physics->zVelocity = Bomb::VER_VEL;
+	_physics->isFalling = true;
 	return true;
 }
 

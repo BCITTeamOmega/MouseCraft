@@ -99,6 +99,10 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		c_dcol->damage = 0;
 		c_dcol->SetEnabled(false);
 		contraption->AddComponent(c_dcol);
+		auto c_rot = ComponentManager<UpdatableComponent>::Instance().Create<Rotator>();
+		c_rot->rotationSpeed = glm::vec3(1.6f, 2.4f, -0.5f);	// random speed
+		c_rot->SetEnabled(false);
+		contraption->AddComponent(c_rot);
 
 		auto e_explosion = EntityManager::Instance().Create();
 		c_bomb->explosion = e_explosion;

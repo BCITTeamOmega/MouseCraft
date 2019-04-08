@@ -16,6 +16,7 @@
 #include "Trampoline.h"
 #include "Swords.h"
 #include "Animation.h"
+#include "Rotator.h"
 
 class ContraptionFactory
 {

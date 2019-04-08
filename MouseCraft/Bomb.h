@@ -3,6 +3,7 @@
 #include "DamageOnCollision.h"
 #include "TimedDestruction.h"
 #include "Physics/PhysicsComponent.h"
+#include "Rotator.h"
 
 class Mouse;
 
@@ -15,6 +16,7 @@ public:
 	const static float SPEED;    // = 12.5f;
 	const static int DAMAGE;     // = 2;
 	const static float EXPLOSION_LIFETIME;	// = 0.6f;
+	const static float VER_VEL;
 
 	Bomb();
 	~Bomb();
@@ -34,6 +36,7 @@ private:
 	PhysicsComponent* _physics;
 	TimedDestruction* _timed;
 	DamageOnCollision* _dcollision;
+	Rotator* _rotator;
 	std::set<PhysObjectType::PhysObjectType> _checkFor;
 };
 
