@@ -39,9 +39,9 @@ void HostScene::InitScene() {
 	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
     Entity* eastWallEntity = EntityManager::Instance().Create();
-    Entity* cameraEntity = EntityManager::Instance().Create();
+	Entity* cameraEntity = EntityManager::Instance().Create();
     cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
-    cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
+    cameraEntity->transform.setLocalRotation(glm::vec3(-1.0f, 0, 0));
     Entity* pSpawnerEntity = EntityManager::Instance().Create();
     Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
@@ -319,9 +319,14 @@ void HostScene::InitScene() {
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
     light2->setColor(Color(10.0f, 60.0f, 300.0f));
-    light2->setAttenuation(1, 0.8, 0.32);
-    light2Entity->transform.setLocalPosition(glm::vec3(30.0f, 0.1f, 30.0f));
+    light2->setAttenuation(1, 0.1, 0.03);
+    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 0.5f, 50.0f));
     light2Entity->AddComponent(light2);
+
+	auto light2test = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	light2test->setColor(Color(10.0f, 60.0f, 300.0f));
+	light2test->setModel(*box);
+	light2Entity->AddComponent(light2test);
 
 	// UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);

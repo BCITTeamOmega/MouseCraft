@@ -60,7 +60,7 @@ vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
 
     vec3 halfVector = normalize(-toLight + normalize(-l.position.xyz));
 
-    return max(pow(dot(normal, halfVector), shininess) * l.color.rgb * strength, 0.0f);
+    return pow(max(dot(normal, halfVector), 0.0f), shininess) * l.color.rgb * strength;
 }
 
 vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
