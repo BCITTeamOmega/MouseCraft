@@ -237,7 +237,7 @@ void HostScene::InitScene() {
     mouse1Entity->AddComponent(mouse1Movement);
 
     HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse1Health->SetHealth(2);
+    mouse1Health->SetHealth(1);
     mouse1Entity->AddComponent(mouse1Health);
 
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -253,7 +253,7 @@ void HostScene::InitScene() {
     mouse2Entity->AddComponent(mouse2Movement);
 
     HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse2Health->SetHealth(2);
+    mouse2Health->SetHealth(1);
     mouse2Entity->AddComponent(mouse2Health);
 
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -269,7 +269,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Movement);
 
     HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse3Health->SetHealth(2);
+    mouse3Health->SetHealth(1);
     mouse3Entity->AddComponent(mouse3Health);
 
     SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
