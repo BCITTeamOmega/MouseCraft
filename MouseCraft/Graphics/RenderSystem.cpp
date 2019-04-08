@@ -407,7 +407,6 @@ void RenderSystem::accumulateList() {
 	auto cameras = ComponentManager<Camera>::Instance().All();
 	auto lights = ComponentManager<Light>::Instance().All();
 	for (Renderable* r : renderables) {
-		if (!r->GetActive()) continue;
 		Transform t = r->getTransform();
 		_accumulatingList->push_back(
 			RenderData(

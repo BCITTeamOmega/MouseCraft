@@ -22,14 +22,11 @@ public:
 	void SetID(unsigned int id) { _playerID = id; }
 	void SetSpeed(float speed) { _speed = speed; }
 	float GetSpeed() { return _speed; }
-	void SetDisabled(bool b) { _isDisabled = b; }
-
 
 private:
 	HealthComponent* _health;
 	unsigned int _playerID;
 	Team _teamID;
-	bool _isDisabled = false;
 
 	Entity* _entity;
 	glm::vec2 _move;
