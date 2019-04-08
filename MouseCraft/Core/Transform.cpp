@@ -215,8 +215,8 @@ void Transform::computeWorldTransformation(glm::mat4 parent)
 float Transform::getAngle2D(glm::vec2 dir)
 {
 	auto rotation = glm::atan(dir.x / dir.y);
-	if (dir.y > 0)
-		rotation -= M_PI;
+	if (dir.y >= 0)
+		rotation += M_PI;
 	return rotation;
 }
 

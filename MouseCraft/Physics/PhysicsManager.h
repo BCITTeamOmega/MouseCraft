@@ -36,20 +36,24 @@ constexpr auto CONTRAPTION_UP_CATEGORY = 0x0200;
 constexpr auto PART_CATEGORY = 0x0400;
 constexpr auto PROJECTILE_DOWN_CATEGORY = 0x0800;
 constexpr auto PROJECTILE_UP_CATEGORY = 0x1000;
+constexpr auto BALL_UP_CATEGORY = 0x2000;
+constexpr auto BALL_DOWN_CATEGORY = 0x4000;
 
 constexpr auto PART_MASK = 0x0010;
-constexpr auto CONTRAPTION_UP_MASK = 0x02A9;
-constexpr auto CONTRAPTION_DOWN_MASK = 0x0157;
-constexpr auto CAT_UP_MASK = 0x0229;
-constexpr auto CAT_DOWN_MASK = 0x0117;
-constexpr auto MOUSE_UP_MASK = 0x02A9;
-constexpr auto MOUSE_DOWN_MASK = 0x0557;
-constexpr auto OBSTACLE_UP_MASK = 0x02A9;
-constexpr auto OBSTACLE_DOWN_MASK = 0x0157;
-constexpr auto PLATFORM_MASK = 0x0154;
-constexpr auto WALL_MASK = 0x03FC;
+constexpr auto CONTRAPTION_UP_MASK = 0x22A9;
+constexpr auto CONTRAPTION_DOWN_MASK = 0x4157;
+constexpr auto CAT_UP_MASK = 0x1229;
+constexpr auto CAT_DOWN_MASK = 0x0917;
+constexpr auto MOUSE_UP_MASK = 0x22A9;
+constexpr auto MOUSE_DOWN_MASK = 0x4557;
+constexpr auto OBSTACLE_UP_MASK = 0x32A9;
+constexpr auto OBSTACLE_DOWN_MASK = 0x4957;
+constexpr auto PLATFORM_MASK = 0x4954;
+constexpr auto WALL_MASK = 0x7BFC;
 constexpr auto PROJECTILE_DOWN_MASK = 0x0047;
 constexpr auto PROJECTILE_UP_MASK = 0x0089;
+constexpr auto BALL_UP_MASK = 0x0229;
+constexpr auto BALL_DOWN_MASK = 0x0117;
 #pragma endregion
 
 class PhysicsComponent;
