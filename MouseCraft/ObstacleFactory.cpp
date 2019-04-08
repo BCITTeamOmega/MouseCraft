@@ -16,10 +16,15 @@
 
 ObstacleFactory::ObstacleFactory()
 {
-	_ballModel = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
+	// load models 
+	_ballModel = ModelLoader::loadModel("res/models/sphere.obj");
+	_lampModel = ModelLoader::loadModel("res/models/lamp.obj");
 	_cylinderModel = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
-	_boxModel = ModelGen::makeCube(4, 4, 4);
-	_bookModel = ModelGen::makeCube(2, 2, 1);
+	_boxModel = ModelLoader::loadModel("res/models/cube.obj");
+	_bookModel = ModelLoader::loadModel("res/models/book.obj");
+	// load textures 
+	std::string* boxTex = new std::string("res/textures/box.png");
+	_boxModel->setTexture(boxTex);
 }
 
 ObstacleFactory::~ObstacleFactory()
@@ -38,7 +43,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	case BOOK:
 	{
 		c_render->setModel(*_bookModel);
-		c_render->setColor(Color(1.0, 0.0, 1.0));
+		c_render->setColor(Color(0.24f, 0.0f, 0.0f));
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 2, 2, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
 		e->AddComponent(c_obs);
@@ -77,10 +82,13 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	case BOX:
 	{
 		c_render->setModel(*_boxModel);
-		c_render->setColor(Color(1.0, 0.0, 0.0));
+		c_render->setColor(Color(1.0, 1.0, 1.0));
+
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 7, 7, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
 		e->AddComponent(c_obs);
+
+		e->transform.setLocalScale(glm::vec3(4.0f));
 		break;
 	}
 	case LAMP:
@@ -96,8 +104,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 		// this is the lamp visual
 		auto e_lampModel = EntityManager::Instance().Create();
 		auto c_lampRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_lampRender->setModel(*_cylinderModel);
-		c_lampRender->setColor(Color(1.0, 1.0, 0.0));
+		c_lampRender->setModel(*_lampModel);
+		c_lampRender->setColor(Color(0.63f, 0.32f, 0.18f));
 		e_lampModel->AddComponent(c_lampRender);
 		e->AddChild(e_lampModel);
 
