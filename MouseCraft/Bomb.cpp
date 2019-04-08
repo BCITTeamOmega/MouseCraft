@@ -21,6 +21,7 @@ Bomb::~Bomb()
 void Bomb::OnInitialized()
 {
 	Contraption::OnInitialized();
+	_physics = GetEntity()->GetComponent<PhysicsComponent>();
 	_timed = GetEntity()->GetComponent<TimedDestruction>();
 	_dcollision = GetEntity()->GetComponent<DamageOnCollision>();
 }
@@ -33,12 +34,11 @@ bool Bomb::use(Mouse* m) {
 	auto pos = GetEntity()->t().wPos() + dir * 5.0f;
 	auto up = GetEntity()->GetParent()->GetComponent<PhysicsComponent>()->isUp;
 
-	auto ptype = up ? PhysObjectType::PROJECTILE_UP : PhysObjectType::PROJECTILE_DOWN;
-	_physics = PhysicsManager::instance()->createObject(pos.x, pos.y, 4, 4, 0, ptype);
-
 	// need to dissapear after exploding
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
 	GetEntity()->transform.setLocalPosition(pos);	// remember physics will override this 
+	_physics->zPos = (up) ? Z_UPPER : Z_LOWER;		// TODO: not 100% sure if PhysicsManager will automatically resolve masking
+	_physics->moveBody(new Vector2D(pos.x, pos.z), 0);
 
 	// make contraption "active"
 	_physics->SetEnabled(true);

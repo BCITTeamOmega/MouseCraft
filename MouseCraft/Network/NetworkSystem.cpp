@@ -247,7 +247,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 float y = packet->ReadFloat();
                 glm::vec2 value(x, y);
 
-                Axis2DEvent eventData(_connectionList[sender].PlayerID, axis, value);
+				Axis2DEvent eventData{ _connectionList[sender].PlayerID, axis, value };
                 EventManager::Notify(EventName::INPUT_AXIS_2D, new TypeParam<Axis2DEvent>(eventData));
             }
             break;
@@ -256,7 +256,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 Button button = (Button)packet->ReadInt();
                 bool down = packet->ReadByte();
 
-                ButtonEvent eventData(_connectionList[sender].PlayerID, button, down);
+				ButtonEvent eventData{ _connectionList[sender].PlayerID, button, down };
                 EventManager::Notify(EventName::INPUT_BUTTON, new TypeParam<ButtonEvent>(eventData));
             }
             break;

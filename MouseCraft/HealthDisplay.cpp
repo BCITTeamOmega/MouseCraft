@@ -1,13 +1,11 @@
 #include "HealthDisplay.h"
-#include "Event/EventManager.h"
-#include "Event/EventName.h"
 
-HealthDisplay::HealthDisplay(int maxHealth) : _maxHealth(maxHealth) {
-	EventManager::Subscribe(EventName::HEALTH_CHANGE, this);
+HealthDisplay::HealthDisplay(int maxHealth) : 
+	_maxHealth(maxHealth), onHealthChange(this, &HealthDisplay::updateHealthUI)
+{
 }
 
 HealthDisplay::~HealthDisplay() {
-	EventManager::Unsubscribe(EventName::HEALTH_CHANGE, this);
 }
 
 void HealthDisplay::OnInitialized() {
@@ -18,15 +16,14 @@ void HealthDisplay::Update(float dt) {
 
 }
 
-void HealthDisplay::Notify(EventName eventName, Param* params) {
-	if (eventName == EventName::HEALTH_CHANGE) {
-		auto data = static_cast<TypeParam<>*>(params)->Param;
-	}
-}
-
 void HealthDisplay::setHealthUI(UIComponent* component) {
 	_healthUI = component;
 	_maxWidth = component->size.x;
+}
+
+void HealthDisplay::setWatchingHealthComponent(HealthComponent* component) {
+	_healthWatch = component;
+	onHealthChange.Observe(_healthWatch->OnHealthChanged);
 }
 
 void HealthDisplay::updateHealthUI(int health) {

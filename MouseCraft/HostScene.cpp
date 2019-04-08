@@ -15,6 +15,11 @@
 #include "HealthComponent.h"
 #include "Mouse.h"
 #include "PickupSpawner.h"
+#include "ObstacleFactory.h"
+#include "HealthDisplay.h"
+#include "UI/ImageComponent.h"
+
+#define CAT_HEALTH 8
 
 void HostScene::InitScene() {
     //Make the entities
@@ -41,6 +46,8 @@ void HostScene::InitScene() {
     Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
     Entity* light2Entity = EntityManager::Instance().Create();
+	Entity* healthUIEntity = EntityManager::Instance().Create();
+	Entity* healthBarUIEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
@@ -64,6 +71,7 @@ void HostScene::InitScene() {
 
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
+	std::string* boxTex = new std::string("res/textures/blank.bmp");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -195,55 +203,18 @@ void HostScene::InitScene() {
     catstandEntity->AddComponent(catstandPhysics);
     catstandPhysics->initPosition();
 
-    auto bookEntity = EntityManager::Instance().Create();
-    Renderable* bookRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    bookRend->setModel(*book);
-    bookRend->setColor(Color(1.0, 0.0, 1.0));
-    bookEntity->AddComponent(bookRend);
-    PhysicsComponent* bookPhysics = PhysicsManager::instance()->createGridObject(25, 5, 5, 5, PhysObjectType::OBSTACLE_UP);
-    bookEntity->AddComponent(bookPhysics);
-    bookPhysics->initPosition();
-
-    auto boxEntity = EntityManager::Instance().Create();
-    Renderable* boxRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    boxRend->setModel(*box);
-    boxRend->setColor(Color(1.0, 0.0, 0.0));
-    boxEntity->AddComponent(boxRend);
-    PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(50, 50, 7, 7, PhysObjectType::OBSTACLE_DOWN);
-    boxEntity->AddComponent(boxPhysics);
-    boxPhysics->initPosition();
-
-    auto vaseEntity = EntityManager::Instance().Create();
-    Renderable* vaseRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    vaseRend->setModel(*cylinder);
-    vaseRend->setColor(Color(0.0, 1.0, 0.0));
-    vaseEntity->AddComponent(vaseRend);
-    PhysicsComponent* vasePhysics = PhysicsManager::instance()->createGridObject(30, 50, 5, 5, PhysObjectType::OBSTACLE_DOWN);
-    vaseEntity->AddComponent(vasePhysics);
-    vasePhysics->initPosition();
-
-    auto lampEntity = EntityManager::Instance().Create();
-    Renderable* lampRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    lampRend->setModel(*cylinder);
-    lampRend->setColor(Color(1.0, 1.0, 0.0));
-    lampEntity->AddComponent(lampRend);
-    PhysicsComponent* lampPhysics = PhysicsManager::instance()->createGridObject(35, 20, 5, 5, PhysObjectType::OBSTACLE_UP);
-    lampEntity->AddComponent(lampPhysics);
-    lampPhysics->initPosition();
-
-    auto ballEntity = EntityManager::Instance().Create();
-    Renderable* ballRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    ballRend->setModel(*ball);
-    ballRend->setColor(Color(1.0, 0.5, 0.5));
-    ballEntity->AddComponent(ballRend);
-    PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
-    ballEntity->AddComponent(ballPhysics);
-    ballPhysics->initPosition();
+	auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+	auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+	auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+	auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
     root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
+	root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
 
     PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
@@ -320,6 +291,7 @@ void HostScene::InitScene() {
     catEntity->AddComponent(catMovement);
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	catHealth->SetHealth(CAT_HEALTH);
     catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -351,6 +323,24 @@ void HostScene::InitScene() {
     light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
     light2Entity->AddComponent(light2);
 
+	// UI
+	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
+	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
+	healthImg->zForce = 0.1;
+	healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
+	healthBarUIEntity->AddComponent(healthImg);
+
+	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.9f);
+	healthBackImg->color = Color(0.0f, 0.0f, 0.0f, 0.8f);
+	healthBackImg->zForce = 0.2;
+	healthUIEntity->AddComponent(healthBackImg);
+	healthUIEntity->AddChild(healthBarUIEntity);
+
+	HealthDisplay* healthDisplayController = ComponentManager<HealthDisplay>::Instance().Create<HealthDisplay>(CAT_HEALTH);
+	healthDisplayController->setHealthUI(healthImg);
+	healthDisplayController->setWatchingHealthComponent(catHealth);
+	healthUIEntity->AddComponent(healthDisplayController);
+
     //Don't forget the stupid teapots
     Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
     teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
@@ -375,6 +365,7 @@ void HostScene::InitScene() {
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
+	root.AddChild(healthUIEntity);
 }
 
 void HostScene::CleanUp() {

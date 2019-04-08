@@ -17,3 +17,13 @@ enum CONTRAPTIONS
 	OVERCHARGE,
 	SWORDS,
 };
+
+
+enum OBSTACLES
+{
+	BOOK,
+	YARNBALL,
+	VASE,
+	BOX,
+	LAMP,
+};
