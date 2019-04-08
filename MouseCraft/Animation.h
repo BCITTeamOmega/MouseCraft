@@ -48,9 +48,7 @@ public:
 	float Convert(float t) override 
 	{
 		auto input = LinearConverter::Expand(t) * glm::pi<float>() / 2.0f;	// convert 0...1 to -pi/2...pi/2
-		auto output = LinearConverter::Linearize( glm::sin(input) );				// return 0...1
-		std::cout << "original: " << t << " modified: " << output << std::endl;
-		return output;
+		return LinearConverter::Linearize( glm::sin(input) );				// return 0...1
 	};
 };
 
