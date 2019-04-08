@@ -17,6 +17,11 @@ void Animation::AddRotation(float time, glm::quat rotation)
 	std::sort(_keyframesRot.begin(), _keyframesRot.end());
 }
 
+void Animation::AddRotation(float time, glm::vec3 rotation)
+{
+	AddRotation(time, glm::quat(rotation));
+}
+
 void Animation::AddScale(float time, glm::vec3 scale)
 {
 	_keyframesScl.push_back(Vec3Keyframe{ time, scale });

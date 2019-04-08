@@ -16,7 +16,18 @@ void TransformAnimator::Update(float deltaTime)
 	{
 		_counter += deltaTime * _speed;
 		if (_counter > _currentAnim->duration)
-			_counter -= _currentAnim->duration;
+		{
+			if (_oneShot)
+			{
+				_counter = 0.0f;
+				_currentAnim = nullptr;
+				return;
+			}
+			else
+			{
+				_counter -= _currentAnim->duration;
+			}
+		}
 
 		if (_currentAnim->GetPositionsCount() > 0)
 			GetEntity()->transform.setLocalPosition(_currentAnim->GetPosition(_counter));
@@ -63,4 +74,14 @@ void TransformAnimator::SetProgress(float percent)
 void TransformAnimator::SetSpeed(float multiplier)
 {
 	_speed = multiplier;
+}
+
+void TransformAnimator::SetOneShot(bool oneShot)
+{
+	_oneShot = oneShot;
+}
+
+bool TransformAnimator::GetOneShot() const
+{
+	return _oneShot;
 }

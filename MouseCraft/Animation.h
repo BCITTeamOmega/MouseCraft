@@ -61,11 +61,13 @@ public:
 
 	float duration;
 
-	void AddPosition(float time, glm::vec3);
+	void AddPosition(float time, glm::vec3 position);
 
-	void AddRotation(float time, glm::quat);
+	void AddRotation(float time, glm::quat rotation);
+	
+	void AddRotation(float time, glm::vec3 rotation);
 
-	void AddScale(float time, glm::vec3);
+	void AddScale(float time, glm::vec3 scale);
 
 	void SetPositionKeyFrames(std::vector<Vec3Keyframe> keyframes);
 

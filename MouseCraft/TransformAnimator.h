@@ -32,10 +32,17 @@ public:
 	// Changes the playback speed of the animation
 	void SetSpeed(float multiplier);
 
+	// If the animation should play only once. Animation will be unset on finish.
+	void SetOneShot(bool oneShot);
+
+	// Returns if animations will play only once. 
+	bool GetOneShot() const;
+
 private:
 	std::map<std::string, Animation*> _anims;
 	float _counter;
 	float _speed = 1.0f;
+	bool _oneShot = false;
 	Animation* _currentAnim = nullptr;
 };
 
