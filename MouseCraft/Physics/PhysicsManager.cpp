@@ -150,12 +150,6 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	switch (t)
 	{
-	case PhysObjectType::PART:
-		bodyDef.type = b2_staticBody;
-		fixtureDef.filter.categoryBits = PART_CATEGORY;
-		fixtureDef.filter.maskBits = PART_MASK;
-		physicsComp->zPos = Z_LOWER;
-		break;
 	case PhysObjectType::PROJECTILE_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = PROJECTILE_UP_CATEGORY;
@@ -261,6 +255,8 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 
 		bodyDef.position.Set(p1->x, p1->y);
 		break;
+	default:
+		return nullptr;
 	}
 
 	switch (t)
@@ -324,6 +320,13 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = CONTRAPTION_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = CONTRAPTION_DOWN_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::PART:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = PART_CATEGORY;
+		fixtureDef.filter.maskBits = PART_MASK;
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;
