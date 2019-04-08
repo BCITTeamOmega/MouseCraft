@@ -8,6 +8,7 @@
 #include "../Core/Component.h"
 #include "../Core/Entity.h"
 #include "../Graphics/Model.h"
+#include "../Graphics/Color.h"
 
 enum VerticalAnchor {
     ANCHOR_TOP, ANCHOR_VCENTER, ANCHOR_BOTTOM
@@ -40,7 +41,7 @@ public:
     virtual void Resize();
 
 	// Determine whether this panel uses transparency
-    virtual bool IsTransparent() const;
+    virtual bool IsTransparent();
 
 	// String id used for uniquely identifying this UIComponent
 	std::string			id;
@@ -51,12 +52,12 @@ public:
 	// UIComponent should be resized if Valid is set to false
 	bool				valid;
 
-	glm::vec4			color;
+	Color				color;
 
     glm::vec2           size;
-    glm::vec2           anchor;
-	int					z;
-	int					zForce;
+	glm::vec2			anchor;
+	float				zForce;
+	float				z;
     VerticalAnchor      vAnchor;
     HorizontalAnchor    hAnchor;
     AnchorType          anchorXType;
@@ -67,9 +68,6 @@ public:
 	// If using scaling type sizing on one side, defines the ratio by which to scale on
     float               aspectRatio;
 
-	// Pointer to the parent element
-    UIComponent         *parent;
-
 	// Calculated screen coordinates, size and rotation in pixels
     glm::vec2           screenPosition;
     glm::vec2           screenSize;
@@ -79,7 +77,7 @@ public:
 	// Blank string if no action
     std::string         ClickAction;
 
-	std::vector<Model*>* models;
+	std::vector<Model*> models;
 protected:
 	void calculateScreenPosition();
 	virtual void setupModels();

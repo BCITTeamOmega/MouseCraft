@@ -4,12 +4,13 @@
 #include "../UI/ImageComponent.h"
 #include "../Core/EntityManager.h"
 #include <sstream>
+#include "../Graphics/Color.h"
 
 using namespace tinyxml2;
 
 Entity* UILoader::loadUI(std::string path, float width, float height) {
 	UIComponent* rootComponent = new UIComponent(100, 100, 0, 0);
-	rootComponent->color = { 0,0,0,0 };
+	rootComponent->color = Color(0, 0, 0);
 	rootComponent->screenSize = { width, height };
 	rootComponent->screenPosition = { 0, 0 };
 
@@ -49,7 +50,7 @@ Entity* UILoader::readChild(const XMLElement* element) {
 	AnchorType aTypeX = ANCHOR_PERCENT, aTypeY = ANCHOR_PERCENT;
 	VerticalAnchor vA = ANCHOR_TOP;
 	HorizontalAnchor hA = ANCHOR_LEFT;
-	glm::vec4 col = { 0, 0, 0, 0 };
+	Color col = Color(0, 0, 0);
 	std::string idVal = "";
 	bool vis = true;
 	std::string clickFunc = "";
@@ -115,7 +116,7 @@ Entity* UILoader::readChild(const XMLElement* element) {
 		const XMLAttribute  *width = element->FindAttribute("width"),
 			*height = element->FindAttribute("height");
 
-		col = { 0, 0, 0, 0 };
+		col = Color(0, 0, 0);
 
 		UnitType xUnit = UNIT_PERCENT, yUnit = UNIT_PERCENT;
 
@@ -153,7 +154,7 @@ Entity* UILoader::readChild(const XMLElement* element) {
 			*height = element->FindAttribute("height"),
 			*src = element->FindAttribute("src");
 
-		col = { 1.0, 1.0, 1.0, 1.0 };
+		col = Color(1.0, 1.0, 1.0);
 
 		std::string srcString = "";
 		UnitType xUnit = UNIT_PERCENT, yUnit = UNIT_PERCENT;
@@ -197,7 +198,7 @@ Entity* UILoader::readChild(const XMLElement* element) {
 			text = "";
 		}
 
-		col = { 1.0, 1.0, 1.0, 1.0 };
+		col = Color(1.0, 1.0, 1.0);
 
 		UnitType sType = UNIT_PIXEL;
 		float s = 0;
@@ -217,14 +218,14 @@ Entity* UILoader::readChild(const XMLElement* element) {
 		int c;
 		cStream >> std::hex >> c;
 
-		col.r = ((c >> 16) & 0xFF) / 255.0f;
-		col.g = ((c >> 8) & 0xFF) / 255.0f;
-		col.b = (c & 0xFF) / 255.0f;
-		col.a = 1.0f;
+		col.setRed(((c >> 16) & 0xFF) / 255.0f);
+		col.setGreen(((c >> 8) & 0xFF) / 255.0f);
+		col.setBlue((c & 0xFF) / 255.0f);
+		col.setAlpha(1.0f);
 	}
 
 	if (alpha != nullptr) {
-		col.a = std::stof(alpha->Value());
+		col.setAlpha(std::stof(alpha->Value()));
 	}
 
 	if (z != nullptr) {

@@ -12,7 +12,7 @@
 /**
 Static structure used to store the UI data, and methods to interact with UI
 */
-class UIManager : System {
+class UIManager : public System {
 public:
 	UIManager();
 	// Resize the root element (and consequently every element)

@@ -4,7 +4,7 @@ ImageComponent::ImageComponent(std::string imagePath, float width, float height,
     UIComponent(width, height, x, y), _imagePath(imagePath) {
 
     //aspectRatio = float(texture.width) / texture.height;
-    color = {1,1,1,1};
+    color = Color(1, 1, 1);
 }
 
 bool ImageComponent::IsTransparent() { return true; }
@@ -15,4 +15,9 @@ std::string ImageComponent::GetImagePath() {
 
 void ImageComponent::SetImagePath(std::string path) {
 	_imagePath = path;
+}
+
+void ImageComponent::setupModels() {
+	UIComponent::setupModels();
+	models[0]->setTexture(new std::string(_imagePath));
 }

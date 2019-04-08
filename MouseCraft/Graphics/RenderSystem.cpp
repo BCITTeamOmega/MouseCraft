@@ -4,14 +4,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Renderable.h"
-#include "UIRenderable.h"
+#include "../UI/UIComponent.h"
 #include "ModelGen.h"
 #include "../Loading/ImageLoader.h"
 #include "RenderUtil.h"
 
+#define TEXTURE_SIZE 2048
+
 using std::string;
 using std::vector;
 using glm::vec3;
+using glm::vec4;
 using glm::mat4;
 using glm::perspective;
 using glm::translate;
@@ -86,7 +89,7 @@ void RenderSystem::initVertexBuffers() {
 
 void RenderSystem::initTextures() {
 	_staticTextures = new vector<Image*>();
-	_textures = new GLTextureArray(1024, 1024, 50, 5, GL_SRGB8_ALPHA8);
+	_textures = new GLTextureArray(TEXTURE_SIZE, TEXTURE_SIZE, 50, 5, GL_SRGB8_ALPHA8);
 }
 
 void RenderSystem::initRenderBuffers() {
@@ -98,8 +101,8 @@ void RenderSystem::initRenderBuffers() {
 	_fbo = new FrameBufferObject(1280, 720, buffers);
 
 	vector<GLTexture*> noBuffers = {};
-	_resizeInFBO = new FrameBufferObject(1024, 1024, noBuffers);
-	_resizeOutFBO = new FrameBufferObject(1024, 1024, noBuffers);
+	_resizeInFBO = new FrameBufferObject(TEXTURE_SIZE, TEXTURE_SIZE, noBuffers);
+	_resizeOutFBO = new FrameBufferObject(TEXTURE_SIZE, TEXTURE_SIZE, noBuffers);
 
 	_ubo = new UniformBufferObject();
 }
@@ -178,7 +181,7 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 	int index = 0;
 	for (RenderData render : *_renderingList) {
 		int texID = getTexture(render.getModel()->getTexture());
-		vec3 color = convertColor(render.getColor());
+		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
 		mat4 mv =  viewMatrix * model;
@@ -285,7 +288,7 @@ void RenderSystem::uiPass() {
 	for (RenderData render : *_uiRenderingList) {
 		int texID = getTexture(render.getModel()->getTexture());
 		Geometry* g = render.getModel()->getGeometry();
-		vec3 color = convertColor(render.getColor());
+		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
 		mat4 matrix = 2.0f * glm::translate(model, vec3(-0.5, -0.5, 0));
@@ -303,7 +306,7 @@ void RenderSystem::uiPass() {
 
 		_textures->bind(GL_TEXTURE0);
 
-		_shader->setUniformVec3("color", color);
+		_shader->setUniformVec4("color", color);
 		_shader->setUniformMatrix("transform", matrix);
 
 		_shader->setUniformInt("textureID", texID);
@@ -321,6 +324,10 @@ void RenderSystem::uiPass() {
 void RenderSystem::swapLists() {
 	swap(_renderingList, _accumulatingList);
 	swap(_uiRenderingList, _uiAccumulatingList);
+	// Sort the UI rendering list from back to front
+	std::sort(_uiRenderingList->begin(), _uiRenderingList->end(), [](RenderData a, RenderData b) {
+		return a.getTransform()[3][2] > b.getTransform()[3][2];
+	});
 	swap(_lightRenderingList, _lightAccumulatingList);
 	_accumulatingList->clear();
 	_uiAccumulatingList->clear();
@@ -397,13 +404,13 @@ bool RenderSystem::loadShader(string shaderName) {
 	return _shaders[shaderName].compile();
 }
 
-vec3 RenderSystem::convertColor(Color c) {
-	return vec3(c.getRed(), c.getGreen(), c.getBlue());
+vec4 RenderSystem::convertColor(Color c) {
+	return vec4(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 }
 
 void RenderSystem::accumulateList() {
 	auto renderables = ComponentManager<Renderable>::Instance().All();
-	auto uiRenderables = ComponentManager<UIRenderable>::Instance().All();
+	auto uiRenderables = ComponentManager<UIComponent>::Instance().All();
 	auto cameras = ComponentManager<Camera>::Instance().All();
 	auto lights = ComponentManager<Light>::Instance().All();
 	for (Renderable* r : renderables) {
@@ -416,15 +423,19 @@ void RenderSystem::accumulateList() {
 			)
 		);
 	}
-	for (UIRenderable* r : uiRenderables) {
-		Transform t = r->getTransform();
-		_uiAccumulatingList->push_back(
-			RenderData(
-				r->getModel(),
-				t.getWorldTransformation(),
-				r->getColor()
-			)
-		);
+	for (UIComponent* r : uiRenderables) {
+		Transform t = r->GetEntity()->transform;
+		vector<Model*> models = r->models;
+		Color c = r->color;
+		for (Model* m : models) {
+			_uiAccumulatingList->push_back(
+				RenderData(
+					m,
+					t.getWorldTransformation(),
+					c
+				)
+			);
+		}
 	}
 	for (Camera* c : cameras) {
 		// Todo: Support for multiple cameras
@@ -441,7 +452,7 @@ void RenderSystem::accumulateList() {
 		internalLight.blank1 = 0;
 		internalLight.blank2 = 0;
 		internalLight.blank3 = 0;
-		internalLight.color = glm::vec4(convertColor(l->getColor()), 1.0f);
+		internalLight.color = convertColor(l->getColor());
 		internalLight.attenuation = glm::vec4(
 			l->getConstantAttenuation(),
 			l->getLinearAttenuation(),

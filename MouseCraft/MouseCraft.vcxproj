@@ -192,7 +192,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
-    <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
@@ -285,7 +284,6 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
-    <ClInclude Include="Graphics\UIRenderable.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />

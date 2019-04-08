@@ -12,6 +12,7 @@
 #include "Sound/SoundManager.h"
 #include "ContraptionSystem.h"
 #include "MenuScene.h"
+#include "UI/UIManager.h"
 
 SoundManager* noise;
 
@@ -57,6 +58,7 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(inputSystem);
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
     OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
+	OmegaEngine::Instance().AddSystem(new UIManager());
 
 	//Start the game
 	OmegaEngine::Instance().Loop();

@@ -1,10 +1,10 @@
 #include "TextComponent.h"
 #include "../Graphics/ModelGen.h"
 
-const std::string TextComponent::DEFAULT_FONT = "fonts/ShareTechMono.png";
+const std::string TextComponent::DEFAULT_FONT = "res/fonts/ShareTechMono.png";
 
 TextComponent::TextComponent(std::string text, float fontSize, float x, float y, std::string fontPath) :
-    UIComponent(0, 0, x, y), _text(text), _fontSize(fontSize), _spacing(1.0f) {
+    UIComponent(0, 0, x, y), _text(text), _fontSize(fontSize), _spacing(1.0f), _fontPath(fontPath) {
 }
 
 void TextComponent::SetText(std::string text) {
@@ -15,19 +15,33 @@ void TextComponent::SetText(std::string text) {
 }
 
 void TextComponent::Resize() {
-    if (parent != nullptr) {
-        screenSize.y = yType == UNIT_PERCENT ? parent->screenSize.y * _fontSize / 100.0f : _fontSize;
-        
-		// TODO update once texture loading is complete
-        float fontWidth = screenSize.y * _spacing;
-        screenSize.x = fontWidth * _text.length();
+	if (this->GetEntity() != nullptr) {
+		glm::vec2 parentSize = { 1.0f, 1.0f };
+		Entity* parent = this->GetEntity()->GetParent();
+		if (parent != nullptr && parent->GetComponent<UIComponent>() != nullptr) {
+			UIComponent* cmp = parent->GetComponent<UIComponent>();
+			parentSize = cmp->screenSize;
+		}
+		screenSize.y = yType == UNIT_PERCENT ? parentSize.y * _fontSize / 100.0f : _fontSize;
+
+		float fontWidth = screenSize.y * _spacing;
+		screenSize.x = fontWidth * _text.length();
 
 		calculateScreenPosition();
-        
-		generateVertices();
-    }
 
-	valid = true;
+		generateVertices();
+
+		// Iterate resize on child panels
+		auto children = this->GetEntity()->GetChildren();
+		for (Entity *child : children) {
+			UIComponent* comp = child->GetComponent<UIComponent>();
+			if (comp != nullptr) {
+				comp->Resize();
+			}
+		}
+
+		valid = true;
+	}
 }
 
 bool TextComponent::IsTransparent() { return true; }
@@ -56,7 +70,7 @@ void TextComponent::generateVertices() {
     //float fontWidth = screenSize.y * texture.width / texture.height;
 	float fontWidth = screenSize.y * _spacing;
 
-	models->clear();
+	models.clear();
 
     for (int i = 0; i < _text.length(); i++) {
 		/*
@@ -78,21 +92,38 @@ void TextComponent::generateVertices() {
 		elements.push_back(i * 4 + 3);
 		*/
 		Model* m = ModelGen::makeQuad(ModelGen::Axis::Z, fontWidth, screenSize.y);
-		auto vec = m->getGeometry()->getVertexData();
+		auto& vec = m->getGeometry()->getVertexData();
 		for (int j = 0; j < vec.size(); j += 3) {
-			vec[j] += screenPosition.x + fontWidth * i;
-			vec[j + 1] += screenPosition.y;
+			vec[j] += fontWidth * i;
 		}
 
 		uv = getUVfromChar(_text[i]);
-		auto uvs = m->getGeometry()->getTexCoordData();
+		auto& uvs = m->getGeometry()->getTexCoordData();
 		uvs[0] = uv.x;
-		uvs[1] = uv.y;
+		uvs[1] = uv.y - 0.1;
 		uvs[2] = uv.x + 0.1;
-		uvs[3] = uv.y + 0.1;
+		uvs[3] = uv.y - 0.1;
+		uvs[4] = uv.x;
+		uvs[5] = uv.y;
+		uvs[6] = uv.x + 0.1;
+		uvs[7] = uv.y;
 
-		models->push_back(m);
+		m->setTexture(new std::string(_fontPath));
+
+		models.push_back(m);
     }
+
+	// Shenanigans to set the position independent of parent location
+	// This is fine since the parents are resized first
+	glm::vec3 parentPos = { 0.0f, 0.0f, 0.0f };
+	Entity* parent = this->GetEntity()->GetParent();
+	if (parent != nullptr) {
+		parentPos = parent->transform.getWorldPosition();
+	}
+	this->GetEntity()->transform.setLocalPosition(glm::vec3(
+		screenPosition.x + fontWidth / 2 - parentPos.x,
+		screenPosition.y + screenSize.y / 2 - parentPos.y,
+		z - parentPos.z));
 }
 
 void TextComponent::SetSpacing(float spacing) {

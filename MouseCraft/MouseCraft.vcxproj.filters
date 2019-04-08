@@ -321,9 +321,6 @@
     <ClCompile Include="Sound\SoundComponent.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\BufferObjects\FBO.cpp">
-      <Filter>Source Files\Graphics\BufferObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Network\NetworkComponent.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -345,9 +342,6 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\UIRenderable.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="MenuController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -362,7 +356,7 @@
     </ClCompile>
     <ClCompile Include="HostScene.cpp">
       <Filter>Source Files</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp">
       <Filter>Source Files\Graphics\BufferObjects</Filter>
     </ClCompile>
@@ -406,9 +400,6 @@
     </ClInclude>
     <ClInclude Include="Sound\SoundParams.h">
       <Filter>Header Files\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sound\TrackParams.h">
       <Filter>Header Files\Sound</Filter>
@@ -677,9 +668,6 @@
     <ClInclude Include="Sound\SoundComponent.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\BufferObjects\FBO.h">
-      <Filter>Header Files\Graphics\BufferObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Network\NetworkComponent.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -707,9 +695,6 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\UIRenderable.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="MenuController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -724,7 +709,7 @@
     </ClInclude>
     <ClInclude Include="HostScene.h">
       <Filter>Header Files</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h">
       <Filter>Header Files\Graphics\BufferObjects</Filter>
     </ClInclude>

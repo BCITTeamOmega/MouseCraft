@@ -26,5 +26,6 @@ private:
 
     std::string _text;
     float       _fontSize;
-	int			_spacing;
+	float		_spacing;
+	std::string	_fontPath;
 };

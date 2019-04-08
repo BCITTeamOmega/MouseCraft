@@ -12,6 +12,7 @@ public:
 	GLuint getProgram();
 	void setUniformMatrix(std::string name, glm::mat4 matrix);
 	void setUniformVec3(std::string name, glm::vec3 vector);
+	void setUniformVec4(std::string name, glm::vec4 vector);
 	void setUniformTexture(std::string name, GLuint index);
 	void setUniformInt(std::string name, GLint value);
 	void setBindingPoint(std::string name, GLint value);
