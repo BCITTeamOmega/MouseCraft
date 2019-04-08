@@ -15,7 +15,6 @@
 #include "HealthComponent.h"
 #include "Mouse.h"
 #include "PickupSpawner.h"
-#include "ObstacleFactory.h"
 
 void HostScene::InitScene() {
     //Make the entities
@@ -196,18 +195,55 @@ void HostScene::InitScene() {
     catstandEntity->AddComponent(catstandPhysics);
     catstandPhysics->initPosition();
 
-	auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
-	auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-	auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-	auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+    auto bookEntity = EntityManager::Instance().Create();
+    Renderable* bookRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    bookRend->setModel(*book);
+    bookRend->setColor(Color(1.0, 0.0, 1.0));
+    bookEntity->AddComponent(bookRend);
+    PhysicsComponent* bookPhysics = PhysicsManager::instance()->createGridObject(25, 5, 5, 5, PhysObjectType::OBSTACLE_UP);
+    bookEntity->AddComponent(bookPhysics);
+    bookPhysics->initPosition();
+
+    auto boxEntity = EntityManager::Instance().Create();
+    Renderable* boxRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    boxRend->setModel(*box);
+    boxRend->setColor(Color(1.0, 0.0, 0.0));
+    boxEntity->AddComponent(boxRend);
+    PhysicsComponent* boxPhysics = PhysicsManager::instance()->createGridObject(50, 50, 7, 7, PhysObjectType::OBSTACLE_DOWN);
+    boxEntity->AddComponent(boxPhysics);
+    boxPhysics->initPosition();
+
+    auto vaseEntity = EntityManager::Instance().Create();
+    Renderable* vaseRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    vaseRend->setModel(*cylinder);
+    vaseRend->setColor(Color(0.0, 1.0, 0.0));
+    vaseEntity->AddComponent(vaseRend);
+    PhysicsComponent* vasePhysics = PhysicsManager::instance()->createGridObject(30, 50, 5, 5, PhysObjectType::OBSTACLE_DOWN);
+    vaseEntity->AddComponent(vasePhysics);
+    vasePhysics->initPosition();
+
+    auto lampEntity = EntityManager::Instance().Create();
+    Renderable* lampRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    lampRend->setModel(*cylinder);
+    lampRend->setColor(Color(1.0, 1.0, 0.0));
+    lampEntity->AddComponent(lampRend);
+    PhysicsComponent* lampPhysics = PhysicsManager::instance()->createGridObject(35, 20, 5, 5, PhysObjectType::OBSTACLE_UP);
+    lampEntity->AddComponent(lampPhysics);
+    lampPhysics->initPosition();
+
+    auto ballEntity = EntityManager::Instance().Create();
+    Renderable* ballRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    ballRend->setModel(*ball);
+    ballRend->setColor(Color(1.0, 0.5, 0.5));
+    ballEntity->AddComponent(ballRend);
+    PhysicsComponent* ballPhysics = PhysicsManager::instance()->createGridObject(35, 30, 5, 5, PhysObjectType::OBSTACLE_UP);
+    ballEntity->AddComponent(ballPhysics);
+    ballPhysics->initPosition();
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
     root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
-	root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
 
     PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
