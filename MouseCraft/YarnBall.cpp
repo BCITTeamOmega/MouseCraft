@@ -25,7 +25,18 @@ void YarnBall::Update(float deltaTime)
 
 void YarnBall::HitByCat(Vector2D dir)
 {
-	GetEntity()->GetComponent<PhysicsComponent>()->velocity = dir * SPEED;
+	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+
+	//Changes the object from a generic obstacle to a ball in the physics manager's eyes
+	b2Filter filter;
+	pComp->type = pComp->isUp ? PhysObjectType::BALL_UP : PhysObjectType::BALL_DOWN;
+	filter.categoryBits = pComp->isUp ? BALL_UP_CATEGORY : BALL_DOWN_CATEGORY;
+	filter.maskBits = pComp->isUp ? BALL_UP_MASK : BALL_DOWN_MASK;
+	pComp->body->GetFixtureList()->SetFilterData(filter);
+
+	//Make it dynamic so it collides properly
+	pComp->makeDynamic();
+	pComp->velocity = dir * SPEED;
 }
 
 void YarnBall::DestroyedByMouse()
@@ -38,5 +49,6 @@ void YarnBall::OnMouseCollide(PhysicsComponent* other)
 	if (other->type == PhysObjectType::MOUSE_DOWN || other->type == PhysObjectType::MOUSE_UP)
 	{
 		other->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
+		GetEntity()->Destroy();
 	}
 }

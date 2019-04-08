@@ -39,9 +39,6 @@ struct AxisEvent
 	int player;
 	Axis axis;
 	float value;
-
-	AxisEvent(int p, Axis a, float v)
-		: player(p), axis(a), value(v) {}
 };
 
 struct Axis2DEvent
@@ -49,9 +46,6 @@ struct Axis2DEvent
 	int player;
 	Axis axis;
 	glm::vec2 value;
-
-	Axis2DEvent(int p, Axis a, glm::vec2 v)
-		: player(p), axis(a), value(v) {}
 
 	// returns value normalized (length of 1)
 	glm::vec2 GetDir()
@@ -71,10 +65,16 @@ struct ButtonEvent
 	int player;
 	Button button;
 	bool isDown;
-	
-	ButtonEvent(int p, Button b, bool d)
-		: player(p), button(b), isDown(d) {}
 };
+
+struct MouseButtonEvent
+{
+	glm::ivec2 position;	// cursor position on screen 
+	bool isRight;			// right or left mouse button.
+	bool isDown;			// is button pressed down
+};
+
+
 
 class InputSystem : public System
 {
@@ -109,11 +109,19 @@ private:
 
 	// functions
 	public:
-		void SetX(float x);
-
-		void SetY(float y);
-
 		void Update();
+
+		void SetX(float x)
+		{
+			xSet = true;
+			rawX = x;
+		}
+
+		void SetY(float y)
+		{
+			ySet = true;
+			rawY = y;
+		}
 
 		bool HasXChanged() const
 		{

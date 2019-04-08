@@ -78,11 +78,11 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		c_renderable->setModel(*_bombModel);
 		auto c_bomb = ComponentManager<Contraption>::Instance().Create<Bomb>();
 		contraption->AddComponent(c_bomb);
-		auto c_phys = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::CONTRAPTION_DOWN);
+		auto c_phys = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::PROJECTILE_DOWN);
 		c_phys->SetEnabled(false);
 		contraption->AddComponent(c_phys);
 		auto c_timed = ComponentManager<UpdatableComponent>::Instance().Create<TimedDestruction>();
-		c_timed->delay = Bomb::RADIUS;
+		c_timed->delay = Bomb::LIFETIME;
 		c_timed->SetEnabled(false);
 		contraption->AddComponent(c_timed);
 		auto c_dcol = ComponentManager<Component>::Instance().Create<DamageOnCollision>();

@@ -199,14 +199,14 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		physicsComp->zPos = Z_LOWER;
 		break;
 	case PhysObjectType::OBSTACLE_UP:
-		bodyDef.type = b2_dynamicBody;
+		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
 		physicsComp->isUp = true;
 		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::OBSTACLE_DOWN:
-		bodyDef.type = b2_dynamicBody;
+		bodyDef.type = b2_kinematicBody;
 		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
 		physicsComp->isUp = false;
@@ -407,6 +407,11 @@ void PhysicsManager::updateHeights(float step)
 					filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 					filter.maskBits = OBSTACLE_DOWN_MASK;
 					break;
+				case PhysObjectType::BALL_UP:
+					comp->type = PhysObjectType::BALL_DOWN;
+					filter.categoryBits = BALL_DOWN_CATEGORY;
+					filter.maskBits = BALL_DOWN_MASK;
+					break;
 				default:
 					break; //you goofed
 				}
@@ -440,6 +445,11 @@ void PhysicsManager::updateHeights(float step)
 					comp->type = PhysObjectType::OBSTACLE_UP;
 					filter.categoryBits = OBSTACLE_UP_CATEGORY;
 					filter.maskBits = OBSTACLE_UP_MASK;
+					break;
+				case PhysObjectType::BALL_DOWN:
+					comp->type = PhysObjectType::BALL_UP;
+					filter.categoryBits = BALL_UP_CATEGORY;
+					filter.maskBits = BALL_UP_MASK;
 					break;
 				default:
 					break; //you goofed
