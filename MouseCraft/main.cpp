@@ -34,7 +34,7 @@ void SetupSound()
 	initial->z = 0;
 	//create a type Param from the track params and pass it into the event notifier
 	TypeParam<TrackParams*> param(initial);
-	//EventManager::Notify(PLAY_SONG, &param);
+	EventManager::Notify(PLAY_SONG, &param);
 }
 
 void MainTest()

@@ -13,7 +13,7 @@ public:
 	void HitByCat(Vector2D dir) override;
 	void DestroyedByMouse() override;
 private:
-	const float SPEED = 5.0f;
+	const float SPEED = 10.0f;
 	PhysicsComponent* _physics;
 	void OnMouseCollide(PhysicsComponent* other);
 	Handler<YarnBall, PhysicsComponent*> HandleMouseCollide;
