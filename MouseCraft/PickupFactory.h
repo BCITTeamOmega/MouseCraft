@@ -4,6 +4,9 @@
 #include "MOUSECRAFT_ENUMS.h"
 #include <glm/glm.hpp>
 #include "Graphics/Model.h"
+#include "Animation.h"
+#include "TransformAnimator.h"
+#include "Rotator.h"
 
 class PickupFactory
 {
@@ -30,5 +33,7 @@ private:
 	Model* _springModel;
 	Model* _batteryModel;
 	Image* _texture; 
+	Animation* _spawnAnim;
+	Animation* _rotationAnim;
 };
 

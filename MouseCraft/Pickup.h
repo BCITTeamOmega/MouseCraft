@@ -4,6 +4,7 @@
 #include "MOUSECRAFT_ENUMS.h"
 #include "./Physics/PhysicsComponent.h"
 #include "Event/Handler.h"
+#include "Rotator.h"
 
 class Pickup : public Component
 {
@@ -21,5 +22,6 @@ public:
 	PICKUPS type;
 private:
 	PhysicsComponent* _physics;
+	Rotator* _rotator;
 };
 

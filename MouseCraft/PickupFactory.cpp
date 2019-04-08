@@ -13,6 +13,14 @@ PickupFactory::PickupFactory()
 	_screwModel = ModelLoader::loadModel("res/models/screw.obj");
 	_springModel = ModelLoader::loadModel("res/models/spring.obj");
 	_batteryModel = ModelLoader::loadModel("res/models/battery.obj");
+
+	_spawnAnim = new Animation();
+	_spawnAnim->name = "spawn";
+	_spawnAnim->duration = 1.0f;
+	_spawnAnim->AddScale(0.0f, glm::vec3(0));
+	_spawnAnim->AddScale(0.8f, glm::vec3(1.2f));
+	_spawnAnim->AddScale(1.0f, glm::vec3(1.0f));
+	_spawnAnim->SetCurve(new SineConverter());
 }
 
 PickupFactory::~PickupFactory()
@@ -24,6 +32,8 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	// create entity 
 	Entity* pickup = EntityManager::Instance().Create();
 	pickup->transform.setLocalPosition(position);
+	pickup->transform.setLocalRotation(glm::vec3(0.42f, 0.0f, 0.0f));
+	pickup->transform.setLocalScale(glm::vec3(0.0f));
 	
 	// create visuals 
 	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -46,6 +56,13 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 		break;
 	}
 
+	auto c_anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	c_anim->SetOneShot(true);
+	c_anim->AddAnimation(_spawnAnim);
+	
+	auto c_rotator = ComponentManager<UpdatableComponent>::Instance().Create<Rotator>();
+	c_rotator->rotationSpeed = glm::vec3(0.0, glm::pi<float>() * 0.5f, 0.0);
+	
 	// create logic 
 	auto c_pickup = ComponentManager<Pickup>::Instance().Create<Pickup>();
 	c_pickup->type = type;
@@ -56,6 +73,8 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 
 	// ASSEMBLE
 	pickup->AddComponent(c_renderable);
+	pickup->AddComponent(c_anim);
+	pickup->AddComponent(c_rotator);
 	pickup->AddComponent(c_pickup);
 	pickup->AddComponent(c_physics);
 

@@ -10,12 +10,14 @@
 #include "Graphics/ModelGen.h"
 #include "Graphics/Renderable.h"
 #include "Physics/PhysicsManager.h"
+#include "Animation.h"
 #include "Cat.h"
 #include "GameManager.h"
 #include "HealthComponent.h"
 #include "Mouse.h"
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
+#include "TransformAnimator.h"
 
 void HostScene::InitScene() {
     //Make the entities
@@ -318,6 +320,29 @@ void HostScene::InitScene() {
     //Don't forget the stupid teapots
     Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
     teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+
+	// Basic animations!
+	Animation* squishSquashAnim = new Animation();
+	squishSquashAnim->name = "idle";
+	squishSquashAnim->duration = 4.0f;
+	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
+	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
+	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
+	squishSquashAnim->SetCurve(new SineConverter());
+
+	TransformAnimator* mouse1Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse1Anim->AddAnimation(squishSquashAnim);
+	mouse1Entity->AddComponent(mouse1Anim);
+
+	TransformAnimator* mouse2Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse2Anim->AddAnimation(squishSquashAnim);
+	mouse2Anim->SetProgress(0.5f);	// chnage progress to look a little different
+	mouse2Entity->AddComponent(mouse2Anim);
+
+	TransformAnimator* mouse3Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse3Anim->AddAnimation(squishSquashAnim);
+	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
+	mouse3Entity->AddComponent(mouse3Anim);
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
