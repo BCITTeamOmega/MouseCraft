@@ -48,7 +48,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	{
 		c_render->setModel(*_ballModel);
 		c_render->setColor(Color(1.0, 0.5, 0.5));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 2, 2, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		c_phys = PhysicsManager::instance()->createObject(pos.x, pos.z, 2, 2, 0, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		YarnBall* c_ball = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
 		e->AddComponent(c_ball);
 		break;
