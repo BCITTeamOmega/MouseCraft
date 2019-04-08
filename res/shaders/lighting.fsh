@@ -32,7 +32,7 @@ vec3 tonemap(vec3 inCol) {
     return inCol / (vec3(1.0f, 1.0f, 1.0f) + inCol);
 }
 
-vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
+vec3 calcDiffuseRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
     vec3 posDiff = position - l.position.xyz;
 
     float distance = length(posDiff);
@@ -44,6 +44,27 @@ vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
     vec3 direction = float(l.type != 0) * normalize(posDiff) + float(l.type == 0) * l.direction.xyz;
 
     return max(-dot(normal, direction), 0.0f) * strength * l.color.rgb * albedo;
+}
+
+vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
+    float shininess = 15;
+    vec3 posDiff = position - l.position.xyz;
+
+    float distance = length(posDiff);
+    vec3 distances = vec3(1.0f, distance, distance * distance);
+
+    // The stuff below might look strange, but it's just calculating the strength and direction such that
+    // It will account for directional and point lights without using any branching
+    float strength = float(l.type != 0) * (1.0 / dot(l.attenuation.xyz, distances)) + float(l.type == 0);
+    vec3 toLight = float(l.type != 0) * normalize(posDiff) + float(l.type == 0) * l.direction.xyz;
+
+    vec3 halfVector = normalize(-toLight + normalize(-l.position.xyz));
+
+    return max(pow(dot(normal, halfVector), shininess) * l.color.rgb * strength, 0.0f);
+}
+
+vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
+    return calcDiffuseRadiance(l, albedo, position, normal) + calcSpecularRadiance(l, albedo, position, normal);
 }
 
 void main()

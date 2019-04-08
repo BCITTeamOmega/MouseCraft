@@ -36,7 +36,7 @@ void HostScene::InitScene() {
     Entity* couchEntity = EntityManager::Instance().Create();
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
-    Entity* southWallEntity = EntityManager::Instance().Create();
+	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
     Entity* eastWallEntity = EntityManager::Instance().Create();
     Entity* cameraEntity = EntityManager::Instance().Create();
@@ -314,13 +314,13 @@ void HostScene::InitScene() {
     light1->setType(Light::LightType::Directional);
     light1->setColor(Color(1.2f, 1.25f, 0.8f));
     light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
-    light1Entity->AddComponent(light1);
+	light1Entity->AddComponent(light1);
 
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
     light2->setColor(Color(10.0f, 60.0f, 300.0f));
     light2->setAttenuation(1, 0.8, 0.32);
-    light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
+    light2Entity->transform.setLocalPosition(glm::vec3(30.0f, 0.1f, 30.0f));
     light2Entity->AddComponent(light2);
 
 	// UI
