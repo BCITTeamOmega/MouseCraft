@@ -56,13 +56,13 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(renderSystem);
 	OmegaEngine::Instance().AddSystem(inputSystem);
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
-    OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
+	OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
 
 	//Start the game
 	OmegaEngine::Instance().Loop();
 }
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
 	SetupSound();
 
