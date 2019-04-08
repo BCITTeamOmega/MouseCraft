@@ -72,3 +72,9 @@ bool PhysicsComponent::updateFalling()
 	}
 	return false;
 }
+
+void PhysicsComponent::makeDynamic()
+{
+	body->SetType(b2BodyType::b2_dynamicBody);
+	body->SetAwake(true);
+}

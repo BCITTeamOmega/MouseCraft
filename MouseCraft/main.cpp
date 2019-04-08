@@ -34,7 +34,7 @@ void SetupSound()
 	initial->z = 0;
 	//create a type Param from the track params and pass it into the event notifier
 	TypeParam<TrackParams*> param(initial);
-	//EventManager::Notify(PLAY_SONG, &param);
+	EventManager::Notify(PLAY_SONG, &param);
 }
 
 void MainTest()
@@ -56,13 +56,13 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(renderSystem);
 	OmegaEngine::Instance().AddSystem(inputSystem);
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
-    OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
+	OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
 
 	//Start the game
 	OmegaEngine::Instance().Loop();
 }
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
 	SetupSound();
 

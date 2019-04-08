@@ -166,7 +166,7 @@ void Mouse::addItem(Pickup* item) {
 
 		GetEntity()->AddChild(item->GetEntity());
 		item->GetEntity()->transform.setLocalPosition(glm::vec3(2, 1, 0));
-		std::cout << "Mouse has pickup up a " << item << std::endl;
+		std::cout << "Mouse has picked up a " << item << std::endl;
 	}
 	else if (baseItem != nullptr && newItem == nullptr) {
 		std::cout << "Mouse will combine the " << baseItem << " and the " << item << std::endl;
