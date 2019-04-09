@@ -71,7 +71,7 @@ void Mouse::Update(float deltaTime)
 
 		for (auto pc : hits)
 		{
-			if (pc->type == PhysObjectType::MOUSE_DOWN || pc->type == PhysObjectType::MOUSE_UP)
+			if (pc->pType == PhysObjectType::MOUSE_DOWN || pc->pType == PhysObjectType::MOUSE_UP)
 			{
 				revive(pc);
 			}

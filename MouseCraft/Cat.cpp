@@ -162,19 +162,22 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
     if (results.size() > 0) {
         //Play a sound on hit here?
 
-        for (auto& p : results)
-        {
-            if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
-            {
-                std::cout << "INFO: Cat hit a mouse!" << std::endl;
-                p->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
-            }
-            else
-            {
-                auto e = p->GetEntity();
-                p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
-            }
-        }
+		for (auto& p : results)
+		{
+			if (p->pType == PhysObjectType::MOUSE_UP || p->pType == PhysObjectType::MOUSE_DOWN)
+			{
+				std::cout << "INFO: Cat hit a mouse!" << std::endl;
+				HealthComponent* hp = p->GetEntity()->GetComponent<HealthComponent>();
+
+				if(hp->GetHealth() > 0)
+					hp->Damage(1);
+			}
+			else
+			{
+				auto e = p->GetEntity();
+				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
+			}
+		}
     }
 
 }

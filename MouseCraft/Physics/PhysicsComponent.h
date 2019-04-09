@@ -22,12 +22,14 @@ public:
 	void makeDynamic();
 	void jump();
 	void fall();
+	void removeCollisions();
+	void removeFromGrid();
 
 	Vector2D velocity;
 	float zPos, zVelocity, rotation, width, height;
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
-	PhysObjectType::PhysObjectType type;
+	PhysObjectType::PhysObjectType pType;
 	Subject<PhysicsComponent*> onCollide; //for collision between bodies
 	Subject<PhysicsComponent*> onHit; //for hitbox checking
 	Subject<PhysicsComponent*> onBounce; //for hitbox checking

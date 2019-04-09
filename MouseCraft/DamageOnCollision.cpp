@@ -29,7 +29,7 @@ void DamageOnCollision::SetLayers(std::set<PhysObjectType::PhysObjectType> check
 
 void DamageOnCollision::OnCollision(PhysicsComponent * other)
 {
-	if (_checkFor.find(other->type) != _checkFor.end())
+	if (_checkFor.find(other->pType) != _checkFor.end())
 	{
 		if (damage > 0)
 		{
