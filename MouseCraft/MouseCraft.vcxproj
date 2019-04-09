@@ -97,6 +97,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D _SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OpenAL32.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
