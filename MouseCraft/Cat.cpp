@@ -4,9 +4,9 @@
 #include "Obstacle.h"
 #include <iostream>
 
-#define ATTACK_TIME 5
-#define JUMP_TIME 5
-#define POUNCE_TIME 5
+#define ATTACK_TIME 0.5
+#define JUMP_TIME 1
+#define POUNCE_TIME 1
 
 Cat::Cat() :
 	HandleOnCollide(this, &Cat::OnCollision),
@@ -187,7 +187,7 @@ void Cat::Jump()
 	if (pComp != nullptr)
 	{
 		//block if we are in an animation already
-		if (isAttacking || pComp->isJumping || isPouncing)
+		if (pComp->isJumping || isPouncing)
 			return;
 
 		//position of cat

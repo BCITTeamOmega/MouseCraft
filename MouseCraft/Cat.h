@@ -10,7 +10,7 @@
 #include "Event/Handler.h"
 #include "Physics/PhysObjectType.h"
 
-constexpr auto CAT_JUMP_DIST = 5;
+constexpr auto CAT_JUMP_DIST = 7.5;
 
 class Cat : public UpdatableComponent, public Observer<PhysicsComponent*>
 {
