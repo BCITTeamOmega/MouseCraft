@@ -6,6 +6,7 @@ Swords::Swords() :
 	HandleOnCollision(this, &Swords::OnCollision)
 
 {
+	Contraption::type = CONTRAPTIONS::SWORDS;
 }
 
 

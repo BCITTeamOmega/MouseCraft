@@ -158,6 +158,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ContraptionSystem.cpp" />
     <ClCompile Include="DamageOnCollision.cpp" />
     <ClCompile Include="Event\Handler.cpp" />
@@ -194,8 +195,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
-    <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthDisplay.cpp" />
     <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp" />
@@ -206,8 +207,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="Loading\ImageLoader.cpp" />
+    <ClCompile Include="Loading\UILoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Loading\SimpleParser.cpp" />
     <ClCompile Include="Loading\ObjFileParser.cpp" />
     <ClCompile Include="Loading\ModelLoader.cpp" />
@@ -234,6 +235,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="Trampoline.cpp" />
     <ClCompile Include="Sound\SoundComponent.cpp" />
     <ClCompile Include="Loading\PrefabLoader.cpp" />
@@ -242,6 +244,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="TestPrefab.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="TimedDestruction.cpp" />
+    <ClCompile Include="TransformAnimator.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
     <ClCompile Include="Network\Address.cpp" />
@@ -258,6 +261,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="YarnBall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Coil.h" />
     <ClInclude Include="Contraption.h" />
@@ -293,11 +297,11 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
-    <ClInclude Include="Graphics\UIRenderable.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HealthDisplay.h" />
     <ClInclude Include="HostScene.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Lamp.h" />
@@ -324,8 +328,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="GL\khrplatform.h" />
     <ClInclude Include="Input\InputSystem.h" />
     <ClInclude Include="Loading\ImageLoader.h" />
+    <ClInclude Include="Loading\UILoader.h" />
     <ClInclude Include="MainScene.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />
@@ -355,6 +359,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Physics\PhysObjectType.h" />
     <ClInclude Include="Loading\PrefabLoader.h" />
     <ClInclude Include="Physics\RayQueryCallback.h" />
+    <ClInclude Include="Rotator.h" />
     <ClInclude Include="Sound\SoundComponent.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Pickup.h" />
@@ -366,6 +371,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="TestPrefab.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="TimedDestruction.h" />
+    <ClInclude Include="TransformAnimator.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />
