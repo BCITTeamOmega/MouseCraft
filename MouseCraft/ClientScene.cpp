@@ -33,12 +33,33 @@ void ClientScene::InitScene() {
     Entity* couchEntity = EntityManager::Instance().Create();
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
+	northWallEntity->transform.setLocalPosition(glm::vec3(50, 5, -2.5));
     Entity* southWallEntity = EntityManager::Instance().Create();
-    Entity* westWallEntity = EntityManager::Instance().Create();
+	southWallEntity->transform.setLocalPosition(glm::vec3(50, 5, 77.5));
+	Entity* westWallEntity = EntityManager::Instance().Create();
+	westWallEntity->transform.setLocalPosition(glm::vec3(-2.5, 5, 37.5));
     Entity* eastWallEntity = EntityManager::Instance().Create();
+	eastWallEntity->transform.setLocalPosition(glm::vec3(102.5, 5, 37.5));
     Entity* cameraEntity = EntityManager::Instance().Create();
     cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
     cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
+	/*
+	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
+	northWallEntity->AddComponent(northWallPhysics);
+	northWallPhysics->initPosition();
+
+	PhysicsComponent* southWallPhysics = PhysicsManager::instance()->createObject(50, 77.5, 110, 5, 0, PhysObjectType::WALL);
+	southWallEntity->AddComponent(southWallPhysics);
+	southWallPhysics->initPosition();
+
+	PhysicsComponent* westWallPhysics = PhysicsManager::instance()->createObject(-2.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	westWallEntity->AddComponent(westWallPhysics);
+	westWallPhysics->initPosition();
+
+	PhysicsComponent* eastWallPhysics = PhysicsManager::instance()->createObject(102.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	eastWallEntity->AddComponent(eastWallPhysics);
+	eastWallPhysics->initPosition();
+	*/
 //    Entity* pSpawnerEntity = EntityManager::Instance().Create();
 //    Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
@@ -153,10 +174,10 @@ void ClientScene::InitScene() {
     eastWallRend->setColor(Color(1.0, 0.5, 0.0));
     eastWallEntity->AddComponent(eastWallRend);
 
-    /*
+    
     //Create PhysicsManager and tell it how big the world is
     PhysicsManager::instance()->setupGrid(100, 75, 5);
-
+	/*
     //Create the physics components
     PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
     mouse1Entity->AddComponent(mouse1Physics);

@@ -246,7 +246,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
             break;
         }
         case NetDatum::DataType::TRANSFORM_STATE_UPDATE:
-            cout << "Received State Update from " << sender << endl;
+            //cout << "Received State Update from " << sender << endl;
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
                 // Update state of NetworkComponents
                 unsigned int componentID = packet->ReadUInt();
