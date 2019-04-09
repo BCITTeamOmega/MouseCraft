@@ -2,6 +2,8 @@
 
 #include "Core/Entity.h"
 
+#include "ResourceCache.h"
+
 TransformAnimator::TransformAnimator()
 {
 }
@@ -95,7 +97,14 @@ Component * TransformAnimator::Create(json json)
 	auto animations = json["animations"];
 	for (auto& j : animations)
 	{
-		c->AddAnimation(Animation::CreateFromJson(j));
+		auto key = j["name"].get<std::string>();
+		auto a = ResourceCache<Animation>::Get(key);
+		if (a == nullptr)
+		{
+			a = Animation::CreateFromJson(j);
+			ResourceCache<Animation>::Add(key, a);
+		}
+		c->AddAnimation(a);
 	}
 	
 	return c;
