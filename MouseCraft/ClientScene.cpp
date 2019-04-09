@@ -221,8 +221,11 @@ void ClientScene::InitScene() {
     */
 
     // Test Network component
-    NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
-    mouse1Entity->AddComponent(mouseNetwork);
+	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
+	mouse1Entity->AddComponent(mouseNetwork);
+
+	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
+	mouse2Entity->AddComponent(mouseNetwork2);
 
     auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
     auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);

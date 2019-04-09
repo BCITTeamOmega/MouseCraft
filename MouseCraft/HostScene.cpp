@@ -284,6 +284,10 @@ void HostScene::InitScene() {
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse2Entity->AddComponent(mouse2JumpSound);
 
+	//Test Network Component
+	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
+	mouse2Entity->AddComponent(mouseNetwork2);
+
     //Mouse 3
     Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
     mouse3Mouse->speed = 50.0f;
