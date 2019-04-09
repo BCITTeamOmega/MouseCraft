@@ -17,7 +17,10 @@
 #include "Mouse.h"
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
+#include "HealthDisplay.h"
+#include "UI/ImageComponent.h"
 #include "TransformAnimator.h"
+#define CAT_HEALTH 8
 
 void HostScene::InitScene() {
     //Make the entities
@@ -44,6 +47,8 @@ void HostScene::InitScene() {
     Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
     Entity* light2Entity = EntityManager::Instance().Create();
+	Entity* healthUIEntity = EntityManager::Instance().Create();
+	Entity* healthBarUIEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
@@ -67,6 +72,7 @@ void HostScene::InitScene() {
 
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
+	std::string* boxTex = new std::string("res/textures/blank.bmp");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -239,7 +245,7 @@ void HostScene::InitScene() {
     mouse1Entity->AddComponent(mouse1Movement);
 
     HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse1Health->SetHealth(2);
+    mouse1Health->SetHealth(1);
     mouse1Entity->AddComponent(mouse1Health);
 
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -255,7 +261,7 @@ void HostScene::InitScene() {
     mouse2Entity->AddComponent(mouse2Movement);
 
     HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse2Health->SetHealth(2);
+    mouse2Health->SetHealth(1);
     mouse2Entity->AddComponent(mouse2Health);
 
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -271,7 +277,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Movement);
 
     HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse3Health->SetHealth(2);
+    mouse3Health->SetHealth(1);
     mouse3Entity->AddComponent(mouse3Health);
 
     SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -286,6 +292,7 @@ void HostScene::InitScene() {
     catEntity->AddComponent(catMovement);
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	catHealth->SetHealth(CAT_HEALTH);
     catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -316,6 +323,24 @@ void HostScene::InitScene() {
     light2->setAttenuation(1, 0.8, 0.32);
     light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
     light2Entity->AddComponent(light2);
+
+	// UI
+	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
+	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
+	healthImg->zForce = 0.1;
+	healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
+	healthBarUIEntity->AddComponent(healthImg);
+
+	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.05f);
+	healthBackImg->color = Color(0.0f, 0.0f, 0.0f, 0.8f);
+	healthBackImg->zForce = 0.2;
+	healthUIEntity->AddComponent(healthBackImg);
+	healthUIEntity->AddChild(healthBarUIEntity);
+
+	HealthDisplay* healthDisplayController = ComponentManager<HealthDisplay>::Instance().Create<HealthDisplay>(CAT_HEALTH);
+	healthDisplayController->setHealthUI(healthImg);
+	healthDisplayController->setWatchingHealthComponent(catHealth);
+	healthUIEntity->AddComponent(healthDisplayController);
 
     //Don't forget the stupid teapots
     Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
@@ -364,6 +389,7 @@ void HostScene::InitScene() {
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
+	root.AddChild(healthUIEntity);
 }
 
 void HostScene::CleanUp() {

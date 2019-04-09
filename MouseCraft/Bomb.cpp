@@ -12,6 +12,7 @@ const float Bomb::VER_VEL = 8.8f;
 
 Bomb::Bomb()
 {
+	Contraption::type = CONTRAPTIONS::BOMB;
 }
 
 Bomb::~Bomb()
