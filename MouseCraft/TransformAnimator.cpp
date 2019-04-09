@@ -2,6 +2,8 @@
 
 #include "Core/Entity.h"
 
+#include "ResourceCache.h"
+
 TransformAnimator::TransformAnimator()
 {
 }
@@ -85,3 +87,27 @@ bool TransformAnimator::GetOneShot() const
 {
 	return _oneShot;
 }
+
+Component * TransformAnimator::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	c->_speed = json["speed"].get<float>();
+	c->_oneShot = json["one_shot"].get<bool>();
+
+	auto animations = json["animations"];
+	for (auto& j : animations)
+	{
+		auto key = j["name"].get<std::string>();
+		auto a = ResourceCache<Animation>::Instance().Get(key);
+		if (a == nullptr)
+		{
+			a = Animation::CreateFromJson(j);
+			ResourceCache<Animation>::Instance().Add(key, a);
+		}
+		c->AddAnimation(a);
+	}
+	
+	return c;
+}
+
+PrefabRegistrar TransformAnimator::reg("TransformAnimator", &TransformAnimator::Create);

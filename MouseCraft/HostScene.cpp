@@ -366,6 +366,10 @@ void HostScene::InitScene() {
 
     //Don't forget the stupid teapots
 	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
+	Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
 
 	// Basic animations!
 	Animation* squishSquashAnim = new Animation();
@@ -412,6 +416,9 @@ void HostScene::InitScene() {
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
 	root.AddChild(teapotEntity);
+	root.AddChild(jumpingTeapot);
+	root.AddChild(jumpingTeapot2);
+
 }
 
 void HostScene::CleanUp() {

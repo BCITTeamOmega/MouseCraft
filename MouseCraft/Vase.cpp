@@ -87,3 +87,11 @@ void Vase::DestroyedByMouse()
 {
 	GetEntity()->Destroy();
 }
+
+Component * Vase::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
+	return c;
+}
+
+PrefabRegistrar Vase::reg("Vase", &Vase::Create);
