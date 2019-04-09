@@ -74,6 +74,7 @@ public:
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2, Vector2D& hit);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit);
+	WorldGrid* getGrid();
 private:
 	static PhysicsManager* pmInstance;
 	CpuProfiler profiler;

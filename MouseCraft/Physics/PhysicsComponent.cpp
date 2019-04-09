@@ -9,11 +9,26 @@ PhysicsComponent::PhysicsComponent(PhysObjectType::PhysObjectType t, float z, fl
 	zPos = z;
 	rotation = r;
 	isJumping = false;
-	type = t;
+	pType = t;
 }
 
 PhysicsComponent::~PhysicsComponent()
 {
+	if (body->GetType() != b2BodyType::b2_dynamicBody)
+	{
+		switch (pType)
+		{
+		case PhysObjectType::OBSTACLE_UP:
+		case PhysObjectType::OBSTACLE_DOWN:
+		case PhysObjectType::CONTRAPTION_UP:
+		case PhysObjectType::CONTRAPTION_DOWN:
+		case PhysObjectType::PLATFORM:
+		case PhysObjectType::PART:
+			removeFromGrid();
+			break;
+		}
+	}
+
 	body->GetWorld()->DestroyBody(body);
 }
 
@@ -86,4 +101,9 @@ void PhysicsComponent::removeCollisions()
 	filter.maskBits = COLLISIONLESS_MASK;
 
 	body->GetFixtureList()->SetFilterData(filter);
+}
+
+void PhysicsComponent::removeFromGrid()
+{
+	PhysicsManager::instance()->getGrid()->removeObject(body->GetPosition().x, body->GetPosition().y);
 }

@@ -126,6 +126,17 @@ void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
 	}
 }
 
+bool WorldGrid::removeObject(float xPos, float yPos)
+{
+	int xInd = round(xPos / scale);
+	int yInd = round(yPos / scale);
+
+	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
+		objectGrid[xInd][yInd] = nullptr;
+
+	return false;
+}
+
 bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 {
 	int x1 = p1->x;
@@ -155,7 +166,7 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 		{
 			for (int y = y1; y <= y2; y++)
 			{
-				objectGrid[x][y] = nullptr; //replace it with whatever should be beneath it
+				objectGrid[x][y] = nullptr;
 			}
 		}
 
@@ -167,11 +178,44 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 
 PhysicsComponent* WorldGrid::objectAt(float xPos, float yPos)
 {
-	int xInd = round(xPos);
-	int yInd = round(yPos);
+	int xInd = round(xPos / scale);
+	int yInd = round(yPos / scale);
 
 	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
 		return objectGrid[xInd][yInd];
 
 	return nullptr;
+}
+
+PhysicsComponent* WorldGrid::objectAt(int xPos, int yPos)
+{
+	if (xPos >= 0 && xPos < baseGrid.size() && yPos >= 0 && yPos < baseGrid[0].size())
+		return objectGrid[xPos][yPos];
+}
+
+bool WorldGrid::tileIsUp(float xPos, float yPos)
+{
+	int xInd = round(xPos / scale);
+	int yInd = round(yPos / scale);
+
+	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
+		return baseGrid[xInd][yInd];
+
+	return false;
+}
+
+bool WorldGrid::tileIsUp(int xPos, int yPos)
+{
+	if (xPos >= 0 && xPos < baseGrid.size() && yPos >= 0 && yPos < baseGrid[0].size())
+		return baseGrid[xPos][yPos];
+}
+
+int WorldGrid::gridWidth()
+{
+	return baseGrid.size();
+}
+
+int WorldGrid::gridHeight()
+{
+	return baseGrid[0].size();
 }

@@ -146,7 +146,7 @@ void Cat::Attack()
 
 		for (auto& p : results)
 		{
-			if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
+			if (p->pType == PhysObjectType::MOUSE_UP || p->pType == PhysObjectType::MOUSE_DOWN)
 			{
 				std::cout << "INFO: Cat hit a mouse!" << std::endl;
 				HealthComponent* hp = p->GetEntity()->GetComponent<HealthComponent>();

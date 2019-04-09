@@ -354,6 +354,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PART:
 		grid->createObject(*p1, physicsComp);
 		break;
 	}
@@ -410,25 +411,25 @@ void PhysicsManager::updateHeights(float step)
 				//Update the filters and categories to be the lower level versions
 				b2Filter filter;
 
-				switch (comp->type)
+				switch (comp->pType)
 				{
 				case PhysObjectType::MOUSE_UP:
-					comp->type = PhysObjectType::MOUSE_DOWN;
+					comp->pType = PhysObjectType::MOUSE_DOWN;
 					filter.categoryBits = MOUSE_DOWN_CATEGORY;
 					filter.maskBits = MOUSE_DOWN_MASK;
 					break;
 				case PhysObjectType::CAT_UP:
-					comp->type = PhysObjectType::CAT_DOWN;
+					comp->pType = PhysObjectType::CAT_DOWN;
 					filter.categoryBits = CAT_DOWN_CATEGORY;
 					filter.maskBits = CAT_DOWN_MASK;
 					break;
 				case PhysObjectType::OBSTACLE_UP:
-					comp->type = PhysObjectType::OBSTACLE_DOWN;
+					comp->pType = PhysObjectType::OBSTACLE_DOWN;
 					filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 					filter.maskBits = OBSTACLE_DOWN_MASK;
 					break;
 				case PhysObjectType::BALL_UP:
-					comp->type = PhysObjectType::BALL_DOWN;
+					comp->pType = PhysObjectType::BALL_DOWN;
 					filter.categoryBits = BALL_DOWN_CATEGORY;
 					filter.maskBits = BALL_DOWN_MASK;
 					break;
@@ -449,25 +450,25 @@ void PhysicsManager::updateHeights(float step)
 				//Update the filters and categories to be the upper level versions
 				b2Filter filter;
 
-				switch (comp->type)
+				switch (comp->pType)
 				{
 				case PhysObjectType::MOUSE_DOWN:
-					comp->type = PhysObjectType::MOUSE_UP;
+					comp->pType = PhysObjectType::MOUSE_UP;
 					filter.categoryBits = MOUSE_UP_CATEGORY;
 					filter.maskBits = MOUSE_UP_MASK;
 					break;
 				case PhysObjectType::CAT_DOWN:
-					comp->type = PhysObjectType::CAT_UP;
+					comp->pType = PhysObjectType::CAT_UP;
 					filter.categoryBits = CAT_UP_CATEGORY;
 					filter.maskBits = CAT_UP_MASK;
 					break;
 				case PhysObjectType::OBSTACLE_DOWN:
-					comp->type = PhysObjectType::OBSTACLE_UP;
+					comp->pType = PhysObjectType::OBSTACLE_UP;
 					filter.categoryBits = OBSTACLE_UP_CATEGORY;
 					filter.maskBits = OBSTACLE_UP_MASK;
 					break;
 				case PhysObjectType::BALL_DOWN:
-					comp->type = PhysObjectType::BALL_UP;
+					comp->pType = PhysObjectType::BALL_UP;
 					filter.categoryBits = BALL_UP_CATEGORY;
 					filter.maskBits = BALL_UP_MASK;
 					break;
@@ -553,7 +554,7 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 	{
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
 
-		if (toCheck.find(pComp->type) != toCheck.end())
+		if (toCheck.find(pComp->pType) != toCheck.end())
 			foundObjects.push_back(pComp);
 	}
 
@@ -608,7 +609,7 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
 
-		if (toCheck.find(pComp->type) != toCheck.end())
+		if (toCheck.find(pComp->pType) != toCheck.end())
 		{
 			frac = callback.fractions[i];
 			bestMatch = pComp;
@@ -624,4 +625,9 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 
 	hit = Vector2D(ray.x, ray.y);
 	return bestMatch;
+}
+
+WorldGrid* PhysicsManager::getGrid()
+{
+	return grid;
 }
