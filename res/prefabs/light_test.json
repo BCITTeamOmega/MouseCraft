@@ -1,0 +1,33 @@
+{
+	"pos": [60,2,60],
+	"scl": [1,1,1],
+	"rot": [0,0,0],
+  "entities": [
+    {
+      "pos": [-10,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Light",
+          "lightType": "Directional",
+          "attenuation": {
+            "constant": 1.0,
+            "linear": 0.1,
+            "quadratic": 0.05
+          },
+          "color":
+          {
+            "r":1.0,
+            "g":1.0,
+            "b":0.2
+          }
+        }
+      ]
+    }
+  ],
+  "components": [
+  ]
+}
