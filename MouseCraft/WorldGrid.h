@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
-#include "Physics\PhysicsComponent.h"
 #include <math.h>
 #include "Core\Vector2D.h"
+
+class PhysicsComponent;
 
 class WorldGrid
 {

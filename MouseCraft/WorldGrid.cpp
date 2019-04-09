@@ -109,16 +109,24 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 //Returns false if there is something already there
 void WorldGrid::createObject(Vector2D& pos, PhysicsComponent* pcomp)
 {
-	if (objectGrid[pos.x][pos.y] != nullptr)
-		objectGrid[pos.x][pos.y] = pcomp;
+	int xInd = round(pos.x / scale);
+	int yInd = round(pos.y / scale);
+
+	if (objectGrid[xInd][yInd] != nullptr)
+		objectGrid[xInd][yInd] = pcomp;
 }
 
 //Returns false if there is something already there
 void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
 {
-	for (int x = p1.x; x < p2.x; x++)
+	int x1 = round(p1.x / scale);
+	int x2 = round(p2.x / scale);
+	int y1 = round(p1.y / scale);
+	int y2 = round(p2.y / scale);
+
+	for (int x = x1; x < x2; x++)
 	{
-		for (int y = p1.y; y < p2.y; y++)
+		for (int y = y1; y < y2; y++)
 		{
 			if (objectGrid[x][y] != nullptr)
 				objectGrid[x][y] = pcomp;

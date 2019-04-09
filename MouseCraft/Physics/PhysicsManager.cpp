@@ -233,7 +233,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 
 	b2BodyDef bodyDef;
 	bodyDef.active = true;	//wait for component to be active (valid state)
-	Vector2D *p1, *p2;
+	Vector2D *p1 = new Vector2D(0, 0), *p2 = new Vector2D(0, 0);
 
 	switch (t)
 	{
