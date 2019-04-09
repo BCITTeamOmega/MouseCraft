@@ -3,6 +3,10 @@
 #include "Core/UpdatableComponent.h"
 #include "Obstacle.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 class YarnBall : public Obstacle
 {
 public:
@@ -17,5 +21,13 @@ private:
 	PhysicsComponent* _physics;
 	void OnMouseCollide(PhysicsComponent* other);
 	Handler<YarnBall, PhysicsComponent*> HandleMouseCollide;
+
+	/* TEMPLATE
+	{
+		"type": "YarnBall",
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

@@ -2,6 +2,10 @@
 
 #include "Obstacle.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 class Vase : public Obstacle
 {
 public:
@@ -34,4 +38,11 @@ private:
 	std::map<PhysicsComponent*, Vector2D*> _affected;
 	std::vector<PhysicsComponent*> _found;
 
+	/* TEMPLATE
+	{
+		"type": "Vase",
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

@@ -52,3 +52,11 @@ void YarnBall::OnMouseCollide(PhysicsComponent* other)
 		GetEntity()->Destroy();
 	}
 }
+
+Component * YarnBall::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
+	return c;
+}
+
+PrefabRegistrar YarnBall::reg("YarnBall", &YarnBall::Create);

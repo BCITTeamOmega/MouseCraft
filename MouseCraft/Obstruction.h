@@ -2,6 +2,10 @@
 
 #include "Obstacle.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 class Obstruction : public Obstacle
 {
 public:
@@ -20,5 +24,13 @@ private:
 	bool _isFalling = false;
 	PhysicsComponent* _physics;
 	Handler<Obstruction, PhysicsComponent*> HandleMouseCollide;
+
+	/* TEMPLATE
+	{
+		"type": "Obstruction",
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

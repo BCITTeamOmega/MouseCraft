@@ -4,6 +4,10 @@
 #include "Event/Handler.h"
 #include "Event/EventManager.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 /*
 Layout of the Lamp
 
@@ -43,4 +47,12 @@ private:
 	std::set<PhysObjectType::PhysObjectType> _checkFor;
 
 	float _counter = 0;
+
+	/* TEMPLATE
+	{
+		"type": "Lamp",
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
