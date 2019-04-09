@@ -331,7 +331,7 @@ void HostScene::InitScene() {
 	healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
 	healthBarUIEntity->AddComponent(healthImg);
 
-	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.9f);
+	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.05f);
 	healthBackImg->color = Color(0.0f, 0.0f, 0.0f, 0.8f);
 	healthBackImg->zForce = 0.2;
 	healthUIEntity->AddComponent(healthBackImg);
