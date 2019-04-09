@@ -42,6 +42,9 @@ private:
 	{
 		"type": "Vase",
 	}
+	REQUIRES
+	- PhysicsComponent
+	- HealthComponent
 	*/
 	static Component* Create(json json);
 	static PrefabRegistrar reg;

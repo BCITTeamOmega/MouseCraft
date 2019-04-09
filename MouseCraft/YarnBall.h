@@ -26,6 +26,9 @@ private:
 	{
 		"type": "YarnBall",
 	}
+	REQUIRES
+	- PhysicsComponent
+	- HealthComponent
 	*/
 	static Component* Create(json json);
 	static PrefabRegistrar reg;

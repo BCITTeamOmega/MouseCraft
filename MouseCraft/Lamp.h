@@ -52,6 +52,9 @@ private:
 	{
 		"type": "Lamp",
 	}
+	REQUIRES
+	- PhysicsComponent
+	- HealthComponent
 	*/
 	static Component* Create(json json);
 	static PrefabRegistrar reg;
