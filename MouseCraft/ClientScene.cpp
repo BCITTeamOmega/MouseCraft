@@ -27,11 +27,17 @@ void ClientScene::InitScene() {
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
     Entity* counter1Entity = EntityManager::Instance().Create();
+	counter1Entity->transform.setLocalPosition(glm::vec3(5, 2.5, 20));
     Entity* counter2Entity = EntityManager::Instance().Create();
+	counter2Entity->transform.setLocalPosition(glm::vec3(35, 2.5, 5));
     Entity* islandEntity = EntityManager::Instance().Create();
+	islandEntity->transform.setLocalPosition(glm::vec3(37.5, 2.5, 30));
     Entity* tableEntity = EntityManager::Instance().Create();
+	tableEntity->transform.setLocalPosition(glm::vec3(80, 2.5, 27.5));
     Entity* couchEntity = EntityManager::Instance().Create();
+	couchEntity->transform.setLocalPosition(glm::vec3(30, 2.5, 67.5));
     Entity* catstandEntity = EntityManager::Instance().Create();
+	catstandEntity->transform.setLocalPosition(glm::vec3(77.5, 2.5, 67.5));
     Entity* northWallEntity = EntityManager::Instance().Create();
 	northWallEntity->transform.setLocalPosition(glm::vec3(50, 5, -2.5));
     Entity* southWallEntity = EntityManager::Instance().Create();
@@ -43,6 +49,32 @@ void ClientScene::InitScene() {
     Entity* cameraEntity = EntityManager::Instance().Create();
     cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
     cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
+	/*
+//Create the physics components
+PhysicsComponent* counter1Physics = PhysicsManager::instance()->createGridObject(5, 20, 10, 40, PhysObjectType::PLATFORM);
+counter1Entity->AddComponent(counter1Physics);
+counter1Physics->initPosition();
+
+PhysicsComponent* counter2Physics = PhysicsManager::instance()->createGridObject(35, 5, 50, 10, PhysObjectType::PLATFORM);
+counter2Entity->AddComponent(counter2Physics);
+counter2Physics->initPosition();
+
+PhysicsComponent* islandPhysics = PhysicsManager::instance()->createGridObject(37.5, 30, 35, 20, PhysObjectType::PLATFORM);
+islandEntity->AddComponent(islandPhysics);
+islandPhysics->initPosition();
+
+PhysicsComponent* tablePhysics = PhysicsManager::instance()->createGridObject(80, 27.5, 20, 35, PhysObjectType::PLATFORM);
+tableEntity->AddComponent(tablePhysics);
+tablePhysics->initPosition();
+
+PhysicsComponent* couchPhysics = PhysicsManager::instance()->createGridObject(30, 67.5, 40, 15, PhysObjectType::PLATFORM);
+couchEntity->AddComponent(couchPhysics);
+couchPhysics->initPosition();
+
+PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
+catstandEntity->AddComponent(catstandPhysics);
+catstandPhysics->initPosition();
+*/
 	/*
 	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
 	northWallEntity->AddComponent(northWallPhysics);
@@ -177,48 +209,6 @@ void ClientScene::InitScene() {
     
     //Create PhysicsManager and tell it how big the world is
     PhysicsManager::instance()->setupGrid(100, 75, 5);
-	/*
-    //Create the physics components
-    PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
-    mouse1Entity->AddComponent(mouse1Physics);
-    mouse1Physics->initPosition();
-
-    PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
-    mouse2Entity->AddComponent(mouse2Physics);
-    mouse2Physics->initPosition();
-
-    PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
-    mouse3Entity->AddComponent(mouse3Physics);
-    mouse3Physics->initPosition();
-
-    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 8, 8, 0, PhysObjectType::CAT_UP);
-    catEntity->AddComponent(catPhysics);
-    catPhysics->initPosition();
-
-    PhysicsComponent* counter1Physics = PhysicsManager::instance()->createGridObject(5, 20, 10, 40, PhysObjectType::PLATFORM);
-    counter1Entity->AddComponent(counter1Physics);
-    counter1Physics->initPosition();
-
-    PhysicsComponent* counter2Physics = PhysicsManager::instance()->createGridObject(35, 5, 50, 10, PhysObjectType::PLATFORM);
-    counter2Entity->AddComponent(counter2Physics);
-    counter2Physics->initPosition();
-
-    PhysicsComponent* islandPhysics = PhysicsManager::instance()->createGridObject(37.5, 30, 35, 20, PhysObjectType::PLATFORM);
-    islandEntity->AddComponent(islandPhysics);
-    islandPhysics->initPosition();
-
-    PhysicsComponent* tablePhysics = PhysicsManager::instance()->createGridObject(80, 27.5, 20, 35, PhysObjectType::PLATFORM);
-    tableEntity->AddComponent(tablePhysics);
-    tablePhysics->initPosition();
-
-    PhysicsComponent* couchPhysics = PhysicsManager::instance()->createGridObject(30, 67.5, 40, 15, PhysObjectType::PLATFORM);
-    couchEntity->AddComponent(couchPhysics);
-    couchPhysics->initPosition();
-
-    PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
-    catstandEntity->AddComponent(catstandPhysics);
-    catstandPhysics->initPosition();
-    */
 
     // Test Network component
 	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
