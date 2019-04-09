@@ -12,7 +12,7 @@ enum Team
 	CAT
 };
 
-class PlayerComponent : public UpdatableComponent, public ISubscriber
+class PlayerComponent : public UpdatableComponent
 {
 public:
 	virtual void OnInitialized();
