@@ -159,6 +159,15 @@ private:
 	std::array<Axis2DInput, MAX_PLAYERS * 2> playerAxes;
 	Axis2DInput debugPlayerAxis;	// special axis for keyboard input
 	CpuProfiler profiler;
+	// hot pile of trash
+	int dkUp = 0;
+	int dkDown = 0;
+	int dkLeft = 0;
+	int dkRight = 0;
+	int dkUpLast = dkUp;
+	int dkDownLast = dkDown;
+	int dkLeftLast = dkLeft;
+	int dkRightLast = dkRight;
 
 // functions
 public:
