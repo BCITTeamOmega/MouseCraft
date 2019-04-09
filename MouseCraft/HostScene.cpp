@@ -343,8 +343,7 @@ void HostScene::InitScene() {
 	healthUIEntity->AddComponent(healthDisplayController);
 
     //Don't forget the stupid teapots
-    Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-    teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
 
 	// Basic animations!
 	Animation* squishSquashAnim = new Animation();
@@ -390,6 +389,7 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
+	root.AddChild(teapotEntity);
 }
 
 void HostScene::CleanUp() {
