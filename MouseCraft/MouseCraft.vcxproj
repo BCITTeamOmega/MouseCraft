@@ -194,8 +194,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
-    <ClCompile Include="Graphics\UIRenderable.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthDisplay.cpp" />
     <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
     <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp" />
@@ -206,8 +206,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="Loading\ImageLoader.cpp" />
+    <ClCompile Include="Loading\UILoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Loading\SimpleParser.cpp" />
     <ClCompile Include="Loading\ObjFileParser.cpp" />
     <ClCompile Include="Loading\ModelLoader.cpp" />
@@ -296,11 +296,11 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
-    <ClInclude Include="Graphics\UIRenderable.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HealthDisplay.h" />
     <ClInclude Include="HostScene.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Lamp.h" />
@@ -327,8 +327,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="GL\khrplatform.h" />
     <ClInclude Include="Input\InputSystem.h" />
     <ClInclude Include="Loading\ImageLoader.h" />
+    <ClInclude Include="Loading\UILoader.h" />
     <ClInclude Include="MainScene.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\StatusAction.h" />
     <ClInclude Include="Core\Test\TestComponent.h" />

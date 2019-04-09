@@ -1,7 +1,7 @@
 #include "MenuController.h"
 #include "Event/EventManager.h"
 #include "Input/InputSystem.h"
-#include "Graphics/UIRenderable.h"
+#include "UI/UIComponent.h"
 
 #include <iostream>
 
@@ -53,8 +53,8 @@ void MenuController::Notify(EventName eventName, Param* params) {
 
 void MenuController::addMenuItem(Entity* e) {
 	this->GetEntity()->AddChild(e);
-	e->transform.setLocalPosition(glm::vec3(0, _menuItems.size() * -0.3, 0));
 	_menuItems.push_back(e);
+	UIComponent* cmp = e->GetComponent<UIComponent>();
 	if (_menuItems.size() == 1) {
 		// Need to highlight the first element when it's added
 		highlight();
@@ -82,15 +82,15 @@ void MenuController::down() {
 }
 
 void MenuController::unhighlight() {
-	UIRenderable* uiRend = _menuItems[currentSelect]->GetComponent<UIRenderable>();
+	UIComponent* uiRend = _menuItems[currentSelect]->GetComponent<UIComponent>();
 	if (uiRend != nullptr) {
-		uiRend->setColor(Color(1.0f, 1.0f, 1.0f));
+		uiRend->color = Color(1.0f, 1.0f, 1.0f);
 	}
 }
 
 void MenuController::highlight() {
-	UIRenderable* uiRend = _menuItems[currentSelect]->GetComponent<UIRenderable>();
+	UIComponent* uiRend = _menuItems[currentSelect]->GetComponent<UIComponent>();
 	if (uiRend != nullptr) {
-		uiRend->setColor(Color(1.0f, 0.2f, 0.2f));
+		uiRend->color = Color(1.0f, 0.2f, 0.2f);
 	}
 }

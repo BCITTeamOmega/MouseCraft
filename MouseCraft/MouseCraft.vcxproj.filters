@@ -108,9 +108,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Event\EventManager.cpp">
       <Filter>Source Files\Event</Filter>
     </ClCompile>
@@ -363,9 +360,6 @@
     <ClCompile Include="Obstruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\UIRenderable.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="MenuController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -399,6 +393,12 @@
     <ClCompile Include="Graphics\Light.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Loading\UILoader.cpp">
+      <Filter>Source Files\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="TransformAnimator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -411,9 +411,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event\EventManager.h">
@@ -433,9 +430,6 @@
     </ClInclude>
     <ClInclude Include="Sound\SoundParams.h">
       <Filter>Header Files\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sound\TrackParams.h">
       <Filter>Header Files\Sound</Filter>
@@ -749,9 +743,6 @@
     <ClInclude Include="Obstruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\UIRenderable.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="MenuController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -784,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\Light.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading\UILoader.h">
+      <Filter>Header Files\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthDisplay.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="TransformAnimator.h">
       <Filter>Header Files</Filter>
