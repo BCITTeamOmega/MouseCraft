@@ -14,4 +14,5 @@ struct TrackParams {
     float z;
 };
 
-
+//method to make it easier to declare a song change
+void selectSong(TrackList track);
