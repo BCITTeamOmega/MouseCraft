@@ -11,6 +11,9 @@
 #include <glm/gtc/quaternion.hpp>
 #include <iostream>
 
+#include "json.hpp"
+using json = nlohmann::json;
+
 struct Vec3Keyframe 
 {
 	float time;
@@ -86,6 +89,8 @@ public:
 	int GetScalesCount() const;
 
 	void SetCurve(LinearConverter* converter);
+
+	static Animation* CreateFromJson(json json);
 
 private:
 	std::vector<Vec3Keyframe> _keyframesPos;
