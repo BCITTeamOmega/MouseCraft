@@ -150,12 +150,6 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 
 	switch (t)
 	{
-	case PhysObjectType::PART:
-		bodyDef.type = b2_staticBody;
-		fixtureDef.filter.categoryBits = PART_CATEGORY;
-		fixtureDef.filter.maskBits = PART_MASK;
-		physicsComp->zPos = Z_LOWER;
-		break;
 	case PhysObjectType::PROJECTILE_UP:
 		bodyDef.type = b2_dynamicBody;
 		fixtureDef.filter.categoryBits = PROJECTILE_UP_CATEGORY;
@@ -239,7 +233,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 
 	b2BodyDef bodyDef;
 	bodyDef.active = true;	//wait for component to be active (valid state)
-	Vector2D *p1, *p2;
+	Vector2D *p1 = new Vector2D(0, 0), *p2 = new Vector2D(0, 0);
 
 	switch (t)
 	{
@@ -249,18 +243,21 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		p1 = new Vector2D(x - ((float)w / 2), y + ((float)h / 2));
 		p2 = new Vector2D(x + ((float)w / 2), y - ((float)h / 2));
 
-		grid->addArea(*p1, *p2, t);
+		grid->positionArea(*p1, *p2);
 
 		bodyDef.position.Set(p1->x + ((float)w / 2), p1->y - ((float)h / 2));
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PART:
 		p1 = new Vector2D(x, y);
 
-		grid->addObject(*p1, t);
+		grid->positionObject(*p1);
 
-		bodyDef.position.Set(p1->x, p1->y);
+		bodyDef.position.Set(p1->x + grid->scale / 2.0f, p1->y - grid->scale / 2.0f);
 		break;
+	default:
+		return nullptr;
 	}
 
 	switch (t)
@@ -278,6 +275,9 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::CONTRAPTION_DOWN:
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::PART:
 		physicsComp->zPos = Z_LOWER;
 		break;
 	}
@@ -327,6 +327,13 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;
+	case PhysObjectType::PART:
+		bodyDef.type = b2_staticBody;
+		fixtureDef.filter.categoryBits = PART_CATEGORY;
+		fixtureDef.filter.maskBits = PART_MASK;
+		physicsComp->isUp = false;
+		physicsComp->zPos = Z_LOWER;
+		break;
 	default:
 		return nullptr; //if the input something that does use the grid
 	}
@@ -337,6 +344,20 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	physicsComp->body = body;
 
 	body->SetUserData(physicsComp);
+
+	switch (t)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_DOWN:
+	case PhysObjectType::PLATFORM:
+		grid->createArea(*p1, *p2, physicsComp);
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PART:
+		grid->createObject(*p1, physicsComp);
+		break;
+	}
 
 	return physicsComp;
 }
@@ -390,25 +411,25 @@ void PhysicsManager::updateHeights(float step)
 				//Update the filters and categories to be the lower level versions
 				b2Filter filter;
 
-				switch (comp->type)
+				switch (comp->pType)
 				{
 				case PhysObjectType::MOUSE_UP:
-					comp->type = PhysObjectType::MOUSE_DOWN;
+					comp->pType = PhysObjectType::MOUSE_DOWN;
 					filter.categoryBits = MOUSE_DOWN_CATEGORY;
 					filter.maskBits = MOUSE_DOWN_MASK;
 					break;
 				case PhysObjectType::CAT_UP:
-					comp->type = PhysObjectType::CAT_DOWN;
+					comp->pType = PhysObjectType::CAT_DOWN;
 					filter.categoryBits = CAT_DOWN_CATEGORY;
 					filter.maskBits = CAT_DOWN_MASK;
 					break;
 				case PhysObjectType::OBSTACLE_UP:
-					comp->type = PhysObjectType::OBSTACLE_DOWN;
+					comp->pType = PhysObjectType::OBSTACLE_DOWN;
 					filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
 					filter.maskBits = OBSTACLE_DOWN_MASK;
 					break;
 				case PhysObjectType::BALL_UP:
-					comp->type = PhysObjectType::BALL_DOWN;
+					comp->pType = PhysObjectType::BALL_DOWN;
 					filter.categoryBits = BALL_DOWN_CATEGORY;
 					filter.maskBits = BALL_DOWN_MASK;
 					break;
@@ -429,25 +450,25 @@ void PhysicsManager::updateHeights(float step)
 				//Update the filters and categories to be the upper level versions
 				b2Filter filter;
 
-				switch (comp->type)
+				switch (comp->pType)
 				{
 				case PhysObjectType::MOUSE_DOWN:
-					comp->type = PhysObjectType::MOUSE_UP;
+					comp->pType = PhysObjectType::MOUSE_UP;
 					filter.categoryBits = MOUSE_UP_CATEGORY;
 					filter.maskBits = MOUSE_UP_MASK;
 					break;
 				case PhysObjectType::CAT_DOWN:
-					comp->type = PhysObjectType::CAT_UP;
+					comp->pType = PhysObjectType::CAT_UP;
 					filter.categoryBits = CAT_UP_CATEGORY;
 					filter.maskBits = CAT_UP_MASK;
 					break;
 				case PhysObjectType::OBSTACLE_DOWN:
-					comp->type = PhysObjectType::OBSTACLE_UP;
+					comp->pType = PhysObjectType::OBSTACLE_UP;
 					filter.categoryBits = OBSTACLE_UP_CATEGORY;
 					filter.maskBits = OBSTACLE_UP_MASK;
 					break;
 				case PhysObjectType::BALL_DOWN:
-					comp->type = PhysObjectType::BALL_UP;
+					comp->pType = PhysObjectType::BALL_UP;
 					filter.categoryBits = BALL_UP_CATEGORY;
 					filter.maskBits = BALL_UP_MASK;
 					break;
@@ -533,7 +554,7 @@ std::vector<PhysicsComponent*> PhysicsManager::areaCheck(PhysicsComponent* check
 	{
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.foundBodies[i]->GetUserData());
 
-		if (toCheck.find(pComp->type) != toCheck.end())
+		if (toCheck.find(pComp->pType) != toCheck.end())
 			foundObjects.push_back(pComp);
 	}
 
@@ -588,7 +609,7 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 
 		PhysicsComponent* pComp = static_cast<PhysicsComponent*>(callback.hitBodies[i]->GetUserData());
 
-		if (toCheck.find(pComp->type) != toCheck.end())
+		if (toCheck.find(pComp->pType) != toCheck.end())
 		{
 			frac = callback.fractions[i];
 			bestMatch = pComp;
@@ -604,4 +625,9 @@ PhysicsComponent* PhysicsManager::rayCheck(PhysicsComponent* checkedBy, std::set
 
 	hit = Vector2D(ray.x, ray.y);
 	return bestMatch;
+}
+
+WorldGrid* PhysicsManager::getGrid()
+{
+	return grid;
 }

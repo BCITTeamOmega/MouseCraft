@@ -1,21 +1,30 @@
 #pragma once
 #include <vector>
-#include "Physics\PhysObjectType.h"
 #include <math.h>
 #include "Core\Vector2D.h"
+
+class PhysicsComponent;
 
 class WorldGrid
 {
 public:
 	WorldGrid(int w, int h, int s);
 	~WorldGrid();
-	void addObject(Vector2D& pos, PhysObjectType::PhysObjectType type);
-	void addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectType type);
+	bool positionObject(Vector2D& pos);
+	bool positionArea(Vector2D& p1, Vector2D& p2);
+	void createObject(Vector2D& pos, PhysicsComponent* pcomp);
+	void createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp);
+	bool removeObject(float xPos, float yPos);
 	bool removeArea(Vector2D* p1, Vector2D* p2);
-	PhysObjectType::PhysObjectType objectAt(float xPos, float yPos);
-private:
-	std::vector<std::vector<PhysObjectType::PhysObjectType>> grid;
-	int scale;
+	PhysicsComponent* objectAt(float xPos, float yPos);
+	PhysicsComponent* objectAt(int xPos, int yPos);
+	bool tileIsUp(float xPos, float yPos);
+	bool tileIsUp(int xPos, int yPos);
+	int gridWidth();
+	int gridHeight();
 
-	PhysObjectType::PhysObjectType replaceType(PhysObjectType::PhysObjectType type);
+	int scale;
+private:
+	std::vector<std::vector<bool>> baseGrid;
+	std::vector<std::vector<PhysicsComponent*>> objectGrid;
 };

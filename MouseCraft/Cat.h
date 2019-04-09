@@ -25,6 +25,7 @@ public:
 
 	Handler<Cat, PhysicsComponent*> HandleOnCollide;
 	Handler<Cat, PhysicsComponent*> HandleOnHit;
+    Entity* Hitbox;
 private:
     // player id for checking input events
     int playerID;
@@ -39,11 +40,15 @@ private:
     
     //method that launches attack animation and effects, and function that tracks if attack cooldown has ended
     void Attack();
+    //helper function that handles the actual checks for hitting things
+    void CheckHitbox(PhysicsComponent* pComp);
     void UpdateAttack(float dt);
     
-    //method that launches the Jump/Pounce animation and effects, and the functions which track the cooldowns on both
+    //method that is intended to remove player control and launch them like a projectile. A hit box will appear partway through.
+    void Pounce(PhysicsComponent* pComp);
+
+    //method that launches the attack/Pounce animation and effects, and the functions which track the cooldowns on both
     void Jump();
-    void UpdateJump(float dt);
     void updatePounce(float dt);
 };
 

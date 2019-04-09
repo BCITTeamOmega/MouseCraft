@@ -68,7 +68,7 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	c_pickup->type = type;
 
 	auto pSys = OmegaEngine::Instance().GetSystem<PhysicsManager>();
-	auto c_physics = pSys->createObject(position.x, position.z, 1, 1, 0.0, PhysObjectType::PART);
+	auto c_physics = pSys->createGridObject(position.x, position.z, 1, 1, PhysObjectType::PART);
 	// auto c_physics = pSys->createObject(0, 0, 0.1, 0.1, 0.0, PhysObjectType::OBSTACLE_DOWN); this works
 
 	// ASSEMBLE
@@ -77,6 +77,8 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	pickup->AddComponent(c_rotator);
 	pickup->AddComponent(c_pickup);
 	pickup->AddComponent(c_physics);
+
+	c_physics->initPosition();
 
 	return pickup;
 }
