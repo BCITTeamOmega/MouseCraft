@@ -1,0 +1,20 @@
+{
+	"pos": [0,0,0],
+	"scl": [1,1,1],
+	"rot": [0,0,0],
+	"entities": [
+	],
+	"components": [
+		{
+			"type": "Renderable",
+			"model_path": "res/models/test/teapot.obj",
+			"texture_path": "res/models/test/blank.bmp",
+			"color":
+			{
+				"r":1.0,
+				"g":0.0,
+				"b":0.0
+			}
+		}
+	]
+}

@@ -62,9 +62,6 @@ void MenuScene::InitScene() {
         case 0:
             OmegaEngine::Instance().ChangeScene(new HostScene());
             selectSong(MainBGM);
-			_back->Destroy();
-			_karen->Destroy();
-			_menu->Destroy();
             break;
         }
     });

@@ -232,8 +232,8 @@ void Entity::Destroy(bool force)
 		std::cout << "Destroying: " << this->GetID() << std::endl;
 
 		// destroy all children 
-		for (auto& e : _children)
-			e->Destroy(true);
+		while (_children.size() > 0)
+			_children.back()->Destroy(true);
 
 		// TODO: destruct all components 
 		for (auto& c : _components)
@@ -243,7 +243,8 @@ void Entity::Destroy(bool force)
 		if (_parent)
 			_parent->removeChild(this->_id);
 
-		delete(this);
+		if (GetID() != 0)
+			delete(this);
 	}
 	else // defer
 	{
