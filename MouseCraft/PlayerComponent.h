@@ -6,6 +6,10 @@
 #include "Event/ISubscriber.h"
 #include "Physics/PhysicsComponent.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 enum Team
 {
 	MOUSE,
@@ -44,4 +48,18 @@ private:
 
 	// Inherited via UpdatableComponent
 	virtual void Update(float deltaTime) override;
+
+	/* TEMPLATE
+	{
+		"type": "Player",
+		"speed": 50.0,
+		"team": "mouse",	// or cat 
+		"id": 0				// OPTIONAL
+	}
+	DEPENDENT
+	- HealthComponent
+	- PhysicsComponent
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

@@ -53,6 +53,12 @@
 				{
 					"type": "Rotator",
 					"speed": [0.0, 3.14, 0.0]
+				},
+				{
+					"type": "Player",
+					"speed": 50.0,
+					"team": "mouse",	
+					"id": 10				
 				}
 			]
 		}
