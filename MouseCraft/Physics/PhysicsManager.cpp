@@ -243,7 +243,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		p1 = new Vector2D(x - ((float)w / 2), y + ((float)h / 2));
 		p2 = new Vector2D(x + ((float)w / 2), y - ((float)h / 2));
 
-		grid->addArea(*p1, *p2, t);
+		grid->positionArea(*p1, *p2);
 
 		bodyDef.position.Set(p1->x + ((float)w / 2), p1->y - ((float)h / 2));
 		break;
@@ -252,7 +252,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	case PhysObjectType::PART:
 		p1 = new Vector2D(x, y);
 
-		grid->addObject(*p1, t);
+		grid->positionObject(*p1);
 
 		bodyDef.position.Set(p1->x, p1->y);
 		break;
@@ -344,6 +344,19 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	physicsComp->body = body;
 
 	body->SetUserData(physicsComp);
+
+	switch (t)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_DOWN:
+	case PhysObjectType::PLATFORM:
+		grid->createArea(*p1, *p2, physicsComp);
+		break;
+	case PhysObjectType::CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_DOWN:
+		grid->createObject(*p1, physicsComp);
+		break;
+	}
 
 	return physicsComp;
 }
