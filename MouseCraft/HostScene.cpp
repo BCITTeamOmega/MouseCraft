@@ -28,6 +28,12 @@ void HostScene::InitScene() {
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
+    Entity* catAttackEntity = EntityManager::Instance().Create();
+    catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
+    catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
+    catAttackEntity->transform.scale(4.4);
+    catAttackEntity->SetEnabled(false);
+    catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
     Entity* counter1Entity = EntityManager::Instance().Create();
@@ -54,6 +60,7 @@ void HostScene::InitScene() {
     //Player Models
     Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
     Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
+    Model* CatAttackModel = ModelLoader::loadModel("res/models/crescent.obj");
     //Map Models
     Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 75);
     Model* counter1Model = ModelGen::makeCube(10, 5, 40);
@@ -104,6 +111,11 @@ void HostScene::InitScene() {
     catRend->setModel(*catModel);
     catRend->setColor(Color(1.0, 0.25, 0.5));
     catEntity->AddComponent(catRend);
+
+    Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    catAttackRend->setModel(*CatAttackModel);
+    catAttackRend->setColor(Color(1.0, 1.0, 1.0));
+    catAttackEntity->AddComponent(catAttackRend);
 
     Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     floorRend->setModel(*floorModel);
@@ -285,6 +297,7 @@ void HostScene::InitScene() {
 
     //Cat
     Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+    catCat->Hitbox = catAttackEntity;
     catEntity->AddComponent(catCat);
 
     PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
