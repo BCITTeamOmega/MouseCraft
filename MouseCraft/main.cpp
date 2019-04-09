@@ -60,7 +60,6 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
 	OmegaEngine::Instance().AddSystem(new UIManager());
 
-
 	//Start the game
 	OmegaEngine::Instance().Loop();
 }

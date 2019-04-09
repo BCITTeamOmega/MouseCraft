@@ -117,10 +117,10 @@ void Cat::Attack()
     //get the section directly in front of our world position
     auto p1 = GetEntity()->transform;
     auto pos = p1.getWorldPosition();
-    pos += p1.getWorldForward();
+    pos += p1.getWorldForward() * 5.0f;
     //get the corners for our bounding box
-    auto bl = pos + glm::vec3(-10, 0, -10);
-    auto tr = pos + glm::vec3(10, 0, 10);
+    auto bl = pos + glm::vec3(-5, 0, -5);
+    auto tr = pos + glm::vec3(5, 0, 5);
 
     //launch area check
     auto results = pComp->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
@@ -148,6 +148,7 @@ void Cat::Attack()
 		{
 			if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
 			{
+				std::cout << "INFO: Cat hit a mouse!" << std::endl;
 				p->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
 			}
 			else
