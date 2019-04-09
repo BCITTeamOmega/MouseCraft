@@ -2,6 +2,8 @@
 
 #include "../Core/ComponentManager.h"
 #include "../Input/InputSystem.h"
+#include "../Core/OmegaEngine.h"
+#include "../ClientScene.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -24,15 +26,19 @@ NetworkComponent * NetworkSystem::CreateComponent() {
     std::mt19937 eng(rd());
     std::uniform_int_distribution<unsigned int> dist;
     unsigned int id;
-    NetworkComponent::NetAuthority auth = _role == HOST ? NetworkComponent::NetAuthority::AUTHORITATIVE : NetworkComponent::NetAuthority::SIMULATED;
 
     do {
         id = dist(eng);
     } while (_componentList.find(id) != _componentList.end());
 
+    return CreateComponent(id);
+}
 
-    NetworkComponent *comp = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(id, auth);
-    _componentList[id] = comp;
+NetworkComponent * NetworkSystem::CreateComponent(unsigned int netID) {
+    NetworkComponent::NetAuthority auth = _role == HOST ? NetworkComponent::NetAuthority::AUTHORITATIVE : NetworkComponent::NetAuthority::SIMULATED;
+
+    NetworkComponent *comp = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(netID, auth);
+    _componentList[netID] = comp;
 
     return comp;
 }
@@ -111,6 +117,7 @@ void NetworkSystem::Notify(EventName name, Param * params) {
 }
 
 void NetworkSystem::serverTick() {
+    // Receive and process any incoming packets
     Address sender;
     int received;
 
@@ -120,8 +127,17 @@ void NetworkSystem::serverTick() {
             processPacket(sender, &_rcv);
     }
 
+    if (_role == HOST) {
+        for (auto component : _componentList) {
+            if (component.second->CheckDiff(_tickNum)) {
+                appendToPackets(StateUpdateDatum(component.first, component.second->GetLastState()));
+            }
+        }
+    }
+    
     vector<Address> deleteList;
 
+    // Send packet data to all active connections
     for (auto & connection : _connectionList) {
         Connection * c = &connection.second;
         c->SetTick(_tickNum);
@@ -204,6 +220,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].Append(AckDatum(packet->GetTick()));
                 _role = Role::CLIENT;
                 _tickNum = newTick;
+                OmegaEngine::Instance().ChangeScene(new ClientScene());
             }
             break;
         }
@@ -229,9 +246,28 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
             break;
         }
         case NetDatum::DataType::TRANSFORM_STATE_UPDATE:
-            cout << "Received State Update from " << sender << endl;
+            //cout << "Received State Update from " << sender << endl;
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
                 // Update state of NetworkComponents
+                unsigned int componentID = packet->ReadUInt();
+
+                float posX = packet->ReadFloat();
+                float posY = packet->ReadFloat();
+                float posZ = packet->ReadFloat();
+
+                float rotX = packet->ReadFloat();
+                float rotY = packet->ReadFloat();
+                float rotZ = packet->ReadFloat();
+
+                float sclX = packet->ReadFloat();
+                float sclY = packet->ReadFloat();
+                float sclZ = packet->ReadFloat();
+
+                if (_componentList.find(componentID) != _componentList.end()) {
+                    _componentList[componentID]->StateUpdate(glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(sclX, sclY, sclZ));
+                } else {
+                    cout << "State update from unknown component " << componentID << endl;
+                }
             }
             break;
         case NetDatum::DataType::EVENT_TRIGGER:
