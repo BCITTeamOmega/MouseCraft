@@ -60,9 +60,6 @@ void MenuScene::InitScene() {
         switch (scene) {
         case 0:
             OmegaEngine::Instance().ChangeScene(new HostScene());
-			_back->Destroy();
-			_karen->Destroy();
-			_menu->Destroy();
             break;
         }
     });
