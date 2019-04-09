@@ -53,6 +53,7 @@ private:
 		"type": "TransformAnimator",
 		"speed": 1.0,
 		"one_shot": false,
+		"curve": "linear",
 		"animations":
 		[
 			{

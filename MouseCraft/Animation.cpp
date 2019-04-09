@@ -78,11 +78,11 @@ Animation * Animation::CreateFromJson(json json)
 		auto positions = json["positions"];
 		for (auto& j : positions)
 		{
-			auto t = json["time"];
+			auto t = j["time"].get<float>();
 			auto pos = glm::vec3(
-				json["value"][0].get<float>(), 
-				json["value"][1].get<float>(), 
-				json["value"][2].get<float>());
+				j["value"][0].get<float>(), 
+				j["value"][1].get<float>(), 
+				j["value"][2].get<float>());
 			a->AddPosition(t, pos);
 		}
 	}
@@ -92,11 +92,11 @@ Animation * Animation::CreateFromJson(json json)
 		auto rotations = json["rotations"];
 		for (auto& j : rotations)
 		{
-			auto t = json["time"];
+			auto t = j["time"].get<float>();
 			auto rot = glm::vec3(
-				json["value"][0].get<float>(),
-				json["value"][1].get<float>(),
-				json["value"][2].get<float>());
+				j["value"][0].get<float>(),
+				j["value"][1].get<float>(),
+				j["value"][2].get<float>());
 			a->AddRotation(t, rot);
 		}
 	}
@@ -106,11 +106,11 @@ Animation * Animation::CreateFromJson(json json)
 		auto scales = json["scales"];
 		for (auto& j : scales)
 		{
-			auto t = json["time"];
+			auto t = j["time"].get<float>();
 			auto scl = glm::vec3(
-				json["value"][0].get<float>(),
-				json["value"][1].get<float>(),
-				json["value"][2].get<float>());
+				j["value"][0].get<float>(),
+				j["value"][1].get<float>(),
+				j["value"][2].get<float>());
 			a->AddRotation(t, scl);
 		}
 	}

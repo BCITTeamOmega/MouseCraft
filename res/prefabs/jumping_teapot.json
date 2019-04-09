@@ -1,0 +1,56 @@
+{
+	"pos": [0,0,0],
+	"scl": [1,1,1],
+	"rot": [0,0,0],
+	"components": [],
+	"entities": [
+		{
+			"pos": [0,0,0],
+			"scl": [1,1,1],
+			"rot": [0,0,0],
+			"entities": [
+			],
+			"components": [
+				{
+					"type": "Renderable",
+					"model_path": "res/models/test/teapot.obj",
+					"texture_path": "res/models/test/blank.bmp",
+					"color":
+					{
+						"r":0.0,
+						"g":1.0,
+						"b":0.0
+					}
+				},
+				{
+					"type": "TransformAnimator",
+					"speed": 1.0,
+					"one_shot": false,
+					"curve": "sine",
+					"animations":
+					[
+						{
+							"name": "jump",
+							"duration": 2.0,
+							"positions":
+							[
+								{
+									"time": 0.0,
+									"value": [0.0, 0.0, 0.0]
+								},
+								{
+									"time": 1.0,
+									"value": [0.0, 2.0, 0.0]
+								},
+								{
+									"time": 2.0,
+									"value": [0.0, 0.0, 0.0]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
