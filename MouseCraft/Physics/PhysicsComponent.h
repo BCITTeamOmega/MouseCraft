@@ -22,6 +22,7 @@ public:
 	void makeDynamic();
 	void jump();
 	void fall();
+	void removeCollisions();
 
 	Vector2D velocity;
 	float zPos, zVelocity, rotation, width, height;

@@ -38,6 +38,7 @@ constexpr auto PROJECTILE_DOWN_CATEGORY = 0x0800;
 constexpr auto PROJECTILE_UP_CATEGORY = 0x1000;
 constexpr auto BALL_UP_CATEGORY = 0x2000;
 constexpr auto BALL_DOWN_CATEGORY = 0x4000;
+constexpr auto COLLISIONLESS_CATEGORY = 0x8000;
 
 constexpr auto PART_MASK = 0x0010;
 constexpr auto CONTRAPTION_UP_MASK = 0x22A9;
@@ -54,6 +55,7 @@ constexpr auto PROJECTILE_DOWN_MASK = 0x0047;
 constexpr auto PROJECTILE_UP_MASK = 0x0089;
 constexpr auto BALL_UP_MASK = 0x0229;
 constexpr auto BALL_DOWN_MASK = 0x0117;
+constexpr auto COLLISIONLESS_MASK = 0x0000;
 #pragma endregion
 
 class PhysicsComponent;

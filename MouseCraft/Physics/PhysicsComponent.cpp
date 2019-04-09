@@ -78,3 +78,12 @@ void PhysicsComponent::makeDynamic()
 	body->SetType(b2BodyType::b2_dynamicBody);
 	body->SetAwake(true);
 }
+
+void PhysicsComponent::removeCollisions()
+{
+	b2Filter filter;
+	filter.categoryBits = COLLISIONLESS_CATEGORY;
+	filter.maskBits = COLLISIONLESS_MASK;
+
+	body->GetFixtureList()->SetFilterData(filter);
+}
