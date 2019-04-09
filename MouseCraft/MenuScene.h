@@ -11,5 +11,7 @@ public:
 	void CleanUp() override;
 private:
     Entity *_menu;
+	Entity *_back;
+	Entity *_karen;
 };
 

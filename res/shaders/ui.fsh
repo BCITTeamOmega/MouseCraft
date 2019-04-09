@@ -5,9 +5,9 @@ in vec2 loc;
 
 uniform int textureID;
 uniform sampler2DArray tex;
-uniform vec3 color;
+uniform vec4 color;
 
 void main()
 {
-    result = vec4(color, 1.0f) * texture(tex, vec3(loc, textureID));
+    result = color * texture(tex, vec3(loc, textureID));
 }

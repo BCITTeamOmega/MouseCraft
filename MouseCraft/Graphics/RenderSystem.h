@@ -58,14 +58,13 @@ private:						        // Data Alignment
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
 	Image* scaleImage(Image* input, int width, int height);
-	glm::vec3 convertColor(Color c);
+	glm::vec4 convertColor(Color c);
 
 	Window* _window;
 	std::vector<RenderData>* _renderingList;
 	std::vector<RenderData>* _accumulatingList;
 	std::map<std::string, Shader> _shaders;
 	Shader* _shader;
-
 
 	std::vector<RenderData>* _uiRenderingList;
 	std::vector<RenderData>* _uiAccumulatingList;
