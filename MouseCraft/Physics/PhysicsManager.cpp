@@ -249,6 +249,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PART:
 		p1 = new Vector2D(x, y);
 
 		grid->addObject(*p1, t);
@@ -274,6 +275,9 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		physicsComp->zPos = Z_UPPER;
 		break;
 	case PhysObjectType::CONTRAPTION_DOWN:
+		physicsComp->zPos = Z_LOWER;
+		break;
+	case PhysObjectType::PART:
 		physicsComp->zPos = Z_LOWER;
 		break;
 	}

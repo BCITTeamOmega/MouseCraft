@@ -27,11 +27,11 @@ void WorldGrid::addObject(Vector2D& pos, PhysObjectType::PhysObjectType object)
 	if (xInd < 0)
 		xInd = 0;
 	else if (xInd >= grid.size())
-		xInd = grid.size();
+		xInd = grid.size() - 1;
 	else if (yInd < 0)
 		yInd = 0;
 	else if (yInd >= grid[0].size())
-		yInd = grid[0].size();
+		yInd = grid[0].size() - 1;
 
 	grid[xInd][yInd] = object;
 
@@ -53,7 +53,7 @@ void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectTy
 	else if (y1 < 0)
 		y1 = 0;
 	else if (y1 >= grid[0].size())
-		y1 = grid[0].size();
+		y1 = grid[0].size() - 1;
 	else if (x2 < 0)
 		x2 = 0;
 	else if (x2 >= grid.size())
@@ -61,7 +61,7 @@ void WorldGrid::addArea(Vector2D& p1, Vector2D& p2, PhysObjectType::PhysObjectTy
 	else if (y2 < 0)
 		y2 = 0;
 	else if (y2 >= grid[0].size())
-		y2 = grid[0].size();
+		y2 = grid[0].size() - 1;
 
 	//Fix the points if the user input them in the wrong order or something
 	if (x1 > x2)

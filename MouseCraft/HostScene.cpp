@@ -213,7 +213,7 @@ void HostScene::InitScene() {
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
-    root.AddChild(vaseEntity);
+    //root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
 	root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
