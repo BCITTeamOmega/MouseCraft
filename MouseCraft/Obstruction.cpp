@@ -47,3 +47,11 @@ void Obstruction::OnMouseCollide(PhysicsComponent * other)
 		health->Damage(100);	// C R U S H E D.
 	}
 }
+
+Component * Obstruction::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
+	return c;
+}
+
+PrefabRegistrar Obstruction::reg("Obstruction", &Obstruction::Create);
