@@ -8,6 +8,7 @@
 #include "UI/TextComponent.h"
 #include "HostScene.h"
 #include "MenuController.h"
+#include "Sound\TrackParams.h"
 
 void MenuScene::InitScene() {
     std::string* menuGameStartTex = new std::string("res/textures/menu1.png");
@@ -60,6 +61,7 @@ void MenuScene::InitScene() {
         switch (scene) {
         case 0:
             OmegaEngine::Instance().ChangeScene(new HostScene());
+            selectSong(MainBGM);
 			_back->Destroy();
 			_karen->Destroy();
 			_menu->Destroy();
