@@ -159,6 +159,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ClientScene.cpp" />
     <ClCompile Include="ContraptionSystem.cpp" />
     <ClCompile Include="DamageOnCollision.cpp" />
     <ClCompile Include="Event\Handler.cpp" />
@@ -196,6 +197,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="HealthDisplay.cpp" />
     <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
@@ -235,6 +237,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="ResourceCache.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="Sound\TrackParams.cpp" />
     <ClCompile Include="Trampoline.cpp" />
@@ -264,6 +267,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ClientScene.h" />
     <ClInclude Include="Coil.h" />
     <ClInclude Include="Contraption.h" />
     <ClInclude Include="Cat.h" />
@@ -360,6 +364,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Physics\PhysObjectType.h" />
     <ClInclude Include="Loading\PrefabLoader.h" />
     <ClInclude Include="Physics\RayQueryCallback.h" />
+    <ClInclude Include="ResourceCache.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="Sound\SoundComponent.h" />
     <ClInclude Include="stb_image.h" />

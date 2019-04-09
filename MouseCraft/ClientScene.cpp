@@ -1,4 +1,4 @@
-#include "HostScene.h"
+#include "ClientScene.h"
 
 #include "Core/ComponentManager.h"
 #include "Core/EntityManager.h"
@@ -10,7 +10,6 @@
 #include "Graphics/ModelGen.h"
 #include "Graphics/Renderable.h"
 #include "Physics/PhysicsManager.h"
-#include "Animation.h"
 #include "Cat.h"
 #include "GameManager.h"
 #include "HealthComponent.h"
@@ -18,23 +17,13 @@
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
 #include "Network/NetworkSystem.h"
-#include "HealthDisplay.h"
-#include "UI/ImageComponent.h"
-#include "TransformAnimator.h"
-#define CAT_HEALTH 8
 
-void HostScene::InitScene() {
+void ClientScene::InitScene() {
     //Make the entities
     Entity* mouse1Entity = EntityManager::Instance().Create();
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
-    Entity* catAttackEntity = EntityManager::Instance().Create();
-    catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
-    catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
-    catAttackEntity->transform.scale(4.4);
-    catAttackEntity->SetEnabled(false);
-    catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
     Entity* counter1Entity = EntityManager::Instance().Create();
@@ -44,24 +33,42 @@ void HostScene::InitScene() {
     Entity* couchEntity = EntityManager::Instance().Create();
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
+	northWallEntity->transform.setLocalPosition(glm::vec3(50, 5, -2.5));
     Entity* southWallEntity = EntityManager::Instance().Create();
-    Entity* westWallEntity = EntityManager::Instance().Create();
+	southWallEntity->transform.setLocalPosition(glm::vec3(50, 5, 77.5));
+	Entity* westWallEntity = EntityManager::Instance().Create();
+	westWallEntity->transform.setLocalPosition(glm::vec3(-2.5, 5, 37.5));
     Entity* eastWallEntity = EntityManager::Instance().Create();
+	eastWallEntity->transform.setLocalPosition(glm::vec3(102.5, 5, 37.5));
     Entity* cameraEntity = EntityManager::Instance().Create();
     cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
     cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
-    Entity* pSpawnerEntity = EntityManager::Instance().Create();
-    Entity* gmEntity = EntityManager::Instance().Create();
+	/*
+	PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
+	northWallEntity->AddComponent(northWallPhysics);
+	northWallPhysics->initPosition();
+
+	PhysicsComponent* southWallPhysics = PhysicsManager::instance()->createObject(50, 77.5, 110, 5, 0, PhysObjectType::WALL);
+	southWallEntity->AddComponent(southWallPhysics);
+	southWallPhysics->initPosition();
+
+	PhysicsComponent* westWallPhysics = PhysicsManager::instance()->createObject(-2.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	westWallEntity->AddComponent(westWallPhysics);
+	westWallPhysics->initPosition();
+
+	PhysicsComponent* eastWallPhysics = PhysicsManager::instance()->createObject(102.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
+	eastWallEntity->AddComponent(eastWallPhysics);
+	eastWallPhysics->initPosition();
+	*/
+//    Entity* pSpawnerEntity = EntityManager::Instance().Create();
+//    Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
     Entity* light2Entity = EntityManager::Instance().Create();
-	Entity* healthUIEntity = EntityManager::Instance().Create();
-	Entity* healthBarUIEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
     Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
     Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
-    Model* CatAttackModel = ModelLoader::loadModel("res/models/crescent.obj");
     //Map Models
     Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 75);
     Model* counter1Model = ModelGen::makeCube(10, 5, 40);
@@ -80,7 +87,6 @@ void HostScene::InitScene() {
 
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
-	std::string* boxTex = new std::string("res/textures/blank.bmp");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -112,11 +118,6 @@ void HostScene::InitScene() {
     catRend->setModel(*catModel);
     catRend->setColor(Color(1.0, 0.25, 0.5));
     catEntity->AddComponent(catRend);
-
-    Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
-    catAttackRend->setModel(*CatAttackModel);
-    catAttackRend->setColor(Color(1.0, 1.0, 1.0));
-    catAttackEntity->AddComponent(catAttackRend);
 
     Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     floorRend->setModel(*floorModel);
@@ -173,9 +174,10 @@ void HostScene::InitScene() {
     eastWallRend->setColor(Color(1.0, 0.5, 0.0));
     eastWallEntity->AddComponent(eastWallRend);
 
+    
     //Create PhysicsManager and tell it how big the world is
     PhysicsManager::instance()->setupGrid(100, 75, 5);
-
+	/*
     //Create the physics components
     PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
     mouse1Entity->AddComponent(mouse1Physics);
@@ -216,21 +218,30 @@ void HostScene::InitScene() {
     PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
     catstandEntity->AddComponent(catstandPhysics);
     catstandPhysics->initPosition();
+    */
 
-	auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
-	auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-	auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-	auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+    // Test Network component
+	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
+	mouse1Entity->AddComponent(mouseNetwork);
+
+	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
+	mouse2Entity->AddComponent(mouseNetwork2);
+
+    auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+    auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+    auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+    auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+    auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+    auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
-    //root.AddChild(vaseEntity);
+    root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
-	root.AddChild(lampEntity2);
+    root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
 
+    /*
     PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
     northWallEntity->AddComponent(northWallPhysics);
     northWallPhysics->initPosition();
@@ -246,7 +257,9 @@ void HostScene::InitScene() {
     PhysicsComponent* eastWallPhysics = PhysicsManager::instance()->createObject(102.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
     eastWallEntity->AddComponent(eastWallPhysics);
     eastWallPhysics->initPosition();
+    */
 
+    /*
     //Create other miscellaneous components for things
     //Mouse 1
     Mouse* mouse1Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -258,15 +271,11 @@ void HostScene::InitScene() {
     mouse1Entity->AddComponent(mouse1Movement);
 
     HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse1Health->SetHealth(1);
+    mouse1Health->SetHealth(2);
     mouse1Entity->AddComponent(mouse1Health);
 
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse1Entity->AddComponent(mouse1JumpSound);
-
-    //Test Network Component
-    NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
-    mouse1Entity->AddComponent(mouseNetwork);
 
     //Mouse 2
     Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -278,15 +287,11 @@ void HostScene::InitScene() {
     mouse2Entity->AddComponent(mouse2Movement);
 
     HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse2Health->SetHealth(1);
+    mouse2Health->SetHealth(2);
     mouse2Entity->AddComponent(mouse2Health);
 
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse2Entity->AddComponent(mouse2JumpSound);
-
-	//Test Network Component
-	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
-	mouse2Entity->AddComponent(mouseNetwork2);
 
     //Mouse 3
     Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -298,7 +303,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Movement);
 
     HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse3Health->SetHealth(1);
+    mouse3Health->SetHealth(2);
     mouse3Entity->AddComponent(mouse3Health);
 
     SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -306,7 +311,6 @@ void HostScene::InitScene() {
 
     //Cat
     Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
-    catCat->Hitbox = catAttackEntity;
     catEntity->AddComponent(catCat);
 
     PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
@@ -314,7 +318,6 @@ void HostScene::InitScene() {
     catEntity->AddComponent(catMovement);
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-	catHealth->SetHealth(CAT_HEALTH);
     catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -323,7 +326,9 @@ void HostScene::InitScene() {
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
+    */
 
+    /*
     //Game Manager
     GameManager* gmGameManager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
     gmGameManager->AddMouse(mouse1Mouse);
@@ -331,6 +336,7 @@ void HostScene::InitScene() {
     gmGameManager->AddMouse(mouse3Mouse);
     gmGameManager->SetCat(catCat);
     gmEntity->AddComponent(gmGameManager);
+    */
 
     // Lights
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
@@ -346,53 +352,9 @@ void HostScene::InitScene() {
     light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
     light2Entity->AddComponent(light2);
 
-	// UI
-	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
-	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
-	healthImg->zForce = 0.1;
-	healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
-	healthBarUIEntity->AddComponent(healthImg);
-
-	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.05f);
-	healthBackImg->color = Color(0.0f, 0.0f, 0.0f, 0.8f);
-	healthBackImg->zForce = 0.2;
-	healthUIEntity->AddComponent(healthBackImg);
-	healthUIEntity->AddChild(healthBarUIEntity);
-
-	HealthDisplay* healthDisplayController = ComponentManager<HealthDisplay>::Instance().Create<HealthDisplay>(CAT_HEALTH);
-	healthDisplayController->setHealthUI(healthImg);
-	healthDisplayController->setWatchingHealthComponent(catHealth);
-	healthUIEntity->AddComponent(healthDisplayController);
-
     //Don't forget the stupid teapots
-	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
-	Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
-
-	// Basic animations!
-	Animation* squishSquashAnim = new Animation();
-	squishSquashAnim->name = "idle";
-	squishSquashAnim->duration = 4.0f;
-	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
-	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
-	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
-	squishSquashAnim->SetCurve(new SineConverter());
-
-	TransformAnimator* mouse1Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
-	mouse1Anim->AddAnimation(squishSquashAnim);
-	mouse1Entity->AddComponent(mouse1Anim);
-
-	TransformAnimator* mouse2Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
-	mouse2Anim->AddAnimation(squishSquashAnim);
-	mouse2Anim->SetProgress(0.5f);	// chnage progress to look a little different
-	mouse2Entity->AddComponent(mouse2Anim);
-
-	TransformAnimator* mouse3Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
-	mouse3Anim->AddAnimation(squishSquashAnim);
-	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
-	mouse3Entity->AddComponent(mouse3Anim);
+    Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+    teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
@@ -409,18 +371,13 @@ void HostScene::InitScene() {
     root.AddChild(southWallEntity);
     root.AddChild(westWallEntity);
     root.AddChild(eastWallEntity);
-    root.AddChild(pSpawnerEntity);
-    root.AddChild(gmEntity);
+//    root.AddChild(pSpawnerEntity);
+//    root.AddChild(gmEntity);
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
-	root.AddChild(healthUIEntity);
-	root.AddChild(teapotEntity);
-	root.AddChild(jumpingTeapot);
-	root.AddChild(jumpingTeapot2);
-
 }
 
-void HostScene::CleanUp() {
+void ClientScene::CleanUp() {
 
 }

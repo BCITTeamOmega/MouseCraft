@@ -1,6 +1,7 @@
 #include "PlayerComponent.h"
 #include "Input/InputSystem.h"
 
+
 void PlayerComponent::OnInitialized()
 {
 	EventManager::Subscribe(EventName::INPUT_AXIS_2D, this);
@@ -54,3 +55,25 @@ void PlayerComponent::Update(float deltaTime)
 		_entity->transform.face2D(_move);
 	}
 }
+
+Component * PlayerComponent::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
+	
+	c->_speed = json["speed"].get<float>();
+	
+	auto team = json["team"].get<std::string>();
+	if (team == "mouse")
+		c->_teamID = Team::MOUSE;
+	else if (team == "cat")
+		c->_teamID = Team::CAT;
+	else
+		SDL_assert(false && "UNKNOWN TEAM");
+
+	if (json.find("id") != json.end())
+		c->_playerID = json["id"].get<int>();
+
+	return c;
+}
+
+PrefabRegistrar PlayerComponent::reg("Player", &PlayerComponent::Create);
