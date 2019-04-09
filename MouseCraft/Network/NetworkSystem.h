@@ -23,6 +23,7 @@ public:
     static NetworkSystem * Instance();
 
     NetworkComponent * CreateComponent();
+    NetworkComponent * CreateComponent(unsigned int netID);
 
     void RequestConnection(const Address & address);
     void SearchForServers();

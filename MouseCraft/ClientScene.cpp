@@ -1,4 +1,4 @@
-#include "HostScene.h"
+#include "ClientScene.h"
 
 #include "Core/ComponentManager.h"
 #include "Core/EntityManager.h"
@@ -18,7 +18,7 @@
 #include "ObstacleFactory.h"
 #include "Network/NetworkSystem.h"
 
-void HostScene::InitScene() {
+void ClientScene::InitScene() {
     //Make the entities
     Entity* mouse1Entity = EntityManager::Instance().Create();
     Entity* mouse2Entity = EntityManager::Instance().Create();
@@ -39,8 +39,8 @@ void HostScene::InitScene() {
     Entity* cameraEntity = EntityManager::Instance().Create();
     cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
     cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
-    Entity* pSpawnerEntity = EntityManager::Instance().Create();
-    Entity* gmEntity = EntityManager::Instance().Create();
+//    Entity* pSpawnerEntity = EntityManager::Instance().Create();
+//    Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
     Entity* light2Entity = EntityManager::Instance().Create();
 
@@ -153,6 +153,7 @@ void HostScene::InitScene() {
     eastWallRend->setColor(Color(1.0, 0.5, 0.0));
     eastWallEntity->AddComponent(eastWallRend);
 
+    /*
     //Create PhysicsManager and tell it how big the world is
     PhysicsManager::instance()->setupGrid(100, 75, 5);
 
@@ -196,21 +197,27 @@ void HostScene::InitScene() {
     PhysicsComponent* catstandPhysics = PhysicsManager::instance()->createGridObject(77.5, 67.5, 15, 15, PhysObjectType::PLATFORM);
     catstandEntity->AddComponent(catstandPhysics);
     catstandPhysics->initPosition();
+    */
 
-	auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
-	auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
-	auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
-	auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
-	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
-	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
+    // Test Network component
+    NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
+    mouse1Entity->AddComponent(mouseNetwork);
+
+    auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+    auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
+    auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
+    auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
+    auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
+    auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
     root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
-	root.AddChild(lampEntity2);
+    root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
 
+    /*
     PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
     northWallEntity->AddComponent(northWallPhysics);
     northWallPhysics->initPosition();
@@ -226,7 +233,9 @@ void HostScene::InitScene() {
     PhysicsComponent* eastWallPhysics = PhysicsManager::instance()->createObject(102.5, 37.5, 5, 85, 0, PhysObjectType::WALL);
     eastWallEntity->AddComponent(eastWallPhysics);
     eastWallPhysics->initPosition();
+    */
 
+    /*
     //Create other miscellaneous components for things
     //Mouse 1
     Mouse* mouse1Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -243,10 +252,6 @@ void HostScene::InitScene() {
 
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse1Entity->AddComponent(mouse1JumpSound);
-
-    //Test Network Component
-    NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
-    mouse1Entity->AddComponent(mouseNetwork);
 
     //Mouse 2
     Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -297,7 +302,9 @@ void HostScene::InitScene() {
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
+    */
 
+    /*
     //Game Manager
     GameManager* gmGameManager = ComponentManager<UpdatableComponent>::Instance().Create<GameManager>();
     gmGameManager->AddMouse(mouse1Mouse);
@@ -305,6 +312,7 @@ void HostScene::InitScene() {
     gmGameManager->AddMouse(mouse3Mouse);
     gmGameManager->SetCat(catCat);
     gmEntity->AddComponent(gmGameManager);
+    */
 
     // Lights
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
@@ -339,13 +347,13 @@ void HostScene::InitScene() {
     root.AddChild(southWallEntity);
     root.AddChild(westWallEntity);
     root.AddChild(eastWallEntity);
-    root.AddChild(pSpawnerEntity);
-    root.AddChild(gmEntity);
+//    root.AddChild(pSpawnerEntity);
+//    root.AddChild(gmEntity);
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 }
 
-void HostScene::CleanUp() {
+void ClientScene::CleanUp() {
 
 }
