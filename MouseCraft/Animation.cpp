@@ -67,6 +67,62 @@ void Animation::SetCurve(LinearConverter * converter)
 		_converter = converter;
 }
 
+Animation * Animation::CreateFromJson(json json)
+{
+	Animation* a = new Animation();
+	a->name = json["name"].get<std::string>();
+	a->duration = json["duration"].get<float>();
+
+	if (json.find("positions") != json.end())
+	{
+		auto positions = json["positions"];
+		for (auto& j : positions)
+		{
+			auto t = json["time"];
+			auto pos = glm::vec3(
+				json["value"][0].get<float>(), 
+				json["value"][1].get<float>(), 
+				json["value"][2].get<float>());
+			a->AddPosition(t, pos);
+		}
+	}
+
+	if (json.find("rotations") != json.end())
+	{
+		auto rotations = json["rotations"];
+		for (auto& j : rotations)
+		{
+			auto t = json["time"];
+			auto rot = glm::vec3(
+				json["value"][0].get<float>(),
+				json["value"][1].get<float>(),
+				json["value"][2].get<float>());
+			a->AddRotation(t, rot);
+		}
+	}
+
+	if (json.find("scales") != json.end())
+	{
+		auto scales = json["scales"];
+		for (auto& j : scales)
+		{
+			auto t = json["time"];
+			auto scl = glm::vec3(
+				json["value"][0].get<float>(),
+				json["value"][1].get<float>(),
+				json["value"][2].get<float>());
+			a->AddRotation(t, scl);
+		}
+	}
+
+	auto curve = json["curve"];
+	if (curve == "sine")
+		a->SetCurve(new SineConverter());
+	// else LINEAR 
+
+	return a;
+}
+
 glm::vec3 Animation::GetPosition(float time) const
 {
 	// WARNING: no keyframes

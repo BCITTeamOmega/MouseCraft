@@ -7,6 +7,9 @@
 #include "Core/UpdatableComponent.h"
 #include "Animation.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
 
 class TransformAnimator : public UpdatableComponent
 {
@@ -44,5 +47,54 @@ private:
 	float _speed = 1.0f;
 	bool _oneShot = false;
 	Animation* _currentAnim = nullptr;
+
+	/* TEMPLATE
+	{
+		"type": "TransformAnimator",
+		"speed": 1.0,
+		"one_shot": false,
+		"animations":
+		[
+			{
+				"name": "jump",
+				"duration": 2.0,
+				"positions": // OPTIONAL
+				[
+					{
+						"time": 0.0,
+						"value": [0.0, 0.0, 0.0]
+					},
+					{
+						"time": 0.0,
+						"value": [0.0, 2.0, 0.0]
+					}
+				],
+				"rotations": // OPTIONAL
+				[
+					{
+						"time": 0.0,
+						"value": [0.0, 0.0, 0.0]
+					}
+				], 
+				"scales": // OPTIONAL
+				[
+					{
+						"time": 0.0,
+						"value": [0.0, 0.0, 0.0]
+					}
+				]
+			},
+			{
+				"name": "nothing",
+				"duration": 10.0
+				// no position key frames
+				// no rotation key frames
+				// no scale key frames
+			}
+		]
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 
