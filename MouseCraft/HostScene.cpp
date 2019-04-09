@@ -40,8 +40,8 @@ void HostScene::InitScene() {
     Entity* westWallEntity = EntityManager::Instance().Create();
     Entity* eastWallEntity = EntityManager::Instance().Create();
 	Entity* cameraEntity = EntityManager::Instance().Create();
-    cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
-    cameraEntity->transform.setLocalRotation(glm::vec3(-1.0f, 0, 0));
+    cameraEntity->transform.setLocalPosition(glm::vec3(50, 50, 40));
+    cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
     Entity* pSpawnerEntity = EntityManager::Instance().Create();
     Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
@@ -78,7 +78,7 @@ void HostScene::InitScene() {
 
     //Create the camera
     Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
-    cam->setFOV(90.0f);
+    cam->setFOV(1.51f);
     cam->setCloseClip(0.01f);
     cam->setFarClip(100.0f);
     cameraEntity->AddComponent(cam);
@@ -310,17 +310,19 @@ void HostScene::InitScene() {
     gmEntity->AddComponent(gmGameManager);
 
     // Lights
+	/*
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
     light1->setType(Light::LightType::Directional);
     light1->setColor(Color(1.2f, 1.25f, 0.8f));
     light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
 	light1Entity->AddComponent(light1);
+	*/
 
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
     light2->setColor(Color(10.0f, 60.0f, 300.0f));
-    light2->setAttenuation(1, 0.1, 0.03);
-    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 0.5f, 50.0f));
+    light2->setAttenuation(1, 0.0, 0.01);
+    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 1.0f, 50.0f));
     light2Entity->AddComponent(light2);
 
 	auto light2test = ComponentManager<Renderable>::Instance().Create<Renderable>();

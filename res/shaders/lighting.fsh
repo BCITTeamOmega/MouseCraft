@@ -47,7 +47,7 @@ vec3 calcDiffuseRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
 }
 
 vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
-    float shininess = 15;
+    float shininess = 16;
     vec3 posDiff = position - l.position.xyz;
 
     float distance = length(posDiff);

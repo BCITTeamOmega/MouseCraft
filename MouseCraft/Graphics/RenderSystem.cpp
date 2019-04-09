@@ -460,8 +460,8 @@ void RenderSystem::accumulateList() {
 			l->getQuadraticAttenuation(),
 			0.0f
 		);
-		internalLight.position = glm::vec4(e->transform.getWorldPosition(), 0.0f);
-		internalLight.direction = glm::vec4(e->transform.getWorldForward(), 0.0f);
+		internalLight.position = glm::vec4(e->transform.getWorldPosition(), 1.0f);
+		internalLight.direction = glm::vec4(e->transform.getWorldForward(), 1.0f);
 
 		_lightAccumulatingList->push_back(internalLight);
 	}
