@@ -11,9 +11,6 @@
 #include "DamageOnCollision.h"
 #include "TimedDestruction.h"
 
-#include "json.hpp"
-using json = nlohmann::json;
-
 class Mouse;
 
 class Contraption : public Component, public Observer<PhysicsComponent*>
@@ -34,9 +31,5 @@ public:
 
 protected:
 	Mouse* mouse;
-
-private:
-	static Component* Create(json json);
-	static PrefabRegistrar reg;
 };
 

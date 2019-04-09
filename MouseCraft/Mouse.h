@@ -18,6 +18,7 @@
 #include "Event/Handler.h"
 #include "Input/InputSystem.h"
 #include "Physics/PhysicsComponent.h"
+#include "Loading/PrefabLoader.h"
 #include "HealthComponent.h"
 #include "Sound\SoundComponent.h"
 #include "PickupFactory.h"

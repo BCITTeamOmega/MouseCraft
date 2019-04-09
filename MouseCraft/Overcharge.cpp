@@ -26,6 +26,7 @@ void Overcharge::show() {
 Component* Overcharge::Create(json json)
 {
 	auto c = ComponentManager<Overcharge>::Instance().Create<Overcharge>();
+	return c;
 }
 
 PrefabRegistrar Overcharge::reg("Overcharge", Overcharge::Create);

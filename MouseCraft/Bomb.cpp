@@ -91,6 +91,7 @@ void Bomb::Explode()
 Component* Bomb::Create(json json)
 {
 	auto c = ComponentManager<Bomb>::Instance().Create<Bomb>();
+	return c;
 }
 
 PrefabRegistrar Bomb::reg("Bomb", Bomb::Create);

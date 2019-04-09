@@ -207,14 +207,25 @@ void Mouse::addItem(Pickup* item) {
 }
 
 void Mouse::dropItem() {
+
 	
 	if (baseItem != nullptr) {
-		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of Mouse
-		auto e = baseItem->GetEntity();
-		e->SetParent(OmegaEngine::Instance().GetRoot(), true);	// forced (instant and unmanaged)	
-		e->transform.setLocalPosition(dropPos);
-		baseItem->Drop();
-		baseItem = nullptr;
+		auto mousePos = GetEntity()->t().wPos();
+		auto upPos = GetEntity()->t().wPos() + glm::vec3(0, 0, 5);
+		auto downPos = GetEntity()->t().wPos() + glm::vec3(0, 0, -5);
+		auto leftPos = GetEntity()->t().wPos() + glm::vec3(-5, 0, 0);
+		auto rightPos = GetEntity()->t().wPos() + glm::vec3(5, 0, 5);
+
+		PhysicsComponent* pCompAt = PhysicsManager::instance()->getGrid()->objectAt(mousePos.x, mousePos.z);
+		PhysicsComponent* pCompAtUp = PhysicsManager::instance()->getGrid()->objectAt(upPos.x, upPos.z);
+		PhysicsComponent* pCompAtDown = PhysicsManager::instance()->getGrid()->objectAt(downPos.x, downPos.z);
+		PhysicsComponent* pCompAtLeft = PhysicsManager::instance()->getGrid()->objectAt(leftPos.x, leftPos.z);
+		PhysicsComponent* pCompAtRight = PhysicsManager::instance()->getGrid()->objectAt(rightPos.x, rightPos.z);
+
+		if (pCompAt == nullptr) {
+			baseItem->Drop();
+			baseItem = nullptr;
+		}
 	}
 
 	if (newItem != nullptr) {
@@ -408,6 +419,7 @@ Component* Mouse::Create(json json)
 	c->speed = json["speed"].get<float>();
 	c->downed = json["downed"].get<bool>();
 	c->player = json["player"].get<int>();
+	return c;
 }
 
 PrefabRegistrar Mouse::reg("Mouse", Mouse::Create);

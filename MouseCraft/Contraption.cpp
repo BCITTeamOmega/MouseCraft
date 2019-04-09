@@ -45,10 +45,3 @@ void Contraption::Drop() {
 	
 }
 
-Component* Contraption::Create(json json)
-{
-	auto c = ComponentManager<Contraption>::Instance().Create<Contraption>();
-
-}
-
-PrefabRegistrar Contraption::reg("Contraption", Contraption::Create);

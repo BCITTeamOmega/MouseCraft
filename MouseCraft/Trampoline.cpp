@@ -76,6 +76,7 @@ Component* Trampoline::Create(json json)
 {
 	auto c = ComponentManager<Trampoline>::Instance().Create<Trampoline>();
 	c->_isPlaced = json["_isPlaced"].get<bool>();
+	return c;
 }
 
 PrefabRegistrar Trampoline::reg("Trampoline", Trampoline::Create);

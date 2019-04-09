@@ -31,3 +31,12 @@ void Pickup::Drop()
 	_rotator->SetEnabled(true);
 	GetEntity()->transform.setLocalRotation(glm::vec3(0.42f, 0.0f, 0.0f));
 }
+
+Component* Pickup::Create(json json)
+{
+	auto c = ComponentManager<Pickup>::Instance().Create<Pickup>();	
+	c->type = json["type"].get<PICKUPS>();
+	return c;
+}
+
+PrefabRegistrar Pickup::reg("Pickup", Pickup::Create);

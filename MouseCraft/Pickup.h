@@ -4,7 +4,12 @@
 #include "MOUSECRAFT_ENUMS.h"
 #include "./Physics/PhysicsComponent.h"
 #include "Event/Handler.h"
+#include "Loading/PrefabLoader.h"
+#include "WorldGrid.h"
 #include "Rotator.h"
+
+#include "json.hpp"
+using json = nlohmann::json;
 
 class Pickup : public Component
 {
@@ -22,6 +27,9 @@ public:
 	PICKUPS type;
 private:
 	PhysicsComponent* _physics;
-	Rotator* _rotator;
+	Rotator* _rotator;	
+	
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

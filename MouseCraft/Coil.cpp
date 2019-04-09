@@ -84,6 +84,7 @@ void Coil::Update(float dt)
 Component* Coil::Create(json json)
 {
 	auto c = ComponentManager<Coil>::Instance().Create<Coil>();
+	return c;
 }
 
 PrefabRegistrar Coil::reg("Coil", Coil::Create);
