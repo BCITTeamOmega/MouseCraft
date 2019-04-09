@@ -310,25 +310,18 @@ void HostScene::InitScene() {
     gmEntity->AddComponent(gmGameManager);
 
     // Lights
-	/*
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
     light1->setType(Light::LightType::Directional);
     light1->setColor(Color(1.2f, 1.25f, 0.8f));
     light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
 	light1Entity->AddComponent(light1);
-	*/
 
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
-    light2->setColor(Color(10.0f, 60.0f, 300.0f));
+    light2->setColor(Color(0.5f, 1.0f, 2.5f));
     light2->setAttenuation(1, 0.0, 0.01);
-    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 1.0f, 50.0f));
+    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 4.0f, 50.0f));
     light2Entity->AddComponent(light2);
-
-	auto light2test = ComponentManager<Renderable>::Instance().Create<Renderable>();
-	light2test->setColor(Color(10.0f, 60.0f, 300.0f));
-	light2test->setModel(*box);
-	light2Entity->AddComponent(light2test);
 
 	// UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
