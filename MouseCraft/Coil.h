@@ -58,4 +58,7 @@ private:
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	
 	Handler<Coil, PhysicsComponent*> HandleOnCollision;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

@@ -94,3 +94,10 @@ void Swords::OnInitialized() {
 void Swords::Update(float dt) {
 	
 }
+
+Component* Swords::Create(json json) 
+{
+	auto c = ComponentManager<Swords>::Instance().Create<Swords>();
+}
+
+PrefabRegistrar Swords::reg("Swords", Swords::Create);

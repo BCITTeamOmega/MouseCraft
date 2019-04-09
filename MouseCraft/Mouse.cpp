@@ -402,3 +402,12 @@ void Mouse::revive(PhysicsComponent* mouse) {
 	mouse->GetEntity()->GetComponent<HealthComponent>()->SetHealth(1);
 }
 
+Component* Mouse::Create(json json)
+{
+	auto c = ComponentManager<Mouse>::Instance().Create<Mouse>();
+	c->speed = json["speed"].get<float>();
+	c->downed = json["downed"].get<bool>();
+	c->player = json["player"].get<int>();
+}
+
+PrefabRegistrar Mouse::reg("Mouse", Mouse::Create);

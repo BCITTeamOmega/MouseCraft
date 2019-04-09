@@ -24,5 +24,8 @@ private:
 	PhysicsComponent* _collidedObjects;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	Handler<Swords, PhysicsComponent*> HandleOnCollision;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

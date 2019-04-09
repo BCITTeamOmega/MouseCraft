@@ -80,3 +80,10 @@ void Coil::Update(float dt)
 		_collidedCat = nullptr;
 	}
 }
+
+Component* Coil::Create(json json)
+{
+	auto c = ComponentManager<Coil>::Instance().Create<Coil>();
+}
+
+PrefabRegistrar Coil::reg("Coil", Coil::Create);

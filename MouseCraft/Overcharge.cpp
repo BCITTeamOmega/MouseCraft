@@ -22,3 +22,10 @@ bool Overcharge::use(Mouse* m) {
 void Overcharge::show() {
 	Contraption::show();
 }
+
+Component* Overcharge::Create(json json)
+{
+	auto c = ComponentManager<Overcharge>::Instance().Create<Overcharge>();
+}
+
+PrefabRegistrar Overcharge::reg("Overcharge", Overcharge::Create);

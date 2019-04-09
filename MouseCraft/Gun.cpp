@@ -69,3 +69,10 @@ bool Gun::use(Mouse* m) {
 void Gun::show() {
 	Contraption::show();
 }
+
+Component* Gun::Create(json json)
+{
+	auto c = ComponentManager<Gun>::Instance().Create<Gun>();
+}
+
+PrefabRegistrar Gun::reg("Gun", Gun::Create);

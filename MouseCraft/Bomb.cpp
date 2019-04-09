@@ -87,3 +87,10 @@ void Bomb::Explode()
 	OmegaEngine::Instance().AddEntity(explosion);
 	explosion->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
 }
+
+Component* Bomb::Create(json json)
+{
+	auto c = ComponentManager<Bomb>::Instance().Create<Bomb>();
+}
+
+PrefabRegistrar Bomb::reg("Bomb", Bomb::Create);

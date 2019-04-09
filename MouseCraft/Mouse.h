@@ -23,6 +23,9 @@
 #include "PickupFactory.h"
 #include "PlayerComponent.h"
 
+#include "json.hpp"
+using json = nlohmann::json;
+
 constexpr auto MOUSE_JUMP_DIST = 10;
 
 class Mouse : public UpdatableComponent
@@ -70,5 +73,8 @@ private:
 	PhysicsComponent* _phys;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	PhysicsComponent* _collidedObjects;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 
