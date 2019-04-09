@@ -78,5 +78,7 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	pickup->AddComponent(c_pickup);
 	pickup->AddComponent(c_physics);
 
+	c_physics->initPosition();
+
 	return pickup;
 }

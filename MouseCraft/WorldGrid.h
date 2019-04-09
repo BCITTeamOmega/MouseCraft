@@ -22,8 +22,9 @@ public:
 	bool tileIsUp(int xPos, int yPos);
 	int gridWidth();
 	int gridHeight();
+
+	int scale;
 private:
 	std::vector<std::vector<bool>> baseGrid;
 	std::vector<std::vector<PhysicsComponent*>> objectGrid;
-	int scale;
 };

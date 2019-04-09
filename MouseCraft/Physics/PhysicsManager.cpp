@@ -254,7 +254,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 
 		grid->positionObject(*p1);
 
-		bodyDef.position.Set(p1->x, p1->y);
+		bodyDef.position.Set(p1->x + grid->scale / 2.0f, p1->y - grid->scale / 2.0f);
 		break;
 	default:
 		return nullptr;
