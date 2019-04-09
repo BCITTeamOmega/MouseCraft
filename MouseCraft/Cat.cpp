@@ -4,9 +4,9 @@
 #include "Obstacle.h"
 #include <iostream>
 
-#define ATTACK_TIME 5
-#define JUMP_TIME 5
-#define POUNCE_TIME 5
+#define ATTACK_TIME 0.5
+#define JUMP_TIME 1
+#define POUNCE_TIME 2
 
 Cat::Cat() :
 	HandleOnCollide(this, &Cat::OnCollision),
@@ -24,10 +24,6 @@ Cat::~Cat()
 void Cat::Update(float dt) {
     if (isAttacking) {
         UpdateAttack(dt);
-    }
-
-    if (isJumping) {
-        UpdateJump(dt);
     }
 
 	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
@@ -97,6 +93,24 @@ void Cat::Attack()
         return;
     }
 
+
+    //play attack noise
+    GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Swipe); //set sound to swipe
+    auto ourPos = GetEntity()->transform.getLocalPosition(); //get our current position
+    GetEntity()->GetComponent<SoundComponent>()->PlaySound(ourPos.x, ourPos.y, ourPos.z); //play sound
+
+    //display hitbox
+    Hitbox->SetEnabled(true);
+
+    //check the area in front of us for valid things to hit
+    CheckHitbox(pComp);
+
+    std::cout << "Cat has attacked." << std::endl;
+    //start cooldown
+    isAttacking = true;
+}
+
+void Cat::CheckHitbox(PhysicsComponent* pComp) {
     //check which level we're on
     std::set<PhysObjectType::PhysObjectType> targets;
     if (pComp->isUp) {
@@ -105,7 +119,8 @@ void Cat::Attack()
             PhysObjectType::OBSTACLE_UP,
             PhysObjectType::MOUSE_UP
         };
-    } else {
+    }
+    else {
         //generate check type
         targets = std::set<PhysObjectType::PhysObjectType>{
             PhysObjectType::OBSTACLE_DOWN,
@@ -119,65 +134,74 @@ void Cat::Attack()
     auto pos = p1.getWorldPosition();
     pos += p1.getWorldForward() * 5.0f;
     //get the corners for our bounding box
-    auto bl = pos + glm::vec3(-5, 0, -5);
-    auto tr = pos + glm::vec3(5, 0, 5);
+    auto bl = pos + glm::vec3(-2.2, 0, -2.2);
+    auto tr = pos + glm::vec3(2.2, 0, 2.2);
 
     //launch area check
     auto results = pComp->areaCheck(targets, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 
-	//calculate which direction we're attacking (locked to the 4 cardinal directions)
-	auto angle = GetEntity()->transform.getWorldRotation2D();
-	
-	Vector2D facing;
-	if (angle > -M_PI/4 && angle < M_PI/4)			// up
-		facing = Vector2D(0, -1);
-	else if (angle > M_PI/4 && angle < M_PI*3/4)	// left
-		facing = Vector2D(-1, 0);	
-	else if (angle > -M_PI*3/4 && angle < -M_PI/4)	// right 
-		facing = Vector2D(1, 0);
-	else 											// down 
-		facing = Vector2D(0, 1);
 
-	std::cout << angle << std::endl;
-	std::cout << facing.x << "," << facing.y << std::endl;
+
+    //calculate which direction we're attacking (locked to the 4 cardinal directions)
+    auto angle = GetEntity()->transform.getWorldRotation2D();
+
+    Vector2D facing;
+    if (angle > -M_PI / 4 && angle < M_PI / 4)			// up
+        facing = Vector2D(0, -1);
+    else if (angle > M_PI / 4 && angle < M_PI * 3 / 4)	// left
+        facing = Vector2D(-1, 0);
+    else if (angle > -M_PI * 3 / 4 && angle < -M_PI / 4)	// right 
+        facing = Vector2D(1, 0);
+    else 											// down 
+        facing = Vector2D(0, 1);
+
+    std::cout << angle << std::endl;
+    std::cout << facing.x << "," << facing.y << std::endl;
 
     //check if we hit something
     if (results.size() > 0) {
+        //Play a sound on hit here?
 
-		for (auto& p : results)
-		{
-			if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
-			{
-				std::cout << "INFO: Cat hit a mouse!" << std::endl;
-				p->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
-			}
-			else
-			{
-				auto e = p->GetEntity();
-				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
-			}
-		}
+        for (auto& p : results)
+        {
+            if (p->type == PhysObjectType::MOUSE_UP || p->type == PhysObjectType::MOUSE_DOWN)
+            {
+                std::cout << "INFO: Cat hit a mouse!" << std::endl;
+                p->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
+            }
+            else
+            {
+                auto e = p->GetEntity();
+                p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
+            }
+        }
     }
 
-	//MIGHT BE COOL TO PLAY A WHACK SOUND EFFECT IF SOMETHING IS HIT
-
-    GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Swipe); //set sound to swipe
-    auto ourPos = GetEntity()->transform.getLocalPosition(); //get our current position
-    GetEntity()->GetComponent<SoundComponent>()->PlaySound(ourPos.x, ourPos.y, ourPos.z); //play sound
-
-    std::cout << "Cat has attacked." << std::endl;
-    isAttacking = true;
 }
 
 // track the time since we launched the attack animation, and reset when finished
 void Cat::UpdateAttack(float dt) {
+
+    if (current_time > 0.1) {
+        Hitbox->SetEnabled(false);
+    }
+
     if (current_time < ATTACK_TIME) {
         //advance time
         current_time += dt;
         return;
     }
     isAttacking = false;
+    
     current_time = 0;
+}
+
+void Cat::Pounce(PhysicsComponent * pComp) {
+    //COLT PUT YOUR CODE FOR THE POUNCE JUMP HERE!!!!
+
+    //SERIOUSLY, THIS IS WHERE
+
+    isPouncing = true;
 }
 
 //check if we are doing something, then check if we can jump and either jump or pounce
@@ -188,7 +212,7 @@ void Cat::Jump()
 	if (pComp != nullptr)
 	{
 		//block if we are in an animation already
-		if (isAttacking || pComp->isJumping || isPouncing)
+		if (pComp->isJumping || isPouncing)
 			return;
 
 		//position of cat
@@ -220,30 +244,33 @@ void Cat::Jump()
 	}
 
     //pounce code
+    Pounce(pComp);
     std::cout << "Cat has pounced." << std::endl;
     //isPouncing = true;
-}
-
-// track the time since we launched the jump animation, and reset when finished
-void Cat::UpdateJump(float dt)
-{
-    /*if (current_time < JUMP_TIME) {
-        //advance time
-        current_time += dt;
-        return;
-    }
-    isJumping = false;
-    current_time = 0;*/
 }
 
 // track the time since we launched the pounce animation, and reset when finished
 void Cat::updatePounce(float dt)
 {
-    /*if (current_time < POUNCE_TIME) {
+
+    if (current_time > POUNCE_TIME * 0.5 && current_time < POUNCE_TIME * 0.75) {
+        PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
+        CheckHitbox(pComp);
+        //display hitbox
+        Hitbox->SetEnabled(true);
+    }
+
+    if (current_time > POUNCE_TIME * 0.75) {
+        //Hide hitbox
+        Hitbox->SetEnabled(false);
+    }
+
+    if (current_time < POUNCE_TIME) {
         //advance time
         current_time += dt;
         return;
     }
     isPouncing = false;
-    current_time = 0;*/
+    Hitbox->SetEnabled(false);
+    current_time = 0;
 }
