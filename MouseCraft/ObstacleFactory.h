@@ -24,6 +24,7 @@ public:
 	Entity* Create(OBSTACLES type, glm::vec3 position, bool isUp);
 private:
 	Model* _ballModel;
+	Model* _lampModel;
 	Model* _cylinderModel;
 	Model* _boxModel;
 	Model* _bookModel;

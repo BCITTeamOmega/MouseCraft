@@ -20,6 +20,7 @@
 #include "Physics/PhysicsComponent.h"
 #include "HealthComponent.h"
 #include "Sound\SoundComponent.h"
+#include "PickupFactory.h"
 #include "PlayerComponent.h"
 
 constexpr auto MOUSE_JUMP_DIST = 10;
@@ -37,11 +38,12 @@ public:
 	virtual void OnHit(PhysicsComponent* e);
 	virtual void OnBounce(PhysicsComponent* e);
 	virtual void OnDeath();
+	virtual void OnRevived();
 	void addItem(Pickup* item);
 	void dropItem();
 	void use(Contraption* item);
 	void combine(Pickup *material);
-	void revive();
+	void revive(PhysicsComponent* mouse);
 
 public:
 	float speed = 10.0f;
@@ -50,6 +52,7 @@ public:
 	Handler<Mouse, PhysicsComponent*> HandleOnHit;
 	Handler<Mouse, PhysicsComponent*> HandleOnBounce;
 	Handler<Mouse> HandleOnDeath;
+	Handler<Mouse> HandleOnRevive;
 
 private:
 	int player = 0;
@@ -57,8 +60,11 @@ private:
 	float moveY;
 	float aimX;
 	float aimY;
+	bool interact;
 	bool shoot;
 	bool drop;
+	Color initialColor;
+	Renderable* render;
 	Pickup* baseItem;
 	Contraption* newItem;
 	PhysicsComponent* _phys;

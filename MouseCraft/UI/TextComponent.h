@@ -10,10 +10,13 @@ public:
 	// default font type to use
     static const std::string DEFAULT_FONT;
 
-    TextComponent(std::string text, float fontSize, float x, float y, std::string fontType = DEFAULT_FONT);
+    TextComponent(std::string text, float fontSize, float x, float y, std::string fontPath = DEFAULT_FONT);
 
     void Resize();
     bool IsTransparent();
+
+	void SetSpacing(float spacing);
+	float GetSpacing();
 
 	// Change the text on this component
     void SetText(std::string text);
@@ -23,4 +26,6 @@ private:
 
     std::string _text;
     float       _fontSize;
+	float		_spacing;
+	std::string	_fontPath;
 };

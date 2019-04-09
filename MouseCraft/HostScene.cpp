@@ -10,6 +10,7 @@
 #include "Graphics/ModelGen.h"
 #include "Graphics/Renderable.h"
 #include "Physics/PhysicsManager.h"
+#include "Animation.h"
 #include "Cat.h"
 #include "GameManager.h"
 #include "HealthComponent.h"
@@ -17,6 +18,10 @@
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
 #include "Network/NetworkSystem.h"
+#include "HealthDisplay.h"
+#include "UI/ImageComponent.h"
+#include "TransformAnimator.h"
+#define CAT_HEALTH 8
 
 void HostScene::InitScene() {
     //Make the entities
@@ -24,6 +29,12 @@ void HostScene::InitScene() {
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
+    Entity* catAttackEntity = EntityManager::Instance().Create();
+    catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
+    catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
+    catAttackEntity->transform.scale(4.4);
+    catAttackEntity->SetEnabled(false);
+    catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
     Entity* counter1Entity = EntityManager::Instance().Create();
@@ -43,11 +54,14 @@ void HostScene::InitScene() {
     Entity* gmEntity = EntityManager::Instance().Create();
     Entity* light1Entity = EntityManager::Instance().Create();
     Entity* light2Entity = EntityManager::Instance().Create();
+	Entity* healthUIEntity = EntityManager::Instance().Create();
+	Entity* healthBarUIEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
     Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
     Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
+    Model* CatAttackModel = ModelLoader::loadModel("res/models/crescent.obj");
     //Map Models
     Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 75);
     Model* counter1Model = ModelGen::makeCube(10, 5, 40);
@@ -66,6 +80,7 @@ void HostScene::InitScene() {
 
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
+	std::string* boxTex = new std::string("res/textures/blank.bmp");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -97,6 +112,11 @@ void HostScene::InitScene() {
     catRend->setModel(*catModel);
     catRend->setColor(Color(1.0, 0.25, 0.5));
     catEntity->AddComponent(catRend);
+
+    Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+    catAttackRend->setModel(*CatAttackModel);
+    catAttackRend->setColor(Color(1.0, 1.0, 1.0));
+    catAttackEntity->AddComponent(catAttackRend);
 
     Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     floorRend->setModel(*floorModel);
@@ -206,7 +226,7 @@ void HostScene::InitScene() {
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
-    root.AddChild(vaseEntity);
+    //root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
 	root.AddChild(lampEntity2);
     root.AddChild(ballEntity);
@@ -238,7 +258,7 @@ void HostScene::InitScene() {
     mouse1Entity->AddComponent(mouse1Movement);
 
     HealthComponent* mouse1Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse1Health->SetHealth(2);
+    mouse1Health->SetHealth(1);
     mouse1Entity->AddComponent(mouse1Health);
 
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -258,7 +278,7 @@ void HostScene::InitScene() {
     mouse2Entity->AddComponent(mouse2Movement);
 
     HealthComponent* mouse2Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse2Health->SetHealth(2);
+    mouse2Health->SetHealth(1);
     mouse2Entity->AddComponent(mouse2Health);
 
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -274,7 +294,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Movement);
 
     HealthComponent* mouse3Health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-    mouse3Health->SetHealth(2);
+    mouse3Health->SetHealth(1);
     mouse3Entity->AddComponent(mouse3Health);
 
     SoundComponent* mouse3JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -282,6 +302,7 @@ void HostScene::InitScene() {
 
     //Cat
     Cat* catCat = ComponentManager<UpdatableComponent>::Instance().Create<Cat>();
+    catCat->Hitbox = catAttackEntity;
     catEntity->AddComponent(catCat);
 
     PlayerComponent* catMovement = ComponentManager<UpdatableComponent>::Instance().Create<PlayerComponent>();
@@ -289,6 +310,7 @@ void HostScene::InitScene() {
     catEntity->AddComponent(catMovement);
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
+	catHealth->SetHealth(CAT_HEALTH);
     catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
@@ -320,9 +342,49 @@ void HostScene::InitScene() {
     light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
     light2Entity->AddComponent(light2);
 
+	// UI
+	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
+	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
+	healthImg->zForce = 0.1;
+	healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
+	healthBarUIEntity->AddComponent(healthImg);
+
+	ImageComponent* healthBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 80.0f, 5.0f, 0.1f, 0.05f);
+	healthBackImg->color = Color(0.0f, 0.0f, 0.0f, 0.8f);
+	healthBackImg->zForce = 0.2;
+	healthUIEntity->AddComponent(healthBackImg);
+	healthUIEntity->AddChild(healthBarUIEntity);
+
+	HealthDisplay* healthDisplayController = ComponentManager<HealthDisplay>::Instance().Create<HealthDisplay>(CAT_HEALTH);
+	healthDisplayController->setHealthUI(healthImg);
+	healthDisplayController->setWatchingHealthComponent(catHealth);
+	healthUIEntity->AddComponent(healthDisplayController);
+
     //Don't forget the stupid teapots
-    Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-    teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+
+	// Basic animations!
+	Animation* squishSquashAnim = new Animation();
+	squishSquashAnim->name = "idle";
+	squishSquashAnim->duration = 4.0f;
+	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
+	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
+	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
+	squishSquashAnim->SetCurve(new SineConverter());
+
+	TransformAnimator* mouse1Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse1Anim->AddAnimation(squishSquashAnim);
+	mouse1Entity->AddComponent(mouse1Anim);
+
+	TransformAnimator* mouse2Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse2Anim->AddAnimation(squishSquashAnim);
+	mouse2Anim->SetProgress(0.5f);	// chnage progress to look a little different
+	mouse2Entity->AddComponent(mouse2Anim);
+
+	TransformAnimator* mouse3Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	mouse3Anim->AddAnimation(squishSquashAnim);
+	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
+	mouse3Entity->AddComponent(mouse3Anim);
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
@@ -344,6 +406,8 @@ void HostScene::InitScene() {
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
+	root.AddChild(healthUIEntity);
+	root.AddChild(teapotEntity);
 }
 
 void HostScene::CleanUp() {

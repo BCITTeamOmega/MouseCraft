@@ -7,6 +7,7 @@
 Coil::Coil() :
 	HandleOnCollision(this, &Coil::OnCollision)
 {
+	Contraption::type = CONTRAPTIONS::COIL;
 }
 
 

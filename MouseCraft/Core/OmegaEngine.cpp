@@ -25,12 +25,6 @@ void OmegaEngine::initialize()
 	// main is defined elsewhere
 	_window = new Window("MouseCraft", SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//initialize SDL sound mixer context
-	//if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
-	//	printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-	//	return;
-	//}
-
 	_profiler.StopTimer(5);
 	std::cout << "Engine initialization finished: " << _profiler.GetDuration(4) << "ns" << std::endl;
 }
@@ -206,7 +200,8 @@ void OmegaEngine::transitionScenes()
 	if (_activeScene)
 	{
 		_activeScene->CleanUp();
-		_activeScene->root.SetEnabled(false, true);
+		_activeScene->root.Destroy(true);
+		delete(_activeScene);
 	}
 	std::deque<StatusActionParam*>().swap(_deferredActions);	// https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
 	std::deque<StatusActionParam*>().swap(_deferredActionsBack);
@@ -215,6 +210,9 @@ void OmegaEngine::transitionScenes()
 	_activeScene = _nextScene;
 	_activeScene->InitScene();
 	_activeScene->root.SetEnabled(true, true);
+	// transfer entities 
+	for (auto& e : transitionHolder.GetChildren())
+		_activeScene->root.AddChild(e);
 }
 
 Window* OmegaEngine::getWindow() const

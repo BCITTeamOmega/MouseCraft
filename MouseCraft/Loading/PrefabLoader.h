@@ -60,9 +60,10 @@ private:
 	{
 		// entity & transform 
 		auto e = EntityManager::Instance().Create();
-		auto pos = glm::vec3(json["pos_x"].get<double>(), json["pos_y"].get<double>(), json["pos_z"].get<double>());
-		auto rot = glm::vec3(json["rot_x"].get<double>(), json["rot_y"].get<double>(), json["rot_z"].get<double>());
-		auto scl = glm::vec3(json["scl_x"].get<double>(), json["scl_y"].get<double>(), json["scl_z"].get<double>());
+		
+		auto pos = glm::vec3(json["pos"][0].get<double>(), json["pos"][1].get<double>(), json["pos"][2].get<double>());
+		auto rot = glm::vec3(json["rot"][0].get<double>(), json["rot"][1].get<double>(), json["rot"][2].get<double>());
+		auto scl = glm::vec3(json["scl"][0].get<double>(), json["scl"][1].get<double>(), json["scl"][2].get<double>());
 		e->transform.setLocalPosition(pos);
 		e->transform.setLocalRotation(rot);
 		e->transform.setLocalScale(scl);

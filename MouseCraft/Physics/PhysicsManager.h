@@ -38,14 +38,15 @@ constexpr auto PROJECTILE_DOWN_CATEGORY = 0x0800;
 constexpr auto PROJECTILE_UP_CATEGORY = 0x1000;
 constexpr auto BALL_UP_CATEGORY = 0x2000;
 constexpr auto BALL_DOWN_CATEGORY = 0x4000;
+constexpr auto COLLISIONLESS_CATEGORY = 0x8000;
 
-constexpr auto PART_MASK = 0x0010;
+constexpr auto PART_MASK = 0x0000;
 constexpr auto CONTRAPTION_UP_MASK = 0x22A9;
 constexpr auto CONTRAPTION_DOWN_MASK = 0x4157;
-constexpr auto CAT_UP_MASK = 0x1229;
-constexpr auto CAT_DOWN_MASK = 0x0917;
-constexpr auto MOUSE_UP_MASK = 0x22A9;
-constexpr auto MOUSE_DOWN_MASK = 0x4557;
+constexpr auto CAT_UP_MASK = 0x1209;
+constexpr auto CAT_DOWN_MASK = 0x0907;
+constexpr auto MOUSE_UP_MASK = 0x2209;
+constexpr auto MOUSE_DOWN_MASK = 0x4107;
 constexpr auto OBSTACLE_UP_MASK = 0x32A9;
 constexpr auto OBSTACLE_DOWN_MASK = 0x4957;
 constexpr auto PLATFORM_MASK = 0x4954;
@@ -54,6 +55,7 @@ constexpr auto PROJECTILE_DOWN_MASK = 0x0047;
 constexpr auto PROJECTILE_UP_MASK = 0x0089;
 constexpr auto BALL_UP_MASK = 0x0229;
 constexpr auto BALL_DOWN_MASK = 0x0117;
+constexpr auto COLLISIONLESS_MASK = 0x0000;
 #pragma endregion
 
 class PhysicsComponent;
@@ -72,6 +74,7 @@ public:
 	std::vector<PhysicsComponent*> areaCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, Vector2D* p1, Vector2D* p2, Vector2D& hit);
 	PhysicsComponent* rayCheck(PhysicsComponent* checkedBy, std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit);
+	WorldGrid* getGrid();
 private:
 	static PhysicsManager* pmInstance;
 	CpuProfiler profiler;
