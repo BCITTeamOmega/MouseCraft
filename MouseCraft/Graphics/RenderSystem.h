@@ -54,6 +54,8 @@ private:						        // Data Alignment
 	void gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	void outlinePass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	void lightingPass();
+	void bloomPass();
+	void finalizationPass();
 	void uiPass();
 	void combineMasterGeometry(std::vector<RenderData>& data);
 	void combineOutlineGeometry(std::vector<RenderData>& data);
@@ -85,6 +87,8 @@ private:						        // Data Alignment
 
 	FrameBufferObject* _fbo;
 	FrameBufferObject* _outlineFBO;
+	FrameBufferObject* _postFBO;
+	FrameBufferObject* _bloomFBO;
 
 	UniformBufferObject* _ubo;
 	Camera* _camera;
@@ -96,7 +100,10 @@ private:						        // Data Alignment
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
+	GLTexture* _specularBuffer;
 	GLTexture* _outlineBuffer;
+	GLTexture* _postBuffer;
+	GLTexture* _bloomBuffer;
 
 	CombinedGeometry* _masterGeometry;
 	CombinedGeometry* _masterOutlineGeometry;

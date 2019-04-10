@@ -66,6 +66,8 @@ RenderSystem::~RenderSystem() {
 	delete _textures;
 	delete _fbo;
 	delete _outlineFBO;
+	delete _postFBO;
+	delete _bloomFBO;
 	delete _screenQuad;
 	delete _masterGeometry;
 	delete _ubo;
@@ -102,16 +104,22 @@ void RenderSystem::initRenderBuffers() {
 	_albedoBuffer = new GLTexture();
 	_normalBuffer = new GLTexture();
 	_positionBuffer = new GLTexture();
+	_specularBuffer = new GLTexture();
 	_outlineBuffer = new GLTexture();
+	_postBuffer = new GLTexture();
+	_bloomBuffer = new GLTexture();
 
-	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer };
+	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer, _specularBuffer };
 	_fbo = new FrameBufferObject(1280, 720, buffers);
 
 	vector<GLTexture*> outlineBuffers = { _outlineBuffer };
 	_outlineFBO = new FrameBufferObject(1280, 720, outlineBuffers);
 
-	_fbo = new FrameBufferObject(1280, 720, buffers);
+	vector<GLTexture*> postBuffers = { _postBuffer };
+	_postFBO = new FrameBufferObject(1280, 720, postBuffers);
 
+	vector<GLTexture*> bloomBuffers = { _bloomBuffer };
+	_bloomFBO = new FrameBufferObject(1280, 720, bloomBuffers);
 
 	vector<GLTexture*> noBuffers = {};
 	_resizeInFBO = new FrameBufferObject(TEXTURE_SIZE, TEXTURE_SIZE, noBuffers);
@@ -129,6 +137,9 @@ void RenderSystem::initShaders() {
 	loadShader("lighting");
 	loadShader("outline");
 	loadShader("ui");
+	loadShader("final");
+	loadShader("bloom1");
+	loadShader("bloom2");
 }
 
 void RenderSystem::setShader(Shader& shader) {
@@ -161,6 +172,12 @@ void RenderSystem::clearBuffers() {
 	_outlineFBO->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_outlineFBO->unbind();
+	_bloomFBO->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_bloomFBO->unbind();
+	_postFBO->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_postFBO->unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -180,6 +197,8 @@ void RenderSystem::renderScene() {
 		outlinePass(view, projection);
 		makeLightsViewSpace(view);
 		lightingPass();
+		bloomPass();
+		finalizationPass();
 	}
 	uiPass();
 }
@@ -214,6 +233,9 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 		_textures->bind(GL_TEXTURE0);
 
 		_shader->setUniformVec3("color", color);
+		_shader->setUniformFloat("shininess", render.getShininess());
+		_shader->setUniformFloat("smoothness", render.getSmoothness());
+
 		_shader->setUniformMatrix("transform", mvp);
 		_shader->setUniformMatrix("transformNoPerspective", mv);
 		_shader->setUniformMatrix("invTransform", invMVP);
@@ -394,6 +416,7 @@ void RenderSystem::lightingPass() {
 	_vao->setBuffer(0, *_positionVBO);
 	_vao->setBuffer(1, *_normalVBO);
 	_vao->setBuffer(2, *_texCoordVBO);
+	_postFBO->bind();
 
 	Geometry* quad = _screenQuad->getGeometry();
 	setShader(_shaders["lighting"]);
@@ -401,12 +424,14 @@ void RenderSystem::lightingPass() {
 	_albedoBuffer->bind(GL_TEXTURE0);
 	_normalBuffer->bind(GL_TEXTURE1);
 	_positionBuffer->bind(GL_TEXTURE2);
-	_outlineBuffer->bind(GL_TEXTURE3);
+	_specularBuffer->bind(GL_TEXTURE3);
+	_outlineBuffer->bind(GL_TEXTURE4);
 
 	_shader->setUniformTexture("albedoTex", 0);
 	_shader->setUniformTexture("normalTex", 1);
 	_shader->setUniformTexture("positionTex", 2);
-	_shader->setUniformTexture("outlineTex", 3);
+	_shader->setUniformTexture("specularTex", 3);
+	_shader->setUniformTexture("outlineTex", 4);
 
 	_shader->setUniformInt("numLights", _lightRenderingList->size());
 	_shader->setUniformVec3("ambientColor", vec3(0.06f, 0.17f, 0.27f));
@@ -421,6 +446,68 @@ void RenderSystem::lightingPass() {
 	_ebo->buffer(quad->getIndices());
 	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
 	_ubo->unbind(0);
+
+	_postFBO->unbind();
+}
+
+void RenderSystem::bloomPass() {
+	// Horizontal Pass
+	_vao->setBuffer(0, *_positionVBO);
+	_vao->setBuffer(1, *_normalVBO);
+	_vao->setBuffer(2, *_texCoordVBO);
+	_bloomFBO->bind();
+
+	Geometry* quad = _screenQuad->getGeometry();
+	setShader(_shaders["bloom1"]);
+
+	_postBuffer->bind(GL_TEXTURE0);
+	_shader->setUniformTexture("screenTex", 0);
+
+	_positionVBO->buffer(quad->getVertexData());
+	_normalVBO->buffer(quad->getNormalData());
+	_texCoordVBO->buffer(quad->getTexCoordData());
+	_ebo->buffer(quad->getIndices());
+	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
+	_bloomFBO->unbind();
+
+	// Vertical Pass
+	_vao->setBuffer(0, *_positionVBO);
+	_vao->setBuffer(1, *_normalVBO);
+	_vao->setBuffer(2, *_texCoordVBO);
+	_postFBO->bind();
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	setShader(_shaders["bloom2"]);
+
+	_postBuffer->bind(GL_TEXTURE0);
+	_bloomBuffer->bind(GL_TEXTURE1);
+	_shader->setUniformTexture("screenTex", 0);
+	_shader->setUniformTexture("tempTex", 1);
+
+	_positionVBO->buffer(quad->getVertexData());
+	_normalVBO->buffer(quad->getNormalData());
+	_texCoordVBO->buffer(quad->getTexCoordData());
+	_ebo->buffer(quad->getIndices());
+	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
+	_postFBO->unbind();
+}
+
+void RenderSystem::finalizationPass() {
+	_vao->setBuffer(0, *_positionVBO);
+	_vao->setBuffer(1, *_normalVBO);
+	_vao->setBuffer(2, *_texCoordVBO);
+
+	Geometry* quad = _screenQuad->getGeometry();
+	setShader(_shaders["final"]);
+
+	_postBuffer->bind(GL_TEXTURE0);
+	_shader->setUniformTexture("screenTex", 0);
+
+	_positionVBO->buffer(quad->getVertexData());
+	_normalVBO->buffer(quad->getNormalData());
+	_texCoordVBO->buffer(quad->getTexCoordData());
+	_ebo->buffer(quad->getIndices());
+	glDrawElements(GL_TRIANGLES, quad->getIndices().size(), GL_UNSIGNED_INT, 0);
 }
 
 void RenderSystem::uiPass() {
@@ -582,6 +669,8 @@ void RenderSystem::accumulateList() {
 			RenderData(
 				r->getModel(),
 				t.getWorldTransformation(),
+				r->getShininess(),
+				r->getSmoothness(),
 				r->getColor()
 			)
 		);
@@ -593,6 +682,8 @@ void RenderSystem::accumulateList() {
 				RenderData(
 					r->getModel(),
 					t.getWorldTransformation(),
+					r->getShininess(),
+					r->getSmoothness(),
 					c
 				)
 			);
@@ -607,6 +698,8 @@ void RenderSystem::accumulateList() {
 				RenderData(
 					m,
 					t.getWorldTransformation(),
+					0.0f,
+					0.0f,
 					c
 				)
 			);

@@ -104,22 +104,30 @@ void HostScene::InitScene() {
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
     mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
+	mouse1Rend->setShininess(0.4);
+	mouse1Rend->setRoughness(10.0);
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse2Rend->setModel(*mouseModel);
     mouse2Rend->setColor(Color(0.16, 0.18, 0.45));
-    mouse2Entity->AddComponent(mouse2Rend);
+	mouse2Rend->setShininess(0.4);
+	mouse2Rend->setRoughness(10.0);
+	mouse2Entity->AddComponent(mouse2Rend);
 
     Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse3Rend->setModel(*mouseModel);
     mouse3Rend->setColor(Color(0.19, 0.42, 0.17));
+	mouse3Rend->setShininess(0.4);
+	mouse3Rend->setRoughness(10.0);
     mouse3Entity->AddComponent(mouse3Rend);
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
 	//catRend->setModel(*box);
     catRend->setColor(Color(0.34, 0.08, 0));
+	catRend->setShininess(0.4);
+	catRend->setRoughness(10.0);
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -238,13 +246,13 @@ void HostScene::InitScene() {
 	Light* lampLight = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight->setType(Light::LightType::Point);
 	lampLight->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight->setAttenuation(1, 0.01, 0.05);
+	lampLight->setAttenuation(1, 0.08, 0.01);
 	lampEntity->AddComponent(lampLight);
 
 	Light* lampLight2 = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight2->setType(Light::LightType::Point);
 	lampLight2->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight2->setAttenuation(1, 0.01, 0.05);
+	lampLight2->setAttenuation(1, 0.08, 0.01);
 	lampEntity2->AddComponent(lampLight2);
 
     root.AddChild(bookEntity);
@@ -406,22 +414,22 @@ void HostScene::InitScene() {
 	
 	//Add outlines to the player entities
 	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	catOutline->setWidth(0.2f);
+	catOutline->setWidth(0.17f);
 	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
 	catEntity->AddComponent(catOutline);
 
 	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setWidth(0.17f);
 	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse1Entity->AddComponent(mouse1Outline);
 
 	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setWidth(0.17f);
 	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse2Entity->AddComponent(mouse2Outline);
 
 	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setWidth(0.17f);
 	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse3Entity->AddComponent(mouse3Outline);
 

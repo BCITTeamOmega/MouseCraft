@@ -47,6 +47,7 @@ bool Shader::compile() {
 	glAttachShader(_program, vertShader);
 	glAttachShader(_program, fragShader);
 	glLinkProgram(_program);
+
 	glGetProgramiv(_program, GL_LINK_STATUS, &status);
 	if (status == 0) {
 		printProgramError(_program);
