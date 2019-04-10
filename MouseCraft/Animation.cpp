@@ -195,7 +195,7 @@ glm::vec3 Animation::GetScale(float time) const
 	// Time is later than last keyframe.
 	if (last.time < time) return last.value;
 	// Find interpolated value
-	glm::vec3 ret;
+	glm::vec3 ret = glm::vec3(0, 0, 0);
 	for (int i = 0; i < _keyframesScl.size(); ++i)
 	{
 		if (_keyframesScl[i].time > time)

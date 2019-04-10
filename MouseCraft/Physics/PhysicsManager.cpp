@@ -196,20 +196,6 @@ PhysicsComponent* PhysicsManager::createObject(float x, float y, float w, float 
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;
-	case PhysObjectType::OBSTACLE_UP:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = OBSTACLE_UP_CATEGORY;
-		fixtureDef.filter.maskBits = OBSTACLE_UP_MASK;
-		physicsComp->isUp = true;
-		physicsComp->zPos = Z_UPPER;
-		break;
-	case PhysObjectType::OBSTACLE_DOWN:
-		bodyDef.type = b2_kinematicBody;
-		fixtureDef.filter.categoryBits = OBSTACLE_DOWN_CATEGORY;
-		fixtureDef.filter.maskBits = OBSTACLE_DOWN_MASK;
-		physicsComp->isUp = false;
-		physicsComp->zPos = Z_LOWER;
-		break;
 	case PhysObjectType::WALL:
 		bodyDef.type = b2_staticBody;
 		fixtureDef.filter.categoryBits = WALL_CATEGORY;
