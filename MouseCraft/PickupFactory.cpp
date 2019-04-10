@@ -37,22 +37,26 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position, std::vector<uns
 	pickup->transform.setLocalRotation(glm::vec3(0.42f, 0.0f, 0.0f));
 	pickup->transform.setLocalScale(glm::vec3(0.0f));
 	
+	// network 
+	auto c_net = NetworkSystem::Instance()->CreateComponent();
+	
 	// create visuals 
-	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	Component* c_renderable = nullptr; // ComponentManager<Renderable>::Instance().Create<Renderable>();
 	
 	switch (type)
 	{
 	case BATTERY:
-		c_renderable->setModel(*_batteryModel);
-		c_renderable->setColor(Color(1.0, 0.6, 0.0));
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/parts/battery_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/parts/battery_renderable.json"} });
 		break;
 	case SCREW:
-		c_renderable->setModel(*_screwModel);
-		c_renderable->setColor(Color(0.5, 0.5, 0.5));
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/parts/screw_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/parts/screw_renderable.json"} });
+
 		break;
 	case SPRING:
-		c_renderable->setModel(*_springModel);
-		c_renderable->setColor(Color(0.8, 0.1, 0.0));
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/parts/spring_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/parts/spring_renderable.json"} });
 		break;
 	default:
 		break;
@@ -73,23 +77,13 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position, std::vector<uns
 	auto c_physics = pSys->createGridObject(position.x, position.z, 1, 1, PhysObjectType::PART);
 	// auto c_physics = pSys->createObject(0, 0, 0.1, 0.1, 0.0, PhysObjectType::OBSTACLE_DOWN); this works
 
-	if (netIds)
-	{
-		auto c_net = NetworkSystem::Instance()->CreateComponent();
-		netIds->push_back(c_net->GetNetworkID());
-		pickup->AddComponent(c_net);
-	}
-	else
-	{
-		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
-	}
-
 	// ASSEMBLE
 	pickup->AddComponent(c_renderable);
 	pickup->AddComponent(c_anim);
 	pickup->AddComponent(c_rotator);
 	pickup->AddComponent(c_pickup);
 	pickup->AddComponent(c_physics);
+	pickup->AddComponent(c_net);
 
 	c_physics->initPosition();
 
