@@ -1,4 +1,5 @@
 #include "WorldGrid.h"
+#include "Physics/PhysicsComponent.h"
 
 //Make sure scale (s) divides into both the width and height otherwise the grid won't be as big as you intend
 WorldGrid::WorldGrid(int w, int h, int s)
@@ -21,6 +22,11 @@ WorldGrid::~WorldGrid()
 {
 	baseGrid.clear();
 	objectGrid.clear();
+}
+
+Vector2D WorldGrid::getScaledPosition(int gridX, int gridY)
+{
+	return Vector2D(gridX * scale, gridY * scale);
 }
 
 //Corrects the positions to ensure they're in the grid
@@ -117,7 +123,7 @@ void WorldGrid::createObject(Vector2D& pos, PhysicsComponent* pcomp)
 }
 
 //Returns false if there is something already there
-void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
+void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp, PhysObjectType::PhysObjectType pType)
 {
 	int x1 = round(p1.x / scale);
 	int x2 = round(p2.x / scale);
@@ -130,6 +136,8 @@ void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
 		{
 			if (objectGrid[x][y] != nullptr)
 				objectGrid[x][y] = pcomp;
+			if (pType == PhysObjectType::PLATFORM)
+				baseGrid[x][y] = true;
 		}
 	}
 }
