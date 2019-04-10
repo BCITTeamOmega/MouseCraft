@@ -39,11 +39,11 @@ void HostScene::InitScene() {
     catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
-    Entity* counter1Entity = EntityManager::Instance().Create();
-    Entity* counter2Entity = EntityManager::Instance().Create();
-    Entity* islandEntity = EntityManager::Instance().Create();
-    Entity* tableEntity = EntityManager::Instance().Create();
-    Entity* couchEntity = EntityManager::Instance().Create();
+	Entity* counter1Entity = PrefabLoader::LoadPrefab("res/prefabs/environment/counter1.json");
+	Entity* counter2Entity = PrefabLoader::LoadPrefab("res/prefabs/environment/counter2.json");
+	Entity* islandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/island.json");
+	Entity* tableEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/table.json");
+	Entity* couchEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/couch.json");
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
 	Entity* southWallEntity = EntityManager::Instance().Create();
@@ -98,22 +98,30 @@ void HostScene::InitScene() {
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
     mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
+	mouse1Rend->setShininess(0.4);
+	mouse1Rend->setRoughness(10.0);
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse2Rend->setModel(*mouseModel);
     mouse2Rend->setColor(Color(0.16, 0.18, 0.45));
-    mouse2Entity->AddComponent(mouse2Rend);
+	mouse2Rend->setShininess(0.4);
+	mouse2Rend->setRoughness(10.0);
+	mouse2Entity->AddComponent(mouse2Rend);
 
     Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse3Rend->setModel(*mouseModel);
     mouse3Rend->setColor(Color(0.19, 0.42, 0.17));
+	mouse3Rend->setShininess(0.4);
+	mouse3Rend->setRoughness(10.0);
     mouse3Entity->AddComponent(mouse3Rend);
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
 	//catRend->setModel(*box);
     catRend->setColor(Color(0.34, 0.08, 0));
+	catRend->setShininess(0.4);
+	catRend->setRoughness(10.0);
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -126,6 +134,7 @@ void HostScene::InitScene() {
     floorRend->setColor(Color(1.0, 1.0, 1.0));
     floorEntity->AddComponent(floorRend);
 
+	/*
     Renderable* counter1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     counter1Rend->setModel(*counter1Model);
     counter1Rend->setColor(Color(1.0, 0.5, 0.0));
@@ -150,6 +159,7 @@ void HostScene::InitScene() {
     couchRend->setModel(*couchModel);
     couchRend->setColor(Color(1.0, 0.5, 0.0));
     couchEntity->AddComponent(couchRend);
+	*/
 
     Renderable* catstandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catstandRend->setModel(*catstandModel);
@@ -337,6 +347,7 @@ void HostScene::InitScene() {
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	pSpawnerSpawner->spawnDelay = 0.5f;
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
 
     //Game Manager
@@ -403,11 +414,11 @@ void HostScene::InitScene() {
 	mouse3Entity->AddComponent(mouse3Outline);
 
     //Don't forget the stupid teapots
-	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
-	Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
+	//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	//Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
+	//Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
 
 	// Basic animations!
 	Animation* squishSquashAnim = new Animation();
@@ -453,9 +464,9 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
-	root.AddChild(teapotEntity);
-	root.AddChild(jumpingTeapot);
-	root.AddChild(jumpingTeapot2);
+	//root.AddChild(teapotEntity);
+	//root.AddChild(jumpingTeapot);
+	//root.AddChild(jumpingTeapot2);
 
 }
 

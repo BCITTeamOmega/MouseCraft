@@ -10,7 +10,7 @@
 #include "../json.hpp"
 using json = nlohmann::json;
 
-constexpr auto JUMP_VELOCITY = 14;
+constexpr auto FALL_FORWARD_VELOCITY = 20;
 
 class PhysicsComponent : public Component
 {
@@ -23,10 +23,11 @@ public:
 	PhysicsComponent* rayCheck(std::set<PhysObjectType::PhysObjectType> toCheck, Vector2D* p1, Vector2D* p2, Vector2D& hit);
 	bool updateFalling();
 	void makeDynamic();
-	void jump();
+	void jump(float jumpVel, float forwardVel);
 	void fall();
 	void removeCollisions();
 	void removeFromGrid();
+	void landed();
 
 	static Component* Create(json json);
 	static PrefabRegistrar reg;
@@ -36,6 +37,8 @@ public:
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 	PhysObjectType::PhysObjectType pType;
+	Subject<> stopMoving;
+	Subject<> resumeMoving;
 	Subject<PhysicsComponent*> onCollide; //for collision between bodies
 	Subject<PhysicsComponent*> onHit; //for hitbox checking
 	Subject<PhysicsComponent*> onBounce; //for hitbox checking

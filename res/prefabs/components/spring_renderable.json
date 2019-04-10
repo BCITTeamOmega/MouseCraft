@@ -1,0 +1,11 @@
+{
+    "type": "Renderable",
+    "model_path": "res/models/spring.obj",
+    "texture_path": "res/models/test/blank.bmp",
+    "color":
+    {
+        "r":0.8,
+        "g":0.1,
+        "b":0.0
+    }
+}

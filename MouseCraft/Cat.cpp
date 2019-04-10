@@ -6,7 +6,7 @@
 
 #define ATTACK_TIME 0.5
 #define JUMP_TIME 1
-#define POUNCE_TIME 2
+#define POUNCE_TIME 0.5
 
 Cat::Cat() :
 	HandleOnCollide(this, &Cat::OnCollision),
@@ -155,9 +155,6 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
     else 											// down 
         facing = Vector2D(0, 1);
 
-    std::cout << angle << std::endl;
-    std::cout << facing.x << "," << facing.y << std::endl;
-
     //check if we hit something
     if (results.size() > 0) {
         //Play a sound on hit here?
@@ -166,6 +163,7 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 		{
 			if (p->pType == PhysObjectType::MOUSE_UP || p->pType == PhysObjectType::MOUSE_DOWN)
 			{
+				// mouse 
 				std::cout << "INFO: Cat hit a mouse!" << std::endl;
 				HealthComponent* hp = p->GetEntity()->GetComponent<HealthComponent>();
 
@@ -174,6 +172,7 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 			}
 			else
 			{
+				// obstacle 
 				auto e = p->GetEntity();
 				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
 			}
@@ -200,9 +199,7 @@ void Cat::UpdateAttack(float dt) {
 }
 
 void Cat::Pounce(PhysicsComponent * pComp) {
-    //COLT PUT YOUR CODE FOR THE POUNCE JUMP HERE!!!!
-
-    //SERIOUSLY, THIS IS WHERE
+	pComp->jump(CAT_POUNCE_VELOCITY, CAT_POUNCE_FORWARD);
 
     isPouncing = true;
 }
@@ -236,7 +233,7 @@ void Cat::Jump()
 		if (jumpTarget != nullptr) {
 			//Jump code
 			std::cout << "Cat has jumped." << std::endl;
-			GetEntity()->GetComponent<PhysicsComponent>()->jump();
+			GetEntity()->GetComponent<PhysicsComponent>()->jump(CAT_JUMP_VELOCITY, CAT_JUMP_FORWARD);
 			isJumping = true;
 
 			GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
@@ -256,23 +253,24 @@ void Cat::Jump()
 void Cat::updatePounce(float dt)
 {
 
-    if (current_time > POUNCE_TIME * 0.5 && current_time < POUNCE_TIME * 0.75) {
+    if (current_time > POUNCE_TIME * 0.6) {
         PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
         CheckHitbox(pComp);
         //display hitbox
         Hitbox->SetEnabled(true);
     }
 
-    if (current_time > POUNCE_TIME * 0.75) {
+    //if (current_time > POUNCE_TIME * 0.75) {
         //Hide hitbox
-        Hitbox->SetEnabled(false);
-    }
+        //Hitbox->SetEnabled(false);
+    //}
 
     if (current_time < POUNCE_TIME) {
         //advance time
         current_time += dt;
         return;
     }
+
     isPouncing = false;
     Hitbox->SetEnabled(false);
     current_time = 0;

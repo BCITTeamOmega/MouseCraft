@@ -8,6 +8,7 @@ in vec2 loc;
 uniform sampler2D albedoTex;
 uniform sampler2D positionTex;
 uniform sampler2D normalTex;
+uniform sampler2D specularTex;
 uniform sampler2D outlineTex;
 
 uniform int numLights;
@@ -30,7 +31,7 @@ vec3 tonemap(vec3 inCol) {
     return inCol / (vec3(1.0f, 1.0f, 1.0f) + inCol);
 }
 
-vec3 calcDiffuseRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
+vec3 calcDiffuseRadiance(Light l, vec3 albedo, vec3 position, vec3 normal, vec2 specular) {
     vec3 posDiff = position - l.position.xyz;
 
     float distance = length(posDiff);
@@ -51,8 +52,9 @@ vec3 calcDiffuseRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
     }
 }
 
-vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
-    float shininess = 16;
+vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal, vec2 specular) {
+    float smoothness = specular.g;
+
     vec3 posDiff = position - l.position.xyz;
 
     float distance = length(posDiff);
@@ -64,18 +66,20 @@ vec3 calcSpecularRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
     vec3 toLight = float(l.type != 0) * normalize(posDiff) + float(l.type == 0) * l.direction.xyz;
 
     vec3 halfVector = normalize(-toLight + normalize(-l.position.xyz));
-    float lum = pow(max(dot(normal, halfVector), 0.0f), shininess) * strength;
+    float lum = pow(max(dot(normal, halfVector), 0.0f), smoothness) * strength;
     float avgColLum = length(l.color.rgb);
     if (lum * avgColLum > 0.8) {
-        return l.color.rgb;
+        return l.color.rgb * 1.25 * (smoothness * smoothness / 625.0);
     }
     else {
-        return step(0.3, lum) * 0.3 *  l.color.rgb;
+        return step(0.3, lum) * 0.35 * (smoothness * smoothness / 625.0) * l.color.rgb;
     }
 }
 
-vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal) {
-    return calcDiffuseRadiance(l, albedo, position, normal) + calcSpecularRadiance(l, albedo, position, normal);
+vec3 calcRadiance(Light l, vec3 albedo, vec3 position, vec3 normal, vec2 specular) {
+    float shininess = specular.r;
+    return calcDiffuseRadiance(l, albedo, position, normal, specular) * (1.0 - shininess)
+        + calcSpecularRadiance(l, albedo, position, normal, specular) * shininess;
 }
 
 void main()
@@ -83,6 +87,7 @@ void main()
     vec4 albedo = texture(albedoTex, loc);
     vec3 position = texture(positionTex, loc).rgb;
     vec3 normal = texture(normalTex, loc).rgb;
+    vec2 specular = texture(specularTex, loc).rg;
     vec4 outline = texture(outlineTex, loc);
 
     if (outline.a > 0.02) {
@@ -92,9 +97,9 @@ void main()
         vec3 totalRadiance = vec3(0.0f, 0.0f, 0.0f);
         for (int i = 0; i < numLights; i++) {
             Light l = light[i];
-            totalRadiance += calcRadiance(l, albedo.rgb, position, normal);
+            totalRadiance += calcRadiance(l, albedo.rgb, position, normal, specular);
         }
-        totalRadiance += ambientColor * albedo.rgb;
+        totalRadiance += ambientColor * albedo.rgb * (1.0 - specular.r);
 
         result = vec4(tonemap(totalRadiance), albedo.a);
     }

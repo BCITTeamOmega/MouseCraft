@@ -34,6 +34,8 @@ void YarnBall::HitByCat(Vector2D dir)
 	filter.maskBits = pComp->isUp ? BALL_UP_MASK : BALL_DOWN_MASK;
 	pComp->body->GetFixtureList()->SetFilterData(filter);
 
+	PhysicsManager::instance()->getGrid()->removeObject(pComp->body->GetPosition().x, pComp->body->GetPosition().y);
+
 	//Make it dynamic so it collides properly
 	pComp->makeDynamic();
 	pComp->velocity = dir * SPEED;
