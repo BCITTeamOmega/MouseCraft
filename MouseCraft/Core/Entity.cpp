@@ -66,6 +66,7 @@ void Entity::SetEnabled(bool enabled, bool force)
 	if (force || !isInActiveScene())
 	{
 		_enabled = enabled;
+		EventManager::Notify(EventName::ENTITY_ENABLE, new TypeParam<Entity*>(this));
 	}
 	else // defer 
 	{
@@ -178,6 +179,10 @@ void Entity::bindEntities(Entity * parent, Entity * child)
 		child->_parent = nullptr;
 		child->setScene(nullptr);
 	}
+
+	// Notify 
+	EventManager::Notify(EventName::ENTITY_MOVE, 
+		new TypeParam<std::pair<Entity*, Entity*>>(std::make_pair(child, parent)));
 }
 
 // Despite being recursive this performs very well 

@@ -10,6 +10,8 @@ enum EventName {
 	COMPONENT_ADDED,	//	| Component*		| Core/Component.h		| DO NOT USE
 	ENTITY_CREATED,		//	| Entity*			| Core/Entity.h			| 
 	ENTITY_DESTROYED,	//	| Entity*			| Core/Entity.h			| 
+	ENTITY_ENABLE,		//	| Entity*			| Core/Entity.h			| Use entity->GetEnabled() to retrieve the enable status. 
+	ENTITY_MOVE,		//  | pair<Entity*,...> | Core/Entity.h			| First argument is child, second is parent. Parent maybe nullptr. Child is being moved to parent.
 	INPUT_RAW,			//	|					|						| DO NOT USE
 	INPUT_AXIS,			//	| AxisEvent			| Input/InputSystem.h	| Controller stick (1D)
 	INPUT_AXIS_2D,		//	| Axis2DEvent		| Input/InputSystem.h	| Controller stick (2D)
