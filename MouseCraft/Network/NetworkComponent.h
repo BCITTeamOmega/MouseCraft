@@ -7,6 +7,7 @@
 
 #include "../json.hpp"
 #include "../Loading/PrefabLoader.h"
+
 using json = nlohmann::json;
 
 class NetworkComponent : public Component {
@@ -18,7 +19,7 @@ public:
 
     NetworkComponent(unsigned int netID, NetAuthority auth) : _netID(netID), _authLevel(auth) { }
 
-	virtual void OnInitialized() override;
+	void OnInitialized() override;
 
     unsigned int GetNetworkID() const { return _netID; }
     const NetState & GetLastState() const { return _lastState; }

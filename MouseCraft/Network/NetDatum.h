@@ -5,6 +5,7 @@
 #include "NetState.h"
 #include <algorithm>
 #include <string>
+#include "NetworkComponent.h"
 
 constexpr size_t MAX_DATUM_SIZE = 128;
 
