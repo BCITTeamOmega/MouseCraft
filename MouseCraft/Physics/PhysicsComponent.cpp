@@ -162,7 +162,7 @@ Component* PhysicsComponent::Create(json json)
 	case PhysObjectType::PLATFORM:
 	case PhysObjectType::PART:
 		return PhysicsManager::instance()->createGridObject(json["xPos"].get<float>(), json["yPos"].get<float>(),
-			json["width"].get<int>(), json["int"].get<float>(), properType);
+			json["width"].get<int>(), json["height"].get<float>(), properType);
 		break;
 	case PhysObjectType::PROJECTILE_UP:
 	case PhysObjectType::PROJECTILE_DOWN:
