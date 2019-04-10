@@ -1,0 +1,16 @@
+{
+    "type": "Renderable",
+    "model_path": "",
+    "texture_path": "",
+    "color":
+    {
+        "r":0.8,
+        "g":0.1,
+        "b":0.0
+    },
+    "model_gen":
+    {
+        "type":"cube",
+        "size":[16,0.1,16]
+    }
+}
