@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 #include <iostream>
+#include "Sound\TrackParams.h"
 
 GameManager::GameManager() :
 	HandleMouseDeath(this, &GameManager::OnMouseDeath),
@@ -53,6 +54,7 @@ void GameManager::GameOver(GameOverParams winner)
 {
 	std::cout << "GAMEOVER! THE WINNER IS: " << winner << std::endl;
 
+    selectSong(GameoverBGM);
 	// disable all players 
 	for (auto m : mice)
 	{

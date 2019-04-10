@@ -83,7 +83,15 @@ void Bomb::Explode()
 
 	for (auto p : hits)
 	{
+        if (p->pType == PhysObjectType::WALL)
+            continue;
 		auto health = p->GetEntity()->GetComponent<HealthComponent>();
+
+        //play cat hit sound
+        p->GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::CatScream); //set sound to squeak for mouse
+        auto targetPos = p->GetEntity()->transform.getLocalPosition(); //get mouse current position
+        p->GetEntity()->GetComponent<SoundComponent>()->PlaySound(targetPos.x, targetPos.y, targetPos.z); //play sound
+
 		if (health) health->Damage(DAMAGE);
 	}
 

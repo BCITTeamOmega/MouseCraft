@@ -180,6 +180,12 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 			{
 				// obstacle 
 				auto e = p->GetEntity();
+                
+                //play obstacle hit noise
+                GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Thud); //set sound to swipe
+                auto ourPos = GetEntity()->transform.getLocalPosition(); //get our current position
+                GetEntity()->GetComponent<SoundComponent>()->PlaySound(ourPos.x, ourPos.y, ourPos.z); //play sound
+
 				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
 			}
 		}
