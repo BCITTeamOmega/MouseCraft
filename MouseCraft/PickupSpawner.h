@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/UpdatableComponent.h"
+#include "Physics/PhysicsManager.h"
 
 class PickupSpawner : public UpdatableComponent
 {
@@ -11,8 +12,11 @@ public:
 	void Spawn();
 
 public:
-	float spawnDelay = 4.0f;
+	float spawnDelay = 0.1f;
 private:
+	glm::vec3 GetFreePosition();
 	float _counter = 0.0f;
+	std::vector<glm::ivec2> _floorPositions;
+	WorldGrid* _grid;
 };
 
