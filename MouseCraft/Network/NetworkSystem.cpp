@@ -184,7 +184,7 @@ void NetworkSystem::serverTick() {
     ++_tickNum;
 }
 
-void NetworkSystem::appendToPackets(const NetDatum * datum) {
+void NetworkSystem::appendToPackets(NetDatum * datum) {
     for (auto & connection : _connectionList)
         if (connection.second.GetState() == Connection::State::LIVE)
             connection.second.Append(datum);
