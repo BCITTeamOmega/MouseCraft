@@ -258,7 +258,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 
 		grid->positionObject(*p1);
 
-		bodyDef.position.Set(p1->x + grid->scale / 2.0f, p1->y - grid->scale / 2.0f);
+		bodyDef.position.Set(p1->x, p1->y);
 		break;
 	default:
 		return nullptr;
@@ -338,8 +338,6 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 		physicsComp->isUp = false;
 		physicsComp->zPos = Z_LOWER;
 		break;
-	default:
-		return nullptr; //if the input something that does use the grid
 	}
 
 	body = world->CreateBody(&bodyDef);
