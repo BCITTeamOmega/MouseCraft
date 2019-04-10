@@ -151,7 +151,7 @@ void NetworkSystem::serverTick() {
 
     if (_role == HOST) {
         for (auto component : _componentList) {
-            if (component.second->CheckDiff(_tickNum)) {
+            if (component.first < 6 && component.second->CheckDiff(_tickNum)) {
                 appendToPackets(new StateUpdateDatum(component.first, component.second->GetLastState()));
             }
         }
