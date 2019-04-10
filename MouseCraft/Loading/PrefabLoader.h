@@ -5,11 +5,13 @@
 #include "../Core/EntityManager.h"
 #include "../Core/ComponentManager.h"
 #include "../json.hpp"
+#include "../ResourceCache.h"
 #include <glm/glm.hpp>
 #include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 using json = nlohmann::json;
 
@@ -38,14 +40,29 @@ public:
 	// Load an entity with a json file
 	static Entity* LoadPrefab(std::string path)
 	{
-		// open file and parse json
-		std::ifstream ifs(path);
-		if (!ifs.good())
+		std::string* data = ResourceCache<std::string>::Instance().Get(path);
+		json json;
+
+		// check if prefab was loaded before (avoid accessing disk)
+		if (data == nullptr)
 		{
-			std::cerr << "ERROR: PrefabLoader could not find file: " << path << std::endl;
-			return nullptr;
+			// open file and parse json
+			std::ifstream ifs(path);
+			if (!ifs.good())
+			{
+				std::cerr << "ERROR: PrefabLoader could not find file: " << path << std::endl;
+				return nullptr;
+			}
+			std::stringstream ss;
+			ss << ifs.rdbuf();
+			ResourceCache<std::string>::Instance().Add(path, new std::string(ss.str()));
+			
+			json = json::parse(ss.str());
 		}
-		auto json = json::parse(ifs);
+		else
+		{
+			json = json::parse(*data);
+		}
 		
 		// load prefab 
 		auto parent = Load(json, nullptr);
@@ -60,9 +77,10 @@ private:
 	{
 		// entity & transform 
 		auto e = EntityManager::Instance().Create();
-		auto pos = glm::vec3(json["pos_x"].get<double>(), json["pos_y"].get<double>(), json["pos_z"].get<double>());
-		auto rot = glm::vec3(json["rot_x"].get<double>(), json["rot_y"].get<double>(), json["rot_z"].get<double>());
-		auto scl = glm::vec3(json["scl_x"].get<double>(), json["scl_y"].get<double>(), json["scl_z"].get<double>());
+		
+		auto pos = glm::vec3(json["pos"][0].get<double>(), json["pos"][1].get<double>(), json["pos"][2].get<double>());
+		auto rot = glm::vec3(json["rot"][0].get<double>(), json["rot"][1].get<double>(), json["rot"][2].get<double>());
+		auto scl = glm::vec3(json["scl"][0].get<double>(), json["scl"][1].get<double>(), json["scl"][2].get<double>());
 		e->transform.setLocalPosition(pos);
 		e->transform.setLocalRotation(rot);
 		e->transform.setLocalScale(scl);

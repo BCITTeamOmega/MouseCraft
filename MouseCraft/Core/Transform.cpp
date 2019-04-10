@@ -28,6 +28,18 @@ glm::vec3 Transform::getLocalRotation() const
 void Transform::setLocalRotation(glm::vec3 rotation)
 {
 	_localRotation = rotation;
+	_localQuat = glm::quat(rotation);
+}
+
+glm::quat Transform::getLocalQuaternion() const
+{
+	return _localQuat;
+}
+
+void Transform::setLocalRotation(glm::quat rotation)
+{
+	_localRotation = glm::eulerAngles(rotation);
+	_localQuat = rotation;
 }
 
 glm::vec3 Transform::getLocalScale() const
@@ -161,10 +173,11 @@ void Transform::face2D(glm::vec3 dir)
 
 void Transform::computeLocalTransformation()
 {
-	// we going super-sonic http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q26
 	_localTransformation = glm::mat4(1.0f);
 	_localTransformation = glm::translate(_localTransformation, _localPosition);
 
+	/*
+	// we going super-sonic http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q26
 	// this is the precalculated y*x*z rotation matrix. (x2 faster)
 	auto A = glm::cos(_localRotation.x);
 	auto B = glm::sin(_localRotation.x);
@@ -187,6 +200,9 @@ void Transform::computeLocalTransformation()
 	rot[2][2] = A * C;
 	rot[3][3] = 1.0f;
 	_localTransformation = _localTransformation * rot;
+	*/
+
+	_localTransformation = _localTransformation * (glm::mat4)_localQuat;
 
 	_localTransformation = glm::scale(_localTransformation, _localScale);
 }

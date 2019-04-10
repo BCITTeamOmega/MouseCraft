@@ -79,6 +79,7 @@ void Vase::HitByCat(Vector2D dir)
 	{
 		visualsEntity->transform.rotate(glm::vec3(0, 0, M_PI / 2));
 		GetEntity()->GetComponent<Renderable>()->SetEnabled(true);
+		GetEntity()->GetComponent<PhysicsComponent>()->SetEnabled(false);
 		_isPlaced = true;
 	}
 }
@@ -87,3 +88,11 @@ void Vase::DestroyedByMouse()
 {
 	GetEntity()->Destroy();
 }
+
+Component * Vase::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
+	return c;
+}
+
+PrefabRegistrar Vase::reg("Vase", &Vase::Create);

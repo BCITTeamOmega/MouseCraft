@@ -6,6 +6,7 @@
 #include "Core/Entity.h"
 #include "Event/Subject.h"
 
+#include "Loading/PrefabLoader.h"
 #include "json.hpp"
 using json = nlohmann::json;
 
@@ -77,4 +78,14 @@ public:
 private:
 	int _health = 1;
 	bool _shield = false;
+
+	/* TEMPLATE
+	{
+		"type": "Health",
+		"hp": 1,
+		"shield": false
+	}
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

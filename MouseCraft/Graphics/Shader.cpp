@@ -8,6 +8,7 @@ using std::endl;
 using std::string;
 using glm::mat4;
 using glm::vec3;
+using glm::vec4;
 using glm::value_ptr;
 
 Shader::Shader(string name, string vertSrc, string fragSrc) :
@@ -97,6 +98,12 @@ void Shader::setUniformVec3(string name, vec3 vector) {
 	const char* cstr = name.c_str();
 	GLint pos = glGetUniformLocation(_program, cstr);
 	glUniform3f(pos, vector.r, vector.g, vector.b);
+}
+
+void Shader::setUniformVec4(string name, vec4 vector) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform4f(pos, vector.r, vector.g, vector.b, vector.a);
 }
 
 void Shader::setUniformTexture(string name, GLuint index) {

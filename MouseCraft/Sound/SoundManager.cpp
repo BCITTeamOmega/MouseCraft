@@ -2,14 +2,12 @@
 #include <iostream>
 #include <mutex>
 //defines for track filenames
-#define MAIN_BGM "../res/music/bgm1.wav" 
-#define MENU_BGM "../music/bgm2.wav"
-#define WELCOME_BGM "../music/bgm3.wav"
+#define MAIN_BGM "../res/music/bgm2.wav" 
+#define MENU_BGM "../res/music/bgm1.wav"
 
 //defines for SoundEffect Names
 #define JUMP "../res/SoundEffects/jumpSE.wav"
 #define SWIPE "../res/SoundEffects/swipe.wav"
-#define GOAT_DEATH "../Sounds/goatDeath.wav"
 
 //private mutex variable
 std::mutex SoundMtx;
@@ -49,12 +47,12 @@ void SoundManager::loadAudioData() {
     }
     Music.insert(std::pair<TrackList,AudioData>(MainBGM, temp)); //store in track memory with handle
     
-    ////load menu BGM, steps are identical to above but with different file and Handle
-    //temp = soundObject->GetAudioData(MENU_BGM);
-    //if (temp.data == NULL) {
-    //    std::cout << "Menu BGM failed to store correctly." << std::endl;
-    //}
-    //Music.insert(std::pair<TrackList, AudioData>(MenuBGM, temp));
+    //load menu BGM, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(MENU_BGM);
+    if (temp.data == NULL) {
+        std::cout << "Menu BGM failed to store correctly." << std::endl;
+    }
+    Music.insert(std::pair<TrackList, AudioData>(MenuBGM, temp));
 
     ////load welcome message BGM, steps are identical to above but with different file and Handle
     //temp = soundObject->GetAudioData(WELCOME_BGM);
@@ -115,12 +113,12 @@ void SoundManager::PlaySong(TrackList track, float x, float y, float z) {
             soundObject->PlaceSource(bgmSource, x, y, z);
             soundObject->PlayAudio(bgmSource);
             break;
-        //case MenuBGM:
-        //    soundObject->BufferData(bgmBuffer, bgmSource, Music.find(MenuBGM)->second);
-        //    soundObject->ToggleLooping(bgmSource, true);
-        //    soundObject->PlaceSource(bgmSource, x, y, z);
-        //    soundObject->PlayAudio(bgmSource);
-        //    break;
+        case MenuBGM:
+            soundObject->BufferData(bgmBuffer, bgmSource, Music.find(MenuBGM)->second);
+            soundObject->ToggleLooping(bgmSource, true);
+            soundObject->PlaceSource(bgmSource, x, y, z);
+            soundObject->PlayAudio(bgmSource);
+            break;
         //case WelcomeBGM:
         //    soundObject->BufferData(bgmBuffer, bgmSource, Music.find(WelcomeBGM)->second);
         //    soundObject->ToggleLooping(bgmSource, false);

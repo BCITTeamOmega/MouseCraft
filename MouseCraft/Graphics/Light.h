@@ -1,6 +1,10 @@
 #pragma once
 #include "../Core/Component.h"
 #include "Color.h"
+#include "../json.hpp"
+#include "../Loading/PrefabLoader.h"
+using json = nlohmann::json;
+
 class Light : public Component {
 public:
 	enum class LightType {
@@ -23,4 +27,7 @@ private:
 	float _constant;
 	float _linear;
 	float _quadratic;
+	
+	static Component* CreateFromJson(json json);
+	static PrefabRegistrar reg;
 };

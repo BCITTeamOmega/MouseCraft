@@ -59,3 +59,11 @@ void Lamp::DestroyedByMouse()
 {
 	GetEntity()->Destroy();
 }
+
+Component * Lamp::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Lamp>();
+	return c;
+}
+
+PrefabRegistrar Lamp::reg("Lamp", &Lamp::Create);

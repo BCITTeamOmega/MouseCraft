@@ -2,6 +2,7 @@
 
 Trampoline::Trampoline() : HandleOnCollision(this, &Trampoline::OnCollision)
 {
+	Contraption::type = CONTRAPTIONS::TRAMPOLINE;
 }
 
 

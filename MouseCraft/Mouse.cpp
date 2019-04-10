@@ -4,7 +4,8 @@ Mouse::Mouse() :
 	HandleOnCollide(this, &Mouse::OnCollision),
 	HandleOnDeath(this, &Mouse::OnDeath),
 	HandleOnHit(this, &Mouse::OnHit),
-	HandleOnBounce(this, &Mouse::OnBounce)
+	HandleOnBounce(this, &Mouse::OnBounce),
+	HandleOnRevive(this, &Mouse::OnRevived)
 {
 	std::cout << std::setprecision(2);
 	EventManager::Subscribe(EventName::INPUT_AXIS, this);
@@ -21,37 +22,70 @@ Mouse::~Mouse()
 void Mouse::OnInitialized() 
 {
 	//Listens for collisions with the physics component
-	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-	if (pComp != nullptr)
+	_phys = GetEntity()->GetComponent<PhysicsComponent>();
+	if (_phys != nullptr)
 	{
-		HandleOnCollide.Observe(pComp->onCollide);
-		HandleOnHit.Observe(pComp->onHit);
-		HandleOnBounce.Observe(pComp->onBounce);
+		HandleOnCollide.Observe(_phys->onCollide);
+		HandleOnHit.Observe(_phys->onHit);
+		HandleOnBounce.Observe(_phys->onBounce);
 	}
 
 	// Listen for death 
 	HealthComponent* c_health = GetEntity()->GetComponent<HealthComponent>();
 	HandleOnDeath.Observe(c_health->OnDeath);
+	HandleOnRevive.Observe(c_health->OnRevive);
 
     player = GetEntity()->GetComponent<PlayerComponent>()->GetID();
+
+	render = GetEntity()->GetComponent<Renderable>();
+	initialColor = render->getColor();
 }
 
 void Mouse::Update(float deltaTime) 
 {
-
-	if (shoot)
+	if (downed) 
+		return;
+	
+	if (interact)
 	{
-		std::cout << std::endl << "Mouse[" << player << "] - Pew pew!" << std::endl;
-		shoot = false;
-		
-		if (newItem != nullptr)
+		interact = false;
+		float RADIUS = 5.0f;
+		auto p1 = GetEntity()->transform;
+		auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
+		auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
+		auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
+		bool isUp = GetEntity()->GetComponent<PhysicsComponent>()->isUp;
+
+		if (isUp) {
+			checkFor.insert(PhysObjectType::MOUSE_UP);
+			checkFor.insert(PhysObjectType::PART);
+		}
+		else
 		{
-			use(newItem);
+			checkFor.insert(PhysObjectType::MOUSE_DOWN);
+			checkFor.insert(PhysObjectType::PART);
 		}
 
-		if (baseItem == nullptr && newItem == nullptr) {
-			revive();
+		auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
+		bool hit = hits.size() > 0;
+
+		for (auto pc : hits)
+		{
+			if (pc->pType == PhysObjectType::MOUSE_DOWN || pc->pType == PhysObjectType::MOUSE_UP)
+			{
+				revive(pc);
+			}
+			else
+			{
+				addItem(pc->GetEntity()->GetComponent<Pickup>());
+			}
 		}
+	}
+
+	if (shoot && newItem != nullptr) 
+	{
+		shoot = false;
+		use(newItem);
 	}
 
 	if (drop)
@@ -60,25 +94,7 @@ void Mouse::Update(float deltaTime)
 		dropItem();
 	}
 
-	PhysicsComponent* pComp = GetEntity()->GetComponent<PhysicsComponent>();
-
-	//check to see if you are on a platform
-	if (pComp != nullptr && !pComp->isJumping && pComp->isUp)
-	{
-		std::set<PhysObjectType::PhysObjectType> types = std::set<PhysObjectType::PhysObjectType>{
-			PhysObjectType::PLATFORM
-		};
-
-		auto compPos = pComp->body->GetPosition();
-		Vector2D* p1 = new Vector2D(compPos.x - (pComp->width / 2), compPos.y - (pComp->height / 2));
-		Vector2D* p2 = new Vector2D(compPos.x + (pComp->width / 2), compPos.y + (pComp->height / 2));
-
-		std::vector<PhysicsComponent*> found = pComp->areaCheck(types, p1, p2);
-
-		//if you aren't on a platform then fall
-		if (found.size() == 0)
-			pComp->fall();
-	}
+	_phys->updateFalling();
 }
 
 void Mouse::Notify(EventName eventName, Param * params)
@@ -95,20 +111,20 @@ void Mouse::Notify(EventName eventName, Param * params)
 			return;
 
 		if (data.button == Button::PRIMARY && data.isDown)
-			shoot = true;	// or do it right away, no post processing required.
+			interact = true;	// or do it right away, no post processing required.
+
+		if (data.button == Button::AUX1)
+			shoot = data.isDown;
 
 		if (data.button == Button::AUX2)
 			drop = data.isDown;
+
 	}
 }
 
 void Mouse::OnCollision(PhysicsComponent * pc)
 {
-	if (pc->type == PhysObjectType::PART)
-	{
-		// collided with part 
-		addItem(pc->GetEntity()->GetComponent<Pickup>());
-	}
+
 }
 
 void Mouse::OnHit(PhysicsComponent* e)
@@ -151,7 +167,16 @@ void Mouse::OnDeath()
 {
 	// on death
 	downed = true;
-	GetEntity()->SetEnabled(false);
+	GetEntity()->GetComponent<PlayerComponent>()->SetEnabled(false);
+	render->setColor(Color(0, 0, 0));
+	_phys->velocity = Vector2D(0, 0);
+}
+
+void Mouse::OnRevived()
+{
+	downed = false;
+	GetEntity()->GetComponent<PlayerComponent>()->SetEnabled(true);
+	render->setColor(initialColor);
 }
 
 void Mouse::addItem(Pickup* item) {
@@ -193,11 +218,48 @@ void Mouse::dropItem() {
 	}
 
 	if (newItem != nullptr) {
-		auto e = newItem->GetEntity();
-		e->SetParent(OmegaEngine::Instance().GetRoot());
-		e->transform.setLocalPosition(e->transform.getWorldPosition());
+		Entity* part1;
+		Entity* part2;
+		auto pos = GetEntity()->transform.getWorldPosition() + GetEntity()->transform.getWorldForward() * 10.0f;
+		auto p1 = pos + glm::vec3(-10.0f, 0, 0);
+		auto p2 = pos + glm::vec3(10.0f, 0, 0);
 
-		newItem->Drop();
+		auto type = newItem->type;
+
+		if (type == CONTRAPTIONS::BOMB) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
+		} 
+		else if (type == CONTRAPTIONS::COIL) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		} 
+		else if (type == CONTRAPTIONS::GUN) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		} 
+		else if (type == CONTRAPTIONS::OVERCHARGE) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
+		} 
+		else if (type == CONTRAPTIONS::SWORDS) 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SCREW,  p2);
+		} 
+		else 
+		{
+			part1 = PickupFactory::Instance().Create(PICKUPS::SPRING, p1);
+			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+		}
+
+		OmegaEngine::Instance().AddEntity(part1);
+		OmegaEngine::Instance().AddEntity(part2);
+		newItem->GetEntity()->Destroy();
 		newItem = nullptr;
 	}
 }
@@ -335,35 +397,8 @@ void Mouse::combine(Pickup *material) {
 	}
 }
 
-void Mouse::revive() {
-	float RADIUS = 5.0f;
-	auto p1 = GetEntity()->transform;
-	auto pos = p1.getWorldPosition() + p1.getWorldForward() * 5.0f;
-	auto bl = pos + glm::vec3(-RADIUS, 0, -RADIUS);
-	auto tr = pos + glm::vec3(RADIUS, 0, RADIUS);
-	bool isUp = GetEntity()->GetComponent<PhysicsComponent>()->isUp;
-
-	if (isUp) {
-		checkFor.insert(PhysObjectType::CAT_UP);
-	}
-	else
-	{
-		checkFor.insert(PhysObjectType::CAT_DOWN);
-	}
+void Mouse::revive(PhysicsComponent* mouse) {
 	
-	auto hits = _phys->areaCheck(checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
-	bool hit = hits.size() > 0;
-
-	if (isUp && !_collidedObjects && hit) {
-
-		std::cout << "Reviving fellow mouse" << std::endl;
-		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->SetEnabled(true);
-	}
-	else if (!isUp && !_collidedObjects && hit)
-	{
-		std::cout << "Revivng fellow mouse" << std::endl;
-		_collidedObjects = hits[0];
-		_collidedObjects->GetEntity()->SetEnabled(true);
-	}
+	mouse->GetEntity()->GetComponent<HealthComponent>()->SetHealth(1);
 }
+

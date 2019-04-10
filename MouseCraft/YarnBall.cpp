@@ -29,7 +29,7 @@ void YarnBall::HitByCat(Vector2D dir)
 
 	//Changes the object from a generic obstacle to a ball in the physics manager's eyes
 	b2Filter filter;
-	pComp->type = pComp->isUp ? PhysObjectType::BALL_UP : PhysObjectType::BALL_DOWN;
+	pComp->pType = pComp->isUp ? PhysObjectType::BALL_UP : PhysObjectType::BALL_DOWN;
 	filter.categoryBits = pComp->isUp ? BALL_UP_CATEGORY : BALL_DOWN_CATEGORY;
 	filter.maskBits = pComp->isUp ? BALL_UP_MASK : BALL_DOWN_MASK;
 	pComp->body->GetFixtureList()->SetFilterData(filter);
@@ -46,9 +46,17 @@ void YarnBall::DestroyedByMouse()
 
 void YarnBall::OnMouseCollide(PhysicsComponent* other)
 {
-	if (other->type == PhysObjectType::MOUSE_DOWN || other->type == PhysObjectType::MOUSE_UP)
+	if (other->pType == PhysObjectType::MOUSE_DOWN || other->pType == PhysObjectType::MOUSE_UP)
 	{
 		other->GetEntity()->GetComponent<HealthComponent>()->Damage(1);
 		GetEntity()->Destroy();
 	}
 }
+
+Component * YarnBall::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
+	return c;
+}
+
+PrefabRegistrar YarnBall::reg("YarnBall", &YarnBall::Create);

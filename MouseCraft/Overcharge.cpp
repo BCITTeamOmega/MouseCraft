@@ -2,6 +2,7 @@
 
 Overcharge::Overcharge()
 {
+	Contraption::type = CONTRAPTIONS::OVERCHARGE;
 }
 
 
