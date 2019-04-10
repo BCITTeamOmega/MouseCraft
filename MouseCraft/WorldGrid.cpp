@@ -216,14 +216,18 @@ PhysicsComponent* WorldGrid::objectAt(int xPos, int yPos)
 		return objectGrid[xPos][yPos];
 }
 
-std::vector<PhysicsComponent*> WorldGrid::objectsInArea(Vector2D* p1, Vector2D* p2)
+std::vector<PhysicsComponent*>* WorldGrid::objectsInArea(Vector2D* p1, Vector2D* p2)
 {
 	int x1 = round(p1->x / scale);
 	int x2 = round(p2->x / scale);
 	int y1 = round(p1->y / scale);
 	int y2 = round(p2->y / scale);
 
-	std::vector<PhysicsComponent*> objects = std::vector<PhysicsComponent*>();
+	std::vector<PhysicsComponent*>* objects = new std::vector<PhysicsComponent*>();
+
+	if (x1 < 0 || x1 >= baseGrid.size() || y1 < 0 || y1 >= baseGrid[0].size()
+		|| x2 < 0 || x2 >= baseGrid.size() || y2 < 0 || y2 >= baseGrid[0].size())
+		return nullptr;
 
 	//Fix the points if the user input them in the wrong order or something
 	if (x1 > x2)
