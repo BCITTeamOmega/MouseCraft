@@ -35,7 +35,8 @@ private:
 	~ContraptionFactory();
 
 public:
-	Entity* Create(CONTRAPTIONS type, glm::vec3 position);
+	Entity* Create(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
+	Entity* CreateSimulated(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
 
 private:
 	Model* _platformModel;

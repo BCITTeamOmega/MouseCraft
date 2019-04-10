@@ -23,6 +23,7 @@ class Entity
 // Variables 
 public:
 	Transform transform;
+	std::string name;
 
 protected:
 	Scene* _myScene;	// which scene this entity is in. null if not assigned.

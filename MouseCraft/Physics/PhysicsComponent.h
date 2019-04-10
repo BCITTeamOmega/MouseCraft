@@ -6,6 +6,9 @@
 #include "PhysObjectType.h"
 #include "../Event/Subject.h"
 #include "PhysicsManager.h"
+#include "../Loading/PrefabLoader.h"
+#include "../json.hpp"
+using json = nlohmann::json;
 
 constexpr auto JUMP_VELOCITY = 14;
 
@@ -24,6 +27,9 @@ public:
 	void fall();
 	void removeCollisions();
 	void removeFromGrid();
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 
 	Vector2D velocity;
 	float zPos, zVelocity, rotation, width, height;

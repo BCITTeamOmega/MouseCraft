@@ -56,23 +56,6 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 	int y1 = round(p1.y / scale);
 	int y2 = round(p2.y / scale);
 
-	if (x1 < 0)
-		x1 = 0;
-	else if (x1 >= baseGrid.size())
-		x1 = baseGrid.size();
-	else if (y1 < 0)
-		y1 = 0;
-	else if (y1 >= baseGrid[0].size())
-		y1 = baseGrid[0].size() - 1;
-	else if (x2 < 0)
-		x2 = 0;
-	else if (x2 >= baseGrid.size())
-		x2 = baseGrid.size();
-	else if (y2 < 0)
-		y2 = 0;
-	else if (y2 >= baseGrid[0].size())
-		y2 = baseGrid[0].size() - 1;
-
 	//Fix the points if the user input them in the wrong order or something
 	if (x1 > x2)
 	{
@@ -81,12 +64,29 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 		x2 = temp;
 	}
 
-	if(y2 > y1)
+	if (y2 > y1)
 	{
 		int temp = y2;
 		y2 = y1;
 		y1 = temp;
 	}
+
+	if (x1 < 0)
+		x1 = 0;
+	else if (x1 > baseGrid.size())
+		x1 = baseGrid.size();
+	else if (y1 < 0)
+		y1 = 0;
+	else if (y1 > baseGrid[0].size())
+		y1 = baseGrid[0].size();
+	else if (x2 < 0)
+		x2 = 0;
+	else if (x2 > baseGrid.size())
+		x2 = baseGrid.size();
+	else if (y2 < 0)
+		y2 = 0;
+	else if (y2 > baseGrid[0].size())
+		y2 = baseGrid[0].size();
 
 	for (int x = x1; x < x2; x++)
 	{
