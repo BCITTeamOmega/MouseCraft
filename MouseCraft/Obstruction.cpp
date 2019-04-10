@@ -3,7 +3,7 @@
 #include "HealthComponent.h"
 
 const int Obstruction::BOX_SIZE = 10;
-const int Obstruction::BOOK_SIZE = 5;
+const int Obstruction::BOOK_SIZE = 4;
 
 Obstruction::Obstruction() : 
 	HandleMouseCollide(this, &Obstruction::OnMouseCollide)

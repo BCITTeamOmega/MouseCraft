@@ -68,7 +68,8 @@ void PhysicsComponent::fall()
 	isFalling = true;
 	
 	stopMoving.Notify();
-	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
+	if (velocity.x != 0 || velocity.y != 0)
+		velocity = velocity * (1.0f/velocity.length()) * AUTO_VELOCITY;
 }
 
 void PhysicsComponent::landed()

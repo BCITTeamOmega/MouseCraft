@@ -149,7 +149,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	{
 		c_render->setModel(*_bookModel);
 		c_render->setColor(Color(0.24f, 0.0f, 0.0f));
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, Obstruction::BOOK_SIZE, Obstruction::BOOK_SIZE, 
+			isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
 		c_obs->size = Obstruction::BOOK_SIZE;
 		e->AddComponent(c_obs);
@@ -213,8 +214,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 		c_render->setModel(*fieldModel);
 		c_render->setColor(Color(1.0, 1.0, 0.0));
 		c_render->SetEnabled(false);	// this is the field 
-		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, Obstruction::BOOK_SIZE, Obstruction::BOOK_SIZE, 
-			isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
+		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Lamp* c_lamp = ComponentManager<UpdatableComponent>::Instance().Create<Lamp>();
 		e->AddComponent(c_lamp);
 
