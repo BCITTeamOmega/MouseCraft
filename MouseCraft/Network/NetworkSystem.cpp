@@ -294,7 +294,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 std::string componentData = packet->ReadString();
                 
                 Entity *newEntity = EntityManager::Instance().Create();
-                NetworkComponent *newComponent = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(netID, NetworkComponent::NetAuthority::SIMULATED);
+				NetworkComponent *newComponent = NetworkSystem::Instance()->CreateComponent(netID);
                 newEntity->AddComponent(newComponent);
 
                 newComponent->SetComponentData(componentData);

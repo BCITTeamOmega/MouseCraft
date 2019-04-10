@@ -193,8 +193,8 @@ public:
 class PlayerButtonDatum : public NetDatum {
 public:
     PlayerButtonDatum(ButtonEvent *eventData) : NetDatum(NetDatum::PLAYER_BUTTON) {
+		appendInt(eventData->button);
         appendBool(eventData->isDown);
-        appendInt(eventData->button);
     }
 
     const bool IsReliable() const override { return false; }
