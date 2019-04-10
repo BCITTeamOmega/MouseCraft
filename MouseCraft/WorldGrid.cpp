@@ -90,7 +90,7 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 
 	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y < y2; y++)
+		for (int y = y2; y < y1; y++)
 		{
 			if (objectGrid[x][y] != nullptr)
 				return false;
@@ -124,9 +124,24 @@ void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
 	int y1 = round(p1.y / scale);
 	int y2 = round(p2.y / scale);
 
+	//Fix the points if the user input them in the wrong order or something
+	if (x1 > x2)
+	{
+		int temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+
+	if (y2 > y1)
+	{
+		int temp = y2;
+		y2 = y1;
+		y1 = temp;
+	}
+
 	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y < y2; y++)
+		for (int y = y2; y < y1; y++)
 		{
 			if (objectGrid[x][y] != nullptr)
 				objectGrid[x][y] = pcomp;
@@ -147,10 +162,10 @@ bool WorldGrid::removeObject(float xPos, float yPos)
 
 bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 {
-	int x1 = p1->x;
-	int x2 = p2->x;
-	int y1 = p1->y;
-	int y2 = p2->y;
+	int x1 = round(p1->x / scale);
+	int x2 = round(p2->x / scale);
+	int y1 = round(p1->y / scale);
+	int y2 = round(p2->y / scale);
 
 	if (x1 >= 0 && x1 < baseGrid.size() && y1 >= 0 && y1 < baseGrid[0].size()
 		&& x2 >= 0 && x2 < baseGrid.size() && y2 >= 0 && y2 < baseGrid[0].size())
@@ -172,7 +187,7 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 
 		for (int x = x1; x <= x2; x++)
 		{
-			for (int y = y1; y <= y2; y++)
+			for (int y = y2; y <= y1; y++)
 			{
 				objectGrid[x][y] = nullptr;
 			}
@@ -199,6 +214,42 @@ PhysicsComponent* WorldGrid::objectAt(int xPos, int yPos)
 {
 	if (xPos >= 0 && xPos < baseGrid.size() && yPos >= 0 && yPos < baseGrid[0].size())
 		return objectGrid[xPos][yPos];
+}
+
+std::vector<PhysicsComponent*> WorldGrid::objectsInArea(Vector2D* p1, Vector2D* p2)
+{
+	int x1 = round(p1->x / scale);
+	int x2 = round(p2->x / scale);
+	int y1 = round(p1->y / scale);
+	int y2 = round(p2->y / scale);
+
+	std::vector<PhysicsComponent*> objects = std::vector<PhysicsComponent*>();
+
+	//Fix the points if the user input them in the wrong order or something
+	if (x1 > x2)
+	{
+		int temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+
+	if (y2 > y1)
+	{
+		int temp = y2;
+		y2 = y1;
+		y1 = temp;
+	}
+
+	for (int x = x1; x <= x2; x++)
+	{
+		for (int y = y2; y <= y1; y++)
+		{
+			if(objectGrid[x][y] != nullptr)
+				objects.push_back(objectGrid[x][y]);
+		}
+	}
+
+	return objects;
 }
 
 bool WorldGrid::tileIsUp(float xPos, float yPos)
