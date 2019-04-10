@@ -1,0 +1,20 @@
+{
+	"pos": [0,0,0],
+	"scl": [20,2,5],
+	"rot": [0,-1.57,0],
+	"entities": [
+	],
+	"components": [
+		{
+			"type": "Renderable",
+			"model_path": "res/models/kitchenCabinet.obj",
+			"texture_path": "",
+			"color":
+			{
+				"r":1.0,
+				"g":1.0,
+				"b":1.0
+			}
+		}
+	]
+}

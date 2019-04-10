@@ -156,9 +156,11 @@ void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp, 
 	{
 		for (int y = y2; y < y1; y++)
 		{
-			objectGrid[x][y] = pcomp;
 			if (pType == PhysObjectType::PLATFORM)
 				baseGrid[x][y] = true;
+			else
+				objectGrid[x][y] = pcomp;
+			
 		}
 	}
 }

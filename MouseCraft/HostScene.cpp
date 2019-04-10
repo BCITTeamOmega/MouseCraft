@@ -39,11 +39,11 @@ void HostScene::InitScene() {
     catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
-    Entity* counter1Entity = EntityManager::Instance().Create();
-    Entity* counter2Entity = EntityManager::Instance().Create();
-    Entity* islandEntity = EntityManager::Instance().Create();
-    Entity* tableEntity = EntityManager::Instance().Create();
-    Entity* couchEntity = EntityManager::Instance().Create();
+	Entity* counter1Entity = PrefabLoader::LoadPrefab("res/prefabs/environment/counter1.json");
+	Entity* counter2Entity = PrefabLoader::LoadPrefab("res/prefabs/environment/counter2.json");
+	Entity* islandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/island.json");
+	Entity* tableEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/table.json");
+	Entity* couchEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/couch.json");
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
 	Entity* southWallEntity = EntityManager::Instance().Create();
@@ -126,6 +126,7 @@ void HostScene::InitScene() {
     floorRend->setColor(Color(1.0, 1.0, 1.0));
     floorEntity->AddComponent(floorRend);
 
+	/*
     Renderable* counter1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     counter1Rend->setModel(*counter1Model);
     counter1Rend->setColor(Color(1.0, 0.5, 0.0));
@@ -150,6 +151,7 @@ void HostScene::InitScene() {
     couchRend->setModel(*couchModel);
     couchRend->setColor(Color(1.0, 0.5, 0.0));
     couchEntity->AddComponent(couchRend);
+	*/
 
     Renderable* catstandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catstandRend->setModel(*catstandModel);

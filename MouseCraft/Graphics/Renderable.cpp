@@ -1,8 +1,11 @@
 #include "Renderable.h"
+#include "ModelGen.h"
 #include "../Core/Entity.h"
 #include "../Loading/ModelLoader.h"
 #include "../Loading/ImageLoader.h"
+#include "../ResourceCache.h"
 #include <string>
+#include <sstream>
 
 Renderable::Renderable() :
 	_shininess(0.5),
@@ -78,8 +81,38 @@ Component* Renderable::CreateFromJson(json json)
 	}
 
 	// parse geometry and texture
-	c->_model = ModelLoader::loadModel(json["model_path"].get<std::string>());
-	c->_model->setTexture(new std::string(json["texture_path"].get<std::string>()));
+	if (json.find("model_gen") != json.end())
+	{
+		// use model generation  
+		if (json["model_gen"]["type"].get<std::string>() == "cube")
+		{
+			auto& jval = json["model_gen"]["size"];
+			c->_model = ModelGen::makeCube(jval[0].get<float>(), jval[1].get<float>(), jval[2].get<float>());
+		}
+		else
+		{
+			std::cerr << "ERROR: Renderable JSON ctor failed to generate model for unknown type." << std::endl;
+		}
+	}
+	else
+	{
+		// use model loading 
+		std::string mPath = json["model_path"].get<std::string>();
+		std::string tPath = json["texture_path"].get<std::string>();
+		std::string key = mPath + tPath;
+
+		// use cached model if possible 
+		Model* model = ResourceCache<Model>::Instance().Get(key);
+		if (model == nullptr)
+		{
+			model = ModelLoader::loadModel(mPath);
+			if (tPath.size() > 0)
+				model->setTexture(new std::string(tPath));
+			ResourceCache<Model>::Instance().Add(key, model);
+		}
+		c->_model = model;
+
+	}
 
 	return c;
 }

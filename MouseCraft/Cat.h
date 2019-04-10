@@ -10,7 +10,11 @@
 #include "Event/Handler.h"
 #include "Physics/PhysObjectType.h"
 
-constexpr auto CAT_JUMP_DIST = 7.5;
+constexpr auto CAT_JUMP_DIST = 10;
+constexpr auto CAT_JUMP_VELOCITY = 14;
+constexpr auto CAT_POUNCE_VELOCITY = 2;
+constexpr auto CAT_JUMP_FORWARD = 25;
+constexpr auto CAT_POUNCE_FORWARD = 100;
 
 class Cat : public UpdatableComponent, public Observer<PhysicsComponent*>
 {
