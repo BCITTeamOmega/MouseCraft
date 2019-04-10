@@ -58,7 +58,6 @@ void Mouse::Update(float deltaTime)
 
 		if (isUp) {
 			checkFor.insert(PhysObjectType::MOUSE_UP);
-			checkFor.insert(PhysObjectType::PART);
 		}
 		else
 		{
@@ -78,6 +77,7 @@ void Mouse::Update(float deltaTime)
 			else
 			{
 				addItem(pc->GetEntity()->GetComponent<Pickup>());
+				break;
 			}
 		}
 	}
