@@ -4,6 +4,7 @@
 #include "PacketData.h"
 
 #include <map>
+#include <queue>
 
 class Connection {
 public:
@@ -17,10 +18,18 @@ public:
     Connection() {}
     Connection(Address location, State state = POTENTIAL) : _remote(location), _timeTillDeath(DEATH_TIME), _connState(state), PlayerID(-1) {}
 
-    void GotUpdate() { _timeTillDeath = DEATH_TIME; }
+    void GotUpdate() { 
+		_timeTillDeath = DEATH_TIME;
+		if (_connState == INACTIVE)
+			_connState = LIVE;
+	}
 
     void Tick() {
         _send.Clear();
+		while (!_overflow.empty()) {
+			_send.Append(_overflow.front);
+			_overflow.pop();
+		}
         if (--_timeTillDeath < 0) {
             _connState = (_connState == LIVE ? INACTIVE : DEAD);
         }
@@ -42,7 +51,13 @@ public:
             _reliableData.insert(std::pair<const unsigned short, PacketData>(tickNum, _send));
     }
 
-    bool Append(const NetDatum & datum) { return _send.Append(datum); }
+    bool Append(const NetDatum & datum) { 
+		if (_send.Append(datum)) {
+			return true;
+		}
+		_overflow.push(datum);
+		return false;
+	}
 
     void Acknowledge(const unsigned short tickNum) { 
         int count = _reliableData.count(tickNum);
@@ -64,5 +79,6 @@ private:
     State _connState;
     PacketData _send;
     std::multimap<const unsigned short, PacketData> _reliableData;
+	std::queue<NetDatum> _overflow;
     PacketData * _extraPacket;
 };

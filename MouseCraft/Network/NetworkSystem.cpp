@@ -229,7 +229,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].SetLive();
                 _connectionList[sender].Append(ConnAccDatum(_tickNum));
                 for (auto comp : _componentList) {
-					if (comp.first > 4) {
+					if (comp.first > 5) {
 						_connectionList[sender].Append(EntityCreateDatum(comp.second));
 					}
                 }
