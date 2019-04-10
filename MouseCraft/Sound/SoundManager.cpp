@@ -87,7 +87,7 @@ void SoundManager::loadAudioData() {
     if (temp.data == NULL) {
         std::cout << "Trampoline SE failed to store correctly." << std::endl;
     }
-    SoundEffects.insert(std::pair<SoundsList, AudioData>(Trampoline, temp));
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Trampoline_sound, temp));
 
     //Hitting obstacle sound, steps are identical to above but with different file and Handle
     temp = soundObject->GetAudioData(THUD_SOUND);
@@ -194,8 +194,8 @@ void SoundManager::PlaySound(SoundsList soundEffect, float x, float y, float z) 
         soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
         soundObject->PlayAudio(seSource[selectedBuffer]);
         break;
-    case Trampoline:
-        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Trampoline)->second);
+    case Trampoline_sound:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Trampoline_sound)->second);
         soundObject->ToggleLooping(seSource[selectedBuffer], false);
         soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
         soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
