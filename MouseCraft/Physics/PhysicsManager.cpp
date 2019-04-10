@@ -99,13 +99,17 @@ void PhysicsManager::Update(float dt)
 
 	while (b != NULL)
 	{
+		PhysicsComponent* pcomp;
+
 		if (b->GetType() == b2_staticBody)
 		{
+			pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
+
 			b = b->GetNext();
 			continue;
 		}
 
-		PhysicsComponent* pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
+		pcomp = static_cast<PhysicsComponent*>(b->GetUserData());
 
 		if (pcomp != NULL)
 		{

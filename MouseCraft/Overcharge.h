@@ -12,5 +12,8 @@ public:
 
 	bool use(Mouse* m) override;
 	void show() override;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

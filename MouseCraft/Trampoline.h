@@ -22,5 +22,8 @@ private:
 	bool _isPlaced = false;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	Handler<Trampoline, PhysicsComponent*> HandleOnCollision;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 
