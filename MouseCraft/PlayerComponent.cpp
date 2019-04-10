@@ -1,6 +1,12 @@
 #include "PlayerComponent.h"
 #include "Input/InputSystem.h"
 
+PlayerComponent::PlayerComponent() :
+	handleStop(this, &PlayerComponent::StopMoving),
+	handleResume(this, &PlayerComponent::ResumeMoving)
+{
+	
+}
 
 void PlayerComponent::OnInitialized()
 {
@@ -8,6 +14,9 @@ void PlayerComponent::OnInitialized()
 	_entity = GetEntity();
 	_health = _entity->GetComponent<HealthComponent>();
 	_physicsComponent = _entity->GetComponent<PhysicsComponent>();
+
+	handleStop.Observe(_physicsComponent->stopMoving);
+	handleResume.Observe(_physicsComponent->resumeMoving);
 }
 
 void PlayerComponent::Notify(EventName eventName, Param* params)
@@ -34,6 +43,16 @@ void PlayerComponent::Notify(EventName eventName, Param* params)
 			// do nothing
 		}
 	}
+}
+
+void PlayerComponent::StopMoving()
+{
+
+}
+
+void PlayerComponent::ResumeMoving()
+{
+
 }
 
 void PlayerComponent::Update(float deltaTime)

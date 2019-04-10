@@ -5,6 +5,7 @@
 #include "Core/Entity.h"
 #include "Event/ISubscriber.h"
 #include "Physics/PhysicsComponent.h"
+#include "Event/Handler.h"
 
 #include "Loading/PrefabLoader.h"
 #include "json.hpp"
@@ -19,6 +20,7 @@ enum Team
 class PlayerComponent : public UpdatableComponent
 {
 public:
+	PlayerComponent();
 	virtual void OnInitialized();
 	Team GetTeam() { return _teamID; }
 	void SetTeam(Team id) { _teamID = id; }
@@ -27,9 +29,12 @@ public:
 	void SetSpeed(float speed) { _speed = speed; }
 	float GetSpeed() { return _speed; }
 	void SetDisabled(bool b) { _isDisabled = b; }
-
+	void StopMoving();
+	void ResumeMoving();
 
 private:
+	Handler<PlayerComponent> handleStop;
+	Handler<PlayerComponent> handleResume;
 	HealthComponent* _health;
 	unsigned int _playerID;
 	Team _teamID;
