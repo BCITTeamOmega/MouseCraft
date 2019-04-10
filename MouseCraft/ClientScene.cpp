@@ -17,6 +17,7 @@
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
 #include "Network/NetworkSystem.h"
+#include "Graphics/OutlineComponent.h"
 
 void ClientScene::InitScene() {
     //Make the entities
@@ -211,11 +212,17 @@ catstandPhysics->initPosition();
     PhysicsManager::instance()->setupGrid(100, 75, 5);
 
     // Test Network component
-	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
+	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(1);
 	mouse1Entity->AddComponent(mouseNetwork);
 
-	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
+	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(2);
 	mouse2Entity->AddComponent(mouseNetwork2);
+
+	NetworkComponent *mouseNetwork3 = NetworkSystem::Instance()->CreateComponent(3);
+	mouse3Entity->AddComponent(mouseNetwork3);
+
+	NetworkComponent *catNetwork = NetworkSystem::Instance()->CreateComponent(4);
+	catEntity->AddComponent(catNetwork);
 
     /*auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
     auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
@@ -329,22 +336,43 @@ catstandPhysics->initPosition();
     */
 
     // Lights
-    Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
-    light1->setType(Light::LightType::Directional);
-    light1->setColor(Color(1.2f, 1.25f, 0.8f));
-    light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
-    light1Entity->AddComponent(light1);
+	Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
+	light1->setType(Light::LightType::Directional);
+	light1->setColor(Color(1.5f, 1.45f, 0.9f));
+	light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
+	light1Entity->AddComponent(light1);
 
-    Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
+    /*Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
     light2->setColor(Color(10.0f, 60.0f, 300.0f));
     light2->setAttenuation(1, 0.8, 0.32);
     light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
-    light2Entity->AddComponent(light2);
+    light2Entity->AddComponent(light2);*/
 
     //Don't forget the stupid teapots
     /*Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
     teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));*/
+
+	//Add outlines to the player entities
+	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	catOutline->setWidth(0.2f);
+	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
+	catEntity->AddComponent(catOutline);
+
+	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse1Entity->AddComponent(mouse1Outline);
+
+	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse2Entity->AddComponent(mouse2Outline);
+
+	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse3Entity->AddComponent(mouse3Outline);
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
@@ -365,7 +393,11 @@ catstandPhysics->initPosition();
 //    root.AddChild(gmEntity);
     root.AddChild(cameraEntity);
     root.AddChild(light1Entity);
-    root.AddChild(light2Entity);
+//    root.AddChild(light2Entity);
+
+	mouse1Entity->SetEnabled(false);
+	mouse2Entity->SetEnabled(false);
+	mouse3Entity->SetEnabled(false);
 }
 
 void ClientScene::CleanUp() {

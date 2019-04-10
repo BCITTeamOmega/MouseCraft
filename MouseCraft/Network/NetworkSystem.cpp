@@ -229,8 +229,11 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].SetLive();
                 _connectionList[sender].Append(ConnAccDatum(_tickNum));
                 for (auto comp : _componentList) {
-                    _connectionList[sender].Append(EntityCreateDatum(comp.second));
+					if (comp.first > 4) {
+						_connectionList[sender].Append(EntityCreateDatum(comp.second));
+					}
                 }
+				_componentList[liveConnections()]->GetEntity()->SetEnabled();
             }
             _connectionList[sender].Append(AckDatum(packet->GetTick()));
             break;
