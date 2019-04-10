@@ -194,7 +194,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Physics);
     mouse3Physics->initPosition();
 
-    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 6, 6, 0, PhysObjectType::CAT_UP);
+    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 4.5, 4.5, 0, PhysObjectType::CAT_UP);
     catEntity->AddComponent(catPhysics);
     catPhysics->initPosition();
 
@@ -417,7 +417,7 @@ void HostScene::InitScene() {
 	squishSquashAnim->name = "idle";
 	squishSquashAnim->duration = 4.0f;
 	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
-	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
+	squishSquashAnim->AddScale(2.0f, glm::vec3(1.02f, 1.1f, 1.02f));
 	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
 	squishSquashAnim->SetCurve(new SineConverter());
 
@@ -434,6 +434,11 @@ void HostScene::InitScene() {
 	mouse3Anim->AddAnimation(squishSquashAnim);
 	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
 	mouse3Entity->AddComponent(mouse3Anim);
+
+	TransformAnimator* catAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	catAnim->AddAnimation(squishSquashAnim);
+	catAnim->SetSpeed(0.8f);
+	catEntity->AddComponent(mouse3Anim);
 
 	auto doorEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/door.json");
 	root.AddChild(doorEntity);
