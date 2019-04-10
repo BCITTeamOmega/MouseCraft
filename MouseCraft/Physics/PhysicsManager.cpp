@@ -404,9 +404,8 @@ void PhysicsManager::updateHeights(float step)
 			//Has it reached the platform?
 			if (comp->zPos > Z_UPPER)
 			{
-				comp->isJumping = false;
-				comp->isFalling = false;
 				comp->zPos = Z_UPPER;
+				comp->landed();
 			} //Has it reached the height threshold?
 			else if (comp->zPos < Z_THRESHOLD)
 			{
@@ -484,9 +483,8 @@ void PhysicsManager::updateHeights(float step)
 			} //Has it reached the ground?
 			else if (comp->zPos < Z_LOWER)
 			{
-				comp->isFalling = false;
-				comp->isJumping = false;
 				comp->zPos = Z_LOWER;
+				comp->landed();
 			}
 		}
 
