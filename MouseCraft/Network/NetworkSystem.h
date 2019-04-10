@@ -29,6 +29,8 @@ public:
     void SearchForServers();
     void SetHost();
 
+    void AddToEntity(unsigned int parentID, Entity * entity);
+
     //Overrides System::Update
     void Update(float dt) override;
 

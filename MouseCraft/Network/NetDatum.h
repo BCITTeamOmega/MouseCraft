@@ -135,6 +135,9 @@ public:
     StateUpdateDatum(unsigned int id, const NetState & state) : NetDatum(NetDatum::TRANSFORM_STATE_UPDATE) {
         appendUInt(id);
 
+        appendUInt(state.parentID);
+        appendBool(state.enabled);
+
         appendFloat(state.pos.x);
         appendFloat(state.pos.y);
         appendFloat(state.pos.z);

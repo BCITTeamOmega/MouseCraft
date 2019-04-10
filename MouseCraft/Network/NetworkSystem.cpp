@@ -4,6 +4,7 @@
 #include "../Input/InputSystem.h"
 #include "../Core/OmegaEngine.h"
 #include "../ClientScene.h"
+#include "NetState.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -29,7 +30,7 @@ NetworkComponent * NetworkSystem::CreateComponent() {
 
     do {
         id = dist(eng);
-    } while (_componentList.find(id) != _componentList.end());
+    } while (_componentList.find(id) != _componentList.end() && id == 0);
 
     return CreateComponent(id);
 }
@@ -75,6 +76,14 @@ void NetworkSystem::SearchForServers() {
 
 void NetworkSystem::SetHost() {
     _role = Role::HOST;
+}
+
+void NetworkSystem::AddToEntity(unsigned int parentID, Entity * entity) {
+    if (_componentList.find(parentID) != _componentList.end()) {
+        entity->SetParent(_componentList[parentID]->GetEntity());
+    } else {
+        entity->SetParent(OmegaEngine::Instance().GetRoot());
+    }
 }
 
 void NetworkSystem::Update(float dt) {
@@ -251,6 +260,9 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 // Update state of NetworkComponents
                 unsigned int componentID = packet->ReadUInt();
 
+                unsigned int parent = packet->ReadUInt();
+                bool enabled = packet->ReadByte();
+
                 float posX = packet->ReadFloat();
                 float posY = packet->ReadFloat();
                 float posZ = packet->ReadFloat();
@@ -263,8 +275,10 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 float sclY = packet->ReadFloat();
                 float sclZ = packet->ReadFloat();
 
+                NetState newState = {0, parent, enabled, glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(sclX, sclY, sclZ) };
+
                 if (_componentList.find(componentID) != _componentList.end()) {
-                    _componentList[componentID]->StateUpdate(glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(sclX, sclY, sclZ));
+                    _componentList[componentID]->StateUpdate(newState);
                 } else {
                     cout << "State update from unknown component " << componentID << endl;
                 }

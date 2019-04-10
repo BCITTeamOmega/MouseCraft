@@ -23,7 +23,7 @@ public:
     bool CheckDiff(unsigned short currTick) {
         if (!moreRecent(currTick))
             return false;
-        NetState next(currTick, GetEntity()->transform);
+        NetState next(currTick, *GetEntity());
         if (!next.Equals(_lastState)) {
             _lastState = next;
             return true;
@@ -31,10 +31,13 @@ public:
         return false;
     }
 
-    void StateUpdate(glm::vec3 pos, glm::vec3 rot, glm::vec3 scl) {
-        GetEntity()->transform.setLocalPosition(pos);
-        GetEntity()->transform.setLocalRotation(rot);
-        GetEntity()->transform.setLocalScale(scl);
+    void StateUpdate(const NetState & ns) {
+        if (ns.parentID != _lastState.parentID)
+            NetworkSystem::Instance()->AddToEntity(ns.parentID, GetEntity());
+        GetEntity()->SetEnabled(ns.enabled);
+        GetEntity()->transform.setLocalPosition(ns.pos);
+        GetEntity()->transform.setLocalRotation(ns.rot);
+        GetEntity()->transform.setLocalScale(ns.scl);
     }
 private:
     bool moreRecent(unsigned short tick) {
