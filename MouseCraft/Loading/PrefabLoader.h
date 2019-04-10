@@ -71,6 +71,44 @@ public:
 		return parent;
 	};
 
+	static Component* LoadComponent(std::string path)
+	{
+		std::string* data = ResourceCache<std::string>::Instance().Get(path);
+		json json;
+
+		// check if prefab was loaded before (avoid accessing disk)
+		if (data == nullptr)
+		{
+			// open file and parse json
+			std::ifstream ifs(path);
+			if (!ifs.good())
+			{
+				std::cerr << "ERROR: PrefabLoader could not find component file: " << path << std::endl;
+				return nullptr;
+			}
+			std::stringstream ss;
+			ss << ifs.rdbuf();
+			ResourceCache<std::string>::Instance().Add(path, new std::string(ss.str()));
+
+			json = json::parse(ss.str());
+		}
+		else
+		{
+			json = json::parse(*data);
+		}
+
+		// use custom loader 
+		auto loader = getMap()->find(json["type"]);
+		if (loader != getMap()->end())
+		{
+			return loader->second(json);
+		}
+		else
+		{
+			throw "ERROR: PrefabLoader component type not registered";
+		}
+	}
+
 private:
 	// Recursive helper function to load an entity
 	static Entity* Load(json json, Entity* parent)
