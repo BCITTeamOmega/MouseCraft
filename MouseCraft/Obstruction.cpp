@@ -105,7 +105,7 @@ void Obstruction::HitByCat(Vector2D dir)
 	{
 		// hell yea, knock this chonk over there 
 		for (auto pc : results)
-			if (pc != _physics && pc->pType != PhysObjectType::WALL && pc->pType != PhysObjectType::PLATFORM)
+			if (pc != _physics && pc->pType != PhysObjectType::WALL && pc->pType != PhysObjectType::PLATFORM && pc->pType != PhysObjectType::CAT_DOWN && pc->pType != PhysObjectType::CAT_UP)
 				pc->GetEntity()->Destroy();
 		grid->createArea(*ntl, *nbr, _physics, _physics->pType);
 		_physics->moveBody(&newPos, 0);
