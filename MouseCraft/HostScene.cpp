@@ -17,6 +17,7 @@
 #include "PickupSpawner.h"
 #include "ObstacleFactory.h"
 #include "HealthDisplay.h"
+#include "Graphics/OutlineComponent.h"
 #include "UI/ImageComponent.h"
 
 #define CAT_HEALTH 8
@@ -101,6 +102,7 @@ void HostScene::InitScene() {
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
+	//catRend->setModel(*box);
     catRend->setColor(Color(1.0, 0.25, 0.5));
     catEntity->AddComponent(catRend);
 
@@ -210,6 +212,18 @@ void HostScene::InitScene() {
 	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(35, 0, 30), true);
 	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(70, 0, 50), false);
 
+	Light* lampLight = ComponentManager<Light>::Instance().Create<Light>();
+	lampLight->setType(Light::LightType::Point);
+	lampLight->setColor(Color(2.5f, 2.1f, 0.6f));
+	lampLight->setAttenuation(1, 0.01, 0.05);
+	lampEntity->AddComponent(lampLight);
+
+	Light* lampLight2 = ComponentManager<Light>::Instance().Create<Light>();
+	lampLight2->setType(Light::LightType::Point);
+	lampLight2->setColor(Color(2.5f, 2.1f, 0.6f));
+	lampLight2->setAttenuation(1, 0.01, 0.05);
+	lampEntity2->AddComponent(lampLight2);
+
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
     root.AddChild(vaseEntity);
@@ -297,6 +311,11 @@ void HostScene::InitScene() {
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     catEntity->AddComponent(catJumpSound);
 
+	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	catOutline->setWidth(0.2f);
+	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
+	catEntity->AddComponent(catOutline);
+
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
@@ -312,16 +331,18 @@ void HostScene::InitScene() {
     // Lights
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
     light1->setType(Light::LightType::Directional);
-    light1->setColor(Color(1.2f, 1.25f, 0.8f));
+    light1->setColor(Color(1.5f, 1.45f, 0.9f));
     light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
 	light1Entity->AddComponent(light1);
 
+	/*
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
     light2->setColor(Color(0.5f, 1.0f, 2.5f));
     light2->setAttenuation(1, 0.0, 0.01);
-    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 4.0f, 50.0f));
+    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 12.0f, 50.0f));
     light2Entity->AddComponent(light2);
+	*/
 
 	// UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);

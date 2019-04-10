@@ -193,6 +193,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\GLTextureArray.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\ModelGen.cpp" />
+    <ClCompile Include="Graphics\OutlineComponent.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="HealthDisplay.cpp" />
     <ClCompile Include="HostScene.cpp" />
@@ -286,6 +287,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Light.h" />
     <ClInclude Include="Graphics\Model.h" />
     <ClInclude Include="Graphics\ModelGen.h" />
+    <ClInclude Include="Graphics\OutlineComponent.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Graphics\RenderData.h" />
     <ClInclude Include="Graphics\RenderUtil.h" />

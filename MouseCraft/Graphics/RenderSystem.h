@@ -51,12 +51,16 @@ private:						        // Data Alignment
 	void clearBuffers();
 	void renderScene();
 	void gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
+	void outlinePass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	void lightingPass();
 	void uiPass();
 	void combineMasterGeometry(std::vector<RenderData>& data);
+	void combineOutlineGeometry(std::vector<RenderData>& data);
 	void makeLightsViewSpace(glm::mat4 viewMatrix);
 	int getTexture(std::string* path);
 	int loadTexture(const std::string& path, bool scaleImage = true);
+	std::vector<GLfloat>* fetchSmoothNormals(Geometry* g);
+	std::vector<GLfloat>* calcSmoothNormals(Geometry* geometry);
 	Image* scaleImage(Image* input, int width, int height);
 	glm::vec4 convertColor(Color c);
 
@@ -69,12 +73,18 @@ private:						        // Data Alignment
 	std::vector<RenderData>* _uiRenderingList;
 	std::vector<RenderData>* _uiAccumulatingList;
 
+	std::vector<RenderData>* _outlineRenderingList;
+	std::vector<RenderData>* _outlineAccumulatingList;
+
 	VertexArrayObject* _vao;
 	VertexBufferObject* _positionVBO;
 	VertexBufferObject* _normalVBO;
 	VertexBufferObject* _texCoordVBO;
 	ElementBufferObject* _ebo;
+
 	FrameBufferObject* _fbo;
+	FrameBufferObject* _outlineFBO;
+
 	UniformBufferObject* _ubo;
 	Camera* _camera;
 
@@ -85,13 +95,17 @@ private:						        // Data Alignment
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
+	GLTexture* _outlineBuffer;
 
 	CombinedGeometry* _masterGeometry;
+	CombinedGeometry* _masterOutlineGeometry;
 
 	Model* _screenQuad;
 	CpuProfiler profiler;
 
 	std::map<std::string, int> _texturePathToID;
+	
+	std::map<Geometry*, std::vector<GLfloat>*> _smoothNormalCache;
 
 	std::vector<Geometry*>* _staticGeometries;
 	std::vector<Image*>* _staticTextures;

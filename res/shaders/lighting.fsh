@@ -8,6 +8,7 @@ in vec2 loc;
 uniform sampler2D albedoTex;
 uniform sampler2D positionTex;
 uniform sampler2D normalTex;
+uniform sampler2D outlineTex;
 
 uniform int numLights;
 uniform vec3 ambientColor;
@@ -72,13 +73,19 @@ void main()
     vec4 albedo = texture(albedoTex, loc);
     vec3 position = texture(positionTex, loc).rgb;
     vec3 normal = texture(normalTex, loc).rgb;
+    vec4 outline = texture(outlineTex, loc);
 
-    vec3 totalRadiance = vec3(0.0f, 0.0f, 0.0f);
-    for (int i = 0; i < numLights; i++) {
-        Light l = light[i];
-        totalRadiance += calcRadiance(l, albedo.rgb, position, normal);
+    if (outline.a > 0.02) {
+        result = outline;
     }
-    totalRadiance += ambientColor * albedo.rgb;
+    else {
+        vec3 totalRadiance = vec3(0.0f, 0.0f, 0.0f);
+        for (int i = 0; i < numLights; i++) {
+            Light l = light[i];
+            totalRadiance += calcRadiance(l, albedo.rgb, position, normal);
+        }
+        totalRadiance += ambientColor * albedo.rgb;
 
-    result = vec4(tonemap(totalRadiance), albedo.a);
+        result = vec4(tonemap(totalRadiance), albedo.a);
+    }
 }

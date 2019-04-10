@@ -63,3 +63,27 @@ void FrameBufferObject::buffer(GLuint attachment, GLTexture& texture) {
 GLuint FrameBufferObject::getID() {
 	return _id;
 }
+
+void FrameBufferObject::blit(FrameBufferObject& source, int srcWidth, int srcHeight, GLuint type) {
+	source.bind(GL_READ_FRAMEBUFFER);
+	bind(GL_DRAW_FRAMEBUFFER);
+
+	GLuint scaling = GL_LINEAR;
+	if (type & GL_DEPTH_BUFFER_BIT || type & GL_STENCIL_BUFFER_BIT) {
+		scaling = GL_NEAREST;
+	}
+
+	glBlitFramebuffer(0, 0, srcWidth, srcHeight, 0, 0, _width, _height, type, scaling);
+	RenderUtil::checkGLError("glBlitFramebuffer");
+
+	source.unbind(GL_READ_FRAMEBUFFER);
+	unbind(GL_DRAW_FRAMEBUFFER);
+}
+
+int FrameBufferObject::getWidth() {
+	return _width;
+}
+
+int FrameBufferObject::getHeight() {
+	return _height;
+}
