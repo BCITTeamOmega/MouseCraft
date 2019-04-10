@@ -1,6 +1,7 @@
 #pragma once
 #include "../Core/Component.h"
 #include "../Core/Entity.h"
+#include <string>
 #include <queue>
 #include "NetState.h"
 
@@ -15,6 +16,9 @@ public:
 
     unsigned int GetNetworkID() const { return _netID; }
     const NetState & GetLastState() const { return _lastState; }
+    const std::string & GetComponentData() const { return _componentData; }
+
+    void SetComponentData(std::string & json) { _componentData = json; }
 
     bool CheckDiff(unsigned short currTick) {
         if (!moreRecent(currTick))
@@ -37,6 +41,7 @@ private:
         return (tick > _lastState.tick || (_lastState.tick - tick) > USHRT_MAX / 2);
     }
 
+    std::string _componentData;
     NetState _lastState;
     unsigned int _netID;
     NetAuthority _authLevel;
