@@ -258,6 +258,9 @@ std::vector<PhysicsComponent*>* WorldGrid::objectsInArea(Vector2D* p1, Vector2D*
 		y1 = temp;
 	}
 
+	std::cout << "--- objects in area ---" << std::endl;
+	std::cout << x1 << "," << x2 << "," << y1 << "," << y2 << std::endl;
+
 	for (int x = x1; x <= x2; x++)
 	{
 		for (int y = y2; y <= y1; y++)

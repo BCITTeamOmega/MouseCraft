@@ -337,6 +337,7 @@ void HostScene::InitScene() {
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	pSpawnerSpawner->spawnDelay = 0.5f;
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
 
     //Game Manager
