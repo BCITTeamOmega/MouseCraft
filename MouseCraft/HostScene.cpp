@@ -21,6 +21,7 @@
 #include "HealthDisplay.h"
 #include "Graphics/OutlineComponent.h"
 #include "UI/ImageComponent.h"
+#include "UI/TextComponent.h"
 #include "TransformAnimator.h"
 #define CAT_HEALTH 8
 
@@ -44,7 +45,7 @@ void HostScene::InitScene() {
 	Entity* islandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/island.json");
 	Entity* tableEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/table.json");
 	Entity* couchEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/couch.json");
-    Entity* catstandEntity = EntityManager::Instance().Create();
+    Entity* catstandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/catstand.json");
     Entity* northWallEntity = EntityManager::Instance().Create();
 	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
@@ -58,6 +59,8 @@ void HostScene::InitScene() {
     Entity* light2Entity = EntityManager::Instance().Create();
 	Entity* healthUIEntity = EntityManager::Instance().Create();
 	Entity* healthBarUIEntity = EntityManager::Instance().Create();
+	Entity* recipeUIEntity = EntityManager::Instance().Create();
+	Entity* recipeUIImgEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
@@ -79,10 +82,13 @@ void HostScene::InitScene() {
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
     Model* box = ModelGen::makeCube(4, 4, 4);
     Model* book = ModelGen::makeCube(2, 2, 1);
+	//Font
+	std::string* font = new std::string("res/fonts/ShareTechMono.png");
 	
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
+	std::string* recipeTex = new std::string("res/icons/recipe_UI.png");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -98,22 +104,30 @@ void HostScene::InitScene() {
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
     mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
+	mouse1Rend->setShininess(0.4);
+	mouse1Rend->setRoughness(10.0);
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse2Rend->setModel(*mouseModel);
     mouse2Rend->setColor(Color(0.16, 0.18, 0.45));
-    mouse2Entity->AddComponent(mouse2Rend);
+	mouse2Rend->setShininess(0.4);
+	mouse2Rend->setRoughness(10.0);
+	mouse2Entity->AddComponent(mouse2Rend);
 
     Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse3Rend->setModel(*mouseModel);
     mouse3Rend->setColor(Color(0.19, 0.42, 0.17));
+	mouse3Rend->setShininess(0.4);
+	mouse3Rend->setRoughness(10.0);
     mouse3Entity->AddComponent(mouse3Rend);
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
 	//catRend->setModel(*box);
     catRend->setColor(Color(0.34, 0.08, 0));
+	catRend->setShininess(0.4);
+	catRend->setRoughness(10.0);
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -151,12 +165,12 @@ void HostScene::InitScene() {
     couchRend->setModel(*couchModel);
     couchRend->setColor(Color(1.0, 0.5, 0.0));
     couchEntity->AddComponent(couchRend);
-	*/
 
     Renderable* catstandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catstandRend->setModel(*catstandModel);
     catstandRend->setColor(Color(1.0, 0.5, 0.0));
     catstandEntity->AddComponent(catstandRend);
+	*/
 
     Renderable* northWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     northWallRend->setModel(*horizWallModel);
@@ -194,7 +208,7 @@ void HostScene::InitScene() {
     mouse3Entity->AddComponent(mouse3Physics);
     mouse3Physics->initPosition();
 
-    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 6, 6, 0, PhysObjectType::CAT_UP);
+    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 4.5, 4.5, 0, PhysObjectType::CAT_UP);
     catEntity->AddComponent(catPhysics);
     catPhysics->initPosition();
 
@@ -232,13 +246,13 @@ void HostScene::InitScene() {
 	Light* lampLight = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight->setType(Light::LightType::Point);
 	lampLight->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight->setAttenuation(1, 0.01, 0.05);
+	lampLight->setAttenuation(1, 0.08, 0.01);
 	lampEntity->AddComponent(lampLight);
 
 	Light* lampLight2 = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight2->setType(Light::LightType::Point);
 	lampLight2->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight2->setAttenuation(1, 0.01, 0.05);
+	lampLight2->setAttenuation(1, 0.08, 0.01);
 	lampEntity2->AddComponent(lampLight2);
 
     root.AddChild(bookEntity);
@@ -339,7 +353,7 @@ void HostScene::InitScene() {
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
-	pSpawnerSpawner->spawnDelay = 0.5f;
+	pSpawnerSpawner->spawnDelay = 2.0f;
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
 
     //Game Manager
@@ -366,7 +380,7 @@ void HostScene::InitScene() {
     light2Entity->AddComponent(light2);
 	*/
 
-	// UI
+	// Health Bar UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
 	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
 	healthImg->zForce = 0.1;
@@ -384,24 +398,38 @@ void HostScene::InitScene() {
 	healthDisplayController->setWatchingHealthComponent(catHealth);
 	healthUIEntity->AddComponent(healthDisplayController);
 
+	//Contraption Recipe UI
+	ImageComponent* recipeBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 19.0f, 34.0f, 0.81f, 0.33f);
+	recipeBackImg->color = Color(0.04f, 0.04f, 0.04f, 0.4f);
+	recipeBackImg->zForce = 0.2;
+	recipeUIEntity->AddComponent(recipeBackImg);
+
+	ImageComponent* recipeUIImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*recipeTex, 96.0f, 96.0f, 0.005f, 0.005f);
+	//recipeUIImg->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	recipeUIImg->zForce = 0.19;
+	recipeUIImgEntity->AddComponent(recipeUIImg);
+	recipeUIEntity->AddChild(recipeUIImgEntity);
+
+	//healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
+	
 	//Add outlines to the player entities
 	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	catOutline->setWidth(0.2f);
+	catOutline->setWidth(0.17f);
 	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
 	catEntity->AddComponent(catOutline);
 
 	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setWidth(0.17f);
 	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse1Entity->AddComponent(mouse1Outline);
 
 	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setWidth(0.17f);
 	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse2Entity->AddComponent(mouse2Outline);
 
 	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setWidth(0.17f);
 	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse3Entity->AddComponent(mouse3Outline);
 
@@ -417,7 +445,7 @@ void HostScene::InitScene() {
 	squishSquashAnim->name = "idle";
 	squishSquashAnim->duration = 4.0f;
 	squishSquashAnim->AddScale(0.0f, glm::vec3(1.0f));
-	squishSquashAnim->AddScale(2.0f, glm::vec3(1.0f, 1.2f, 1.0f));
+	squishSquashAnim->AddScale(2.0f, glm::vec3(1.02f, 1.1f, 1.02f));
 	squishSquashAnim->AddScale(4.0f, glm::vec3(1.0f));
 	squishSquashAnim->SetCurve(new SineConverter());
 
@@ -434,6 +462,14 @@ void HostScene::InitScene() {
 	mouse3Anim->AddAnimation(squishSquashAnim);
 	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
 	mouse3Entity->AddComponent(mouse3Anim);
+
+	TransformAnimator* catAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	catAnim->AddAnimation(squishSquashAnim);
+	catAnim->SetSpeed(0.8f);
+	catEntity->AddComponent(mouse3Anim);
+
+	auto doorEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/door.json");
+	root.AddChild(doorEntity);
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
@@ -456,6 +492,7 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
+	root.AddChild(recipeUIEntity);
 	//root.AddChild(teapotEntity);
 	//root.AddChild(jumpingTeapot);
 	//root.AddChild(jumpingTeapot2);
