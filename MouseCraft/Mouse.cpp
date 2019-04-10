@@ -240,7 +240,7 @@ void Mouse::dropItem() {
 	physPos.push_back(pCompAtRight);
 
 	for (int i = 0; i < gridPos.size(); i++) {
-		if (physPos[i] == nullptr) {
+		if (physPos[i] == nullptr && !PhysicsManager::instance()->getGrid()->tileIsUp(gridPos[i].x, gridPos[i].z)) {
 			baseItem->Drop(gridPos[i]);
 			baseItem = nullptr;
 			break;
@@ -282,7 +282,7 @@ void Mouse::disassemble() {
 	glm::vec3 tempPos2 = glm::vec3(0, 0, 0);
 
 	for (int i = 0; i < gridPos.size(); i++) {
-		if (physPos[i] == nullptr) {
+		if (physPos[i] == nullptr && !PhysicsManager::instance()->getGrid()->tileIsUp(gridPos[i].x, gridPos[i].z)) {
 			if (count >= 2) {
 				break;
 			}			
