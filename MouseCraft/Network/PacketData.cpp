@@ -37,7 +37,6 @@ bool PacketData::Append(NetDatum * datum) {
 		delete datum;
         return true;
     }
-	delete datum;
     return false;
 }
 
