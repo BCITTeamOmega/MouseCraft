@@ -11,6 +11,9 @@ NetState::NetState(unsigned short tickNum, const Entity & entity) {
     enabled = entity.GetEnabled();
 
     Entity *parent = entity.GetParent();
-    if (parent != nullptr)
-        parentID = parent->GetComponent<NetworkComponent>()->GetNetworkID();
+	if (parent != nullptr) {
+		NetworkComponent *comp = parent->GetComponent<NetworkComponent>();
+		if (comp != nullptr)
+			parentID = comp->GetNetworkID();
+	}
 }
