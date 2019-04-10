@@ -230,13 +230,13 @@ void HostScene::InitScene() {
 	Light* lampLight = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight->setType(Light::LightType::Point);
 	lampLight->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight->setAttenuation(1, 0.01, 0.05);
+	lampLight->setAttenuation(1, 0.08, 0.01);
 	lampEntity->AddComponent(lampLight);
 
 	Light* lampLight2 = ComponentManager<Light>::Instance().Create<Light>();
 	lampLight2->setType(Light::LightType::Point);
 	lampLight2->setColor(Color(2.5f, 2.1f, 0.6f));
-	lampLight2->setAttenuation(1, 0.01, 0.05);
+	lampLight2->setAttenuation(1, 0.08, 0.01);
 	lampEntity2->AddComponent(lampLight2);
 
     root.AddChild(bookEntity);
@@ -383,22 +383,22 @@ void HostScene::InitScene() {
 
 	//Add outlines to the player entities
 	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	catOutline->setWidth(0.2f);
+	catOutline->setWidth(0.17f);
 	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
 	catEntity->AddComponent(catOutline);
 
 	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setWidth(0.17f);
 	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse1Entity->AddComponent(mouse1Outline);
 
 	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setWidth(0.17f);
 	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse2Entity->AddComponent(mouse2Outline);
 
 	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setWidth(0.17f);
 	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse3Entity->AddComponent(mouse3Outline);
 
