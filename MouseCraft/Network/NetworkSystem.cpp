@@ -30,7 +30,7 @@ NetworkComponent * NetworkSystem::CreateComponent() {
 
     do {
         id = dist(eng);
-    } while (_componentList.find(id) != _componentList.end() && id == 0);
+    } while (_componentList.find(id) != _componentList.end() && id < 6);
 
     return CreateComponent(id);
 }
@@ -233,7 +233,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
 						_connectionList[sender].Append(EntityCreateDatum(comp.second));
 					}
                 }
-				_componentList[liveConnections()]->GetEntity()->SetEnabled();
+				_componentList[liveConnections()]->GetEntity()->SetEnabled(true);
             }
             _connectionList[sender].Append(AckDatum(packet->GetTick()));
             break;

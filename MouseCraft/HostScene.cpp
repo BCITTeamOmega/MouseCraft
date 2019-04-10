@@ -341,6 +341,9 @@ void HostScene::InitScene() {
 	NetworkComponent *catNetwork = NetworkSystem::Instance()->CreateComponent(4);
 	catEntity->AddComponent(catNetwork);
 
+	NetworkComponent *catAtkNet = NetworkSystem::Instance()->CreateComponent(5);
+	catAttackEntity->AddComponent(catAtkNet);
+
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
     pSpawnerEntity->AddComponent(pSpawnerSpawner);

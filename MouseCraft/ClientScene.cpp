@@ -25,6 +25,13 @@ void ClientScene::InitScene() {
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
+	catEntity->transform.setLocalPosition(glm::vec3(77.5f, 5, 66.5f));
+	Entity* catAttackEntity = EntityManager::Instance().Create();
+	catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
+	catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI / 2, 0));
+	catAttackEntity->transform.scale(4.4);
+	catAttackEntity->SetEnabled(false);
+	catEntity->AddChild(catAttackEntity);
     Entity* floorEntity = EntityManager::Instance().Create();
     floorEntity->transform.setLocalPosition(glm::vec3(50, 0, 37.5));
     Entity* counter1Entity = EntityManager::Instance().Create();
@@ -100,9 +107,10 @@ catstandPhysics->initPosition();
 
     //Make the models
     //Player Models
-    Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
-    Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
-    //Map Models
+	Model* mouseModel = ModelLoader::loadModel("res/models/rat_tri.obj");
+	Model* catModel = ModelLoader::loadModel("res/models/cat_tri.obj");
+	Model* CatAttackModel = ModelLoader::loadModel("res/models/crescent.obj");
+	//Map Models
     Model* floorModel = ModelGen::makeQuad(ModelGen::Axis::Y, 100, 75);
     Model* counter1Model = ModelGen::makeCube(10, 5, 40);
     Model* counter2Model = ModelGen::makeCube(50, 5, 10);
@@ -149,8 +157,13 @@ catstandPhysics->initPosition();
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
-    catRend->setColor(Color(1.0, 0.25, 0.5));
-    catEntity->AddComponent(catRend);
+	catRend->setColor(Color(0.34, 0.08, 0));
+	catEntity->AddComponent(catRend);
+
+	Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	catAttackRend->setModel(*CatAttackModel);
+	catAttackRend->setColor(Color(1.0, 1.0, 1.0));
+	catAttackEntity->AddComponent(catAttackRend);
 
     Renderable* floorRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     floorRend->setModel(*floorModel);
@@ -223,6 +236,9 @@ catstandPhysics->initPosition();
 
 	NetworkComponent *catNetwork = NetworkSystem::Instance()->CreateComponent(4);
 	catEntity->AddComponent(catNetwork);
+
+	NetworkComponent *catAtkNet = NetworkSystem::Instance()->CreateComponent(5);
+	catAttackEntity->AddComponent(catAtkNet);
 
     /*auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
     auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
