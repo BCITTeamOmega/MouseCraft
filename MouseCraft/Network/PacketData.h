@@ -7,6 +7,7 @@
 
 #include "../Util/TypePunners.h"
 #include "NetDatum.h"
+#include <string>
 
 constexpr size_t MAX_PACKET_SIZE = 256;
 
@@ -34,6 +35,7 @@ public:
     unsigned short ReadUShort();
     float ReadFloat();
     unsigned char ReadByte();
+    std::string ReadString();
 
     bool Verify() const;
     bool Empty() const;

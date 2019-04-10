@@ -86,6 +86,10 @@ void NetworkSystem::AddToEntity(unsigned int parentID, Entity * entity) {
     }
 }
 
+void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
+    appendToPackets(EntityCreateDatum(component));
+}
+
 void NetworkSystem::Update(float dt) {
     _tickCount += dt;
     if (_tickCount >= TICK_PERIOD) {
@@ -282,6 +286,21 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 } else {
                     cout << "State update from unknown component " << componentID << endl;
                 }
+            }
+            break;
+        case NetDatum::DataType::ENTITY_CREATE:
+            if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
+                unsigned int netID = packet->ReadUInt();
+                std::string componentData = packet->ReadString();
+                
+                Entity *newEntity = EntityManager::Instance().Create();
+                NetworkComponent *newComponent = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(netID, NetworkComponent::NetAuthority::SIMULATED);
+                newEntity->AddComponent(newComponent);
+
+                newComponent->AddComponentData(componentData);
+                newComponent->ConstructComponents();
+
+                OmegaEngine::Instance().GetRoot()->AddChild(newEntity);
             }
             break;
         case NetDatum::DataType::EVENT_TRIGGER:

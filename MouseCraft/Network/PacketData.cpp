@@ -111,6 +111,16 @@ unsigned char PacketData::ReadByte() {
     return _data[_readPos++];
 }
 
+std::string PacketData::ReadString() {
+    unsigned int size = ReadUInt();
+    char * str = (char*)malloc(size * sizeof(char));
+    std::copy(_data + _readPos, _data + _readPos + size, str);
+    std::string ret(str, size);
+    _readPos += size;
+    free(str);
+    return ret;
+}
+
 bool PacketData::Empty() const {
     return _size == HEADER_SIZE;
 }
