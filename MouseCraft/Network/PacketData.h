@@ -19,7 +19,7 @@ public:
     void Load(const unsigned char * data, const size_t size);
 
     bool Append(const char * string, const size_t length);
-    bool Append(const NetDatum * datum);
+    bool Append(NetDatum * datum);
 
     size_t GetData(unsigned char * buffer) const;
 

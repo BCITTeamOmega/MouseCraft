@@ -27,7 +27,7 @@ bool PacketData::Append(const char * string, const size_t length) {
     return false;
 }
 
-bool PacketData::Append(const NetDatum * datum) {
+bool PacketData::Append(NetDatum * datum) {
     if (_size + datum->GetSize() + 1 < MAX_PACKET_SIZE) {
         _data[_size++] = datum->GetType();
         if (datum->IsReliable())

@@ -51,7 +51,7 @@ public:
             _reliableData.insert(std::pair<const unsigned short, PacketData>(tickNum, _send));
     }
 
-    bool Append(const NetDatum * datum) { 
+    bool Append(NetDatum * datum) { 
 		if (_send.Append(datum)) {
 			return true;
 		}
@@ -79,6 +79,6 @@ private:
     State _connState;
     PacketData _send;
     std::multimap<const unsigned short, PacketData> _reliableData;
-	std::queue<const NetDatum*> _overflow;
+	std::queue<NetDatum*> _overflow;
     PacketData * _extraPacket;
 };
