@@ -101,7 +101,12 @@ public:
 		auto loader = getMap()->find(json["type"]);
 		if (loader != getMap()->end())
 		{
-			return loader->second(json);
+			auto c = loader->second(json);
+			if (json.find("enabled") != json.end())
+			{
+				c->SetEnabled(json["enabled"].get<bool>());
+			}
+			return c;
 		}
 		else
 		{
