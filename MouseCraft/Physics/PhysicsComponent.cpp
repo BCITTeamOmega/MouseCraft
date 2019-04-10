@@ -53,13 +53,13 @@ PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObject
 	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }
 
-void PhysicsComponent::jump()
+void PhysicsComponent::jump(float upVel, float forwardVel)
 {
-	zVelocity = JUMP_VELOCITY;
+	zVelocity = upVel;
 	isJumping = true;
 
 	stopMoving.Notify();
-	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
+	velocity = GetEntity()->transform.getWorldForward2D() * forwardVel;
 }
 
 void PhysicsComponent::fall()
@@ -68,7 +68,7 @@ void PhysicsComponent::fall()
 	isFalling = true;
 	
 	stopMoving.Notify();
-	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
+	velocity = GetEntity()->transform.getWorldForward2D() * FALL_FORWARD_VELOCITY;
 }
 
 void PhysicsComponent::landed()

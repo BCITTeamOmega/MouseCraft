@@ -28,6 +28,8 @@
 using json = nlohmann::json;
 
 constexpr auto MOUSE_JUMP_DIST = 10;
+constexpr auto MOUSE_JUMP_VELOCITY = 14;
+constexpr auto MOUSE_JUMP_FORWARD = 25;
 
 class Mouse : public UpdatableComponent
 {
