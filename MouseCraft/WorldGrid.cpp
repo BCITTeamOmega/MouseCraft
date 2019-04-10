@@ -118,7 +118,7 @@ void WorldGrid::createObject(Vector2D& pos, PhysicsComponent* pcomp)
 	int xInd = round((pos.x - scale / 2.0f) / scale);
 	int yInd = round((pos.y - scale / 2.0f) / scale);
 
-	if (objectGrid[xInd][yInd] != nullptr)
+	if (objectGrid[xInd][yInd] == nullptr)
 		objectGrid[xInd][yInd] = pcomp;
 }
 
@@ -130,12 +130,18 @@ void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp, 
 	int y1 = round(p1.y / scale);
 	int y2 = round(p2.y / scale);
 
+	// ensure all positions are free
+	for (int x = x1; x < x2; x++)
+		for (int y = y1; y < y2; y++)
+			if (objectGrid[x][y] != nullptr)
+				return;
+
+	// occup all positions
 	for (int x = x1; x < x2; x++)
 	{
 		for (int y = y1; y < y2; y++)
 		{
-			if (objectGrid[x][y] != nullptr)
-				objectGrid[x][y] = pcomp;
+			objectGrid[x][y] = pcomp;
 			if (pType == PhysObjectType::PLATFORM)
 				baseGrid[x][y] = true;
 		}

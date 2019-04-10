@@ -14,11 +14,9 @@ PickupSpawner::PickupSpawner()
 	{
 		for (int j = 0; j < _grid->gridHeight(); j++)
 		{
-			if (!_grid->tileIsUp(i, j) && _grid->objectAt(i, j) == nullptr)
+			if (!_grid->tileIsUp(i, j))
 			{
-				Vector2D pos = _grid->getScaledPosition(i, j);
-				std::cout << "found free spot " << i << "," << j << std::endl;
-				_floorPositions.push_back(pos);
+				_floorPositions.push_back(glm::ivec2(i,j));
 			}
 		}
 	}
@@ -30,14 +28,17 @@ PickupSpawner::~PickupSpawner()
 
 glm::vec3 PickupSpawner::GetFreePosition()
 {
+	// find a free position (on the floor)
 	int idx = rand() % _floorPositions.size();
-	idx = rand() % _floorPositions.size();
-	Vector2D pos = _floorPositions[idx];
-	while (_grid->objectAt(pos.x, pos.y) != nullptr)
+	glm::ivec2 check = _floorPositions[idx];
+	while (_grid->objectAt(check.x, check.y) != nullptr)
 	{
-		idx = rand() & _floorPositions.size();
-		pos = _floorPositions[idx];
+		idx = rand() % _floorPositions.size();
+		check = _floorPositions[idx];
 	}
+
+	// calculate the actual position
+	Vector2D pos = _grid->getScaledPosition(check.x, check.y);
 	return glm::vec3(pos.x, 0.0f, pos.y);
 }
 

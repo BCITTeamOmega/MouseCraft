@@ -16,7 +16,7 @@ public:
 private:
 	glm::vec3 GetFreePosition();
 	float _counter = 0.0f;
-	std::vector<Vector2D> _floorPositions;
+	std::vector<glm::ivec2> _floorPositions;
 	WorldGrid* _grid;
 };
 
