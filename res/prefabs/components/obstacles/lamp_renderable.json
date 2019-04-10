@@ -1,7 +1,7 @@
 {
     "type": "Renderable",
     "model_path": "res/models/lamp.obj",
-    "texture_path": "res/models/test/blank.bmp",
+    "texture_path": "",
     "color":
     {
         "r":0.63,

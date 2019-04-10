@@ -1,7 +1,7 @@
 {
     "type": "Renderable",
     "model_path": "res/models/sphere.obj",
-    "texture_path": "res/models/test/blank.bmp",
+    "texture_path": "",
     "color":
     {
         "r":1.0,
