@@ -45,6 +45,7 @@ public:
 	virtual void OnRevived();
 	void addItem(Pickup* item);
 	void dropItem();
+	void disassemble();
 	void use(Contraption* item);
 	void combine(Pickup *material);
 	void revive(PhysicsComponent* mouse);

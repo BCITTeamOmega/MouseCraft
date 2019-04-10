@@ -20,7 +20,7 @@ public:
 	
 	virtual void OnInitialized() override;
 	void Grab();
-	void Drop();
+	void Drop(glm::vec3);
 	
 // variables 
 public:

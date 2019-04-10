@@ -1,6 +1,7 @@
 #include "Pickup.h"
 
 #include "Core/Entity.h"
+#include "Core/OmegaEngine.h"
 
 Pickup::Pickup()
 {
@@ -23,13 +24,18 @@ void Pickup::Grab()
 	GetEntity()->transform.setLocalRotation(glm::vec3(0.0f));
 }
 
-void Pickup::Drop()
+void Pickup::Drop(glm::vec3 gPos)
 {
-	auto pos = GetEntity()->transform.getLocalPosition();
-	_physics->moveBody(new Vector2D(pos.x, pos.z), 0);
+	Vector2D gPosition = Vector2D(gPos.x, gPos.z);
+	PhysicsManager::instance()->getGrid()->positionObject(gPosition);
+	PhysicsManager::instance()->getGrid()->createObject(gPosition, _physics);
 	_physics->SetEnabled(true);
 	_rotator->SetEnabled(true);
 	GetEntity()->transform.setLocalRotation(glm::vec3(0.42f, 0.0f, 0.0f));
+	OmegaEngine::Instance().GetActiveScene()->root.AddChild(GetEntity());
+	_physics->moveBody(&gPosition, 0);
+	_physics->initPosition();
+	
 }
 
 Component* Pickup::Create(json json)

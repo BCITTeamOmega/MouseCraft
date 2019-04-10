@@ -38,6 +38,7 @@ private:
 	DamageOnCollision* _dcollision;
 	Rotator* _rotator;
 	std::set<PhysObjectType::PhysObjectType> _checkFor;
+	bool _activated = false;
 
 	static Component* Create(json json);
 	static PrefabRegistrar reg;
