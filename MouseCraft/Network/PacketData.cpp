@@ -27,15 +27,17 @@ bool PacketData::Append(const char * string, const size_t length) {
     return false;
 }
 
-bool PacketData::Append(const NetDatum & datum) {
-    if (_size + datum.GetSize() + 1 < MAX_PACKET_SIZE) {
-        _data[_size++] = datum.GetType();
-        if (datum.IsReliable())
+bool PacketData::Append(const NetDatum * datum) {
+    if (_size + datum->GetSize() + 1 < MAX_PACKET_SIZE) {
+        _data[_size++] = datum->GetType();
+        if (datum->IsReliable())
             _reliable = true;
-        std::copy(datum.GetPointer(), datum.GetPointer() + datum.GetSize(), _data + _size);
-        _size += datum.GetSize();
+        std::copy(datum->GetPointer(), datum->GetPointer() + datum->GetSize(), _data + _size);
+        _size += datum->GetSize();
+		delete datum;
         return true;
     }
+	delete datum;
     return false;
 }
 

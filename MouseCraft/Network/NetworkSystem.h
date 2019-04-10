@@ -50,7 +50,7 @@ private:
 
     void serverTick();
 
-    void appendToPackets(const NetDatum & datum);
+    void appendToPackets(const NetDatum * datum);
 
     void processPacket(const Address & sender, PacketData * packet);
     void processDatum(const Address & sender, PacketData * packet);
