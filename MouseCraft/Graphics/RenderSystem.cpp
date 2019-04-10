@@ -198,7 +198,7 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 
 	int index = 0;
 	for (RenderData render : *_renderingList) {
-		int texID = getTexture(render.getModel()->getTexture());
+		TextureInfo texInfo = getTexture(render.getModel()->getTexture());
 		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
@@ -218,7 +218,7 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 		_shader->setUniformMatrix("transformNoPerspective", mv);
 		_shader->setUniformMatrix("invTransform", invMVP);
 
-		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformInt("textureID", texInfo.id);
 		_shader->setUniformTexture("albedoTex", 0);
 
 		int start = _masterGeometry->getIndexStart(index);
@@ -431,7 +431,7 @@ void RenderSystem::uiPass() {
 
 	int index = 0;
 	for (RenderData render : *_uiRenderingList) {
-		int texID = getTexture(render.getModel()->getTexture());
+		TextureInfo texInfo = getTexture(render.getModel()->getTexture(), false);
 		Geometry* g = render.getModel()->getGeometry();
 		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
@@ -440,13 +440,23 @@ void RenderSystem::uiPass() {
 		matrix[3][3] = 1.0f; // To fix the scaling to be what we want
 
 		int loc = 0;
+
+		// Manually adjust texture coordinates
+		float widthScale = (float)texInfo.width / TEXTURE_SIZE;
+		float heightScale = (float)texInfo.height / TEXTURE_SIZE;
+		vector<GLfloat> texCoords = vector<GLfloat>(g->getTexCoordData().begin(), g->getTexCoordData().end());
+		for (int i = 0; i < texCoords.size(); i += 2) {
+			texCoords[i] *= widthScale;
+			texCoords[i + 1] *= heightScale;
+		}
+
 		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
 		
 		_positionVBO->buffer(g->getVertexData());
 		_normalVBO->buffer(g->getNormalData());
-		_texCoordVBO->buffer(g->getTexCoordData());
+		_texCoordVBO->buffer(texCoords);
 		_ebo->buffer(g->getIndices());
 
 		_textures->bind(GL_TEXTURE0);
@@ -454,7 +464,7 @@ void RenderSystem::uiPass() {
 		_shader->setUniformVec4("color", color);
 		_shader->setUniformMatrix("transform", matrix);
 
-		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformInt("textureID", texInfo.id);
 		_shader->setUniformTexture("tex", 0);
 
 		int start = 0;
@@ -481,15 +491,15 @@ void RenderSystem::swapLists() {
 	_outlineAccumulatingList->clear();
 }
 
-int RenderSystem::getTexture(string* path) {
+TextureInfo& RenderSystem::getTexture(string* path, bool scale) {
 	if (path == nullptr) {
-		return 0; // Use the default texture
+		return _defaultTextureValue;
 	}
-	return (_texturePathToID.find(*path) != _texturePathToID.end()) ?
-		_texturePathToID[*path] : loadTexture(*path);
+	return (_texturePathToInfo.find(*path) != _texturePathToInfo.end()) ?
+		_texturePathToInfo[*path] : loadTexture(*path, scale);
 }
 
-int RenderSystem::loadTexture(const string& path, bool scale) {
+TextureInfo& RenderSystem::loadTexture(const string& path, bool scale) {
 	Image* img = ImageLoader::loadImage(path);
 	if (scale) {
 		Image* tmp = img;
@@ -497,11 +507,16 @@ int RenderSystem::loadTexture(const string& path, bool scale) {
 		delete tmp;
 	}
 	int id = _staticTextures->size();
-	_texturePathToID[path] = id;
+	_texturePathToInfo[path] = TextureInfo(
+		id,
+		scale,
+		scale ? _textures->getWidth() : img->getWidth(),
+		scale ? _textures->getHeight() : img->getHeight()
+	);
 	_staticTextures->push_back(img);
 	_textures->setImage(id, *img, GL_UNSIGNED_BYTE);
 	_textures->genMipmaps();
-	return id;
+	return _texturePathToInfo[path];
 }
 
 Image* RenderSystem::scaleImage(Image* input, int width, int height) {

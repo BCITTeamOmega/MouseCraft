@@ -305,6 +305,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
     <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
+    <ClInclude Include="Graphics\TextureInfo.h" />
     <ClInclude Include="Graphics\Window.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Gun.h" />
