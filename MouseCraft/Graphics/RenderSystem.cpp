@@ -165,7 +165,7 @@ void RenderSystem::clearBuffers() {
 }
 
 void RenderSystem::renderScene() {
-	if (_camera != nullptr) {
+	if (_camera != nullptr && _renderingList->size() > 0) {
 		float windowRatio = (float)_window->getWidth() / _window->getHeight();
 		Transform viewTransform = _camera->getTransform();
 		mat4 view = inverse(viewTransform.getWorldTransformation());
@@ -342,50 +342,52 @@ void RenderSystem::makeLightsViewSpace(glm::mat4 viewMatrix) {
 }
 
 void RenderSystem::outlinePass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {
-	// Set up all of the vertex data for all objects to be rendered
-	combineOutlineGeometry(*_outlineRenderingList);
-	_positionVBO->buffer(_masterOutlineGeometry->getVertexData());
-	_normalVBO->buffer(_masterOutlineGeometry->getNormalData());
-	_texCoordVBO->buffer(_masterOutlineGeometry->getTexCoordData());
-	_ebo->buffer(_masterOutlineGeometry->getIndices());
+	if (_outlineRenderingList->size() > 0) {
+		// Set up all of the vertex data for all objects to be rendered
+		combineOutlineGeometry(*_outlineRenderingList);
+		_positionVBO->buffer(_masterOutlineGeometry->getVertexData());
+		_normalVBO->buffer(_masterOutlineGeometry->getNormalData());
+		_texCoordVBO->buffer(_masterOutlineGeometry->getTexCoordData());
+		_ebo->buffer(_masterOutlineGeometry->getIndices());
 
-	setShader(_shaders["outline"]);
+		setShader(_shaders["outline"]);
 
-	glCullFace(GL_FRONT);
+		glCullFace(GL_FRONT);
 
-	// Blit the depth buffer from the gbuffer
-	//glClear(GL_DEPTH_BUFFER_BIT);
-	_outlineFBO->blit(*_fbo, _fbo->getWidth(), _fbo->getHeight(), GL_DEPTH_BUFFER_BIT);
-	RenderUtil::checkGLError("glBlitFramebuffer");
-	
-	_outlineFBO->bind();
-	int index = 0;
-	for (RenderData render : *_outlineRenderingList) {
-		vec4 color = convertColor(render.getColor());
-		color.a = 1.0f;
-		mat4 model = render.getTransform();
+		// Blit the depth buffer from the gbuffer
+		//glClear(GL_DEPTH_BUFFER_BIT);
+		_outlineFBO->blit(*_fbo, _fbo->getWidth(), _fbo->getHeight(), GL_DEPTH_BUFFER_BIT);
+		RenderUtil::checkGLError("glBlitFramebuffer");
 
-		mat4 mv = viewMatrix * model;
-		mat4 mvp = projectionMatrix * mv;
-		mat4 invMVP = transpose(inverse(viewMatrix * model));
+		_outlineFBO->bind();
+		int index = 0;
+		for (RenderData render : *_outlineRenderingList) {
+			vec4 color = convertColor(render.getColor());
+			color.a = 1.0f;
+			mat4 model = render.getTransform();
 
-		int loc = _masterOutlineGeometry->getVertexStart(index);
-		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
-		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
-		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
+			mat4 mv = viewMatrix * model;
+			mat4 mvp = projectionMatrix * mv;
+			mat4 invMVP = transpose(inverse(viewMatrix * model));
 
-		_shader->setUniformVec3("color", color);
-		_shader->setUniformMatrix("transform", mvp);
-		_shader->setUniformFloat("lineWidth", render.getColor().getAlpha());
+			int loc = _masterOutlineGeometry->getVertexStart(index);
+			_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
+			_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
+			_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
 
-		int start = _masterOutlineGeometry->getIndexStart(index);
-		int size = _masterOutlineGeometry->getIndexEnd(index) - start + 1;
-		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
+			_shader->setUniformVec3("color", color);
+			_shader->setUniformMatrix("transform", mvp);
+			_shader->setUniformFloat("lineWidth", render.getColor().getAlpha());
 
-		index++;
+			int start = _masterOutlineGeometry->getIndexStart(index);
+			int size = _masterOutlineGeometry->getIndexEnd(index) - start + 1;
+			glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
+
+			index++;
+		}
+		_outlineFBO->unbind();
+		glCullFace(GL_BACK);
 	}
-	_outlineFBO->unbind();
-	glCullFace(GL_BACK);
 }
 
 void RenderSystem::lightingPass() {
