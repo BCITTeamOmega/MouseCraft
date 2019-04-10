@@ -1,0 +1,11 @@
+{
+    "type": "Renderable",
+    "model_path": "res/models/cube.obj",
+    "texture_path": "res/textures/box.png",
+    "color":
+    {
+        "r":1.0,
+        "g":1.0,
+        "b":1.0
+    }
+}

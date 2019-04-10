@@ -1,0 +1,16 @@
+{
+    "type": "Renderable",
+    "model_path": "",
+    "texture_path": "res/models/test/blank.bmp",
+    "color":
+    {
+        "r":1.0,
+        "g":1.0,
+        "b":0.0
+    },
+    "model_gen":
+    {
+        "type":"cube",
+        "size":[16,0.1,16]
+    }
+}
