@@ -18,6 +18,9 @@ public:
 
     NetworkComponent(unsigned int netID, NetAuthority auth) : _netID(netID), _authLevel(auth) { }
 
+	// TODO: please reivew implementation
+	virtual void OnInitialized() override;
+
     unsigned int GetNetworkID() const { return _netID; }
     const NetState & GetLastState() const { return _lastState; }
 	
@@ -25,6 +28,11 @@ public:
 	const std::string GetComponentData() const;
 	void AddComponentData(std::string& json);
 	void AddComponentData(json json);
+	void SetComponentData(json json);
+
+	// TODO: may want to move this into the system
+	// Called by clients. Reconstructs all the components this entity should have. 
+	void ConstructComponents();
 
     bool CheckDiff(unsigned short currTick) {
         if (!moreRecent(currTick))
