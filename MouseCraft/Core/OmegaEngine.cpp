@@ -129,6 +129,10 @@ void OmegaEngine::sequential_loop()
 			transitionScenes();
 			continue;
 		}
+		else
+		{
+			_activeScene->Update(deltaSeconds);
+		}
 		_profiler.StopTimer(1);
 
 		// PHASE 1: Status Change Resolution

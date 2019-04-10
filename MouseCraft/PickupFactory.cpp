@@ -81,7 +81,7 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position, std::vector<uns
 	}
 	else
 	{
-		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
+		// std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
 	}
 
 	// ASSEMBLE

@@ -337,6 +337,7 @@ void HostScene::InitScene() {
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
+	pSpawnerSpawner->spawnDelay = 0.5f;
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
 
     //Game Manager
@@ -403,11 +404,11 @@ void HostScene::InitScene() {
 	mouse3Entity->AddComponent(mouse3Outline);
 
     //Don't forget the stupid teapots
-	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
-	Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
+	//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	//Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
+	//Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
 
 	// Basic animations!
 	Animation* squishSquashAnim = new Animation();
@@ -453,9 +454,9 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
-	root.AddChild(teapotEntity);
-	root.AddChild(jumpingTeapot);
-	root.AddChild(jumpingTeapot2);
+	//root.AddChild(teapotEntity);
+	//root.AddChild(jumpingTeapot);
+	//root.AddChild(jumpingTeapot2);
 
 }
 
