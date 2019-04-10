@@ -47,12 +47,12 @@ void PlayerComponent::Notify(EventName eventName, Param* params)
 
 void PlayerComponent::StopMoving()
 {
-
+	SetEnabled(false);
 }
 
 void PlayerComponent::ResumeMoving()
 {
-
+	SetEnabled(true);
 }
 
 void PlayerComponent::Update(float deltaTime)
