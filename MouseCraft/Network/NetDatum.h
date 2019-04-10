@@ -185,17 +185,17 @@ public:
         appendUInt(parentID);
         appendBool(entity->GetEnabled());
 
-        appendFloat(entity->transform.pos.x);
-        appendFloat(entity->transform.pos.y);
-        appendFloat(entity->transform.pos.z);
+        appendFloat(entity->transform.getLocalPosition().x);
+        appendFloat(entity->transform.getLocalPosition().y);
+        appendFloat(entity->transform.getLocalPosition().z);
 
-        appendFloat(entity->transform.rot.x);
-        appendFloat(entity->transform.rot.y);
-        appendFloat(entity->transform.rot.z);
+        appendFloat(entity->transform.getLocalRotation().x);
+        appendFloat(entity->transform.getLocalRotation().y);
+        appendFloat(entity->transform.getLocalRotation().z);
 
-        appendFloat(entity->transform.scl.x);
-        appendFloat(entity->transform.scl.y);
-        appendFloat(entity->transform.scl.z);
+        appendFloat(entity->transform.getLocalScale().x);
+        appendFloat(entity->transform.getLocalScale().y);
+        appendFloat(entity->transform.getLocalScale().z);
 
         appendString(component->GetComponentData());
     }
