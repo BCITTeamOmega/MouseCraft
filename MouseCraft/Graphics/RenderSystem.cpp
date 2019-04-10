@@ -8,6 +8,7 @@
 #include "ModelGen.h"
 #include "../Loading/ImageLoader.h"
 #include "RenderUtil.h"
+#include "OutlineComponent.h"
 
 #define TEXTURE_SIZE 2048
 
@@ -41,7 +42,11 @@ RenderSystem::RenderSystem() : System() {
 	_lightAccumulatingList = new vector<LightData>();
 	_lightAccumulatingList->reserve(MAX_LIGHTS);
 
+	_outlineRenderingList = new vector<RenderData>();
+	_outlineAccumulatingList = new vector<RenderData>();
+
 	_masterGeometry = new CombinedGeometry();
+	_masterOutlineGeometry = new CombinedGeometry();
 
 	glEnable(GL_FRAMEBUFFER_SRGB);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -60,6 +65,7 @@ RenderSystem::~RenderSystem() {
 	delete _ebo;
 	delete _textures;
 	delete _fbo;
+	delete _outlineFBO;
 	delete _screenQuad;
 	delete _masterGeometry;
 	delete _ubo;
@@ -96,9 +102,16 @@ void RenderSystem::initRenderBuffers() {
 	_albedoBuffer = new GLTexture();
 	_normalBuffer = new GLTexture();
 	_positionBuffer = new GLTexture();
+	_outlineBuffer = new GLTexture();
 
 	vector<GLTexture*> buffers = { _albedoBuffer, _normalBuffer, _positionBuffer };
 	_fbo = new FrameBufferObject(1280, 720, buffers);
+
+	vector<GLTexture*> outlineBuffers = { _outlineBuffer };
+	_outlineFBO = new FrameBufferObject(1280, 720, outlineBuffers);
+
+	_fbo = new FrameBufferObject(1280, 720, buffers);
+
 
 	vector<GLTexture*> noBuffers = {};
 	_resizeInFBO = new FrameBufferObject(TEXTURE_SIZE, TEXTURE_SIZE, noBuffers);
@@ -114,6 +127,7 @@ void RenderSystem::setWindow(Window* window) {
 void RenderSystem::initShaders() {
 	loadShader("gbuffer");
 	loadShader("lighting");
+	loadShader("outline");
 	loadShader("ui");
 }
 
@@ -144,11 +158,14 @@ void RenderSystem::clearBuffers() {
 	_fbo->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_fbo->unbind();
+	_outlineFBO->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_outlineFBO->unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderSystem::renderScene() {
-	if (_camera != nullptr) {
+	if (_camera != nullptr && _renderingList->size() > 0) {
 		float windowRatio = (float)_window->getWidth() / _window->getHeight();
 		Transform viewTransform = _camera->getTransform();
 		mat4 view = inverse(viewTransform.getWorldTransformation());
@@ -160,6 +177,7 @@ void RenderSystem::renderScene() {
 		mat4 projection = perspective(fov, windowRatio, closeClip, farClip);
 
 		gBufferPass(view, projection);
+		outlinePass(view, projection);
 		makeLightsViewSpace(view);
 		lightingPass();
 	}
@@ -180,7 +198,7 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 
 	int index = 0;
 	for (RenderData render : *_renderingList) {
-		int texID = getTexture(render.getModel()->getTexture());
+		TextureInfo texInfo = getTexture(render.getModel()->getTexture());
 		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
 
@@ -200,7 +218,7 @@ void RenderSystem::gBufferPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 		_shader->setUniformMatrix("transformNoPerspective", mv);
 		_shader->setUniformMatrix("invTransform", invMVP);
 
-		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformInt("textureID", texInfo.id);
 		_shader->setUniformTexture("albedoTex", 0);
 
 		int start = _masterGeometry->getIndexStart(index);
@@ -237,11 +255,138 @@ void RenderSystem::combineMasterGeometry(vector<RenderData>& data) {
 	_masterGeometry->setIndices(indices);
 }
 
+vector<GLfloat>* RenderSystem::fetchSmoothNormals(Geometry* g) {
+	if (_smoothNormalCache.find(g) == _smoothNormalCache.end()) {
+		_smoothNormalCache[g] = calcSmoothNormals(g);
+	}
+	return _smoothNormalCache[g];
+}
+
+std::vector<GLfloat>* RenderSystem::calcSmoothNormals(Geometry* geometry) {
+	std::vector<GLfloat> normals = geometry->getNormalData();
+	std::vector<GLfloat> vertices = geometry->getVertexData();
+	std::map<std::vector<int>, std::pair<glm::vec3, std::vector<size_t>>> vertexIndexNormals;
+	size_t size = normals.size();
+
+	// Calculate the smooth normals
+	for (int i = 0; i < size; i += 3) {
+		std::vector<GLfloat> vertex = std::vector<GLfloat>(vertices.begin() + i, vertices.begin() + (i + 3));
+		std::vector<GLfloat> normal = std::vector<GLfloat>(normals.begin() + i, normals.begin() + (i + 3));
+
+		std::vector<int> vertInt = std::vector<int>();
+		for (GLfloat& f : vertex) {
+			vertInt.push_back((int)(round(f * 100.0f)));
+		}
+
+		std::vector<size_t>& indices = vertexIndexNormals[vertInt].second;
+		size_t size = indices.size();
+		if (size == 0) {
+			vertexIndexNormals[vertInt].first = glm::vec3(normal[0], normal[1], normal[2]);
+		}
+		else {
+			glm::vec3& f = vertexIndexNormals[vertInt].first;
+			f = f * ((float)(size) / (size + 1.0f)) + vec3(normal[0], normal[1], normal[2]) * (1.0f / (size + 1.0f));
+		}
+		indices.push_back(i);
+	}
+
+	// Propogate the smooth normals back to the indices
+	std::vector<GLfloat>* smoothNormals = new std::vector<GLfloat>(normals);
+	for (auto& pair : vertexIndexNormals) {
+		std::vector<size_t> indices = pair.second.second;
+		glm::vec3 smoothNormal = normalize(pair.second.first);
+		//glm::vec3 smoothNormal = vec3(0.0f, 0.0f, 0.0f);
+		
+		for (size_t i : indices) {
+			(*smoothNormals)[i] = smoothNormal.x;
+			(*smoothNormals)[i + 1] = smoothNormal.y;
+			(*smoothNormals)[i + 2] = smoothNormal.z;
+		}
+	}
+	return smoothNormals;
+}
+
+void RenderSystem::combineOutlineGeometry(vector<RenderData>& data) {
+	_masterOutlineGeometry->clear();
+	std::vector<GLfloat>& vert = _masterOutlineGeometry->getVertexData();
+	std::vector<GLfloat>& texCoord = _masterOutlineGeometry->getTexCoordData();
+	std::vector<GLfloat>& normal = _masterOutlineGeometry->getNormalData();
+	std::vector<GLuint>& indices = _masterOutlineGeometry->getIndices();
+	for (RenderData render : data) {
+		Geometry* g = render.getModel()->getGeometry();
+
+		int startVertex = vert.size() / 3;
+		int startIndex = indices.size();
+		_masterOutlineGeometry->getIndexIndices().push_back(startIndex);
+		_masterOutlineGeometry->getVertexIndices().push_back(startVertex);
+
+		std::vector<GLfloat>* smoothNormals = fetchSmoothNormals(g);
+
+		vert.insert(vert.end(), g->getVertexData().begin(), g->getVertexData().end());
+		texCoord.insert(texCoord.end(), g->getTexCoordData().begin(), g->getTexCoordData().end());
+		normal.insert(normal.end(), smoothNormals->begin(), smoothNormals->end());
+		indices.insert(indices.end(), g->getIndices().begin(), g->getIndices().end());
+	}
+	_masterOutlineGeometry->setVertexData(vert);
+	_masterOutlineGeometry->setTexCoordData(texCoord);
+	_masterOutlineGeometry->setNormalData(normal);
+	_masterOutlineGeometry->setIndices(indices);
+}
+
 void RenderSystem::makeLightsViewSpace(glm::mat4 viewMatrix) {
 	glm::mat4 normalMatrix = transpose(inverse(viewMatrix));
 	for (LightData& l : *_lightRenderingList) {
 		l.position = viewMatrix * l.position;
 		l.direction = normalMatrix * l.direction;
+	}
+}
+
+void RenderSystem::outlinePass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {
+	if (_outlineRenderingList->size() > 0) {
+		// Set up all of the vertex data for all objects to be rendered
+		combineOutlineGeometry(*_outlineRenderingList);
+		_positionVBO->buffer(_masterOutlineGeometry->getVertexData());
+		_normalVBO->buffer(_masterOutlineGeometry->getNormalData());
+		_texCoordVBO->buffer(_masterOutlineGeometry->getTexCoordData());
+		_ebo->buffer(_masterOutlineGeometry->getIndices());
+
+		setShader(_shaders["outline"]);
+
+		glCullFace(GL_FRONT);
+
+		// Blit the depth buffer from the gbuffer
+		//glClear(GL_DEPTH_BUFFER_BIT);
+		_outlineFBO->blit(*_fbo, _fbo->getWidth(), _fbo->getHeight(), GL_DEPTH_BUFFER_BIT);
+		RenderUtil::checkGLError("glBlitFramebuffer");
+
+		_outlineFBO->bind();
+		int index = 0;
+		for (RenderData render : *_outlineRenderingList) {
+			vec4 color = convertColor(render.getColor());
+			color.a = 1.0f;
+			mat4 model = render.getTransform();
+
+			mat4 mv = viewMatrix * model;
+			mat4 mvp = projectionMatrix * mv;
+			mat4 invMVP = transpose(inverse(viewMatrix * model));
+
+			int loc = _masterOutlineGeometry->getVertexStart(index);
+			_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
+			_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
+			_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
+
+			_shader->setUniformVec3("color", color);
+			_shader->setUniformMatrix("transform", mvp);
+			_shader->setUniformFloat("lineWidth", render.getColor().getAlpha());
+
+			int start = _masterOutlineGeometry->getIndexStart(index);
+			int size = _masterOutlineGeometry->getIndexEnd(index) - start + 1;
+			glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)(start * sizeof(GLuint)));
+
+			index++;
+		}
+		_outlineFBO->unbind();
+		glCullFace(GL_BACK);
 	}
 }
 
@@ -256,10 +401,12 @@ void RenderSystem::lightingPass() {
 	_albedoBuffer->bind(GL_TEXTURE0);
 	_normalBuffer->bind(GL_TEXTURE1);
 	_positionBuffer->bind(GL_TEXTURE2);
+	_outlineBuffer->bind(GL_TEXTURE3);
 
 	_shader->setUniformTexture("albedoTex", 0);
 	_shader->setUniformTexture("normalTex", 1);
 	_shader->setUniformTexture("positionTex", 2);
+	_shader->setUniformTexture("outlineTex", 3);
 
 	_shader->setUniformInt("numLights", _lightRenderingList->size());
 	_shader->setUniformVec3("ambientColor", vec3(0.06f, 0.17f, 0.27f));
@@ -286,7 +433,7 @@ void RenderSystem::uiPass() {
 
 	int index = 0;
 	for (RenderData render : *_uiRenderingList) {
-		int texID = getTexture(render.getModel()->getTexture());
+		TextureInfo texInfo = getTexture(render.getModel()->getTexture(), false);
 		Geometry* g = render.getModel()->getGeometry();
 		vec4 color = convertColor(render.getColor());
 		mat4 model = render.getTransform();
@@ -295,13 +442,23 @@ void RenderSystem::uiPass() {
 		matrix[3][3] = 1.0f; // To fix the scaling to be what we want
 
 		int loc = 0;
+
+		// Manually adjust texture coordinates
+		float widthScale = (float)texInfo.width / TEXTURE_SIZE;
+		float heightScale = (float)texInfo.height / TEXTURE_SIZE;
+		vector<GLfloat> texCoords = vector<GLfloat>(g->getTexCoordData().begin(), g->getTexCoordData().end());
+		for (int i = 0; i < texCoords.size(); i += 2) {
+			texCoords[i] *= widthScale;
+			texCoords[i + 1] *= heightScale;
+		}
+
 		_vao->setBuffer(0, *_positionVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(1, *_normalVBO, loc * 3 * sizeof(GLfloat));
 		_vao->setBuffer(2, *_texCoordVBO, loc * 2 * sizeof(GLfloat));
 		
 		_positionVBO->buffer(g->getVertexData());
 		_normalVBO->buffer(g->getNormalData());
-		_texCoordVBO->buffer(g->getTexCoordData());
+		_texCoordVBO->buffer(texCoords);
 		_ebo->buffer(g->getIndices());
 
 		_textures->bind(GL_TEXTURE0);
@@ -309,7 +466,7 @@ void RenderSystem::uiPass() {
 		_shader->setUniformVec4("color", color);
 		_shader->setUniformMatrix("transform", matrix);
 
-		_shader->setUniformInt("textureID", texID);
+		_shader->setUniformInt("textureID", texInfo.id);
 		_shader->setUniformTexture("tex", 0);
 
 		int start = 0;
@@ -329,20 +486,22 @@ void RenderSystem::swapLists() {
 		return a.getTransform()[3][2] > b.getTransform()[3][2];
 	});
 	swap(_lightRenderingList, _lightAccumulatingList);
+	swap(_outlineRenderingList, _outlineAccumulatingList);
 	_accumulatingList->clear();
 	_uiAccumulatingList->clear();
 	_lightAccumulatingList->clear();
+	_outlineAccumulatingList->clear();
 }
 
-int RenderSystem::getTexture(string* path) {
+TextureInfo& RenderSystem::getTexture(string* path, bool scale) {
 	if (path == nullptr) {
-		return 0; // Use the default texture
+		return _defaultTextureValue;
 	}
-	return (_texturePathToID.find(*path) != _texturePathToID.end()) ?
-		_texturePathToID[*path] : loadTexture(*path);
+	return (_texturePathToInfo.find(*path) != _texturePathToInfo.end()) ?
+		_texturePathToInfo[*path] : loadTexture(*path, scale);
 }
 
-int RenderSystem::loadTexture(const string& path, bool scale) {
+TextureInfo& RenderSystem::loadTexture(const string& path, bool scale) {
 	Image* img = ImageLoader::loadImage(path);
 	if (scale) {
 		Image* tmp = img;
@@ -350,11 +509,16 @@ int RenderSystem::loadTexture(const string& path, bool scale) {
 		delete tmp;
 	}
 	int id = _staticTextures->size();
-	_texturePathToID[path] = id;
+	_texturePathToInfo[path] = TextureInfo(
+		id,
+		scale,
+		scale ? _textures->getWidth() : img->getWidth(),
+		scale ? _textures->getHeight() : img->getHeight()
+	);
 	_staticTextures->push_back(img);
 	_textures->setImage(id, *img, GL_UNSIGNED_BYTE);
 	_textures->genMipmaps();
-	return id;
+	return _texturePathToInfo[path];
 }
 
 Image* RenderSystem::scaleImage(Image* input, int width, int height) {
@@ -377,21 +541,18 @@ Image* RenderSystem::scaleImage(Image* input, int width, int height) {
 	tmpTex2.setImage(*tmpImg, false, GL_RGBA8, GL_UNSIGNED_BYTE);
 	_resizeInFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex);
 	_resizeOutFBO->buffer(GL_COLOR_ATTACHMENT0, tmpTex2);
-	_resizeInFBO->bind(GL_READ_FRAMEBUFFER);
-	_resizeOutFBO->bind(GL_DRAW_FRAMEBUFFER);
+	
+	_resizeOutFBO->blit(*_resizeInFBO, input->getWidth(), input->getHeight());
 
-	glBlitFramebuffer(0, 0, input->getWidth(), input->getHeight(), 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	RenderUtil::checkGLError("glBlitFramebuffer");
-
-	_resizeOutFBO->bind(GL_READ_FRAMEBUFFER);
+	_resizeOutFBO->bind(GL_FRAMEBUFFER);
 	delete tmpImg;
 	std::vector<unsigned char>* data = new std::vector<unsigned char>(width * height * 4);
 	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &(*data)[0]);
 	RenderUtil::checkGLError("glReadPixels");
 	tmpImg = new Image(&(*data)[0], width, height, 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	_resizeOutFBO->unbind(GL_READ_FRAMEBUFFER);
-	_resizeOutFBO->unbind(GL_DRAW_FRAMEBUFFER);
+
+	_resizeOutFBO->unbind(GL_FRAMEBUFFER);
 
 	return tmpImg;
 }
@@ -415,6 +576,7 @@ void RenderSystem::accumulateList() {
 	auto lights = ComponentManager<Light>::Instance().All();
 	for (Renderable* r : renderables) {
 		if (!r->GetActive()) continue;
+		Entity* e = r->GetEntity();
 		Transform t = r->getTransform();
 		_accumulatingList->push_back(
 			RenderData(
@@ -423,6 +585,18 @@ void RenderSystem::accumulateList() {
 				r->getColor()
 			)
 		);
+		OutlineComponent* o = e->GetComponent<OutlineComponent>();
+		if (o != nullptr) {
+			Color c = o->getColor();
+			c.setAlpha(o->getWidth());
+			_outlineAccumulatingList->push_back(
+				RenderData(
+					r->getModel(),
+					t.getWorldTransformation(),
+					c
+				)
+			);
+		}
 	}
 	for (UIComponent* r : uiRenderables) {
 		Transform t = r->GetEntity()->transform;
@@ -460,8 +634,8 @@ void RenderSystem::accumulateList() {
 			l->getQuadraticAttenuation(),
 			0.0f
 		);
-		internalLight.position = glm::vec4(e->transform.getWorldPosition(), 0.0f);
-		internalLight.direction = glm::vec4(e->transform.getWorldForward(), 0.0f);
+		internalLight.position = glm::vec4(e->transform.getWorldPosition(), 1.0f);
+		internalLight.direction = glm::vec4(e->transform.getWorldForward(), 1.0f);
 
 		_lightAccumulatingList->push_back(internalLight);
 	}

@@ -422,6 +422,9 @@
     </ClCompile>
     <ClCompile Include="Network\NetState.cpp">
       <Filter>Source Files\Network</Filter>
+	</ClCompile>
+    <ClCompile Include="Graphics\OutlineComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -814,6 +817,12 @@
     </ClInclude>
     <ClInclude Include="Network\NetState.h">
       <Filter>Header Files\Network</Filter>
+	</ClInclude>
+    <ClInclude Include="Graphics\OutlineComponent.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\TextureInfo.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

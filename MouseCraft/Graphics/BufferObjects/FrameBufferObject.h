@@ -49,6 +49,10 @@ public:
 	/// </summary>
 	/// <returns>The ID of the FBO</returns>
 	GLuint getID();
+	
+	void blit(FrameBufferObject& source, int srcWidth, int srcHeight, GLuint type = GL_COLOR_BUFFER_BIT);
+	int getWidth();
+	int getHeight();
 private:
 	/// <summary>
 	/// Attaches buffers to the FBO

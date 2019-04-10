@@ -57,11 +57,26 @@ void PhysicsComponent::jump()
 {
 	zVelocity = JUMP_VELOCITY;
 	isJumping = true;
+
+	stopMoving.Notify();
+	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
 }
 
 void PhysicsComponent::fall()
 {
+	zVelocity = -5;
 	isFalling = true;
+	
+	stopMoving.Notify();
+	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
+}
+
+void PhysicsComponent::landed()
+{
+	isJumping = false;
+	isFalling = false;
+
+	resumeMoving.Notify();
 }
 
 bool PhysicsComponent::updateFalling()

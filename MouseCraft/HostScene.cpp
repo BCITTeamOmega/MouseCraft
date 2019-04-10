@@ -19,6 +19,7 @@
 #include "ObstacleFactory.h"
 #include "Network/NetworkSystem.h"
 #include "HealthDisplay.h"
+#include "Graphics/OutlineComponent.h"
 #include "UI/ImageComponent.h"
 #include "TransformAnimator.h"
 #define CAT_HEALTH 8
@@ -29,6 +30,7 @@ void HostScene::InitScene() {
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
+	catEntity->transform.setLocalScale(glm::vec3(1.8, 1.0, 1.2));
     Entity* catAttackEntity = EntityManager::Instance().Create();
     catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
     catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
@@ -44,11 +46,11 @@ void HostScene::InitScene() {
     Entity* couchEntity = EntityManager::Instance().Create();
     Entity* catstandEntity = EntityManager::Instance().Create();
     Entity* northWallEntity = EntityManager::Instance().Create();
-    Entity* southWallEntity = EntityManager::Instance().Create();
+	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
     Entity* eastWallEntity = EntityManager::Instance().Create();
-    Entity* cameraEntity = EntityManager::Instance().Create();
-    cameraEntity->transform.setLocalPosition(glm::vec3(50, 30, 40));
+	Entity* cameraEntity = EntityManager::Instance().Create();
+    cameraEntity->transform.setLocalPosition(glm::vec3(50, 50, 40));
     cameraEntity->transform.setLocalRotation(glm::vec3(-1.5f, 0, 0));
     Entity* pSpawnerEntity = EntityManager::Instance().Create();
     Entity* gmEntity = EntityManager::Instance().Create();
@@ -77,7 +79,7 @@ void HostScene::InitScene() {
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
     Model* box = ModelGen::makeCube(4, 4, 4);
     Model* book = ModelGen::makeCube(2, 2, 1);
-
+	
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
@@ -87,7 +89,7 @@ void HostScene::InitScene() {
 
     //Create the camera
     Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
-    cam->setFOV(90.0f);
+    cam->setFOV(1.51f);
     cam->setCloseClip(0.01f);
     cam->setFarClip(100.0f);
     cameraEntity->AddComponent(cam);
@@ -95,7 +97,7 @@ void HostScene::InitScene() {
     //Create the renderables, set their model and colour, and add them to their entity
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
-    mouse1Rend->setColor(Color(0.52, 0.24, 0.20));
+    mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -110,7 +112,8 @@ void HostScene::InitScene() {
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
-    catRend->setColor(Color(1.0, 0.25, 0.5));
+	//catRend->setModel(*box);
+    catRend->setColor(Color(0.34, 0.08, 0));
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -177,19 +180,19 @@ void HostScene::InitScene() {
     PhysicsManager::instance()->setupGrid(100, 75, 5);
 
     //Create the physics components
-    PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse1Entity->AddComponent(mouse1Physics);
     mouse1Physics->initPosition();
 
-    PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse2Entity->AddComponent(mouse2Physics);
     mouse2Physics->initPosition();
 
-    PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse3Entity->AddComponent(mouse3Physics);
     mouse3Physics->initPosition();
 
-    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 8, 8, 0, PhysObjectType::CAT_UP);
+    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 6, 6, 0, PhysObjectType::CAT_UP);
     catEntity->AddComponent(catPhysics);
     catPhysics->initPosition();
 
@@ -223,6 +226,18 @@ void HostScene::InitScene() {
 	auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(37.5, 0, 22.5), true);
 	auto* ballEntity = ObstacleFactory::Instance().Create(OBSTACLES::YARNBALL, glm::vec3(32.5, 0, 32.5), true);
 	auto* lampEntity2 = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(72.5, 0, 47.5), false);
+
+	Light* lampLight = ComponentManager<Light>::Instance().Create<Light>();
+	lampLight->setType(Light::LightType::Point);
+	lampLight->setColor(Color(2.5f, 2.1f, 0.6f));
+	lampLight->setAttenuation(1, 0.01, 0.05);
+	lampEntity->AddComponent(lampLight);
+
+	Light* lampLight2 = ComponentManager<Light>::Instance().Create<Light>();
+	lampLight2->setType(Light::LightType::Point);
+	lampLight2->setColor(Color(2.5f, 2.1f, 0.6f));
+	lampLight2->setAttenuation(1, 0.01, 0.05);
+	lampEntity2->AddComponent(lampLight2);
 
     root.AddChild(bookEntity);
     root.AddChild(boxEntity);
@@ -315,10 +330,10 @@ void HostScene::InitScene() {
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	catHealth->SetHealth(CAT_HEALTH);
-    catEntity->AddComponent(catHealth);
+	catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
-    catEntity->AddComponent(catJumpSound);
+	catEntity->AddComponent(catJumpSound);
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
@@ -335,16 +350,18 @@ void HostScene::InitScene() {
     // Lights
     Light* light1 = ComponentManager<Light>::Instance().Create<Light>();
     light1->setType(Light::LightType::Directional);
-    light1->setColor(Color(1.2f, 1.25f, 0.8f));
+    light1->setColor(Color(1.5f, 1.45f, 0.9f));
     light1Entity->transform.setLocalRotation(glm::vec3(-1.1f, 0.8f, 0.0f));
-    light1Entity->AddComponent(light1);
+	light1Entity->AddComponent(light1);
 
+	/*
     Light* light2 = ComponentManager<Light>::Instance().Create<Light>();
     light2->setType(Light::LightType::Point);
-    light2->setColor(Color(10.0f, 60.0f, 300.0f));
-    light2->setAttenuation(1, 0.8, 0.32);
-    light2Entity->transform.setLocalPosition(glm::vec3(13.0f, 0.0f, 0.25f));
+    light2->setColor(Color(0.5f, 1.0f, 2.5f));
+    light2->setAttenuation(1, 0.0, 0.01);
+    light2Entity->transform.setLocalPosition(glm::vec3(65.0f, 12.0f, 50.0f));
     light2Entity->AddComponent(light2);
+	*/
 
 	// UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
@@ -364,12 +381,33 @@ void HostScene::InitScene() {
 	healthDisplayController->setWatchingHealthComponent(catHealth);
 	healthUIEntity->AddComponent(healthDisplayController);
 
+	//Add outlines to the player entities
+	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	catOutline->setWidth(0.2f);
+	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
+	catEntity->AddComponent(catOutline);
+
+	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse1Entity->AddComponent(mouse1Outline);
+
+	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse2Entity->AddComponent(mouse2Outline);
+
+	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse3Entity->AddComponent(mouse3Outline);
+
     //Don't forget the stupid teapots
-	Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-	Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
-	Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
-	jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
+	//Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+	//Entity* jumpingTeapot = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot->transform.setLocalPosition(glm::vec3(60, 0, 50));
+	//Entity* jumpingTeapot2 = PrefabLoader::LoadPrefab("res/prefabs/jumping_teapot.json");
+	//jumpingTeapot2->transform.setLocalPosition(glm::vec3(60, 0, 40));
 
 	// Basic animations!
 	Animation* squishSquashAnim = new Animation();
@@ -415,9 +453,9 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
-	root.AddChild(teapotEntity);
-	root.AddChild(jumpingTeapot);
-	root.AddChild(jumpingTeapot2);
+	//root.AddChild(teapotEntity);
+	//root.AddChild(jumpingTeapot);
+	//root.AddChild(jumpingTeapot2);
 
 }
 

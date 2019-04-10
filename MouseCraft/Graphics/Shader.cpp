@@ -118,6 +118,12 @@ void Shader::setUniformInt(string name, GLint value) {
 	glUniform1i(pos, value);
 }
 
+void Shader::setUniformFloat(string name, GLfloat value) {
+	const char* cstr = name.c_str();
+	GLint pos = glGetUniformLocation(_program, cstr);
+	glUniform1f(pos, value);
+}
+
 void Shader::setBindingPoint(string name, GLint value) {
 	const char* cstr = name.c_str();
 	GLuint index = glGetUniformBlockIndex(_program, cstr);
