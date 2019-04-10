@@ -62,10 +62,10 @@ Component* Renderable::CreateFromJson(json json)
 		c->_shininess = json["shininess"].get<double>();
 	}
 	
-	// parse roughness
-	if (json.find("roughness") != json.end())
+	// parse smoothness
+	if (json.find("smoothness") != json.end())
 	{
-		c->_smoothness = json["roughness"].get<double>();
+		c->_smoothness = json["smoothness"].get<double>();
 	}
 
 	// parse color 
