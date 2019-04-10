@@ -125,7 +125,7 @@ void PhysicsComponent::removeFromGrid()
 
 Component* PhysicsComponent::Create(json json)
 {
-	/*std::string physType = json["physType"].get<std::string>();
+	std::string physType = json["physType"].get<std::string>();
 	PhysObjectType::PhysObjectType properType = PhysObjectType::NOTHING;
 
 	if (physType == "OBSTACLE_UP")
@@ -151,11 +151,32 @@ Component* PhysicsComponent::Create(json json)
 	else if (physType == "MOUSE_UP")
 		properType = PhysObjectType::MOUSE_UP;
 	else if (physType == "MOUSE_DOWN")
-		properType = PhysObjectType::MOUSE_DOWN;*/
+		properType = PhysObjectType::MOUSE_DOWN;
+
+	switch (properType)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_DOWN:
+	case PhysObjectType::CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PLATFORM:
+	case PhysObjectType::PART:
+		return PhysicsManager::instance()->createGridObject(json["xPos"].get<float>(), json["yPos"].get<float>(),
+			json["width"].get<int>(), json["int"].get<float>(), properType);
+		break;
+	case PhysObjectType::PROJECTILE_UP:
+	case PhysObjectType::PROJECTILE_DOWN:
+	case PhysObjectType::CAT_UP:
+	case PhysObjectType::CAT_DOWN:
+	case PhysObjectType::MOUSE_UP:
+	case PhysObjectType::MOUSE_DOWN:
+		return PhysicsManager::instance()->createObject(json["xPos"].get<float>(), json["yPos"].get<float>(),
+			json["width"].get<float>(), json["height"].get<float>(), json["rotation"].get<float>(), properType);
+		break;
+	}
 	
-	auto c = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
-	return c;
+	return nullptr;
 }
 
 // !!! which key you want to load 
-PrefabRegistrar PhysicsComponent::reg("TestComponent1", &PhysicsComponent::Create);
+PrefabRegistrar PhysicsComponent::reg("PhysicsComponent", &PhysicsComponent::Create);
