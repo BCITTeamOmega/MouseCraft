@@ -9,6 +9,12 @@ Pickup::Pickup()
 
 Pickup::~Pickup()
 {
+	// clean ourselves off the board, if still there
+	auto wPos = GetEntity()->transform.getWorldPosition2D();
+	if (PhysicsManager::instance()->getGrid()->objectAt(wPos.x, wPos.y) == _physics)
+	{
+		PhysicsManager::instance()->getGrid()->removeObject(wPos.x, wPos.y);
+	}
 }
 
 void Pickup::OnInitialized()
@@ -22,6 +28,8 @@ void Pickup::Grab()
 	_physics->SetEnabled(false);
 	_rotator->SetEnabled(false);
 	GetEntity()->transform.setLocalRotation(glm::vec3(0.0f));
+	auto wPos = GetEntity()->t().wPos();
+	PhysicsManager::instance()->getGrid()->removeObject(wPos.x, wPos.z);
 }
 
 void Pickup::Drop(glm::vec3 gPos)
