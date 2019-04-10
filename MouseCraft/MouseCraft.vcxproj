@@ -81,7 +81,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -97,9 +97,10 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D _SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -124,8 +125,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;Box2D.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
@@ -146,7 +148,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;tinyxml2.lib;SDL2.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;Box2D.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -157,6 +159,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ClientScene.cpp" />
     <ClCompile Include="ContraptionSystem.cpp" />
     <ClCompile Include="DamageOnCollision.cpp" />
     <ClCompile Include="Event\Handler.cpp" />
@@ -195,6 +199,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Graphics\ModelGen.cpp" />
     <ClCompile Include="Graphics\OutlineComponent.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="HealthDisplay.cpp" />
     <ClCompile Include="HostScene.cpp" />
     <ClCompile Include="Input\InputSystem.cpp" />
@@ -234,6 +239,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupFactory.cpp" />
     <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="ResourceCache.cpp" />
+    <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="Sound\TrackParams.cpp" />
     <ClCompile Include="Trampoline.cpp" />
     <ClCompile Include="Sound\SoundComponent.cpp" />
     <ClCompile Include="Loading\PrefabLoader.cpp" />
@@ -242,6 +250,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="TestPrefab.cpp" />
     <ClCompile Include="TestSubObs.cpp" />
     <ClCompile Include="TimedDestruction.cpp" />
+    <ClCompile Include="TransformAnimator.cpp" />
     <ClCompile Include="Util\CpuProfiler.cpp" />
     <ClCompile Include="Util\OpenGLProfiler.cpp" />
     <ClCompile Include="Network\Address.cpp" />
@@ -258,7 +267,9 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="YarnBall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ClientScene.h" />
     <ClInclude Include="Coil.h" />
     <ClInclude Include="Contraption.h" />
     <ClInclude Include="Cat.h" />
@@ -356,6 +367,8 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Physics\PhysObjectType.h" />
     <ClInclude Include="Loading\PrefabLoader.h" />
     <ClInclude Include="Physics\RayQueryCallback.h" />
+    <ClInclude Include="ResourceCache.h" />
+    <ClInclude Include="Rotator.h" />
     <ClInclude Include="Sound\SoundComponent.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Pickup.h" />
@@ -367,6 +380,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="TestPrefab.h" />
     <ClInclude Include="TestSubObs.h" />
     <ClInclude Include="TimedDestruction.h" />
+    <ClInclude Include="TransformAnimator.h" />
     <ClInclude Include="Util\OpenGLProfiler.h" />
     <ClInclude Include="Util\CpuProfiler.h" />
     <ClInclude Include="Core\UpdatableComponent.h" />

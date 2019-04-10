@@ -15,6 +15,8 @@
 #include "Overcharge.h"
 #include "Trampoline.h"
 #include "Swords.h"
+#include "Animation.h"
+#include "Rotator.h"
 
 class ContraptionFactory
 {
@@ -33,7 +35,8 @@ private:
 	~ContraptionFactory();
 
 public:
-	Entity* Create(CONTRAPTIONS type, glm::vec3 position);
+	Entity* Create(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
+	Entity* CreateSimulated(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
 
 private:
 	Model* _platformModel;
@@ -42,9 +45,9 @@ private:
 	Model* _bombModel;
 	Model* _overchargeModel;
 	Model* _swordsModel;
-
 	Model* _coilFieldModel;
-
+	Model* _explosionModel;
 	Image* _texture;	// generic default texture
+	Animation* _explosionAnim;
 };
 

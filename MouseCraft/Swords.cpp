@@ -6,6 +6,7 @@ Swords::Swords() :
 	HandleOnCollision(this, &Swords::OnCollision)
 
 {
+	Contraption::type = CONTRAPTIONS::SWORDS;
 }
 
 
@@ -93,3 +94,11 @@ void Swords::OnInitialized() {
 void Swords::Update(float dt) {
 	
 }
+
+Component* Swords::Create(json json) 
+{
+	auto c = ComponentManager<Swords>::Instance().Create<Swords>();
+	return c;
+}
+
+PrefabRegistrar Swords::reg("Swords", Swords::Create);

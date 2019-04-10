@@ -21,9 +21,12 @@ private:
 
 // factory 
 public: 
-	Entity* Create(OBSTACLES type, glm::vec3 position, bool isUp);
+	Entity* Create(OBSTACLES type, glm::vec3 position, bool isUp, std::vector<unsigned int>* netIds = nullptr);
+	Entity* CreateSimulated(OBSTACLES type, glm::vec3 position, bool isUp, std::vector<unsigned int>* netIds = nullptr);
+
 private:
 	Model* _ballModel;
+	Model* _lampModel;
 	Model* _cylinderModel;
 	Model* _boxModel;
 	Model* _bookModel;

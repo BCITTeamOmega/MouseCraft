@@ -34,19 +34,13 @@ void Vase::Update(float deltaTime)
 		auto tr = pos + glm::vec3(0.5, 0, 0.5) * FIELD_RANGE;
 		auto hits = PhysicsManager::instance()->areaCheck(nullptr, _checkFor, new Vector2D(bl.x, bl.z), new Vector2D(tr.x, tr.z));
 
-		
 		for (auto& p : hits)
 		{
-			if (_affected.find(p) != _affected.end())
+			auto it = std::find(_affected.begin(), _affected.end(), p);
+			if (it == _affected.end())
 			{
-				if (_affected[p]->x == 0 && _affected[p]->y == 0)
-					_affected[p]->x = 50;
-				p->velocity = *_affected[p];
-				p->GetEntity()->GetComponent<PlayerComponent>()->SetDisabled(true);
-			}
-			else
-			{
-				_affected[p] = new Vector2D(p->velocity.x, p->velocity.y);
+				_affected.push_back(p);
+				p->GetEntity()->GetComponent<PlayerComponent>()->SetSpeed(50.0f * SLOW_RATIO);
 			}
 		}
 		_found.clear();
@@ -54,7 +48,7 @@ void Vase::Update(float deltaTime)
 		{
 			if (hits.size() != 0)
 			{
-				auto it = std::find(hits.begin(), hits.end(), p.first);
+				auto it = std::find(hits.begin(), hits.end(), p);
 				if (it == hits.end())
 				{
 					_found.push_back(*it);
@@ -62,13 +56,13 @@ void Vase::Update(float deltaTime)
 			}
 			else
 			{
-				_found.push_back(p.first);
+				_found.push_back(p);
 			}
 		}
-		for (auto& p : _found)
+		for (auto p : _found)
 		{
-			p->GetEntity()->GetComponent<PlayerComponent>()->SetDisabled(false);
-			_affected.erase(p);
+			p->GetEntity()->GetComponent<PlayerComponent>()->SetSpeed(50.0f);
+			_affected.erase(std::find(_affected.begin(), _affected.end(), p));
 		}
 	}
 }
@@ -79,6 +73,7 @@ void Vase::HitByCat(Vector2D dir)
 	{
 		visualsEntity->transform.rotate(glm::vec3(0, 0, M_PI / 2));
 		GetEntity()->GetComponent<Renderable>()->SetEnabled(true);
+		GetEntity()->GetComponent<PhysicsComponent>()->SetEnabled(false);
 		_isPlaced = true;
 	}
 }
@@ -87,3 +82,11 @@ void Vase::DestroyedByMouse()
 {
 	GetEntity()->Destroy();
 }
+
+Component * Vase::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
+	return c;
+}
+
+PrefabRegistrar Vase::reg("Vase", &Vase::Create);

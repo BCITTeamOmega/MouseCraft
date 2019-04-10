@@ -2,6 +2,10 @@
 
 #include "Obstacle.h"
 
+#include "Loading/PrefabLoader.h"
+#include "json.hpp"
+using json = nlohmann::json;
+
 class Vase : public Obstacle
 {
 public:
@@ -17,11 +21,11 @@ public:
 	Entity* visualsEntity;
 
 private:
-	// deal one tick of damage every n seconds
-	const float DAMAGE_RATE = 1.0f;
+	// how much it slows
+	const float SLOW_RATIO = 0.25f;
 
 	// range of the field
-	const float FIELD_RANGE = 16.0F;
+	const float FIELD_RANGE = 15.0f;
 
 	// if the field has been placed
 	bool _isPlaced = false;
@@ -31,7 +35,17 @@ private:
 
 	float _counter = 0;
 
-	std::map<PhysicsComponent*, Vector2D*> _affected;
+	std::vector<PhysicsComponent*> _affected;
 	std::vector<PhysicsComponent*> _found;
 
+	/* TEMPLATE
+	{
+		"type": "Vase",
+	}
+	REQUIRES
+	- PhysicsComponent
+	- HealthComponent
+	*/
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };

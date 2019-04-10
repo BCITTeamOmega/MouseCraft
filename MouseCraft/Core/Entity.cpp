@@ -66,6 +66,7 @@ void Entity::SetEnabled(bool enabled, bool force)
 	if (force || !isInActiveScene())
 	{
 		_enabled = enabled;
+		EventManager::Notify(EventName::ENTITY_ENABLE, new TypeParam<Entity*>(this));
 	}
 	else // defer 
 	{
@@ -178,6 +179,10 @@ void Entity::bindEntities(Entity * parent, Entity * child)
 		child->_parent = nullptr;
 		child->setScene(nullptr);
 	}
+
+	// Notify 
+	EventManager::Notify(EventName::ENTITY_MOVE, 
+		new TypeParam<std::pair<Entity*, Entity*>>(std::make_pair(child, parent)));
 }
 
 // Despite being recursive this performs very well 
@@ -232,8 +237,8 @@ void Entity::Destroy(bool force)
 		std::cout << "Destroying: " << this->GetID() << std::endl;
 
 		// destroy all children 
-		for (auto& e : _children)
-			e->Destroy(true);
+		while (_children.size() > 0)
+			_children.back()->Destroy(true);
 
 		// TODO: destruct all components 
 		for (auto& c : _components)
@@ -243,7 +248,8 @@ void Entity::Destroy(bool force)
 		if (_parent)
 			_parent->removeChild(this->_id);
 
-		delete(this);
+		if (GetID() != 0)
+			delete(this);
 	}
 	else // defer
 	{

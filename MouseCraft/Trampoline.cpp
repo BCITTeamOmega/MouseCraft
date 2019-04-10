@@ -2,6 +2,7 @@
 
 Trampoline::Trampoline() : HandleOnCollision(this, &Trampoline::OnCollision)
 {
+	Contraption::type = CONTRAPTIONS::TRAMPOLINE;
 }
 
 
@@ -70,3 +71,12 @@ void Trampoline::Update(float dt) {
 		//destroy trampoline
 	}
 }
+
+Component* Trampoline::Create(json json) 
+{
+	auto c = ComponentManager<Trampoline>::Instance().Create<Trampoline>();
+	c->_isPlaced = json["_isPlaced"].get<bool>();
+	return c;
+}
+
+PrefabRegistrar Trampoline::reg("Trampoline", Trampoline::Create);

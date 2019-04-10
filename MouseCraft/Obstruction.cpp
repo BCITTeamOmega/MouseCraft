@@ -41,9 +41,17 @@ void Obstruction::OnMouseCollide(PhysicsComponent * other)
 	if (!_physics->isFalling)
 		return;
 
-	if (other->type == PhysObjectType::MOUSE_DOWN || other->type == PhysObjectType::MOUSE_UP)
+	if (other->pType == PhysObjectType::MOUSE_DOWN || other->pType == PhysObjectType::MOUSE_UP)
 	{
 		auto health = other->GetEntity()->GetComponent<HealthComponent>();
 		health->Damage(100);	// C R U S H E D.
 	}
 }
+
+Component * Obstruction::Create(json json)
+{
+	auto c = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
+	return c;
+}
+
+PrefabRegistrar Obstruction::reg("Obstruction", &Obstruction::Create);

@@ -7,6 +7,7 @@
 Coil::Coil() :
 	HandleOnCollision(this, &Coil::OnCollision)
 {
+	Contraption::type = CONTRAPTIONS::COIL;
 }
 
 
@@ -79,3 +80,11 @@ void Coil::Update(float dt)
 		_collidedCat = nullptr;
 	}
 }
+
+Component* Coil::Create(json json)
+{
+	auto c = ComponentManager<Coil>::Instance().Create<Coil>();
+	return c;
+}
+
+PrefabRegistrar Coil::reg("Coil", Coil::Create);

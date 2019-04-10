@@ -25,17 +25,7 @@ void SetupSound()
 	//adding sound system
 	noise = new SoundManager();
 	//start initial music track, standard form for music selection
-	//create Track Params for event
-	TrackParams * initial = new TrackParams();
-	//select song
-	initial->track = MainBGM;
-	//specify song location. Usually fine to leave with default values of 0
-	initial->x = 0;
-	initial->y = 0;
-	initial->z = 0;
-	//create a type Param from the track params and pass it into the event notifier
-	TypeParam<TrackParams*> param(initial);
-	EventManager::Notify(PLAY_SONG, &param);
+    selectSong(MenuBGM);
 }
 
 void MainTest()
@@ -59,7 +49,6 @@ void MainTest()
 	OmegaEngine::Instance().AddSystem(new ContraptionSystem());
 	OmegaEngine::Instance().AddSystem(NetworkSystem::Instance());
 	OmegaEngine::Instance().AddSystem(new UIManager());
-
 
 	//Start the game
 	OmegaEngine::Instance().Loop();

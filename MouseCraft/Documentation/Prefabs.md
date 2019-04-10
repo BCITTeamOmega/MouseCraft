@@ -16,3 +16,9 @@ The important parts are highlighted with **!!!**
 [TestPrefab.cpp](../TestPrefab.cpp)
 
 [test.json](../../res/prefabs/test.json)
+
+Some more examples:
+
+[teapot.json](../../res/prefabs/teapot.json)
+
+[pot_army.json](../../res/prefabs/pot_army.json)
