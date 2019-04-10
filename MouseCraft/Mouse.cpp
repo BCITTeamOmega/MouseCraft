@@ -161,7 +161,7 @@ void Mouse::OnBounce(PhysicsComponent* e)
 	if (jumpTarget != nullptr) {
 		//Jump code
 		std::cout << "Mouse has jumped." << std::endl;
-		GetEntity()->GetComponent<PhysicsComponent>()->jump();
+		GetEntity()->GetComponent<PhysicsComponent>()->jump(MOUSE_JUMP_VELOCITY, MOUSE_JUMP_FORWARD);
 
 		GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Jump); //set sound to jump
 		auto pos = GetEntity()->transform.getLocalPosition(); //get our current position
