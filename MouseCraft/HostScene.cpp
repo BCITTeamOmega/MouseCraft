@@ -30,6 +30,7 @@ void HostScene::InitScene() {
     Entity* mouse2Entity = EntityManager::Instance().Create();
     Entity* mouse3Entity = EntityManager::Instance().Create();
     Entity* catEntity = EntityManager::Instance().Create();
+	catEntity->transform.setLocalScale(glm::vec3(1.8, 1.0, 1.2));
     Entity* catAttackEntity = EntityManager::Instance().Create();
     catAttackEntity->transform.setLocalPosition(glm::vec3(0, 2, -5));
     catAttackEntity->transform.setLocalRotation(glm::vec3(0, -M_PI/2, 0));
@@ -78,7 +79,7 @@ void HostScene::InitScene() {
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
     Model* box = ModelGen::makeCube(4, 4, 4);
     Model* book = ModelGen::makeCube(2, 2, 1);
-
+	
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
@@ -96,7 +97,7 @@ void HostScene::InitScene() {
     //Create the renderables, set their model and colour, and add them to their entity
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
-    mouse1Rend->setColor(Color(0.52, 0.24, 0.20));
+    mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -112,7 +113,7 @@ void HostScene::InitScene() {
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
 	//catRend->setModel(*box);
-    catRend->setColor(Color(1.0, 0.25, 0.5));
+    catRend->setColor(Color(0.34, 0.08, 0));
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
@@ -179,19 +180,19 @@ void HostScene::InitScene() {
     PhysicsManager::instance()->setupGrid(100, 75, 5);
 
     //Create the physics components
-    PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse1Physics = PhysicsManager::instance()->createObject(2.5, 45, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse1Entity->AddComponent(mouse1Physics);
     mouse1Physics->initPosition();
 
-    PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse2Physics = PhysicsManager::instance()->createObject(7.5, 50, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse2Entity->AddComponent(mouse2Physics);
     mouse2Physics->initPosition();
 
-    PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 5, 5, 0, PhysObjectType::MOUSE_DOWN);
+    PhysicsComponent* mouse3Physics = PhysicsManager::instance()->createObject(2.5, 55, 3, 3, 0, PhysObjectType::MOUSE_DOWN);
     mouse3Entity->AddComponent(mouse3Physics);
     mouse3Physics->initPosition();
 
-    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 8, 8, 0, PhysObjectType::CAT_UP);
+    PhysicsComponent* catPhysics = PhysicsManager::instance()->createObject(77.5, 67.5, 6, 6, 0, PhysObjectType::CAT_UP);
     catEntity->AddComponent(catPhysics);
     catPhysics->initPosition();
 
