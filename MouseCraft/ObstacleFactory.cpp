@@ -60,7 +60,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	}
 	case VASE:
 	{
-		auto fieldModel = ModelGen::makeCube(16, 0.1, 16);
+		auto fieldModel = ModelGen::makeCube(15, 0.1, 15);
 		c_render->setModel(*fieldModel);
 		c_render->setColor(Color(0.0, 0.0, 1.0));
 		c_render->SetEnabled(false);	// this is the field 
@@ -93,7 +93,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp)
 	}
 	case LAMP:
 	{	
-		auto fieldModel = ModelGen::makeCube(16, 0.1, 16);
+		auto fieldModel = ModelGen::makeCube(15, 0.1, 15);
 		c_render->setModel(*fieldModel);
 		c_render->setColor(Color(1.0, 1.0, 0.0));
 		c_render->SetEnabled(false);	// this is the field 
