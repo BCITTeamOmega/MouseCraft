@@ -1,5 +1,6 @@
 {
     "type": "Renderable",
+    "enabled": false,
     "model_path": "",
     "texture_path": "",
     "color":
