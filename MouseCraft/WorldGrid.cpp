@@ -263,7 +263,7 @@ std::vector<PhysicsComponent*>* WorldGrid::objectsInArea(Vector2D* p1, Vector2D*
 		for (int y = y2; y <= y1; y++)
 		{
 			if(objectGrid[x][y] != nullptr)
-				objects.push_back(objectGrid[x][y]);
+				objects->push_back(objectGrid[x][y]);
 		}
 	}
 
