@@ -11,6 +11,7 @@
 using json = nlohmann::json;
 
 constexpr auto JUMP_VELOCITY = 14;
+constexpr auto AUTO_VELOCITY = 20;
 
 class PhysicsComponent : public Component
 {
@@ -27,6 +28,7 @@ public:
 	void fall();
 	void removeCollisions();
 	void removeFromGrid();
+	void landed();
 
 	static Component* Create(json json);
 	static PrefabRegistrar reg;
@@ -36,6 +38,8 @@ public:
 	bool isJumping, isFalling, isUp;
 	b2Body* body;
 	PhysObjectType::PhysObjectType pType;
+	Subject<> stopMoving;
+	Subject<> resumeMoving;
 	Subject<PhysicsComponent*> onCollide; //for collision between bodies
 	Subject<PhysicsComponent*> onHit; //for hitbox checking
 	Subject<PhysicsComponent*> onBounce; //for hitbox checking

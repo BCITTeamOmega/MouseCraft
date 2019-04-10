@@ -199,9 +199,9 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 			y1 = temp;
 		}
 
-		for (int x = x1; x <= x2; x++)
+		for (int x = x1; x < x2; x++)
 		{
-			for (int y = y2; y <= y1; y++)
+			for (int y = y2; y < y1; y++)
 			{
 				objectGrid[x][y] = nullptr;
 			}
@@ -261,9 +261,9 @@ std::vector<PhysicsComponent*>* WorldGrid::objectsInArea(Vector2D* p1, Vector2D*
 	std::cout << "--- objects in area ---" << std::endl;
 	std::cout << x1 << "," << x2 << "," << y1 << "," << y2 << std::endl;
 
-	for (int x = x1; x <= x2; x++)
+	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y2; y <= y1; y++)
+		for (int y = y2; y < y1; y++)
 		{
 			if(objectGrid[x][y] != nullptr)
 				objects->push_back(objectGrid[x][y]);

@@ -2,8 +2,8 @@
 
 #include "HealthComponent.h"
 
-const int Obstruction::BOX_SIZE = 9;
-const int Obstruction::BOOK_SIZE = 4;
+const int Obstruction::BOX_SIZE = 10;
+const int Obstruction::BOOK_SIZE = 5;
 
 Obstruction::Obstruction() : 
 	HandleMouseCollide(this, &Obstruction::OnMouseCollide)
@@ -35,18 +35,18 @@ void Obstruction::HitByCat(Vector2D dir)
 	auto halfsize = Vector2D(size / 2.0f, size / 2.0f);
 
 	// first cleanup our area to check
-	auto bl = new Vector2D(pos - halfsize);
-	auto tr = new Vector2D(pos + halfsize);
-	grid->removeArea(bl, tr);
+	auto tl = new Vector2D(pos - halfsize);
+	auto br = new Vector2D(pos + halfsize);
+	grid->removeArea(tl, br);
 
 	// now check 
-	auto nbl = new Vector2D(newPos - halfsize);
-	auto ntr = new Vector2D(newPos + halfsize);
-	auto hits = grid->objectsInArea(ntr, nbl);
+	auto ntl = new Vector2D(newPos - halfsize);
+	auto nbr = new Vector2D(newPos + halfsize);
+	auto hits = grid->objectsInArea(ntl, nbr);
 
 	std::cout << "OBSTRUCTION CHECKING" << std::endl;
 	std::cout << "original: " << pos.x << "," << pos.y << " attempt: " << newPos.x << "," << newPos.y << std::endl;
-	std::cout << "bl: " << nbl->x << "," << nbl->y << " tr: " << ntr->x << "," << ntr->y << std::endl;
+	std::cout << "tl: " << ntl->x << "," << ntl->y << " br: " << nbr->x << "," << nbr->y << std::endl;
 
 	if (hits)
 	{
@@ -94,7 +94,7 @@ void Obstruction::HitByCat(Vector2D dir)
 	if (stop)
 	{
 		// oh no git reset --HARD
-		grid->createArea(*bl, *tr, _physics, _physics->pType);
+		grid->createArea(*tl, *br, _physics, _physics->pType);
 	}
 	else
 	{
@@ -102,7 +102,7 @@ void Obstruction::HitByCat(Vector2D dir)
 		for (auto pc : *hits)
 			if (pc)
 				pc->GetEntity()->Destroy();
-		grid->createArea(*nbl, *ntr, _physics, _physics->pType);
+		grid->createArea(*ntl, *nbr, _physics, _physics->pType);
 		_physics->moveBody(&newPos, 0);
 		_physics->updateFalling();
 	}
