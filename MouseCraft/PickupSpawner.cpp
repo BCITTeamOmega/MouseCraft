@@ -9,14 +9,15 @@ PickupSpawner::PickupSpawner()
 {
 	// create list of floor position
 	_grid = PhysicsManager::instance()->getGrid();
-	for (int i = 0; i < _grid->gridWidth(); ++i)
+
+	for (int i = 0; i < _grid->gridWidth(); i++)
 	{
-		for (int j = 0; j < _grid->gridHeight(); ++j)
+		for (int j = 0; j < _grid->gridHeight(); j++)
 		{
-			if (!_grid->tileIsUp(i, j))
+			if (!_grid->tileIsUp(i, j) && _grid->objectAt(i, j) == nullptr)
 			{
 				Vector2D pos = _grid->getScaledPosition(i, j);
-				std::cout << "found free spot " << pos.x << "," << pos.y << std::endl;
+				std::cout << "found free spot " << i << "," << j << std::endl;
 				_floorPositions.push_back(pos);
 			}
 		}

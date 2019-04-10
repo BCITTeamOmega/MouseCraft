@@ -18,10 +18,14 @@
 #include "Event/Handler.h"
 #include "Input/InputSystem.h"
 #include "Physics/PhysicsComponent.h"
+#include "Loading/PrefabLoader.h"
 #include "HealthComponent.h"
 #include "Sound\SoundComponent.h"
 #include "PickupFactory.h"
 #include "PlayerComponent.h"
+
+#include "json.hpp"
+using json = nlohmann::json;
 
 constexpr auto MOUSE_JUMP_DIST = 10;
 
@@ -41,6 +45,7 @@ public:
 	virtual void OnRevived();
 	void addItem(Pickup* item);
 	void dropItem();
+	void disassemble();
 	void use(Contraption* item);
 	void combine(Pickup *material);
 	void revive(PhysicsComponent* mouse);
@@ -70,5 +75,8 @@ private:
 	PhysicsComponent* _phys;
 	std::set<PhysObjectType::PhysObjectType> checkFor;
 	PhysicsComponent* _collidedObjects;
+
+	static Component* Create(json json);
+	static PrefabRegistrar reg;
 };
 

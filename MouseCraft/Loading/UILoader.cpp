@@ -6,7 +6,7 @@
 #include <sstream>
 #include "../Graphics/Color.h"
 
-using namespace tinyxml2;
+//using namespace tinyxml2;
 
 Entity* UILoader::loadUI(std::string path, float width, float height) {
 	UIComponent* rootComponent = new UIComponent(100, 100, 0, 0);
@@ -17,23 +17,23 @@ Entity* UILoader::loadUI(std::string path, float width, float height) {
 	Entity* rootEntity = EntityManager::Instance().Create();
 	rootEntity->AddComponent(rootComponent);
 
-	const char* filePath = path.c_str();
-	tinyxml2::XMLDocument doc;
-	XMLError err = doc.LoadFile(filePath);
-	if (err == XML_SUCCESS) {
-		XMLElement *root = doc.RootElement();
+	//const char* filePath = path.c_str();
+	//tinyxml2::XMLDocument doc;
+	//XMLError err = doc.LoadFile(filePath);
+	//if (err == XML_SUCCESS) {
+	//	XMLElement *root = doc.RootElement();
 
-		XMLElement *child = root->FirstChildElement();
-		while (child != nullptr) {
-			Entity *childEntity = readChild(child);
-			rootEntity->AddChild(childEntity);
-			child = child->NextSiblingElement();
-		}
-	}
+	//	XMLElement *child = root->FirstChildElement();
+	//	while (child != nullptr) {
+	//		Entity *childEntity = readChild(child);
+	//		rootEntity->AddChild(childEntity);
+	//		child = child->NextSiblingElement();
+	//	}
+	//}
 	return rootEntity;
 }
 
-Entity* UILoader::readChild(const XMLElement* element) {
+/*Entity* UILoader::readChild(const XMLElement* element) {
 	std::string type = element->Name();
 
 	const XMLAttribute *offset = element->FindAttribute("offset"),
@@ -255,3 +255,4 @@ Entity* UILoader::readChild(const XMLElement* element) {
 
 	return newEntity;
 }
+*/

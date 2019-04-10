@@ -17,7 +17,8 @@ Bomb::Bomb()
 
 Bomb::~Bomb()
 {
-	Explode();
+	if (_activated)
+		Explode();
 }
 
 void Bomb::OnInitialized()
@@ -31,6 +32,8 @@ void Bomb::OnInitialized()
 
 bool Bomb::use(Mouse* m) {
 	std::cout << "BOMB is being used" << std::endl;
+
+	_activated = true;
 
 	// launching position
 	auto dir = GetEntity()->t().wForward();
@@ -87,3 +90,11 @@ void Bomb::Explode()
 	OmegaEngine::Instance().AddEntity(explosion);
 	explosion->transform.setLocalPosition(GetEntity()->transform.getWorldPosition());
 }
+
+Component* Bomb::Create(json json)
+{
+	auto c = ComponentManager<Bomb>::Instance().Create<Bomb>();
+	return c;
+}
+
+PrefabRegistrar Bomb::reg("Bomb", Bomb::Create);

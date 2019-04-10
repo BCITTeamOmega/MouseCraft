@@ -90,8 +90,15 @@ void Mouse::Update(float deltaTime)
 
 	if (drop)
 	{
-		drop = false;
-		dropItem();
+		if (baseItem != nullptr) {
+			drop = false;
+			dropItem();
+		} 
+		else if (newItem != nullptr) 
+		{
+			drop = false;
+			disassemble();
+		}
 	}
 
 	_phys->updateFalling();
@@ -207,62 +214,130 @@ void Mouse::addItem(Pickup* item) {
 }
 
 void Mouse::dropItem() {
-	
-	if (baseItem != nullptr) {
-		auto dropPos = GetEntity()->t().wPos() + GetEntity()->t().wForward() * 5.0f;	// drop in front of Mouse
-		auto e = baseItem->GetEntity();
-		e->SetParent(OmegaEngine::Instance().GetRoot(), true);	// forced (instant and unmanaged)	
-		e->transform.setLocalPosition(dropPos);
-		baseItem->Drop();
-		baseItem = nullptr;
-	}
 
-	if (newItem != nullptr) {
-		Entity* part1;
-		Entity* part2;
-		auto pos = GetEntity()->transform.getWorldPosition() + GetEntity()->transform.getWorldForward() * 10.0f;
-		auto p1 = pos + glm::vec3(-10.0f, 0, 0);
-		auto p2 = pos + glm::vec3(10.0f, 0, 0);
+	std::vector<glm::vec3> gridPos;
+	std::vector<PhysicsComponent*> physPos;
+	glm::vec3 mousePos = GetEntity()->t().wPos();
+	gridPos.push_back(mousePos);
+	glm::vec3 upPos = GetEntity()->t().wPos() + glm::vec3(0, 0, 5);
+	gridPos.push_back(upPos);
+	glm::vec3 downPos = GetEntity()->t().wPos() + glm::vec3(0, 0, -5);
+	gridPos.push_back(downPos);
+	glm::vec3 leftPos = GetEntity()->t().wPos() + glm::vec3(-5, 0, 0);
+	gridPos.push_back(leftPos);
+	glm::vec3 rightPos = GetEntity()->t().wPos() + glm::vec3(5, 0, 5);
+	gridPos.push_back(rightPos);
 
-		auto type = newItem->type;
+	PhysicsComponent* pCompAt = PhysicsManager::instance()->getGrid()->objectAt(mousePos.x, mousePos.z);
+	physPos.push_back(pCompAt);
+	PhysicsComponent* pCompAtUp = PhysicsManager::instance()->getGrid()->objectAt(upPos.x, upPos.z);
+	physPos.push_back(pCompAtUp);
+	PhysicsComponent* pCompAtDown = PhysicsManager::instance()->getGrid()->objectAt(downPos.x, downPos.z);
+	physPos.push_back(pCompAtDown);
+	PhysicsComponent* pCompAtLeft = PhysicsManager::instance()->getGrid()->objectAt(leftPos.x, leftPos.z);
+	physPos.push_back(pCompAtLeft);
+	PhysicsComponent* pCompAtRight = PhysicsManager::instance()->getGrid()->objectAt(rightPos.x, rightPos.z);
+	physPos.push_back(pCompAtRight);
 
-		if (type == CONTRAPTIONS::BOMB) 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
-		} 
-		else if (type == CONTRAPTIONS::COIL) 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
-		} 
-		else if (type == CONTRAPTIONS::GUN) 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
-		} 
-		else if (type == CONTRAPTIONS::OVERCHARGE) 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, p2);
-		} 
-		else if (type == CONTRAPTIONS::SWORDS) 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::SCREW,  p2);
-		} 
-		else 
-		{
-			part1 = PickupFactory::Instance().Create(PICKUPS::SPRING, p1);
-			part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, p2);
+	for (int i = 0; i < gridPos.size(); i++) {
+		if (physPos[i] == nullptr && !PhysicsManager::instance()->getGrid()->tileIsUp(gridPos[i].x, gridPos[i].z)) {
+			baseItem->Drop(gridPos[i]);
+			baseItem = nullptr;
+			break;
 		}
-
-		OmegaEngine::Instance().AddEntity(part1);
-		OmegaEngine::Instance().AddEntity(part2);
-		newItem->GetEntity()->Destroy();
-		newItem = nullptr;
 	}
 }
+
+void Mouse::disassemble() {
+	Entity* part1;
+	Entity* part2;
+
+	std::vector<glm::vec3> gridPos;
+	std::vector<PhysicsComponent*> physPos;
+
+	glm::vec3 mousePos = GetEntity()->t().wPos();
+	gridPos.push_back(mousePos);
+	glm::vec3 upPos = GetEntity()->t().wPos() + glm::vec3(0, 0, 5);
+	gridPos.push_back(upPos);
+	glm::vec3 downPos = GetEntity()->t().wPos() + glm::vec3(0, 0, -5);
+	gridPos.push_back(downPos);
+	glm::vec3 leftPos = GetEntity()->t().wPos() + glm::vec3(-5, 0, 0);
+	gridPos.push_back(leftPos);
+	glm::vec3 rightPos = GetEntity()->t().wPos() + glm::vec3(5, 0, 5);
+	gridPos.push_back(rightPos);
+
+	PhysicsComponent* pCompAt = PhysicsManager::instance()->getGrid()->objectAt(mousePos.x, mousePos.z);
+	physPos.push_back(pCompAt);
+	PhysicsComponent* pCompAtUp = PhysicsManager::instance()->getGrid()->objectAt(upPos.x, upPos.z);
+	physPos.push_back(pCompAtUp);
+	PhysicsComponent* pCompAtDown = PhysicsManager::instance()->getGrid()->objectAt(downPos.x, downPos.z);
+	physPos.push_back(pCompAtDown);
+	PhysicsComponent* pCompAtLeft = PhysicsManager::instance()->getGrid()->objectAt(leftPos.x, leftPos.z);
+	physPos.push_back(pCompAtLeft);
+	PhysicsComponent* pCompAtRight = PhysicsManager::instance()->getGrid()->objectAt(rightPos.x, rightPos.z);
+	physPos.push_back(pCompAtRight);
+
+	int count = 0;
+	glm::vec3 tempPos1 = glm::vec3(0, 0, 0);
+	glm::vec3 tempPos2 = glm::vec3(0, 0, 0);
+
+	for (int i = 0; i < gridPos.size(); i++) {
+		if (physPos[i] == nullptr && !PhysicsManager::instance()->getGrid()->tileIsUp(gridPos[i].x, gridPos[i].z)) {
+			if (count >= 2) {
+				break;
+			}			
+			
+			if (count == 1) {
+				tempPos2 = gridPos[i];
+				break;
+			}
+
+			if (count == 0) {
+				tempPos1 = gridPos[i];
+				count++;
+			}
+		}
+	}
+
+	auto type = newItem->type;
+
+	if (type == CONTRAPTIONS::BOMB)
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, tempPos2);
+	}
+	else if (type == CONTRAPTIONS::COIL)
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, tempPos2);
+	}
+	else if (type == CONTRAPTIONS::GUN)
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, tempPos2);
+	}
+	else if (type == CONTRAPTIONS::OVERCHARGE)
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::BATTERY, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::BATTERY, tempPos2);
+	}
+	else if (type == CONTRAPTIONS::SWORDS)
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::SCREW, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::SCREW, tempPos2);
+	}
+	else
+	{
+		part1 = PickupFactory::Instance().Create(PICKUPS::SPRING, tempPos1);
+		part2 = PickupFactory::Instance().Create(PICKUPS::SPRING, tempPos2);
+	}
+
+	OmegaEngine::Instance().AddEntity(part1);
+	OmegaEngine::Instance().AddEntity(part2);
+	newItem->GetEntity()->Destroy();
+	newItem = nullptr;
+}
+
 
 void Mouse::use(Contraption* item) {
 	
@@ -402,3 +477,13 @@ void Mouse::revive(PhysicsComponent* mouse) {
 	mouse->GetEntity()->GetComponent<HealthComponent>()->SetHealth(1);
 }
 
+Component* Mouse::Create(json json)
+{
+	auto c = ComponentManager<Mouse>::Instance().Create<Mouse>();
+	c->speed = json["speed"].get<float>();
+	c->downed = json["downed"].get<bool>();
+	c->player = json["player"].get<int>();
+	return c;
+}
+
+PrefabRegistrar Mouse::reg("Mouse", Mouse::Create);

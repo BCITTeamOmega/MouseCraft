@@ -28,6 +28,7 @@ public:
 
 public:
 	CONTRAPTIONS type;
+
 protected:
 	Mouse* mouse;
 };
