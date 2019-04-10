@@ -21,6 +21,7 @@
 #include "HealthDisplay.h"
 #include "Graphics/OutlineComponent.h"
 #include "UI/ImageComponent.h"
+#include "UI/TextComponent.h"
 #include "TransformAnimator.h"
 #define CAT_HEALTH 8
 
@@ -58,6 +59,8 @@ void HostScene::InitScene() {
     Entity* light2Entity = EntityManager::Instance().Create();
 	Entity* healthUIEntity = EntityManager::Instance().Create();
 	Entity* healthBarUIEntity = EntityManager::Instance().Create();
+	Entity* recipeUIEntity = EntityManager::Instance().Create();
+	Entity* recipeUIImgEntity = EntityManager::Instance().Create();
 
     //Make the models
     //Player Models
@@ -79,10 +82,13 @@ void HostScene::InitScene() {
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
     Model* box = ModelGen::makeCube(4, 4, 4);
     Model* book = ModelGen::makeCube(2, 2, 1);
+	//Font
+	std::string* font = new std::string("res/fonts/ShareTechMono.png");
 	
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
+	std::string* recipeTex = new std::string("res/icons/recipe_UI.png");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
@@ -366,7 +372,7 @@ void HostScene::InitScene() {
     light2Entity->AddComponent(light2);
 	*/
 
-	// UI
+	// Health Bar UI
 	ImageComponent* healthImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 98.0f, 90.0f, 0.01f, 0.0f);
 	healthImg->color = Color(1.0f, 0.1f, 0.1f, 1.0f);
 	healthImg->zForce = 0.1;
@@ -384,6 +390,20 @@ void HostScene::InitScene() {
 	healthDisplayController->setWatchingHealthComponent(catHealth);
 	healthUIEntity->AddComponent(healthDisplayController);
 
+	//Contraption Recipe UI
+	ImageComponent* recipeBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 19.0f, 34.0f, 0.81f, 0.33f);
+	recipeBackImg->color = Color(0.04f, 0.04f, 0.04f, 0.4f);
+	recipeBackImg->zForce = 0.2;
+	recipeUIEntity->AddComponent(recipeBackImg);
+
+	ImageComponent* recipeUIImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*recipeTex, 96.0f, 96.0f, 0.005f, 0.005f);
+	//recipeUIImg->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	recipeUIImg->zForce = 0.19;
+	recipeUIImgEntity->AddComponent(recipeUIImg);
+	recipeUIEntity->AddChild(recipeUIImgEntity);
+
+	//healthImg->vAnchor = VerticalAnchor::ANCHOR_VCENTER;
+	
 	//Add outlines to the player entities
 	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
 	catOutline->setWidth(0.2f);
@@ -456,6 +476,7 @@ void HostScene::InitScene() {
     root.AddChild(light1Entity);
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
+	root.AddChild(recipeUIEntity);
 	//root.AddChild(teapotEntity);
 	//root.AddChild(jumpingTeapot);
 	//root.AddChild(jumpingTeapot2);
