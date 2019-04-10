@@ -301,7 +301,9 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 newComponent->ConstructComponents();
 
                 OmegaEngine::Instance().GetRoot()->AddChild(newEntity);
-            }
+
+				_connectionList[sender].Append(AckDatum(packet->GetTick()));
+			}
             break;
         case NetDatum::DataType::EVENT_TRIGGER:
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {

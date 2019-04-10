@@ -80,10 +80,10 @@ void ClientScene::InitScene() {
     Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
     Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
     //Obstacle Models
-    Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
+    /*Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
     Model* box = ModelGen::makeCube(4, 4, 4);
-    Model* book = ModelGen::makeCube(2, 2, 1);
+    Model* book = ModelGen::makeCube(2, 2, 1);*/
 
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
@@ -227,7 +227,7 @@ void ClientScene::InitScene() {
 	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
 	mouse2Entity->AddComponent(mouseNetwork2);
 
-    auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
+    /*auto* bookEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOOK, glm::vec3(5, 0, 35), true);
     auto* boxEntity = ObstacleFactory::Instance().Create(OBSTACLES::BOX, glm::vec3(50, 0, 50), false);
     auto* vaseEntity = ObstacleFactory::Instance().Create(OBSTACLES::VASE, glm::vec3(30, 0, 50), false);
     auto* lampEntity = ObstacleFactory::Instance().Create(OBSTACLES::LAMP, glm::vec3(35, 0, 25), true);
@@ -239,7 +239,7 @@ void ClientScene::InitScene() {
     root.AddChild(vaseEntity);
     root.AddChild(lampEntity);
     root.AddChild(lampEntity2);
-    root.AddChild(ballEntity);
+    root.AddChild(ballEntity);*/
 
     /*
     PhysicsComponent* northWallPhysics = PhysicsManager::instance()->createObject(50, -2.5, 110, 5, 0, PhysObjectType::WALL);
@@ -353,8 +353,8 @@ void ClientScene::InitScene() {
     light2Entity->AddComponent(light2);
 
     //Don't forget the stupid teapots
-    Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
-    teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));
+    /*Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
+    teapotEntity->transform.setLocalPosition(glm::vec3(50, 0, 50));*/
 
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
