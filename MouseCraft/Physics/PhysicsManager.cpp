@@ -354,7 +354,7 @@ PhysicsComponent* PhysicsManager::createGridObject(float x, float y, int w, int 
 	case PhysObjectType::OBSTACLE_UP:
 	case PhysObjectType::OBSTACLE_DOWN:
 	case PhysObjectType::PLATFORM:
-		grid->createArea(*p1, *p2, physicsComp);
+		grid->createArea(*p1, *p2, physicsComp, t);
 		break;
 	case PhysObjectType::CONTRAPTION_UP:
 	case PhysObjectType::CONTRAPTION_DOWN:
