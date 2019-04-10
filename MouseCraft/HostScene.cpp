@@ -88,7 +88,7 @@ void HostScene::InitScene() {
     //Set the textures
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
-	std::string* recipeTex = new std::string("res/icons/recipe_UI.png");
+	std::string* recipeTex = new std::string("res/textures/recipe_UI.png");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
