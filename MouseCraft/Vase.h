@@ -25,7 +25,7 @@ private:
 	const float DAMAGE_RATE = 1.0f;
 
 	// range of the field
-	const float FIELD_RANGE = 16.0F;
+	const float FIELD_RANGE = 15.0f;
 
 	// if the field has been placed
 	bool _isPlaced = false;
