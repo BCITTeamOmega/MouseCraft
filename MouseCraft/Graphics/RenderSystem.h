@@ -18,6 +18,7 @@
 #include "GLTextureArray.h"
 #include "Light.h"
 #include "../Util/CpuProfiler.h"
+#include "TextureInfo.h"
 
 #define MAX_LIGHTS 50
 
@@ -57,8 +58,8 @@ private:						        // Data Alignment
 	void combineMasterGeometry(std::vector<RenderData>& data);
 	void combineOutlineGeometry(std::vector<RenderData>& data);
 	void makeLightsViewSpace(glm::mat4 viewMatrix);
-	int getTexture(std::string* path);
-	int loadTexture(const std::string& path, bool scaleImage = true);
+	TextureInfo& getTexture(std::string* path, bool scale = true);
+	TextureInfo& loadTexture(const std::string& path, bool scaleImage = true);
 	std::vector<GLfloat>* fetchSmoothNormals(Geometry* g);
 	std::vector<GLfloat>* calcSmoothNormals(Geometry* geometry);
 	Image* scaleImage(Image* input, int width, int height);
@@ -103,7 +104,7 @@ private:						        // Data Alignment
 	Model* _screenQuad;
 	CpuProfiler profiler;
 
-	std::map<std::string, int> _texturePathToID;
+	std::map<std::string, TextureInfo> _texturePathToInfo;
 	
 	std::map<Geometry*, std::vector<GLfloat>*> _smoothNormalCache;
 
@@ -112,4 +113,6 @@ private:						        // Data Alignment
 
 	std::vector<LightData>* _lightRenderingList;
 	std::vector<LightData>* _lightAccumulatingList;
+
+	TextureInfo _defaultTextureValue = TextureInfo(0, false, 1, 1);
 };
