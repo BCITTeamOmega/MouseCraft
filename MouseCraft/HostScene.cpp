@@ -98,22 +98,30 @@ void HostScene::InitScene() {
     Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
     mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
+	mouse1Rend->setShininess(0.4);
+	mouse1Rend->setRoughness(10.0);
     mouse1Entity->AddComponent(mouse1Rend);
 
     Renderable* mouse2Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse2Rend->setModel(*mouseModel);
     mouse2Rend->setColor(Color(0.16, 0.18, 0.45));
-    mouse2Entity->AddComponent(mouse2Rend);
+	mouse2Rend->setShininess(0.4);
+	mouse2Rend->setRoughness(10.0);
+	mouse2Entity->AddComponent(mouse2Rend);
 
     Renderable* mouse3Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse3Rend->setModel(*mouseModel);
     mouse3Rend->setColor(Color(0.19, 0.42, 0.17));
+	mouse3Rend->setShininess(0.4);
+	mouse3Rend->setRoughness(10.0);
     mouse3Entity->AddComponent(mouse3Rend);
 
     Renderable* catRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catRend->setModel(*catModel);
 	//catRend->setModel(*box);
     catRend->setColor(Color(0.34, 0.08, 0));
+	catRend->setShininess(0.4);
+	catRend->setRoughness(10.0);
     catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
