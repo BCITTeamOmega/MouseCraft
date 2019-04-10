@@ -306,16 +306,37 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
         case NetDatum::DataType::ENTITY_CREATE:
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
                 unsigned int netID = packet->ReadUInt();
+
+                unsigned int parent = packet->ReadUInt();
+                bool enabled = packet->ReadByte();
+
+                float posX = packet->ReadFloat();
+                float posY = packet->ReadFloat();
+                float posZ = packet->ReadFloat();
+
+                float rotX = packet->ReadFloat();
+                float rotY = packet->ReadFloat();
+                float rotZ = packet->ReadFloat();
+
+                float sclX = packet->ReadFloat();
+                float sclY = packet->ReadFloat();
+                float sclZ = packet->ReadFloat();
+
                 std::string componentData = packet->ReadString();
                 
                 Entity *newEntity = EntityManager::Instance().Create();
-				NetworkComponent *newComponent = NetworkSystem::Instance()->CreateComponent(netID);
+                newEntity->SetEnabled(enabled);
+                newEntity->transform.setLocalPosition(glm::vec3(posX, posY, posZ));
+                newEntity->transform.setLocalRotation(glm::vec3(rotX, rotY, rotZ));
+                newEntity->transform.setLocalScale(glm::vec3(sclX, sclY, sclZ));
+
+                NetworkComponent *newComponent = NetworkSystem::Instance()->CreateComponent(netID);
                 newEntity->AddComponent(newComponent);
 
                 newComponent->SetComponentData(componentData);
                 newComponent->ConstructComponents();
 
-                OmegaEngine::Instance().GetRoot()->AddChild(newEntity);
+                AddToEntity(parent, newEntity);
 
 				_connectionList[sender].Append(new AckDatum(packet->GetTick()));
 			}

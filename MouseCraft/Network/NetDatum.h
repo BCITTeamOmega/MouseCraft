@@ -171,6 +171,32 @@ class EntityCreateDatum : public NetDatum {
 public:
     EntityCreateDatum(const NetworkComponent *component) : NetDatum(NetDatum::ENTITY_CREATE) {
         appendUInt(component->GetNetworkID());
+
+        Entity *entity = component->GetEntity();
+        
+        unsigned int parentID = 0;
+        Entity *parent = entity->GetParent();
+        if (parent != nullptr) {
+            NetworkComponent * comp = parent->GetComponent<NetworkComponent>();
+            if (comp != nullptr)
+                parentID = comp->GetNetworkID();
+        }
+
+        appendUInt(parentID);
+        appendBool(entity->GetEnabled());
+
+        appendFloat(entity->transform.pos.x);
+        appendFloat(entity->transform.pos.y);
+        appendFloat(entity->transform.pos.z);
+
+        appendFloat(entity->transform.rot.x);
+        appendFloat(entity->transform.rot.y);
+        appendFloat(entity->transform.rot.z);
+
+        appendFloat(entity->transform.scl.x);
+        appendFloat(entity->transform.scl.y);
+        appendFloat(entity->transform.scl.z);
+
         appendString(component->GetComponentData());
     }
 
