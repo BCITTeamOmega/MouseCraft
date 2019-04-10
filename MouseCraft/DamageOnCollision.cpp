@@ -1,6 +1,7 @@
 #include "DamageOnCollision.h"
 
 #include "HealthComponent.h"
+#include "Sound\SoundComponent.h"
 
 DamageOnCollision::DamageOnCollision() : 
 	_handleOnCollision(this, &DamageOnCollision::OnCollision)
@@ -36,6 +37,12 @@ void DamageOnCollision::OnCollision(PhysicsComponent * other)
 			auto health = other->GetEntity()->GetComponent<HealthComponent>();
 			if (health)
 				health->Damage(1);
+            if (other->pType == PhysObjectType::CAT_DOWN || other->pType == PhysObjectType::CAT_UP) {
+                //play cat hit sound
+                    other->GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::CatScream); //set sound to squeak for mouse
+                    auto targetPos = other->GetEntity()->transform.getLocalPosition(); //get mouse current position
+                    other->GetEntity()->GetComponent<SoundComponent>()->PlaySound(targetPos.x, targetPos.y, targetPos.z); //play sound
+                }
 			else
 				std::cout << "WARNING: DamageOnCollision couldn't find health to damage." << std::endl;
 		}

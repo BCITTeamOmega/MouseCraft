@@ -62,10 +62,16 @@ void Trampoline::Update(float dt) {
 	{
 		//for now i'm just going to destroy the trampoline after 1 jump
 		std::cout << "Mouse touched trampoline" << std::endl;
+
+
 		
 		for (int i = 0; i < hits.size(); i++)
 		{
 			hits[i]->GetEntity()->GetComponent<PhysicsComponent>()->onBounce.Notify(GetEntity()->GetComponent<PhysicsComponent>());
+            //play spring noise
+            hits[i]->GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Trampoline_sound); //set sound to trampoline
+            auto ourPos = hits[i]->GetEntity()->transform.getLocalPosition(); //get our current position
+            hits[i]->GetEntity()->GetComponent<SoundComponent>()->PlaySound(ourPos.x, ourPos.y, ourPos.z); //play sound
 		}
 
 		//destroy trampoline

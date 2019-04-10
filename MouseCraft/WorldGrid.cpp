@@ -1,4 +1,5 @@
 #include "WorldGrid.h"
+#include "Physics/PhysicsComponent.h"
 
 //Make sure scale (s) divides into both the width and height otherwise the grid won't be as big as you intend
 WorldGrid::WorldGrid(int w, int h, int s)
@@ -23,12 +24,17 @@ WorldGrid::~WorldGrid()
 	objectGrid.clear();
 }
 
+Vector2D WorldGrid::getScaledPosition(int gridX, int gridY)
+{
+	return Vector2D(gridX * scale + scale / 2.0f, gridY * scale + scale / 2.0f);
+}
+
 //Corrects the positions to ensure they're in the grid
 //Returns false if there is something already there
 bool WorldGrid::positionObject(Vector2D& pos)
 {
-	int xInd = round(pos.x / scale);
-	int yInd = round(pos.y / scale);
+	int xInd = round((pos.x - scale / 2.0f) / scale);
+	int yInd = round((pos.y - scale / 2.0f) / scale);
 
 	if (xInd < 0)
 		xInd = 0;
@@ -42,8 +48,8 @@ bool WorldGrid::positionObject(Vector2D& pos)
 	if (objectGrid[xInd][yInd] != nullptr)
 		return false;
 
-	pos.x = xInd * scale;
-	pos.y = yInd * scale;
+	pos.x = xInd * scale + scale / 2.0f;
+	pos.y = yInd * scale + scale / 2.0f;
 
 	return true;
 }
@@ -90,7 +96,7 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 
 	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y < y2; y++)
+		for (int y = y2; y < y1; y++)
 		{
 			if (objectGrid[x][y] != nullptr)
 				return false;
@@ -109,35 +115,60 @@ bool WorldGrid::positionArea(Vector2D& p1, Vector2D& p2)
 //Returns false if there is something already there
 void WorldGrid::createObject(Vector2D& pos, PhysicsComponent* pcomp)
 {
-	int xInd = round(pos.x / scale);
-	int yInd = round(pos.y / scale);
+	int xInd = round((pos.x - scale / 2.0f) / scale);
+	int yInd = round((pos.y - scale / 2.0f) / scale);
 
-	if (objectGrid[xInd][yInd] != nullptr)
+	if (objectGrid[xInd][yInd] == nullptr)
 		objectGrid[xInd][yInd] = pcomp;
 }
 
 //Returns false if there is something already there
-void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp)
+void WorldGrid::createArea(Vector2D& p1, Vector2D& p2, PhysicsComponent* pcomp, PhysObjectType::PhysObjectType pType)
 {
 	int x1 = round(p1.x / scale);
 	int x2 = round(p2.x / scale);
 	int y1 = round(p1.y / scale);
 	int y2 = round(p2.y / scale);
 
+	//Fix the points if the user input them in the wrong order or something
+	if (x1 > x2)
+	{
+		int temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+
+	if (y2 > y1)
+	{
+		int temp = y2;
+		y2 = y1;
+		y1 = temp;
+	}
+
+	// ensure all positions are free
+	for (int x = x1; x < x2; x++)
+		for (int y = y1; y < y2; y++)
+			if (objectGrid[x][y] != nullptr)
+				return;
+
+	// occup all positions
 	for (int x = x1; x < x2; x++)
 	{
-		for (int y = y1; y < y2; y++)
+		for (int y = y2; y < y1; y++)
 		{
-			if (objectGrid[x][y] != nullptr)
+			if (pType == PhysObjectType::PLATFORM)
+				baseGrid[x][y] = true;
+			else
 				objectGrid[x][y] = pcomp;
+			
 		}
 	}
 }
 
 bool WorldGrid::removeObject(float xPos, float yPos)
 {
-	int xInd = round(xPos / scale);
-	int yInd = round(yPos / scale);
+	int xInd = round((xPos - scale / 2.0f) / scale);
+	int yInd = round((yPos - scale / 2.0f) / scale);
 
 	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
 		objectGrid[xInd][yInd] = nullptr;
@@ -147,10 +178,10 @@ bool WorldGrid::removeObject(float xPos, float yPos)
 
 bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 {
-	int x1 = p1->x;
-	int x2 = p2->x;
-	int y1 = p1->y;
-	int y2 = p2->y;
+	int x1 = round(p1->x / scale);
+	int x2 = round(p2->x / scale);
+	int y1 = round(p1->y / scale);
+	int y2 = round(p2->y / scale);
 
 	if (x1 >= 0 && x1 < baseGrid.size() && y1 >= 0 && y1 < baseGrid[0].size()
 		&& x2 >= 0 && x2 < baseGrid.size() && y2 >= 0 && y2 < baseGrid[0].size())
@@ -170,9 +201,9 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 			y1 = temp;
 		}
 
-		for (int x = x1; x <= x2; x++)
+		for (int x = x1; x < x2; x++)
 		{
-			for (int y = y1; y <= y2; y++)
+			for (int y = y2; y < y1; y++)
 			{
 				objectGrid[x][y] = nullptr;
 			}
@@ -186,8 +217,8 @@ bool WorldGrid::removeArea(Vector2D* p1, Vector2D* p2)
 
 PhysicsComponent* WorldGrid::objectAt(float xPos, float yPos)
 {
-	int xInd = round(xPos / scale);
-	int yInd = round(yPos / scale);
+	int xInd = round((xPos - scale / 2.0f) / scale);
+	int yInd = round((yPos - scale / 2.0f) / scale);
 
 	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
 		return objectGrid[xInd][yInd];
@@ -201,10 +232,53 @@ PhysicsComponent* WorldGrid::objectAt(int xPos, int yPos)
 		return objectGrid[xPos][yPos];
 }
 
+std::vector<PhysicsComponent*>* WorldGrid::objectsInArea(Vector2D* p1, Vector2D* p2)
+{
+	int x1 = round(p1->x / scale);
+	int x2 = round(p2->x / scale);
+	int y1 = round(p1->y / scale);
+	int y2 = round(p2->y / scale);
+
+	std::vector<PhysicsComponent*>* objects = new std::vector<PhysicsComponent*>();
+
+	if (x1 < 0 || x1 >= baseGrid.size() || y1 < 0 || y1 >= baseGrid[0].size()
+		|| x2 < 0 || x2 >= baseGrid.size() || y2 < 0 || y2 >= baseGrid[0].size())
+		return nullptr;
+
+	//Fix the points if the user input them in the wrong order or something
+	if (x1 > x2)
+	{
+		int temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+
+	if (y2 > y1)
+	{
+		int temp = y2;
+		y2 = y1;
+		y1 = temp;
+	}
+
+	std::cout << "--- objects in area ---" << std::endl;
+	std::cout << x1 << "," << x2 << "," << y1 << "," << y2 << std::endl;
+
+	for (int x = x1; x < x2; x++)
+	{
+		for (int y = y2; y < y1; y++)
+		{
+			if(objectGrid[x][y] != nullptr)
+				objects->push_back(objectGrid[x][y]);
+		}
+	}
+
+	return objects;
+}
+
 bool WorldGrid::tileIsUp(float xPos, float yPos)
 {
-	int xInd = round(xPos / scale);
-	int yInd = round(yPos / scale);
+	int xInd = round((xPos - scale / 2.0f) / scale);
+	int yInd = round((yPos - scale / 2.0f) / scale);
 
 	if (xInd >= 0 && xInd < baseGrid.size() && yInd >= 0 && yInd < baseGrid[0].size())
 		return baseGrid[xInd][yInd];

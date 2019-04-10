@@ -1,7 +1,7 @@
 #pragma once
 //for referencing songs. These are the internal names of each
 enum TrackList {
-    MainBGM, MenuBGM, WelcomeBGM
+    MainBGM, MenuBGM, GameoverBGM
 };
 
 

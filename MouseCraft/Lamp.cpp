@@ -39,7 +39,9 @@ void Lamp::Update(float deltaTime)
 			for (auto& p : hits)
 			{
 				auto health = p->GetEntity()->GetComponent<HealthComponent>();
-				health->Damage(1);
+
+				if(health->GetHealth() > 0)
+					health->Damage(1);
 			}
 		}
 	}

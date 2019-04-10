@@ -15,9 +15,15 @@ public:
 	Transform getTransform();
 	Color getColor();
 	void setColor(Color color);
+	void setShininess(float f);
+	float getShininess();
+	void setRoughness(float f);
+	float getSmoothness();
 private:
 	Model* _model;
 	Color _color;
+	float _shininess;
+	float _smoothness;
 
 	static Component* CreateFromJson(json json);
 	static PrefabRegistrar reg;

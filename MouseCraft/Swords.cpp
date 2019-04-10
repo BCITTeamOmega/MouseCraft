@@ -49,6 +49,12 @@ bool Swords::use(Mouse* m) {
 		std::cout << "Swords hit Object" << std::endl;
 		_collidedObjects = hits[0];
 		_collidedObjects->GetEntity()->GetComponent<HealthComponent>()->Damage(DAMAGE);
+        if (hits[0]->pType == PhysObjectType::CAT_UP) {
+            //play cat hit sound
+            hits[0]->GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::CatScream); //set sound to squeak for mouse
+            auto targetPos = hits[0]->GetEntity()->transform.getLocalPosition(); //get mouse current position
+            hits[0]->GetEntity()->GetComponent<SoundComponent>()->PlaySound(targetPos.x, targetPos.y, targetPos.z); //play sound
+        }
 		this->GetEntity()->Destroy();
 
 		return true;
@@ -67,6 +73,12 @@ bool Swords::use(Mouse* m) {
 		std::cout << "Swords hit Object" << std::endl;
 		_collidedObjects = hits[0];
 		_collidedObjects->GetEntity()->GetComponent<HealthComponent>()->Damage(DAMAGE);
+        if (hits[0]->pType == PhysObjectType::CAT_DOWN) {
+            //play cat hit sound
+            hits[0]->GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::CatScream); //set sound to squeak for mouse
+            auto targetPos = hits[0]->GetEntity()->transform.getLocalPosition(); //get mouse current position
+            hits[0]->GetEntity()->GetComponent<SoundComponent>()->PlaySound(targetPos.x, targetPos.y, targetPos.z); //play sound
+        }
 		this->GetEntity()->Destroy();
 
 		return true;
