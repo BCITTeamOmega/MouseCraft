@@ -44,7 +44,7 @@ void HostScene::InitScene() {
 	Entity* islandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/island.json");
 	Entity* tableEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/table.json");
 	Entity* couchEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/couch.json");
-    Entity* catstandEntity = EntityManager::Instance().Create();
+    Entity* catstandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/catstand.json");
     Entity* northWallEntity = EntityManager::Instance().Create();
 	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
@@ -151,12 +151,12 @@ void HostScene::InitScene() {
     couchRend->setModel(*couchModel);
     couchRend->setColor(Color(1.0, 0.5, 0.0));
     couchEntity->AddComponent(couchRend);
-	*/
 
     Renderable* catstandRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catstandRend->setModel(*catstandModel);
     catstandRend->setColor(Color(1.0, 0.5, 0.0));
     catstandEntity->AddComponent(catstandRend);
+	*/
 
     Renderable* northWallRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     northWallRend->setModel(*horizWallModel);
@@ -339,7 +339,7 @@ void HostScene::InitScene() {
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
-	pSpawnerSpawner->spawnDelay = 0.5f;
+	pSpawnerSpawner->spawnDelay = 2.0f;
     pSpawnerEntity->AddComponent(pSpawnerSpawner);
 
     //Game Manager
