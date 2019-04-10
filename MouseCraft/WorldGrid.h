@@ -20,6 +20,7 @@ public:
 	bool removeArea(Vector2D* p1, Vector2D* p2);
 	PhysicsComponent* objectAt(float xPos, float yPos);
 	PhysicsComponent* objectAt(int xPos, int yPos);
+	std::vector<PhysicsComponent*>* objectsInArea(Vector2D* p1, Vector2D* p2);
 	bool tileIsUp(float xPos, float yPos);
 	bool tileIsUp(int xPos, int yPos);
 	int gridWidth();

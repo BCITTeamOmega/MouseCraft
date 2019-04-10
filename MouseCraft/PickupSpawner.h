@@ -12,7 +12,7 @@ public:
 	void Spawn();
 
 public:
-	float spawnDelay = 0.1f;
+	float spawnDelay = 4.0f;
 private:
 	glm::vec3 GetFreePosition();
 	float _counter = 0.0f;

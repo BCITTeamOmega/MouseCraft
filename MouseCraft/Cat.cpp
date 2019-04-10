@@ -155,9 +155,6 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
     else 											// down 
         facing = Vector2D(0, 1);
 
-    std::cout << angle << std::endl;
-    std::cout << facing.x << "," << facing.y << std::endl;
-
     //check if we hit something
     if (results.size() > 0) {
         //Play a sound on hit here?
@@ -166,6 +163,7 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 		{
 			if (p->pType == PhysObjectType::MOUSE_UP || p->pType == PhysObjectType::MOUSE_DOWN)
 			{
+				// mouse 
 				std::cout << "INFO: Cat hit a mouse!" << std::endl;
 				HealthComponent* hp = p->GetEntity()->GetComponent<HealthComponent>();
 
@@ -174,6 +172,7 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 			}
 			else
 			{
+				// obstacle 
 				auto e = p->GetEntity();
 				p->GetEntity()->GetComponent<Obstacle>()->HitByCat(facing);
 			}

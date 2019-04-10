@@ -9,6 +9,12 @@ Pickup::Pickup()
 
 Pickup::~Pickup()
 {
+	// clean ourselves off the board, if still there
+	auto wPos = GetEntity()->transform.getWorldPosition2D();
+	if (PhysicsManager::instance()->getGrid()->objectAt(wPos.x, wPos.y) == _physics)
+	{
+		PhysicsManager::instance()->getGrid()->removeObject(wPos.x, wPos.y);
+	}
 }
 
 void Pickup::OnInitialized()
