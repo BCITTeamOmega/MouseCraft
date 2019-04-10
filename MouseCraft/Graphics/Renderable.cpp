@@ -4,9 +4,10 @@
 #include "../Loading/ImageLoader.h"
 #include <string>
 
-Renderable::Renderable()
-{
-}
+Renderable::Renderable() :
+	_shininess(0.5),
+	_smoothness(25.0)
+{}
 
 Model* Renderable::getModel() {
 	return _model;
@@ -21,6 +22,7 @@ Transform Renderable::getTransform() {
 	if (e != nullptr) {
 		return e->transform;
 	}
+	return Transform();
 }
 
 Color Renderable::getColor() {
@@ -31,6 +33,21 @@ void Renderable::setColor(Color color) {
 	_color = color;
 }
 
+void Renderable::setShininess(float f) {
+	_shininess = f;
+}
+
+float Renderable::getShininess() {
+	return _shininess;
+}
+
+void Renderable::setRoughness(float f) {
+	_smoothness = f;
+}
+
+float Renderable::getSmoothness() {
+	return _smoothness;
+}
 
 
 #pragma region prefab support 
@@ -38,6 +55,18 @@ void Renderable::setColor(Color color) {
 Component* Renderable::CreateFromJson(json json)
 {
 	auto c = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
+	// parse shininess
+	if (json.find("shininess") != json.end())
+	{
+		c->_shininess = json["shininess"].get<double>();
+	}
+	
+	// parse roughness
+	if (json.find("roughness") != json.end())
+	{
+		c->_smoothness = json["roughness"].get<double>();
+	}
 
 	// parse color 
 	if (json.find("color") != json.end())

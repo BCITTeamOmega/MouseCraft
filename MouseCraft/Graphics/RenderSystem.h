@@ -96,6 +96,7 @@ private:						        // Data Alignment
 	GLTexture* _albedoBuffer;
 	GLTexture* _normalBuffer;
 	GLTexture* _positionBuffer;
+	GLTexture* _specularBuffer;
 	GLTexture* _outlineBuffer;
 
 	CombinedGeometry* _masterGeometry;
