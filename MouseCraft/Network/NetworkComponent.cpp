@@ -55,7 +55,7 @@ void NetworkComponent::ConstructComponents() {
 bool NetworkComponent::CheckDiff(unsigned short currTick) {
     if (!moreRecent(currTick))
         return false;
-    NetState next(currTick, *GetEntity());
+    NetState next(currTick, GetEntity());
     if (!next.Equals(_lastState)) {
         _lastState = next;
         return true;
