@@ -1,19 +1,19 @@
 {
 	"pos": [0,0,0],
-	"scl": [21,2,5],
-	"rot": [0,-1.57,0],
+	"scl": [7.5, 1.6, 7.5],
+	"rot": [0,0,0],
 	"entities": [
 	],
 	"components": [
 		{
 			"type": "Renderable",
-			"model_path": "res/models/kitchenCabinet.obj",
+			"model_path": "res/models/bookcaseOpenLow.obj",
 			"texture_path": "",
 			"color":
 			{
-				"r":1.0,
-				"g":1.0,
-				"b":1.0
+				"r":0.55,
+				"g":0.27,
+				"b":0.07
 			}
 		}
 	]
