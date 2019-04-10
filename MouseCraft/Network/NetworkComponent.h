@@ -27,6 +27,7 @@ public:
     const std::string GetComponentData() const;
     void AddComponentData(std::string& json);
 	void AddComponentData(json json);
+	void SetComponentData(std::string& json);
 	void SetComponentData(json json);
 
 	// Called by clients. Reconstructs all the components this entity should have. 

@@ -25,6 +25,11 @@ void NetworkComponent::AddComponentData(json json) {
 	_componentData.push_back(json);
 }
 
+void NetworkComponent::SetComponentData(std::string & json)
+{
+	_componentData = json::parse(json);
+}
+
 void NetworkComponent::SetComponentData(json json) {
 	_componentData = json;
 }

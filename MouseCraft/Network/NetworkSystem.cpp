@@ -297,7 +297,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 NetworkComponent *newComponent = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(netID, NetworkComponent::NetAuthority::SIMULATED);
                 newEntity->AddComponent(newComponent);
 
-                newComponent->AddComponentData(componentData);
+                newComponent->SetComponentData(componentData);
                 newComponent->ConstructComponents();
 
                 OmegaEngine::Instance().GetRoot()->AddChild(newEntity);
