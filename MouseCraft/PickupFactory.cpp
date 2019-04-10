@@ -7,6 +7,8 @@
 #include "Graphics/Renderable.h"
 #include "Loading/ImageLoader.h"
 #include "Physics/PhysicsManager.h"
+#include "Network/NetworkComponent.h"
+#include "Network/NetworkSystem.h"
 
 PickupFactory::PickupFactory()
 {
@@ -27,7 +29,7 @@ PickupFactory::~PickupFactory()
 {
 }
 
-Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
+Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position, std::vector<unsigned int>* netIds)
 {
 	// create entity 
 	Entity* pickup = EntityManager::Instance().Create();
@@ -71,6 +73,17 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	auto c_physics = pSys->createGridObject(position.x, position.z, 1, 1, PhysObjectType::PART);
 	// auto c_physics = pSys->createObject(0, 0, 0.1, 0.1, 0.0, PhysObjectType::OBSTACLE_DOWN); this works
 
+	if (netIds)
+	{
+		auto c_net = NetworkSystem::Instance()->CreateComponent();
+		netIds->push_back(c_net->GetNetworkID());
+		pickup->AddComponent(c_net);
+	}
+	else
+	{
+		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
+	}
+
 	// ASSEMBLE
 	pickup->AddComponent(c_renderable);
 	pickup->AddComponent(c_anim);
@@ -79,6 +92,56 @@ Entity * PickupFactory::Create(PICKUPS type, glm::vec3 position)
 	pickup->AddComponent(c_physics);
 
 	c_physics->initPosition();
+
+	return pickup;
+}
+
+Entity * PickupFactory::CreateSimulated(PICKUPS type, glm::vec3 position, std::vector<unsigned int>* netIds)
+{
+	// create entity 
+	Entity* pickup = EntityManager::Instance().Create();
+	pickup->transform.setLocalPosition(position);
+	pickup->transform.setLocalRotation(glm::vec3(0.42f, 0.0f, 0.0f));
+	pickup->transform.setLocalScale(glm::vec3(0.0f));
+
+	// create visuals 
+	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
+	switch (type)
+	{
+	case BATTERY:
+		c_renderable->setModel(*_batteryModel);
+		c_renderable->setColor(Color(1.0, 0.6, 0.0));
+		break;
+	case SCREW:
+		c_renderable->setModel(*_screwModel);
+		c_renderable->setColor(Color(0.5, 0.5, 0.5));
+		break;
+	case SPRING:
+		c_renderable->setModel(*_springModel);
+		c_renderable->setColor(Color(0.8, 0.1, 0.0));
+		break;
+	default:
+		break;
+	}
+
+	auto c_anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+	c_anim->SetOneShot(true);
+	c_anim->AddAnimation(_spawnAnim);
+
+	auto c_rotator = ComponentManager<UpdatableComponent>::Instance().Create<Rotator>();
+	c_rotator->rotationSpeed = glm::vec3(0.0, glm::pi<float>() * 0.5f, 0.0);
+
+	if (netIds)
+	{
+		auto c_net = NetworkSystem::Instance()->CreateComponent((*netIds)[0]);
+		pickup->AddComponent(c_net);
+	}
+	
+	// ASSEMBLE
+	pickup->AddComponent(c_renderable);
+	pickup->AddComponent(c_anim);
+	pickup->AddComponent(c_rotator);
 
 	return pickup;
 }

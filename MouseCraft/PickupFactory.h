@@ -25,7 +25,8 @@ private:
 
 // functions
 public: 
-	Entity* Create(PICKUPS type, glm::vec3 position);
+	Entity* Create(PICKUPS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
+	Entity* CreateSimulated(PICKUPS type, glm::vec3 position, std::vector<unsigned int>* netIds = nullptr);
 
 // variables 
 private:

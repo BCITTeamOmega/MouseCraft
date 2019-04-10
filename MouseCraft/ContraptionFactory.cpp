@@ -10,6 +10,10 @@
 
 #include "TransformAnimator.h"
 
+#include "Network/NetworkComponent.h"
+
+#include "Network/NetworkSystem.h"
+
 ContraptionFactory::ContraptionFactory()
 {
 	_platformModel = ModelLoader::loadModel("res/models/spring.obj");
@@ -34,10 +38,21 @@ ContraptionFactory::~ContraptionFactory()
 {
 }
 
-Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
+Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds) {
 
 	Entity* contraption = EntityManager::Instance().Create();
 	contraption->transform.setLocalPosition(position);
+
+	if (netIds)
+	{
+		auto c_net = NetworkSystem::Instance()->CreateComponent();
+		netIds->push_back(c_net->GetNetworkID());
+		contraption->AddComponent(c_net);
+	}
+	else
+	{
+		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
+	}
 
 	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
 
@@ -56,6 +71,14 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 
 		contraption->AddChild(e_trampolineField);
 		c_trampoline->fieldEntity = e_trampolineField;
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent();
+			netIds->push_back(c_net->GetNetworkID());
+			e_trampolineField->AddComponent(c_net);
+		}
+		
 		break;
 	}
 
@@ -81,6 +104,14 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 
 		contraption->AddChild(e_coilField);
 		c_coil->fieldEntity = e_coilField;
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent();
+			netIds->push_back(c_net->GetNetworkID());
+			e_coilField->AddComponent(c_net);
+		}
+
 		break;
 	}
 
@@ -116,6 +147,14 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		auto c_expTimed = ComponentManager<UpdatableComponent>::Instance().Create<TimedDestruction>();
 		c_expTimed->delay = Bomb::EXPLOSION_LIFETIME;
 		e_explosion->AddComponent(c_expTimed);
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent();
+			netIds->push_back(c_net->GetNetworkID());
+			e_explosion->AddComponent(c_net);
+		}
+
 		break;
 	}
 
@@ -137,6 +176,116 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position) {
 		break;
 	}
 	
+	contraption->AddComponent(c_renderable);
+
+	return contraption;
+}
+
+Entity * ContraptionFactory::CreateSimulated(CONTRAPTIONS type, glm::vec3 position, std::vector<unsigned int>* netIds)
+{
+	Entity* contraption = EntityManager::Instance().Create();
+	contraption->transform.setLocalPosition(position);
+
+	if (netIds)
+	{
+		auto c_net = NetworkSystem::Instance()->CreateComponent((*netIds)[0]);
+		contraption->AddComponent(c_net);
+	}
+	else
+	{
+		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
+	}
+
+	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
+
+	switch (type) {
+	case TRAMPOLINE: {
+		c_renderable->setModel(*_platformModel);
+
+		auto e_trampolineField = EntityManager::Instance().Create();
+		e_trampolineField->SetEnabled(false);
+		auto c_trampolineRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_trampolineRender->setModel(*_coilFieldModel);
+		c_trampolineRender->setColor(Color(0.9f, 1.0f, 0.9f));
+		e_trampolineField->AddComponent(c_trampolineRender);
+
+		contraption->AddChild(e_trampolineField);
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent((*netIds)[1]);
+			e_trampolineField->AddComponent(c_net);
+		}
+
+		break;
+	}
+
+	case GUN: {
+		c_renderable->setModel(*_gunModel);
+		break;
+	}
+
+	case COIL: {
+		c_renderable->setModel(*_coilModel);
+
+		// the field 
+		auto e_coilField = EntityManager::Instance().Create();
+		e_coilField->SetEnabled(false);
+		auto c_coilRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_coilRender->setModel(*_coilFieldModel);
+		c_coilRender->setColor(Color(0.9f, 1.0f, 0.9f));
+		e_coilField->AddComponent(c_coilRender);
+
+		contraption->AddChild(e_coilField);
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent((*netIds)[1]);
+			e_coilField->AddComponent(c_net);
+		}
+
+		break;
+	}
+
+	case BOMB: {
+		c_renderable->setModel(*_bombModel);
+		auto c_rot = ComponentManager<UpdatableComponent>::Instance().Create<Rotator>();
+		c_rot->rotationSpeed = glm::vec3(1.6f, 2.4f, -0.5f);	// random speed
+		c_rot->SetEnabled(false);
+		contraption->AddComponent(c_rot);
+
+		auto e_explosion = EntityManager::Instance().Create();
+		auto c_expRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
+		c_expRender->setModel(*_explosionModel);
+		c_expRender->setColor(Color(1.0f, 0.0f, 0.0f));
+		e_explosion->AddComponent(c_expRender);
+		auto c_expAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
+		c_expAnim->AddAnimation(_explosionAnim);
+		e_explosion->AddComponent(c_expAnim);
+
+		if (netIds)
+		{
+			auto c_net = NetworkSystem::Instance()->CreateComponent((*netIds)[1]);
+			e_explosion->AddComponent(c_net);
+		}
+
+		break;
+	}
+
+	case OVERCHARGE: {
+		c_renderable->setModel(*_overchargeModel);
+		break;
+	}
+
+	case SWORDS: {
+		c_renderable->setModel(*_swordsModel);
+		break;
+	}
+
+	default:
+		break;
+	}
+
 	contraption->AddComponent(c_renderable);
 
 	return contraption;

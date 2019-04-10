@@ -100,6 +100,12 @@ void InputSystem::Update(float dt)
 {
 	profiler.StartTimer(0);
 
+	// Note: hot pile of trash for handle SDL2 hot pile of keyboard input trash.
+	dkUpLast = dkUp;
+	dkDownLast = dkDown;
+	dkLeftLast = dkLeft;
+	dkRightLast = dkRight;
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e) != 0)
 	{
@@ -189,20 +195,21 @@ void InputSystem::Update(float dt)
 			// handling both states here to minimize LINES
 			int player = DEBUG_PLAYER;
 			bool isDown = e.type == SDL_KEYDOWN;
+			float diff;
 
 			switch (e.key.keysym.sym)
 			{
 			case SDLK_w:
-				debugPlayerAxis.SetY(isDown ? -1 : 0);
+				dkUp = (isDown) ? -1 : 0;
 				break;
 			case SDLK_a:
-				debugPlayerAxis.SetX(isDown ? -1 : 0);
+				dkLeft = (isDown) ? -1 : 0;
 				break;
 			case SDLK_s:
-				debugPlayerAxis.SetY(isDown ? 1 : 0);
+				dkDown = (isDown) ? 1 : 0;
 				break;
 			case SDLK_d:
-				debugPlayerAxis.SetX(isDown ? 1 : 0);
+				dkRight = (isDown) ? 1 : 0;
 				break;
 			case SDLK_j:
 				EventManager::Notify(EventName::INPUT_BUTTON,
@@ -276,6 +283,14 @@ void InputSystem::Update(float dt)
 	}
 
 	// notify debug keyboard player 
+	// note: we update every frame because SDL2 is stupid and key_down/up event/pressed/release 
+	// is already called every frame on hold (instead on change).
+	bool dkUpdated = (dkLeft != dkLeftLast) || (dkRight != dkRightLast) || (dkUp != dkUpLast) || (dkDown != dkDownLast);
+	if (dkUpdated)
+	{
+		debugPlayerAxis.SetX(dkLeft + dkRight);
+		debugPlayerAxis.SetY(dkUp + dkDown);
+	}
 	debugPlayerAxis.Update();
 	NotifyAxis(debugPlayerAxis, Axis::LEFT, DEBUG_PLAYER);
 
