@@ -6,7 +6,7 @@
 #include "TrackParams.h"
 #include <unordered_map>
 #include "../Core/System.h"
-#define MAX_SOUND_BUFFERS 5
+#define MAX_SOUND_BUFFERS 10
 
 //actual Manager class, is an ISubScriber to use the event system
 class SoundManager : public ISubscriber, public System {

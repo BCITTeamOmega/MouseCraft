@@ -26,6 +26,7 @@ public:
     //methods
     //constructor and Destructor
 	Sound();
+    void changeSoundVolume(ALuint source, float volume);
     ~Sound();
     
     //method that allows an audio source to begin playing

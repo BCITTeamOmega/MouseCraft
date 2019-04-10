@@ -2,12 +2,18 @@
 #include <iostream>
 #include <mutex>
 //defines for track filenames
-#define MAIN_BGM "../res/music/bgm2.wav" 
-#define MENU_BGM "../res/music/bgm1.wav"
+#define MAIN_BGM "res/music/bgm2.wav" 
+#define MENU_BGM "res/music/bgm1.wav"
+#define GAMEOVER_BGM "res/music/bgm3.wav"
 
 //defines for SoundEffect Names
-#define JUMP "../res/SoundEffects/jumpSE.wav"
-#define SWIPE "../res/SoundEffects/swipe.wav"
+#define JUMP_SOUND "res/SoundEffects/jumpCat.wav"
+#define SWIPE_SOUND "res/SoundEffects/swipe.wav"
+#define TRAMP_SOUND "res/SoundEffects/trampoline.wav"
+#define THUD_SOUND  "res/SoundEffects/obstacleThud.wav"
+#define SQUEAK_SOUND "res/SoundEffects/squeak.wav"
+#define CAT_HURT_SOUND "res/SoundEffects/catScream.wav"
+
 
 //private mutex variable
 std::mutex SoundMtx;
@@ -54,34 +60,55 @@ void SoundManager::loadAudioData() {
     }
     Music.insert(std::pair<TrackList, AudioData>(MenuBGM, temp));
 
-    ////load welcome message BGM, steps are identical to above but with different file and Handle
-    //temp = soundObject->GetAudioData(WELCOME_BGM);
-    //if (temp.data == NULL) {
-    //    std::cout << "Welcome BGM failed to store correctly." << std::endl;
-    //}
-    //Music.insert(std::pair<TrackList, AudioData>(WelcomeBGM, temp));
+    //load game over music bgm.
+    temp = soundObject->GetAudioData(GAMEOVER_BGM);
+    if (temp.data == NULL) {
+        std::cout << "Welcome BGM failed to store correctly." << std::endl;
+    }
+    Music.insert(std::pair<TrackList, AudioData>(GameoverBGM, temp));
 
-    ////Load Sounds Section
+    //Load Sounds Section
     //Jump Sound
-    temp = soundObject->GetAudioData(JUMP); //attempt to read file
+    temp = soundObject->GetAudioData(JUMP_SOUND); //attempt to read file
     if (temp.data == NULL) {
         std::cout << "Jump SE failed to store correctly." << std::endl; //handle failed file read
     }
     SoundEffects.insert(std::pair<SoundsList, AudioData>(Jump, temp)); //store in Sounds Memory with handle
 
     //Cat Attacking Sound, steps are identical to above but with different file and Handle
-    temp = soundObject->GetAudioData(SWIPE);
+    temp = soundObject->GetAudioData(SWIPE_SOUND);
     if (temp.data == NULL) {
         std::cout << "Swiping SE failed to store correctly." << std::endl;
     }
     SoundEffects.insert(std::pair<SoundsList, AudioData>(Swipe, temp));
 
-    ////death Sound 1, steps are identical to above but with different file and Handle
-    //temp = soundObject->GetAudioData(GOAT_DEATH);
-    //if (temp.data == NULL) {
-    //    std::cout << "Death SE failed to store correctly." << std::endl;
-    //}
-    //SoundEffects.insert(std::pair<SoundsList, AudioData>(GoatDeath, temp));
+    //Trampoline sound, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(TRAMP_SOUND);
+    if (temp.data == NULL) {
+        std::cout << "Trampoline SE failed to store correctly." << std::endl;
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Trampoline_sound, temp));
+
+    //Hitting obstacle sound, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(THUD_SOUND);
+    if (temp.data == NULL) {
+        std::cout << "Obstacle hit SE failed to store correctly." << std::endl;
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Thud, temp));
+
+    //Mouse Damage sound, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(SQUEAK_SOUND);
+    if (temp.data == NULL) {
+        std::cout << "Squeak SE failed to store correctly." << std::endl;
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(Squeak, temp));
+
+    //Mouse Damage sound, steps are identical to above but with different file and Handle
+    temp = soundObject->GetAudioData(CAT_HURT_SOUND);
+    if (temp.data == NULL) {
+        std::cout << "Squeak SE failed to store correctly." << std::endl;
+    }
+    SoundEffects.insert(std::pair<SoundsList, AudioData>(CatScream, temp));
 }
 
 void SoundManager::Update(float dt)
@@ -119,12 +146,12 @@ void SoundManager::PlaySong(TrackList track, float x, float y, float z) {
             soundObject->PlaceSource(bgmSource, x, y, z);
             soundObject->PlayAudio(bgmSource);
             break;
-        //case WelcomeBGM:
-        //    soundObject->BufferData(bgmBuffer, bgmSource, Music.find(WelcomeBGM)->second);
-        //    soundObject->ToggleLooping(bgmSource, false);
-        //    soundObject->PlaceSource(bgmSource, x, y, z);
-        //    soundObject->PlayAudio(bgmSource);
-        //    break;
+        case GameoverBGM:
+            soundObject->BufferData(bgmBuffer, bgmSource, Music.find(GameoverBGM)->second);
+            soundObject->ToggleLooping(bgmSource, true);
+            soundObject->PlaceSource(bgmSource, x, y, z);
+            soundObject->PlayAudio(bgmSource);
+            break;
         default:
             break;
     }
@@ -157,20 +184,44 @@ void SoundManager::PlaySound(SoundsList soundEffect, float x, float y, float z) 
         soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Jump)->second);
         soundObject->ToggleLooping(seSource[selectedBuffer], false);
         soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
         soundObject->PlayAudio(seSource[selectedBuffer]);
         break;
     case Swipe:
         soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Swipe)->second);
         soundObject->ToggleLooping(seSource[selectedBuffer], false);
         soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
         soundObject->PlayAudio(seSource[selectedBuffer]);
         break;
-    //case GoatDeath:
-    //    soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(GoatDeath)->second);
-    //    soundObject->ToggleLooping(seSource[selectedBuffer], false);
-    //    soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
-    //    soundObject->PlayAudio(seSource[selectedBuffer]);
-    //    break;
+    case Trampoline_sound:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Trampoline_sound)->second);
+        soundObject->ToggleLooping(seSource[selectedBuffer], false);
+        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
+        soundObject->PlayAudio(seSource[selectedBuffer]);
+        break;
+    case Thud:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Thud)->second);
+        soundObject->ToggleLooping(seSource[selectedBuffer], false);
+        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
+        soundObject->PlayAudio(seSource[selectedBuffer]);
+        break;
+    case Squeak:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(Squeak)->second);
+        soundObject->ToggleLooping(seSource[selectedBuffer], false);
+        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
+        soundObject->PlayAudio(seSource[selectedBuffer]);
+        break;
+    case CatScream:
+        soundObject->BufferData(seBuffer[selectedBuffer], seSource[selectedBuffer], SoundEffects.find(CatScream)->second);
+        soundObject->ToggleLooping(seSource[selectedBuffer], false);
+        soundObject->PlaceSource(seSource[selectedBuffer], x, y, z);
+        soundObject->changeSoundVolume(seSource[selectedBuffer], 1.0);
+        soundObject->PlayAudio(seSource[selectedBuffer]);
+        break;
     default:
         break;
     }
