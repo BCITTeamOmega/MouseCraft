@@ -147,10 +147,8 @@ class StateUpdateDatum : public NetDatum {
 public:
     StateUpdateDatum(unsigned int id, const NetState & state) : NetDatum(NetDatum::TRANSFORM_STATE_UPDATE) {
         appendUInt(id);
-        appendUInt(state.parentID);
-        appendBool(state.enabled);
 
-        appendUInt(state.parentID);
+		appendUInt(state.parentID);
         appendBool(state.enabled);
 
         appendFloat(state.pos.x);
