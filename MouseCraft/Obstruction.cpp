@@ -53,7 +53,7 @@ void Obstruction::HitByCat(Vector2D dir)
 
 		if (_physics->isUp)
 		{
-			if (pc->pType == PhysObjectType::OBSTACLE_UP || pc->pType == PhysObjectType::WALL)
+			if (pc->pType == PhysObjectType::OBSTACLE_UP || pc->pType == PhysObjectType::WALL || pc->pType == PhysObjectType::MOUSE_UP)
 			{
 				stop = true;
 				break;
@@ -61,7 +61,7 @@ void Obstruction::HitByCat(Vector2D dir)
 		}
 		else
 		{
-			if (pc->pType == PhysObjectType::PLATFORM || pc->pType == PhysObjectType::OBSTACLE_DOWN || pc->pType == PhysObjectType::WALL)
+			if (pc->pType == PhysObjectType::PLATFORM || pc->pType == PhysObjectType::OBSTACLE_DOWN || pc->pType == PhysObjectType::WALL || pc->pType == PhysObjectType::MOUSE_DOWN)
 			{
 				stop = true;
 				break;
