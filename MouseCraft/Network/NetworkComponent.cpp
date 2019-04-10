@@ -4,6 +4,12 @@
 #include <numeric>
 #include "../Loading/PrefabLoader.h"
 
+NetworkComponent::~NetworkComponent() {
+    if(_authLevel == AUTHORITATIVE)
+        NetworkSystem::Instance()->DestroyEntityOnClients(this);
+    NetworkSystem::Instance()->RemoveComponent(_netID);
+}
+
 void NetworkComponent::OnInitialized() {
     if (_authLevel == AUTHORITATIVE) {
         NetworkSystem::Instance()->SpawnEntityOnClients(this);

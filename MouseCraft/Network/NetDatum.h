@@ -177,6 +177,15 @@ public:
     const bool IsReliable() const override { return true; }
 };
 
+class EntityDestroyDatum : public NetDatum {
+public:
+    EntityDestroyDatum(const NetworkComponent *component) : NetDatum(NetDatum::ENTITY_DESTROY) {
+        appendUInt(component->GetNetworkID());
+    }
+
+    const bool IsReliable() const override { return true; }
+};
+
 class PlayerAxisDatum : public NetDatum {
 public:
     PlayerAxisDatum(Axis2DEvent *eventData) : NetDatum(NetDatum::PLAYER_AXIS) {

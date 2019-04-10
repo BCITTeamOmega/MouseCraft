@@ -90,6 +90,10 @@ void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
     appendToPackets(EntityCreateDatum(component));
 }
 
+void NetworkSystem::DestroyEntityOnClients(NetworkComponent *component) {
+    appendToPackets(EntityCreateDatum(component));
+}
+
 void NetworkSystem::Update(float dt) {
     _tickCount += dt;
     if (_tickCount >= TICK_PERIOD) {
@@ -126,6 +130,13 @@ void NetworkSystem::Notify(EventName name, Param * params) {
     }
     default:
         break;
+    }
+}
+
+void NetworkSystem::RemoveComponent(unsigned int netID) {
+    auto comp = _componentList.find(netID);
+    if (comp != _componentList.end()) {
+        _componentList.erase(comp);
     }
 }
 
@@ -304,6 +315,15 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
 
 				_connectionList[sender].Append(AckDatum(packet->GetTick()));
 			}
+            break;
+        case NetDatum::DataType::ENTITY_DESTROY:
+            if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
+                unsigned int netID = packet->ReadUInt();
+
+                _componentList[netID]->GetEntity()->Destroy();
+
+                _connectionList[sender].Append(AckDatum(packet->GetTick()));
+            }
             break;
         case NetDatum::DataType::EVENT_TRIGGER:
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {

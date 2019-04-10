@@ -31,6 +31,8 @@ public:
 
     void AddToEntity(unsigned int parentID, Entity * entity);
     void SpawnEntityOnClients(NetworkComponent *component);
+    void DestroyEntityOnClients(NetworkComponent *component);
+    void RemoveComponent(unsigned int id);
 
     //Overrides System::Update
     void Update(float dt) override;

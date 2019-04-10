@@ -18,6 +18,7 @@ public:
     };
 
     NetworkComponent(unsigned int netID, NetAuthority auth) : _netID(netID), _authLevel(auth) { }
+    ~NetworkComponent();
 
 	void OnInitialized() override;
 
