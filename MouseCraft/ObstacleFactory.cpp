@@ -128,27 +128,18 @@ Entity * ObstacleFactory::CreateSimulated(OBSTACLES type, glm::vec3 position, bo
 Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::vector<unsigned int>* netIds)
 {
 	auto e = EntityManager::Instance().Create();
-	Renderable* c_render = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	
+	Component* c_render = nullptr; // ComponentManager<Renderable>::Instance().Create<Renderable>();
 	PhysicsComponent* c_phys;
 	HealthComponent* c_health = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
-
-	if (netIds)
-	{
-		auto c_net = NetworkSystem::Instance()->CreateComponent();
-		netIds->push_back(c_net->GetNetworkID());
-		e->AddComponent(c_net);
-	}
-	else
-	{
-		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
-	}
+	NetworkComponent* c_net = NetworkSystem::Instance()->CreateComponent();
 
 	switch (type)
 	{
 	case BOOK:
 	{
-		c_render->setModel(*_bookModel);
-		c_render->setColor(Color(0.24f, 0.0f, 0.0f));
+		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/book_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/book_renderable.json"} });
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
 		e->AddComponent(c_obs);
@@ -156,8 +147,8 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	}
 	case YARNBALL:
 	{
-		c_render->setModel(*_ballModel);
-		c_render->setColor(Color(1.0, 0.5, 0.5));
+		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/ball_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/ball_renderable.json"} });
 		c_phys = PhysicsManager::instance()->createObject(pos.x, pos.z, 5, 5, 0, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		YarnBall* c_ball = ComponentManager<UpdatableComponent>::Instance().Create<YarnBall>();
 		e->AddComponent(c_ball);
@@ -165,37 +156,31 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	}
 	case VASE:
 	{
-		auto fieldModel = ModelGen::makeCube(15, 0.1, 15);
-		c_render->setModel(*fieldModel);
-		c_render->setColor(Color(0.0, 0.0, 1.0));
-		c_render->SetEnabled(false);	// this is the field 
+		// base entity is field 
+		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/vase_field_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/vase__field_renderable.json"} });
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
-		
 		Vase* c_vase = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
 		e->AddComponent(c_vase);
 
+		// child entity is vase model (so we can rotate without affecting parent)
 		auto e_vaseModel = EntityManager::Instance().Create();
-		auto c_vaseRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_vaseRender->setModel(*_cylinderModel);
-		c_vaseRender->setColor(Color(0.0, 1.0, 0.0));
+		Component* c_vaseRender = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/vase_renderable.json");
 		e_vaseModel->AddComponent(c_vaseRender);
-		e->AddChild(e_vaseModel);
+		NetworkComponent* c_vaseNet = NetworkSystem::Instance()->CreateComponent();
+		c_vaseNet->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/vase_renderable.json"} });
+		e_vaseModel->AddComponent(c_vaseNet);
 
+		// bindings
+		e->AddChild(e_vaseModel);
 		c_vase->visualsEntity = e_vaseModel;
-		
-		if (netIds)
-		{
-			auto c_net = NetworkSystem::Instance()->CreateComponent();
-			netIds->push_back(c_net->GetNetworkID());
-			e_vaseModel->AddComponent(c_net);
-		}
 		
 		break;
 	}
 	case BOX:
 	{
-		c_render->setModel(*_boxModel);
-		c_render->setColor(Color(1.0, 1.0, 1.0));
+		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/box_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/box_renderable.json"} });
 
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 10, 10, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Obstruction* c_obs = ComponentManager<UpdatableComponent>::Instance().Create<Obstruction>();
@@ -206,31 +191,25 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	}
 	case LAMP:
 	{	
+		// base entity is field 
 		auto fieldModel = ModelGen::makeCube(15, 0.1, 15);
-		c_render->setModel(*fieldModel);
-		c_render->setColor(Color(1.0, 1.0, 0.0));
-		c_render->SetEnabled(false);	// this is the field 
+		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/lamp_field_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/lamp_field_renderable.json"} });
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Lamp* c_lamp = ComponentManager<UpdatableComponent>::Instance().Create<Lamp>();
 		e->AddComponent(c_lamp);
 
-		// this is the lamp visual
+		// child entity is lamp model (so we can rotate without affecting parent)
 		auto e_lampModel = EntityManager::Instance().Create();
-		auto c_lampRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_lampRender->setModel(*_lampModel);
-		c_lampRender->setColor(Color(0.63f, 0.32f, 0.18f));
+		Component* c_lampRender = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/lamp_renderable.json");
 		e_lampModel->AddComponent(c_lampRender);
+		NetworkComponent* c_lampNet = NetworkSystem::Instance()->CreateComponent();
+		c_lampNet->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/lamp_renderable.json"} });
+		e_lampModel->AddComponent(c_lampNet);
+
+		// bindings 
 		e->AddChild(e_lampModel);
-
 		c_lamp->visualsEntity = e_lampModel;
-
-		if (netIds)
-		{
-			auto c_net = NetworkSystem::Instance()->CreateComponent();
-			netIds->push_back(c_net->GetNetworkID());
-			e_lampModel->AddComponent(c_net);
-		}
-
 		break;
 	}
 	default:
@@ -242,6 +221,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	e->AddComponent(c_render);
 	e->AddComponent(c_phys);
 	e->AddComponent(c_health);
+	e->AddComponent(c_net);
 
 	c_phys->initPosition();
 

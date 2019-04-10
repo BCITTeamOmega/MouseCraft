@@ -5,6 +5,10 @@
 #include <queue>
 #include "NetState.h"
 
+#include "../json.hpp"
+#include "../Loading/PrefabLoader.h"
+using json = nlohmann::json;
+
 class NetworkComponent : public Component {
 public:
     enum NetAuthority {
@@ -14,11 +18,21 @@ public:
 
     NetworkComponent(unsigned int netID, NetAuthority auth) : _netID(netID), _authLevel(auth) { }
 
+	// TODO: please reivew implementation
+	virtual void OnInitialized() override;
+
     unsigned int GetNetworkID() const { return _netID; }
     const NetState & GetLastState() const { return _lastState; }
-    const std::string & GetComponentData() const { return _componentData; }
+	
+	// TODO: please review implementation
+	const std::string GetComponentData() const;
+	void AddComponentData(std::string& json);
+	void AddComponentData(json json);
+	void SetComponentData(json json);
 
-    void SetComponentData(std::string & json) { _componentData = json; }
+	// TODO: may want to move this into the system
+	// Called by clients. Reconstructs all the components this entity should have. 
+	void ConstructComponents();
 
     bool CheckDiff(unsigned short currTick) {
         if (!moreRecent(currTick))
@@ -41,7 +55,7 @@ private:
         return (tick > _lastState.tick || (_lastState.tick - tick) > USHRT_MAX / 2);
     }
 
-    std::string _componentData;
+	json _componentData;
     NetState _lastState;
     unsigned int _netID;
     NetAuthority _authLevel;
