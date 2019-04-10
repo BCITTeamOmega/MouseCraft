@@ -53,13 +53,13 @@ PhysicsComponent* PhysicsComponent::rayCheck(std::set<PhysObjectType::PhysObject
 	return PhysicsManager::instance()->rayCheck(this, toCheck, p1, p2, hit);
 }
 
-void PhysicsComponent::jump()
+void PhysicsComponent::jump(float upVel, float forwardVel)
 {
-	zVelocity = JUMP_VELOCITY;
+	zVelocity = upVel;
 	isJumping = true;
 
 	stopMoving.Notify();
-	velocity = GetEntity()->transform.getWorldForward2D() * AUTO_VELOCITY;
+	velocity = GetEntity()->transform.getWorldForward2D() * forwardVel;
 }
 
 void PhysicsComponent::fall()
@@ -68,8 +68,9 @@ void PhysicsComponent::fall()
 	isFalling = true;
 	
 	stopMoving.Notify();
+
 	if (velocity.x != 0 || velocity.y != 0)
-		velocity = velocity * (1.0f/velocity.length()) * AUTO_VELOCITY;
+		velocity = velocity * (1.0f/velocity.length()) * FALL_FORWARD_VELOCITY;
 }
 
 void PhysicsComponent::landed()
@@ -126,7 +127,7 @@ void PhysicsComponent::removeFromGrid()
 
 Component* PhysicsComponent::Create(json json)
 {
-	/*std::string physType = json["physType"].get<std::string>();
+	std::string physType = json["physType"].get<std::string>();
 	PhysObjectType::PhysObjectType properType = PhysObjectType::NOTHING;
 
 	if (physType == "OBSTACLE_UP")
@@ -152,11 +153,32 @@ Component* PhysicsComponent::Create(json json)
 	else if (physType == "MOUSE_UP")
 		properType = PhysObjectType::MOUSE_UP;
 	else if (physType == "MOUSE_DOWN")
-		properType = PhysObjectType::MOUSE_DOWN;*/
+		properType = PhysObjectType::MOUSE_DOWN;
+
+	switch (properType)
+	{
+	case PhysObjectType::OBSTACLE_UP:
+	case PhysObjectType::OBSTACLE_DOWN:
+	case PhysObjectType::CONTRAPTION_UP:
+	case PhysObjectType::CONTRAPTION_DOWN:
+	case PhysObjectType::PLATFORM:
+	case PhysObjectType::PART:
+		return PhysicsManager::instance()->createGridObject(json["xPos"].get<float>(), json["yPos"].get<float>(),
+			json["width"].get<int>(), json["height"].get<float>(), properType);
+		break;
+	case PhysObjectType::PROJECTILE_UP:
+	case PhysObjectType::PROJECTILE_DOWN:
+	case PhysObjectType::CAT_UP:
+	case PhysObjectType::CAT_DOWN:
+	case PhysObjectType::MOUSE_UP:
+	case PhysObjectType::MOUSE_DOWN:
+		return PhysicsManager::instance()->createObject(json["xPos"].get<float>(), json["yPos"].get<float>(),
+			json["width"].get<float>(), json["height"].get<float>(), json["rotation"].get<float>(), properType);
+		break;
+	}
 	
-	auto c = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::MOUSE_DOWN);
-	return c;
+	return nullptr;
 }
 
 // !!! which key you want to load 
-PrefabRegistrar PhysicsComponent::reg("TestComponent1", &PhysicsComponent::Create);
+PrefabRegistrar PhysicsComponent::reg("PhysicsComponent", &PhysicsComponent::Create);
