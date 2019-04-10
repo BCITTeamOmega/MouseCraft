@@ -72,6 +72,4 @@ void PickupSpawner::Spawn()
 	}
 
 	OmegaEngine::Instance().AddEntity(entity);
-
-	std::cout << "Spawning new pickup at " << pos.x << "," << pos.z << std::endl;
 }
