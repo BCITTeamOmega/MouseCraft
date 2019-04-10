@@ -3,7 +3,7 @@
 #include "HealthComponent.h"
 
 const int Obstruction::BOX_SIZE = 10;
-const int Obstruction::BOOK_SIZE = 5;
+const int Obstruction::BOOK_SIZE = 4;
 
 Obstruction::Obstruction() : 
 	HandleMouseCollide(this, &Obstruction::OnMouseCollide)
@@ -42,28 +42,33 @@ void Obstruction::HitByCat(Vector2D dir)
 	// now check 
 	auto ntl = new Vector2D(newPos - halfsize);
 	auto nbr = new Vector2D(newPos + halfsize);
-	auto hits = grid->objectsInArea(ntl, nbr);
-
-	std::cout << "OBSTRUCTION CHECKING" << std::endl;
-	std::cout << "original: " << pos.x << "," << pos.y << " attempt: " << newPos.x << "," << newPos.y << std::endl;
-	std::cout << "tl: " << ntl->x << "," << ntl->y << " br: " << nbr->x << "," << nbr->y << std::endl;
-
-	if (hits)
-	{
-		for (auto pc : *hits)
-		{
-			auto p = pc->GetEntity()->transform.getWorldPosition2D();
-			b2Vec2 foo = pc->body->GetPosition();
-			std::cout << "hit something at " << foo.x << "," << foo.y << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << "no hits" << std::endl;
-	}
+	// auto hits = grid->objectsInArea(ntl, nbr);
 
 	bool stop = false;
-	if (hits)
+	auto results = PhysicsManager::instance()->areaCheck(_physics, ntl, nbr);
+	for (auto pc : results)
+	{
+		if (pc == _physics)
+			continue;
+
+		if (_physics->isUp)
+		{
+			if (pc->pType == PhysObjectType::OBSTACLE_UP || pc->pType == PhysObjectType::WALL || pc->pType == PhysObjectType::MOUSE_UP)
+			{
+				stop = true;
+				break;
+			}
+		}
+		else
+		{
+			if (pc->pType == PhysObjectType::PLATFORM || pc->pType == PhysObjectType::OBSTACLE_DOWN || pc->pType == PhysObjectType::WALL || pc->pType == PhysObjectType::MOUSE_DOWN)
+			{
+				stop = true;
+				break;
+			}
+		}
+	}
+	/*if (hits)
 	{
 		for (auto pc : *hits)
 		{
@@ -89,7 +94,7 @@ void Obstruction::HitByCat(Vector2D dir)
 	else
 	{
 		stop = true;
-	}
+	}*/
 
 	if (stop)
 	{
@@ -99,8 +104,8 @@ void Obstruction::HitByCat(Vector2D dir)
 	else
 	{
 		// hell yea, knock this chonk over there 
-		for (auto pc : *hits)
-			if (pc)
+		for (auto pc : results)
+			if (pc != _physics && pc->pType != PhysObjectType::WALL && pc->pType != PhysObjectType::PLATFORM)
 				pc->GetEntity()->Destroy();
 		grid->createArea(*ntl, *nbr, _physics, _physics->pType);
 		_physics->moveBody(&newPos, 0);
