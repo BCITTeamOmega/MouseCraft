@@ -157,7 +157,7 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 
     //check if we hit something
     if (results.size() > 0) {
-        //Play a sound on hit here?
+        
 
 		for (auto& p : results)
 		{
@@ -165,6 +165,12 @@ void Cat::CheckHitbox(PhysicsComponent* pComp) {
 			{
 				// mouse 
 				std::cout << "INFO: Cat hit a mouse!" << std::endl;
+                
+                //play mouse hit sound
+                GetEntity()->GetComponent<SoundComponent>()->ChangeSound(SoundsList::Squeak); //set sound to swipe
+                auto targetPos = p->GetEntity()->transform.getWorldPosition(); //get mouse current position
+                GetEntity()->GetComponent<SoundComponent>()->PlaySound(targetPos.x, targetPos.y, targetPos.z); //play sound
+
 				HealthComponent* hp = p->GetEntity()->GetComponent<HealthComponent>();
 
 				if(hp->GetHealth() > 0)

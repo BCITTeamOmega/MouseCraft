@@ -33,6 +33,11 @@ Sound::Sound() {
     alListenerf(AL_GAIN, 0.5); //set the default volume
 }
 
+// Helper that adjusts source volume
+void Sound::changeSoundVolume(ALuint source, float volume) {
+    alSourcef(source, AL_GAIN, volume);
+}
+
 //clean up step. Undo Start up
 Sound::~Sound(){
     alcDestroyContext(Context);
