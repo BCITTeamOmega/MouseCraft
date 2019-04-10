@@ -4,6 +4,8 @@
 #include "../Input/InputSystem.h"
 #include "NetState.h"
 #include <algorithm>
+#include <string>
+#include "NetworkComponent.h"
 
 constexpr size_t MAX_DATUM_SIZE = 128;
 
@@ -16,6 +18,8 @@ public:
         HOST_INFO_REQUEST = 0x03,
         HOST_INFO_RESPONSE = 0x04,
         TRANSFORM_STATE_UPDATE = 0x10,
+        ENTITY_CREATE = 0x11,
+        ENTITY_DESTROY = 0x12,
         EVENT_TRIGGER = 0x20,
         PLAYER_AXIS = 0x30,
         PLAYER_BUTTON = 0x31,
@@ -83,6 +87,15 @@ protected:
         }
     }
 
+    void appendString(const std::string str) {
+        if (MAX_DATUM_SIZE - _size > str.size() + sizeof(unsigned int)) {
+            appendUInt(str.size());
+            const char * cstr = str.c_str();
+            std::copy(cstr, cstr + str.size(), _data + _size);
+            _size += str.size();
+        }
+    }
+
     DataType _type;
 
     size_t _size;
@@ -134,6 +147,11 @@ class StateUpdateDatum : public NetDatum {
 public:
     StateUpdateDatum(unsigned int id, const NetState & state) : NetDatum(NetDatum::TRANSFORM_STATE_UPDATE) {
         appendUInt(id);
+        appendUInt(state.parentID);
+        appendBool(state.enabled);
+
+        appendUInt(state.parentID);
+        appendBool(state.enabled);
 
         appendFloat(state.pos.x);
         appendFloat(state.pos.y);
@@ -149,6 +167,16 @@ public:
     }
 
     const bool IsReliable() const override { return false; }
+};
+
+class EntityCreateDatum : public NetDatum {
+public:
+    EntityCreateDatum(const NetworkComponent *component) : NetDatum(NetDatum::ENTITY_CREATE) {
+        appendUInt(component->GetNetworkID());
+        appendString(component->GetComponentData());
+    }
+
+    const bool IsReliable() const override { return true; }
 };
 
 class PlayerAxisDatum : public NetDatum {

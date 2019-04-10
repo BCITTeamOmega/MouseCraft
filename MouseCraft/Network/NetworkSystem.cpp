@@ -4,6 +4,7 @@
 #include "../Input/InputSystem.h"
 #include "../Core/OmegaEngine.h"
 #include "../ClientScene.h"
+#include "NetState.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -29,7 +30,7 @@ NetworkComponent * NetworkSystem::CreateComponent() {
 
     do {
         id = dist(eng);
-    } while (_componentList.find(id) != _componentList.end());
+    } while (_componentList.find(id) != _componentList.end() && id == 0);
 
     return CreateComponent(id);
 }
@@ -75,6 +76,18 @@ void NetworkSystem::SearchForServers() {
 
 void NetworkSystem::SetHost() {
     _role = Role::HOST;
+}
+
+void NetworkSystem::AddToEntity(unsigned int parentID, Entity * entity) {
+    if (_componentList.find(parentID) != _componentList.end()) {
+        entity->SetParent(_componentList[parentID]->GetEntity());
+    } else {
+        entity->SetParent(OmegaEngine::Instance().GetRoot());
+    }
+}
+
+void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
+    appendToPackets(EntityCreateDatum(component));
 }
 
 void NetworkSystem::Update(float dt) {
@@ -251,6 +264,9 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 // Update state of NetworkComponents
                 unsigned int componentID = packet->ReadUInt();
 
+                unsigned int parent = packet->ReadUInt();
+                bool enabled = packet->ReadByte();
+
                 float posX = packet->ReadFloat();
                 float posY = packet->ReadFloat();
                 float posZ = packet->ReadFloat();
@@ -263,11 +279,28 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 float sclY = packet->ReadFloat();
                 float sclZ = packet->ReadFloat();
 
+                NetState newState = {0, parent, enabled, glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(sclX, sclY, sclZ) };
+
                 if (_componentList.find(componentID) != _componentList.end()) {
-                    _componentList[componentID]->StateUpdate(glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(sclX, sclY, sclZ));
+                    _componentList[componentID]->StateUpdate(newState);
                 } else {
                     cout << "State update from unknown component " << componentID << endl;
                 }
+            }
+            break;
+        case NetDatum::DataType::ENTITY_CREATE:
+            if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
+                unsigned int netID = packet->ReadUInt();
+                std::string componentData = packet->ReadString();
+                
+                Entity *newEntity = EntityManager::Instance().Create();
+                NetworkComponent *newComponent = ComponentManager<NetworkComponent>::Instance().Create<NetworkComponent, unsigned int, NetworkComponent::NetAuthority>(netID, NetworkComponent::NetAuthority::SIMULATED);
+                newEntity->AddComponent(newComponent);
+
+                newComponent->AddComponentData(componentData);
+                newComponent->ConstructComponents();
+
+                OmegaEngine::Instance().GetRoot()->AddChild(newEntity);
             }
             break;
         case NetDatum::DataType::EVENT_TRIGGER:

@@ -29,6 +29,9 @@ public:
     void SearchForServers();
     void SetHost();
 
+    void AddToEntity(unsigned int parentID, Entity * entity);
+    void SpawnEntityOnClients(NetworkComponent *component);
+
     //Overrides System::Update
     void Update(float dt) override;
 
