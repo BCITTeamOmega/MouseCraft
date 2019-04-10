@@ -91,7 +91,7 @@ void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
 }
 
 void NetworkSystem::DestroyEntityOnClients(NetworkComponent *component) {
-    appendToPackets(new EntityCreateDatum(component));
+    appendToPackets(new EntityDestroyDatum(component));
 }
 
 void NetworkSystem::Update(float dt) {

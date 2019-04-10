@@ -158,7 +158,7 @@ Entity * ObstacleFactory::Create(OBSTACLES type, glm::vec3 pos, bool isUp, std::
 	{
 		// base entity is field 
 		c_render = PrefabLoader::LoadComponent("res/prefabs/components/obstacles/vase_field_renderable.json");
-		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/vase__field_renderable.json"} });
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/obstacles/vase_field_renderable.json"} });
 		c_phys = PhysicsManager::instance()->createGridObject(pos.x, pos.z, 5, 5, isUp ? PhysObjectType::OBSTACLE_UP : PhysObjectType::OBSTACLE_DOWN);
 		Vase* c_vase = ComponentManager<UpdatableComponent>::Instance().Create<Vase>();
 		e->AddComponent(c_vase);
