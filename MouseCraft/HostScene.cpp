@@ -306,15 +306,10 @@ void HostScene::InitScene() {
 
     HealthComponent* catHealth = ComponentManager<HealthComponent>::Instance().Create<HealthComponent>();
 	catHealth->SetHealth(CAT_HEALTH);
-    catEntity->AddComponent(catHealth);
+	catEntity->AddComponent(catHealth);
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
-    catEntity->AddComponent(catJumpSound);
-
-	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
-	catOutline->setWidth(0.2f);
-	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
-	catEntity->AddComponent(catOutline);
+	catEntity->AddComponent(catJumpSound);
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
@@ -361,6 +356,27 @@ void HostScene::InitScene() {
 	healthDisplayController->setHealthUI(healthImg);
 	healthDisplayController->setWatchingHealthComponent(catHealth);
 	healthUIEntity->AddComponent(healthDisplayController);
+
+	//Add outlines to the player entities
+	OutlineComponent* catOutline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	catOutline->setWidth(0.2f);
+	catOutline->setColor(Color(0.0f, 0.0f, 0.0f));
+	catEntity->AddComponent(catOutline);
+
+	OutlineComponent* mouse1Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse1Outline->setWidth(0.2f);
+	mouse1Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse1Entity->AddComponent(mouse1Outline);
+
+	OutlineComponent* mouse2Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse2Outline->setWidth(0.2f);
+	mouse2Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse2Entity->AddComponent(mouse2Outline);
+
+	OutlineComponent* mouse3Outline = ComponentManager<OutlineComponent>::Instance().Create<OutlineComponent>();
+	mouse3Outline->setWidth(0.2f);
+	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
+	mouse3Entity->AddComponent(mouse3Outline);
 
     //Don't forget the stupid teapots
     Entity* teapotEntity = PrefabLoader::LoadPrefab("res/prefabs/pot_army.json");
