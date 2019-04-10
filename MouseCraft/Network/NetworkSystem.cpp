@@ -87,11 +87,11 @@ void NetworkSystem::AddToEntity(unsigned int parentID, Entity * entity) {
 }
 
 void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
-    appendToPackets(new EntityCreateDatum(component));
+//    appendToPackets(new EntityCreateDatum(component));
 }
 
 void NetworkSystem::DestroyEntityOnClients(NetworkComponent *component) {
-    appendToPackets(new EntityDestroyDatum(component));
+//    appendToPackets(new EntityDestroyDatum(component));
 }
 
 void NetworkSystem::Update(float dt) {
@@ -228,7 +228,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].Append(new ConnAccDatum(_tickNum));
                 for (auto comp : _componentList) {
 					if (comp.first > 5) {
-						_connectionList[sender].Append(new EntityCreateDatum(comp.second));
+						//_connectionList[sender].Append(new EntityCreateDatum(comp.second));
 					}
                 }
 				_componentList[liveConnections()]->GetEntity()->SetEnabled(true);
