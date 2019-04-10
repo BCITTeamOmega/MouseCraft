@@ -435,6 +435,9 @@ void HostScene::InitScene() {
 	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
 	mouse3Entity->AddComponent(mouse3Anim);
 
+	auto doorEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/door.json");
+	root.AddChild(doorEntity);
+
     root.AddChild(mouse1Entity);
     root.AddChild(mouse2Entity);
     root.AddChild(mouse3Entity);
