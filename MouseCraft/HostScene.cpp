@@ -46,6 +46,8 @@ void HostScene::InitScene() {
 	Entity* tableEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/table.json");
 	Entity* couchEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/couch.json");
     Entity* catstandEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/catstand.json");
+	Entity* bobRossEntity = EntityManager::Instance().Create();
+	bobRossEntity->transform.setLocalPosition(glm::vec3(0, 6, 65));
     Entity* northWallEntity = EntityManager::Instance().Create();
 	Entity* southWallEntity = EntityManager::Instance().Create();
     Entity* westWallEntity = EntityManager::Instance().Create();
@@ -77,6 +79,7 @@ void HostScene::InitScene() {
     Model* catstandModel = ModelGen::makeCube(15, 5, 15);
     Model* horizWallModel = ModelGen::makeCube(110, 10, 5);
     Model* vertWallModel = ModelGen::makeCube(5, 10, 85);
+	Model* bobRossModel = ModelGen::makeCube(0.1, 3, 5);
     //Obstacle Models
     Model* ball = ModelLoader::loadModel("res/models/test/teapot.obj"); // ball temp
     Model* cylinder = ModelLoader::loadModel("res/models/test/Cylinder.obj"); // vase / lamp temp
@@ -89,9 +92,11 @@ void HostScene::InitScene() {
     std::string* woodTex = new std::string("res/textures/wood.png");
 	std::string* boxTex = new std::string("res/textures/blank.bmp");
 	std::string* recipeTex = new std::string("res/textures/recipe_UI.png");
+	std::string* bobRossTex = new std::string("res/textures/bob_ross.png");
     floorModel->setTexture(woodTex);
     horizWallModel->setTexture(woodTex);
     vertWallModel->setTexture(woodTex);
+	bobRossModel->setTexture(bobRossTex);
 
     //Create the camera
     Camera* cam = ComponentManager<Camera>::Instance().Create<Camera>();
@@ -191,6 +196,11 @@ void HostScene::InitScene() {
     eastWallRend->setModel(*vertWallModel);
     eastWallRend->setColor(Color(1.0, 0.5, 0.0));
     eastWallEntity->AddComponent(eastWallRend);
+
+	Renderable* bobRossRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	bobRossRend->setModel(*bobRossModel);
+	bobRossRend->setColor(Color(1.0, 1.0, 1.0));
+	bobRossEntity->AddComponent(bobRossRend);
 
     //Create PhysicsManager and tell it how big the world is
     PhysicsManager::instance()->setupGrid(100, 75, 5);
@@ -399,12 +409,12 @@ void HostScene::InitScene() {
 	healthUIEntity->AddComponent(healthDisplayController);
 
 	//Contraption Recipe UI
-	ImageComponent* recipeBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 19.0f, 34.0f, 0.81f, 0.33f);
-	recipeBackImg->color = Color(0.04f, 0.04f, 0.04f, 0.4f);
+	ImageComponent* recipeBackImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*boxTex, 18.0f, 34.0f, 0.81f, 0.33f);
+	recipeBackImg->color = Color(0.6f, 0.6f, 0.6f, 0.4f);
 	recipeBackImg->zForce = 0.2;
 	recipeUIEntity->AddComponent(recipeBackImg);
 
-	ImageComponent* recipeUIImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*recipeTex, 96.0f, 96.0f, 0.005f, 0.005f);
+	ImageComponent* recipeUIImg = ComponentManager<UIComponent>::Instance().Create<ImageComponent>(*recipeTex, 100.0f, 96.0f, 0.0f, 0.01f);
 	//recipeUIImg->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 	recipeUIImg->zForce = 0.19;
 	recipeUIImgEntity->AddComponent(recipeUIImg);
@@ -493,9 +503,7 @@ void HostScene::InitScene() {
     root.AddChild(light2Entity);
 	root.AddChild(healthUIEntity);
 	root.AddChild(recipeUIEntity);
-	//root.AddChild(teapotEntity);
-	//root.AddChild(jumpingTeapot);
-	//root.AddChild(jumpingTeapot2);
+	root.AddChild(bobRossEntity);
 
 }
 
