@@ -4,6 +4,8 @@
 #include "../Input/InputSystem.h"
 #include "NetState.h"
 #include <algorithm>
+#include <string>
+#include "NetworkComponent.h"
 
 constexpr size_t MAX_DATUM_SIZE = 128;
 
@@ -16,6 +18,8 @@ public:
         HOST_INFO_REQUEST = 0x03,
         HOST_INFO_RESPONSE = 0x04,
         TRANSFORM_STATE_UPDATE = 0x10,
+        ENTITY_CREATE = 0x11,
+        ENTITY_DESTROY = 0x12,
         EVENT_TRIGGER = 0x20,
         PLAYER_AXIS = 0x30,
         PLAYER_BUTTON = 0x31,
@@ -83,6 +87,15 @@ protected:
         }
     }
 
+    void appendString(const std::string str) {
+        if (MAX_DATUM_SIZE - _size > str.size() + sizeof(unsigned int)) {
+            appendUInt(str.size());
+            const char * cstr = str.c_str();
+            std::copy(cstr, cstr + str.size(), _data + _size);
+            _size += str.size();
+        }
+    }
+
     DataType _type;
 
     size_t _size;
@@ -135,6 +148,9 @@ public:
     StateUpdateDatum(unsigned int id, const NetState & state) : NetDatum(NetDatum::TRANSFORM_STATE_UPDATE) {
         appendUInt(id);
 
+		appendUInt(state.parentID);
+        appendBool(state.enabled);
+
         appendFloat(state.pos.x);
         appendFloat(state.pos.y);
         appendFloat(state.pos.z);
@@ -151,6 +167,51 @@ public:
     const bool IsReliable() const override { return false; }
 };
 
+class EntityCreateDatum : public NetDatum {
+public:
+    EntityCreateDatum(const NetworkComponent *component) : NetDatum(NetDatum::ENTITY_CREATE) {
+        appendUInt(component->GetNetworkID());
+
+        Entity *entity = component->GetEntity();
+        
+        unsigned int parentID = 0;
+        Entity *parent = entity->GetParent();
+        if (parent != nullptr) {
+            NetworkComponent * comp = parent->GetComponent<NetworkComponent>();
+            if (comp != nullptr)
+                parentID = comp->GetNetworkID();
+        }
+
+        appendUInt(parentID);
+        appendBool(entity->GetEnabled());
+
+        appendFloat(entity->transform.getLocalPosition().x);
+        appendFloat(entity->transform.getLocalPosition().y);
+        appendFloat(entity->transform.getLocalPosition().z);
+
+        appendFloat(entity->transform.getLocalRotation().x);
+        appendFloat(entity->transform.getLocalRotation().y);
+        appendFloat(entity->transform.getLocalRotation().z);
+
+        appendFloat(entity->transform.getLocalScale().x);
+        appendFloat(entity->transform.getLocalScale().y);
+        appendFloat(entity->transform.getLocalScale().z);
+
+        appendString(component->GetComponentData());
+    }
+
+    const bool IsReliable() const override { return true; }
+};
+
+class EntityDestroyDatum : public NetDatum {
+public:
+    EntityDestroyDatum(const NetworkComponent *component) : NetDatum(NetDatum::ENTITY_DESTROY) {
+        appendUInt(component->GetNetworkID());
+    }
+
+    const bool IsReliable() const override { return true; }
+};
+
 class PlayerAxisDatum : public NetDatum {
 public:
     PlayerAxisDatum(Axis2DEvent *eventData) : NetDatum(NetDatum::PLAYER_AXIS) {
@@ -165,8 +226,8 @@ public:
 class PlayerButtonDatum : public NetDatum {
 public:
     PlayerButtonDatum(ButtonEvent *eventData) : NetDatum(NetDatum::PLAYER_BUTTON) {
+		appendInt(eventData->button);
         appendBool(eventData->isDown);
-        appendInt(eventData->button);
     }
 
     const bool IsReliable() const override { return false; }

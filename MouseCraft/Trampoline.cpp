@@ -22,7 +22,7 @@ bool Trampoline::use(Mouse* m) {
 
 	GetEntity()->transform.setLocalPosition(pos);
 	GetEntity()->SetParent(OmegaEngine::Instance().GetRoot());
-	fieldEntity->SetEnabled(true);
+	// fieldEntity->SetEnabled(true);
 
 	_isPlaced = true;
 
