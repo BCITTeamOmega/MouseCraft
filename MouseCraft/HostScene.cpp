@@ -506,9 +506,14 @@ void HostScene::InitScene() {
 	//root.AddChild(jumpingTeapot);
 	//root.AddChild(jumpingTeapot2);
 
+    /*
+    Leaving mice enabled on release build for local play
+
+    // Disable mice on start, to enable when players connect
 	mouse1Entity->SetEnabled(false);
 	mouse2Entity->SetEnabled(false);
 	mouse3Entity->SetEnabled(false);
+    */
 }
 
 void HostScene::CleanUp() {

@@ -67,7 +67,7 @@ void NetworkSystem::RequestConnection(const Address & address) {
     _connectionList[address].Append(new ConnReqDatum());
 }
 
-void NetworkSystem::SearchForServers() {
+void NetworkSystem::SearchForServers() { // Requests info from all computers on local network
     PacketData data;
     data.Append(new InfoReqDatum());
     _socket.Send(_broadcast, data.GetPointer(), data.GetSize());
@@ -149,6 +149,7 @@ void NetworkSystem::serverTick() {
             processPacket(sender, &_rcv);
     }
 
+    // Append any state updates for all NetworkComponents
     if (_role == HOST) {
         for (auto component : _componentList) {
             if (component.first < 6 && component.second->CheckDiff(_tickNum)) {
@@ -227,7 +228,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].SetLive();
                 _connectionList[sender].Append(new ConnAccDatum(_tickNum));
                 for (auto comp : _componentList) {
-					if (comp.first > 5) {
+					if (comp.first > 5) { // Send all entities to newly connected players. Disabled for release build
 						//_connectionList[sender].Append(new EntityCreateDatum(comp.second));
 					}
                 }
@@ -276,7 +277,7 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
         case NetDatum::DataType::TRANSFORM_STATE_UPDATE:
             //cout << "Received State Update from " << sender << endl;
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
-                // Update state of NetworkComponents
+                // Update state of NetworkComponent
                 unsigned int componentID = packet->ReadUInt();
 
                 unsigned int parent = packet->ReadUInt();
