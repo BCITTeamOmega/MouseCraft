@@ -1,0 +1,109 @@
+{
+	"pos": [60,0,60],
+	"scl": [1,1,1],
+	"rot": [0,0,0],
+  "entities": [
+    {
+      "pos": [-10,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Renderable",
+          "model_path": "res/models/test/teapot.obj",
+          "texture_path": "res/models/test/blank.bmp",
+          "color":
+          {
+            "r":1.0,
+            "g":0.0,
+            "b":0.0
+          }
+        }
+      ]
+    },
+    {
+      "pos": [-5,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Renderable",
+          "model_path": "res/models/test/teapot.obj",
+          "texture_path": "res/models/test/blank.bmp",
+          "color":
+          {
+            "r":1.0,
+            "g":0.0,
+            "b":0.0
+          }
+        }
+      ]
+    },
+    {
+      "pos": [0,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Renderable",
+          "model_path": "res/models/test/teapot.obj",
+          "texture_path": "res/models/test/blank.bmp",
+          "color":
+          {
+            "r":1.0,
+            "g":0.0,
+            "b":0.0
+          }
+        }
+      ]
+    },
+    {
+      "pos": [5,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Renderable",
+          "model_path": "res/models/test/teapot.obj",
+          "texture_path": "res/models/test/blank.bmp",
+          "color":
+          {
+            "r":1.0,
+            "g":0.0,
+            "b":0.0
+          }
+        }
+      ]
+    },
+    {
+      "pos": [10,0,0],
+      "scl": [1,1,1],
+      "rot": [0,0,0],
+      "entities": [
+      ],
+      "components": [
+        {
+          "type": "Renderable",
+          "model_path": "res/models/test/teapot.obj",
+          "texture_path": "res/models/test/blank.bmp",
+          "color":
+          {
+            "r":1.0,
+            "g":0.0,
+            "b":0.0
+          }
+        }
+      ]
+    }
+  ],
+  "components": [
+  ]
+}

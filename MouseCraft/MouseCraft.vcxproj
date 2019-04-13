@@ -76,12 +76,19 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Documents\School\COMP8851\MouseCraft\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D _SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\Documents\School\COMP8851\MouseCraft\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;glew32s.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x86\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -89,7 +96,20 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D _SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;Box2D.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -99,11 +119,21 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x86-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;Box2D.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)bin\libs-x32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -113,39 +143,261 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;SDL2.lib;Box2D.lib;SDL2main.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)\bin\libs-x64\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)\res" "$(TargetDir)\res\" /D /K /E /Y
+XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EventManager\EventManager.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ClientScene.cpp" />
+    <ClCompile Include="ContraptionSystem.cpp" />
+    <ClCompile Include="DamageOnCollision.cpp" />
+    <ClCompile Include="Event\Handler.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\FrameBufferObject.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\UniformBufferObject.cpp" />
+    <ClCompile Include="Graphics\GLTexture.cpp" />
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Coil.cpp" />
+    <ClCompile Include="Contraption.cpp" />
+    <ClCompile Include="Cat.cpp" />
+    <ClCompile Include="ContraptionFactory.cpp" />
+    <ClCompile Include="DebugColliderComponent.cpp" />
+    <ClCompile Include="DebugColliderSystem.cpp" />
+    <ClCompile Include="Event\Observer.cpp" />
+    <ClCompile Include="Event\Subject.cpp" />
+    <ClCompile Include="Graphics\Camera.cpp" />
+    <ClCompile Include="Core\Component.cpp" />
+    <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\Handle.cpp" />
+    <ClCompile Include="Core\System.cpp" />
+    <ClCompile Include="Core\Task.cpp" />
+    <ClCompile Include="Core\TaskScheduler.cpp" />
+    <ClCompile Include="Core\Transform.cpp" />
+    <ClCompile Include="Core\OmegaEngine.cpp" />
+    <ClCompile Include="Core\EntityManager.cpp" />
+    <ClCompile Include="Core\Example\ExampleComponent.cpp" />
+    <ClCompile Include="Core\Example\ExampleSystem.cpp" />
+    <ClCompile Include="Core\Example\ExampleSystemComponent.cpp" />
+    <ClCompile Include="Core\Example\ExampleUpdatableComponent.cpp" />
+    <ClCompile Include="Core\Vector2D.cpp" />
+    <ClCompile Include="GL\glad.c" />
+    <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="Graphics\GLTextureArray.cpp" />
+    <ClCompile Include="Graphics\Light.cpp" />
+    <ClCompile Include="Graphics\ModelGen.cpp" />
+    <ClCompile Include="Graphics\OutlineComponent.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="HealthDisplay.cpp" />
+    <ClCompile Include="HostScene.cpp" />
+    <ClCompile Include="Input\InputSystem.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\ElementBufferObject.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VertexArrayObject.cpp" />
+    <ClCompile Include="Graphics\BufferObjects\VertexBufferObject.cpp" />
+    <ClCompile Include="Graphics\Renderable.cpp" />
+    <ClCompile Include="Graphics\RenderSystem.cpp" />
+    <ClCompile Include="Graphics\Window.cpp" />
+    <ClCompile Include="Lamp.cpp" />
+    <ClCompile Include="Loading\ImageLoader.cpp" />
+    <ClCompile Include="Loading\UILoader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Loading\SimpleParser.cpp" />
+    <ClCompile Include="Loading\ObjFileParser.cpp" />
+    <ClCompile Include="Loading\ModelLoader.cpp" />
+    <ClCompile Include="Graphics\Shader.cpp" />
+    <ClCompile Include="Core\StatusAction.cpp" />
+    <ClCompile Include="Core\Test\TestComponent.cpp" />
+    <ClCompile Include="Core\Test\TestDerivedComponent.cpp" />
+    <ClCompile Include="Core\UpdatableComponent.cpp" />
+    <ClCompile Include="MenuController.cpp" />
+    <ClCompile Include="MenuItem.cpp" />
+    <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="SoundManager\Sound.cpp" />
-    <ClCompile Include="SoundManager\SoundManager.cpp" />
-    <ClCompile Include="UIManager\ImageComponent.cpp" />
-    <ClCompile Include="UIManager\TextComponent.cpp" />
-    <ClCompile Include="UIManager\UIComponent.cpp" />
-    <ClCompile Include="UIManager\UIManager.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="ObstacleFactory.cpp" />
+    <ClCompile Include="Obstruction.cpp" />
+    <ClCompile Include="Network\NetworkComponent.cpp" />
+    <ClCompile Include="Network\NetworkSystem.cpp" />
+    <ClCompile Include="Network\PacketData.cpp" />
+    <ClCompile Include="Overcharge.cpp" />
+    <ClCompile Include="Physics\CContactListener.cpp" />
+    <ClCompile Include="Physics\PhysicsComponent.cpp" />
+    <ClCompile Include="Physics\PhysicsManager.cpp" />
+    <ClCompile Include="Pickup.cpp" />
+    <ClCompile Include="PickupFactory.cpp" />
+    <ClCompile Include="PickupSpawner.cpp" />
+    <ClCompile Include="ResourceCache.cpp" />
+    <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="Sound\TrackParams.cpp" />
+    <ClCompile Include="Trampoline.cpp" />
+    <ClCompile Include="Sound\SoundComponent.cpp" />
+    <ClCompile Include="Loading\PrefabLoader.cpp" />
+    <ClCompile Include="Swords.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
+    <ClCompile Include="TestPrefab.cpp" />
+    <ClCompile Include="TestSubObs.cpp" />
+    <ClCompile Include="TimedDestruction.cpp" />
+    <ClCompile Include="TransformAnimator.cpp" />
+    <ClCompile Include="Util\CpuProfiler.cpp" />
+    <ClCompile Include="Util\OpenGLProfiler.cpp" />
+    <ClCompile Include="Network\Address.cpp" />
+    <ClCompile Include="Network\Socket.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
+    <ClCompile Include="Sound\SoundManager.cpp" />
+    <ClCompile Include="Loading\TextLoader.cpp" />
+    <ClCompile Include="UI\ImageComponent.cpp" />
+    <ClCompile Include="UI\TextComponent.cpp" />
+    <ClCompile Include="UI\UIComponent.cpp" />
+    <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="Vase.cpp" />
+    <ClCompile Include="WorldGrid.cpp" />
+    <ClCompile Include="YarnBall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EventManager\EventManager.h" />
-    <ClInclude Include="EventManager\EventName.h" />
-    <ClInclude Include="EventManager\ISubscriber.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ClientScene.h" />
+    <ClInclude Include="Coil.h" />
+    <ClInclude Include="Contraption.h" />
+    <ClInclude Include="Cat.h" />
+    <ClInclude Include="ContraptionFactory.h" />
+    <ClInclude Include="ContraptionSystem.h" />
+    <ClInclude Include="Core\Vector2D.h" />
+    <ClInclude Include="DamageOnCollision.h" />
+    <ClInclude Include="Event\Handler.h" />
+    <ClInclude Include="Graphics\BufferObjects\FrameBufferObject.h" />
+    <ClInclude Include="Graphics\BufferObjects\UniformBufferObject.h" />
+    <ClInclude Include="Graphics\CombinedGeometry.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Graphics\GLTexture.h" />
+    <ClInclude Include="DebugColliderComponent.h" />
+    <ClInclude Include="DebugColliderSystem.h" />
+    <ClInclude Include="Event\Observer.h" />
+    <ClInclude Include="Event\Subject.h" />
+    <ClInclude Include="Graphics\Camera.h" />
+    <ClInclude Include="Event\EventManager.h" />
+    <ClInclude Include="Event\EventName.h" />
+    <ClInclude Include="Event\ISubscriber.h" />
+    <ClInclude Include="Graphics\BufferObjects\ElementBufferObject.h" />
+    <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\GLTextureArray.h" />
+    <ClInclude Include="Graphics\Image.h" />
+    <ClInclude Include="Graphics\Light.h" />
+    <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\ModelGen.h" />
+    <ClInclude Include="Graphics\OutlineComponent.h" />
+    <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="Graphics\RenderData.h" />
+    <ClInclude Include="Graphics\RenderUtil.h" />
+    <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\BufferObjects\VertexArrayObject.h" />
+    <ClInclude Include="Graphics\BufferObjects\VertexBufferObject.h" />
+    <ClInclude Include="Graphics\TextureInfo.h" />
+    <ClInclude Include="Graphics\Window.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HealthDisplay.h" />
+    <ClInclude Include="HostScene.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="Lamp.h" />
+    <ClInclude Include="Loading\ObjFileParser.h" />
+    <ClInclude Include="Loading\ModelLoader.h" />
+    <ClInclude Include="Graphics\RenderSystem.h" />
+    <ClInclude Include="Loading\SimpleParser.h" />
+    <ClInclude Include="Core\Component.h" />
+    <ClInclude Include="Core\ComponentManager.h" />
+    <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\Handle.h" />
+    <ClInclude Include="Core\RootEntity.h" />
+    <ClInclude Include="Core\System.h" />
+    <ClInclude Include="Core\Task.h" />
+    <ClInclude Include="Core\TaskScheduler.h" />
+    <ClInclude Include="Core\Transform.h" />
+    <ClInclude Include="Core\OmegaEngine.h" />
+    <ClInclude Include="Core\EntityManager.h" />
+    <ClInclude Include="Core\Example\ExampleComponent.h" />
+    <ClInclude Include="Core\Example\ExampleSystem.h" />
+    <ClInclude Include="Core\Example\ExampleSystemComponent.h" />
+    <ClInclude Include="Core\Example\ExampleUpdatableComponent.h" />
+    <ClInclude Include="GL\glad.h" />
+    <ClInclude Include="GL\khrplatform.h" />
+    <ClInclude Include="Input\InputSystem.h" />
+    <ClInclude Include="Loading\ImageLoader.h" />
+    <ClInclude Include="Loading\UILoader.h" />
     <ClInclude Include="MainScene.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SoundManager\Sound.h" />
-    <ClInclude Include="SoundManager\SoundManager.h" />
-    <ClInclude Include="SoundManager\SoundParams.h" />
-    <ClInclude Include="SoundManager\TrackParams.h" />
-    <ClInclude Include="UIManager\ImageComponent.h" />
-    <ClInclude Include="UIManager\TextComponent.h" />
-    <ClInclude Include="UIManager\UIComponent.h" />
-    <ClInclude Include="UIManager\UIManager.h" />
+    <ClInclude Include="Core\Scene.h" />
+    <ClInclude Include="Core\StatusAction.h" />
+    <ClInclude Include="Core\Test\TestComponent.h" />
+    <ClInclude Include="Core\Test\TestDerivedComponent.h" />
+    <ClInclude Include="Network\Address.h" />
+    <ClInclude Include="Network\Connection.h" />
+    <ClInclude Include="Network\NetDatum.h" />
+    <ClInclude Include="Network\NetworkComponent.h" />
+    <ClInclude Include="Network\NetworkSystem.h" />
+    <ClInclude Include="Network\PacketData.h" />
+    <ClInclude Include="Network\Socket.h" />
+    <ClInclude Include="MenuController.h" />
+    <ClInclude Include="MenuItem.h" />
+    <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MOUSECRAFT_ENUMS.h" />
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="ObstacleFactory.h" />
+    <ClInclude Include="Obstacles.h" />
+    <ClInclude Include="Obstruction.h" />
+    <ClInclude Include="OmegaTests.h" />
+    <ClInclude Include="Overcharge.h" />
+    <ClInclude Include="Physics\AreaQueryCallback.h" />
+    <ClInclude Include="Physics\CContactListener.h" />
+    <ClInclude Include="Physics\PhysicsComponent.h" />
+    <ClInclude Include="Physics\PhysicsManager.h" />
+    <ClInclude Include="Physics\PhysObjectType.h" />
+    <ClInclude Include="Loading\PrefabLoader.h" />
+    <ClInclude Include="Physics\RayQueryCallback.h" />
+    <ClInclude Include="ResourceCache.h" />
+    <ClInclude Include="Rotator.h" />
+    <ClInclude Include="Sound\SoundComponent.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Pickup.h" />
+    <ClInclude Include="PickupFactory.h" />
+    <ClInclude Include="PickupSpawner.h" />
+    <ClInclude Include="Trampoline.h" />
+    <ClInclude Include="Swords.h" />
+    <ClInclude Include="PlayerComponent.h" />
+    <ClInclude Include="TestPrefab.h" />
+    <ClInclude Include="TestSubObs.h" />
+    <ClInclude Include="TimedDestruction.h" />
+    <ClInclude Include="TransformAnimator.h" />
+    <ClInclude Include="Util\OpenGLProfiler.h" />
+    <ClInclude Include="Util\CpuProfiler.h" />
+    <ClInclude Include="Core\UpdatableComponent.h" />
+    <ClInclude Include="Sound\Sound.h" />
+    <ClInclude Include="Sound\SoundManager.h" />
+    <ClInclude Include="Sound\SoundParams.h" />
+    <ClInclude Include="Sound\TrackParams.h" />
+    <ClInclude Include="Loading\TextLoader.h" />
+    <ClInclude Include="UI\ImageComponent.h" />
+    <ClInclude Include="UI\TextComponent.h" />
+    <ClInclude Include="UI\UIComponent.h" />
+    <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Util\TypePunners.h" />
+    <ClInclude Include="Vase.h" />
+    <ClInclude Include="WorldGrid.h" />
+    <ClInclude Include="YarnBall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

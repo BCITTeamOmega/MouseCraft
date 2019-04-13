@@ -1,0 +1,22 @@
+{
+	"pos": [0,0,0],
+	"scl": [20,2.5,7.5],
+	"rot": [0,0,0],
+	"entities": [
+	],
+	"components": [
+		{
+			"type": "Renderable",
+			"model_path": "res/models/loungeChair.obj",
+			"texture_path": "",
+			"color":
+			{
+				"r":0.8,
+				"g":0.0,
+				"b":0.0
+			},
+            "shininess": 0.2,
+            "smoothness": 5.0
+		}
+	]
+}

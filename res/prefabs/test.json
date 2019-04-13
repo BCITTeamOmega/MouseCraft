@@ -1,0 +1,32 @@
+{
+	"pos": [1,2,3],
+	"scl": [10,20,30],
+  "rot": [3.14,3.14,3.14],
+  "components": [
+    {
+      "type": "TestComponent1",
+      "iunno": 420,
+      "dawg": 0.42
+    },
+    {
+      "type": "TestComponent2",
+      "bic": true,
+      "boi": false
+    }
+  ],
+  "entities": [
+    {
+      "pos": [1,2,3],
+      "scl": [10,20,30],
+      "rot": [3.14,3.14,3.14],
+      "components": [
+        {
+          "type": "TestComponent1",
+          "iunno": 5,
+          "dawg": 0.05
+        }
+      ],
+      "entities": []
+    }
+  ]
+}

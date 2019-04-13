@@ -64,6 +64,7 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
+!res/**/*.obj
 *.iobj
 *.pch
 *.pdb
@@ -328,3 +329,6 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+!bin/
+mousecraft/res
