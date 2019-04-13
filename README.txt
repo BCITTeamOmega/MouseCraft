@@ -50,3 +50,16 @@ Overcharge (Battery + Battery)
 	-gives an additional hp
 Dual Sword-screws (Screw + Screw)
 	-melee weapon
+
+NETWORK PLAY
+Currently client-side entity replication is disabled, except for player characters.
+The Join Game UI is also not completed.
+In lieu of the Join Game UI, there are currently 2 console commands that can be used to join a networked game.
+By pressing ENTER on the keyboard or the OPTION button on the controller, the console window will listen for keyboard input for commands.
+
+Commands:
+search - Gets IPs of all computers running the game on the local network (including the computer that used this command)
+
+connect [IP Address] - Attempt to connect to a game running at the requested IP. Must include port number 8878.
+Example:
+	connect 192.168.0.1:8878
