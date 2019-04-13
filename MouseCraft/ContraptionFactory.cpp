@@ -43,82 +43,52 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position, std::
 	Entity* contraption = EntityManager::Instance().Create();
 	contraption->transform.setLocalPosition(position);
 
-	if (netIds)
-	{
-		auto c_net = NetworkSystem::Instance()->CreateComponent();
-		netIds->push_back(c_net->GetNetworkID());
-		contraption->AddComponent(c_net);
-	}
-	else
-	{
-		std::cout << "WARNING: NETWORK IDS NULLPTR" << std::endl;
-	}
-
-	auto c_renderable = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	Component* c_renderable = nullptr; // ComponentManager<Renderable>::Instance().Create<Renderable>();
+	NetworkComponent* c_net = NetworkSystem::Instance()->CreateComponent();
+	Contraption* c_contraption = nullptr;
 
 	switch (type) {
 	case TRAMPOLINE: {
-		c_renderable->setModel(*_platformModel);
-		auto c_trampoline = ComponentManager<Contraption>::Instance().Create<Trampoline>();
-		contraption->AddComponent(c_trampoline);	
-
-		auto e_trampolineField = EntityManager::Instance().Create();
-		e_trampolineField->SetEnabled(false);
-		auto c_trampolineRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_trampolineRender->setModel(*_coilFieldModel);
-		c_trampolineRender->setColor(Color(0.9f, 1.0f, 0.9f));
-		e_trampolineField->AddComponent(c_trampolineRender);
-
-		contraption->AddChild(e_trampolineField);
-		c_trampoline->fieldEntity = e_trampolineField;
-
-		if (netIds)
-		{
-			auto c_net = NetworkSystem::Instance()->CreateComponent();
-			netIds->push_back(c_net->GetNetworkID());
-			e_trampolineField->AddComponent(c_net);
-		}
-		
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/trampoline_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/trampoline_renderable.json"} });
+		c_contraption = ComponentManager<Contraption>::Instance().Create<Trampoline>();
 		break;
 	}
 
 	case GUN: {
-		c_renderable->setModel(*_gunModel);
-		auto c_gun = ComponentManager<Contraption>::Instance().Create<Gun>();
-		contraption->AddComponent(c_gun);
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/gun_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/gun_renderable.json"} });
+		c_contraption = ComponentManager<Contraption>::Instance().Create<Gun>();
 		break;
 	}
 
 	case COIL: {
-		c_renderable->setModel(*_coilModel);
-		auto c_coil = ComponentManager<Contraption>::Instance().Create<Coil>();
-		contraption->AddComponent(c_coil);
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/coil_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/coil_renderable.json"} });
+		auto coil = ComponentManager<Contraption>::Instance().Create<Coil>();
+		c_contraption = coil;
 
 		// the field 
 		auto e_coilField = EntityManager::Instance().Create();
 		e_coilField->SetEnabled(false);
-		auto c_coilRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_coilRender->setModel(*_coilFieldModel);
-		c_coilRender->setColor(Color(0.9f, 1.0f, 0.9f));
-		e_coilField->AddComponent(c_coilRender);
+		auto c_coilRenderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/coil_field_renderable.json");
+		e_coilField->AddComponent(c_coilRenderable);
+		auto c_coilNet = NetworkSystem::Instance()->CreateComponent();
+		c_coilNet->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/coil_field_renderable.json"} });
+		e_coilField->AddComponent(c_coilNet);
 
+		// bindings 
 		contraption->AddChild(e_coilField);
-		c_coil->fieldEntity = e_coilField;
-
-		if (netIds)
-		{
-			auto c_net = NetworkSystem::Instance()->CreateComponent();
-			netIds->push_back(c_net->GetNetworkID());
-			e_coilField->AddComponent(c_net);
-		}
-
+		coil->fieldEntity = e_coilField;
 		break;
 	}
 
 	case BOMB: {
-		c_renderable->setModel(*_bombModel);
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/bomb_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/bomb_renderable.json"} });
 		auto c_bomb = ComponentManager<Contraption>::Instance().Create<Bomb>();
-		contraption->AddComponent(c_bomb);
+		c_contraption = c_bomb;
+		
 		auto c_phys = PhysicsManager::instance()->createObject(0, 0, 1, 1, 0, PhysObjectType::PROJECTILE_DOWN);
 		c_phys->SetEnabled(false);
 		contraption->AddComponent(c_phys);
@@ -137,10 +107,11 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position, std::
 
 		auto e_explosion = EntityManager::Instance().Create();
 		c_bomb->explosion = e_explosion;
-		auto c_expRender = ComponentManager<Renderable>::Instance().Create<Renderable>();
-		c_expRender->setModel(*_explosionModel);
-		c_expRender->setColor(Color(1.0f, 0.0f, 0.0f));
+		auto c_expRender = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/bomb_renderable.json");
 		e_explosion->AddComponent(c_expRender);
+		auto c_expNet = NetworkSystem::Instance()->CreateComponent();
+		c_expNet->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/bomb_field_renderable.json"} });
+		e_explosion->AddComponent(c_expNet);
 		auto c_expAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 		c_expAnim->AddAnimation(_explosionAnim);
 		e_explosion->AddComponent(c_expAnim);
@@ -148,27 +119,20 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position, std::
 		c_expTimed->delay = Bomb::EXPLOSION_LIFETIME;
 		e_explosion->AddComponent(c_expTimed);
 
-		if (netIds)
-		{
-			auto c_net = NetworkSystem::Instance()->CreateComponent();
-			netIds->push_back(c_net->GetNetworkID());
-			e_explosion->AddComponent(c_net);
-		}
-
 		break;
 	}
 
 	case OVERCHARGE: {
-		c_renderable->setModel(*_overchargeModel);
-		auto c_overcharge = ComponentManager<Contraption>::Instance().Create<Overcharge>();
-		contraption->AddComponent(c_overcharge);
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/overcharge_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/overcharge_renderable.json"} });
+		c_contraption = ComponentManager<Contraption>::Instance().Create<Overcharge>();
 		break;
 	}
 
 	case SWORDS: {
-		c_renderable->setModel(*_swordsModel);
-		auto c_swords = ComponentManager<Contraption>::Instance().Create<Swords>();
-		contraption->AddComponent(c_swords);
+		c_renderable = PrefabLoader::LoadComponent("res/prefabs/components/contraptions/swords_renderable.json");
+		c_net->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/contraptions/swords_renderable.json"} });
+		c_contraption = ComponentManager<Contraption>::Instance().Create<Swords>();
 		break;
 	}
 
@@ -177,6 +141,8 @@ Entity * ContraptionFactory::Create(CONTRAPTIONS type, glm::vec3 position, std::
 	}
 	
 	contraption->AddComponent(c_renderable);
+	contraption->AddComponent(c_net);
+	contraption->AddComponent(c_contraption);
 
 	return contraption;
 }

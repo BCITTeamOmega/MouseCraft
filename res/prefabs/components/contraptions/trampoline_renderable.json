@@ -1,0 +1,11 @@
+{
+    "type": "Renderable",
+    "model_path": "res/models/spring.obj",
+    "texture_path": "",
+    "color":
+    {
+        "r":0.9,
+        "g":1.0,
+        "b":0.9
+    }
+}

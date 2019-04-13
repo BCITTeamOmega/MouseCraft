@@ -29,6 +29,11 @@ public:
     void SearchForServers();
     void SetHost();
 
+    void AddToEntity(unsigned int parentID, Entity * entity);
+    void SpawnEntityOnClients(NetworkComponent *component);
+    void DestroyEntityOnClients(NetworkComponent *component);
+    void RemoveComponent(unsigned int id);
+
     //Overrides System::Update
     void Update(float dt) override;
 
@@ -45,7 +50,7 @@ private:
 
     void serverTick();
 
-    void appendToPackets(const NetDatum & datum);
+    void appendToPackets(NetDatum * datum);
 
     void processPacket(const Address & sender, PacketData * packet);
     void processDatum(const Address & sender, PacketData * packet);

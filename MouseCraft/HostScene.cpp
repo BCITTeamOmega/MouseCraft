@@ -305,10 +305,6 @@ void HostScene::InitScene() {
     SoundComponent* mouse1JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse1Entity->AddComponent(mouse1JumpSound);
 
-    //Test Network Component
-    NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(69);
-    mouse1Entity->AddComponent(mouseNetwork);
-
     //Mouse 2
     Mouse* mouse2Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
     mouse2Mouse->speed = 50.0f;
@@ -325,9 +321,6 @@ void HostScene::InitScene() {
     SoundComponent* mouse2JumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
     mouse2Entity->AddComponent(mouse2JumpSound);
 
-	//Test Network Component
-	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(420);
-	mouse2Entity->AddComponent(mouseNetwork2);
 
     //Mouse 3
     Mouse* mouse3Mouse = ComponentManager<UpdatableComponent>::Instance().Create<Mouse>();
@@ -360,6 +353,22 @@ void HostScene::InitScene() {
 
     SoundComponent* catJumpSound = ComponentManager<SoundComponent>::Instance().Create<SoundComponent>(Jump);
 	catEntity->AddComponent(catJumpSound);
+
+	// Network Components
+	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(1);
+	mouse1Entity->AddComponent(mouseNetwork);
+
+	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(2);
+	mouse2Entity->AddComponent(mouseNetwork2);
+
+	NetworkComponent *mouseNetwork3 = NetworkSystem::Instance()->CreateComponent(3);
+	mouse3Entity->AddComponent(mouseNetwork3);
+
+	NetworkComponent *catNetwork = NetworkSystem::Instance()->CreateComponent(4);
+	catEntity->AddComponent(catNetwork);
+
+	NetworkComponent *catAtkNet = NetworkSystem::Instance()->CreateComponent(5);
+	catAttackEntity->AddComponent(catAtkNet);
 
     //Pickup Spawner
     PickupSpawner* pSpawnerSpawner = ComponentManager<UpdatableComponent>::Instance().Create<PickupSpawner>();
@@ -505,6 +514,14 @@ void HostScene::InitScene() {
 	root.AddChild(recipeUIEntity);
 	root.AddChild(bobRossEntity);
 
+    /*
+    Leaving mice enabled on release build for local play
+
+    // Disable mice on start, to enable when players connect
+	mouse1Entity->SetEnabled(false);
+	mouse2Entity->SetEnabled(false);
+	mouse3Entity->SetEnabled(false);
+    */
 }
 
 void HostScene::CleanUp() {

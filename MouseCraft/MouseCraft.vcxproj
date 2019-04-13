@@ -226,6 +226,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Network\NetState.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstacleFactory.cpp" />
     <ClCompile Include="Obstruction.cpp" />
@@ -346,6 +347,7 @@ XCOPY "$(SolutionDir)\res" "$(ProjectDir)\res\" /D /K /E /Y</Command>
     <ClInclude Include="Network\Address.h" />
     <ClInclude Include="Network\Connection.h" />
     <ClInclude Include="Network\NetDatum.h" />
+    <ClInclude Include="Network\NetState.h" />
     <ClInclude Include="Network\NetworkComponent.h" />
     <ClInclude Include="Network\NetworkSystem.h" />
     <ClInclude Include="Network\PacketData.h" />

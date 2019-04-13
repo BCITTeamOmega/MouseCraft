@@ -1,0 +1,11 @@
+{
+    "type": "Renderable",
+    "model_path": "res/models/screw.obj",
+    "texture_path": "",
+    "color":
+    {
+        "r":0.5,
+        "g":0.5,
+        "b":0.5
+    }
+}
