@@ -26,8 +26,7 @@ public:
 
     void Tick() {
         _send.Clear();
-		while (!_overflow.empty()) {
-			_send.Append(_overflow.front());
+		while (!_overflow.empty() && _send.Append(_overflow.front())) {
 			_overflow.pop();
 		}
         if (--_timeTillDeath < 0) {

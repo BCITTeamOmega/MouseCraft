@@ -81,17 +81,20 @@ void NetworkSystem::SetHost() {
 void NetworkSystem::AddToEntity(unsigned int parentID, Entity * entity) {
     if (_componentList.find(parentID) != _componentList.end()) {
         entity->SetParent(_componentList[parentID]->GetEntity());
-    } else {
+    } else if (parentID == 0) {
         entity->SetParent(OmegaEngine::Instance().GetRoot());
-    }
+	} else {
+		cout << "NETWORK WARNING: Failed to find parent netID, adding to root instead." << endl;
+		entity->SetParent(OmegaEngine::Instance().GetRoot());
+	}
 }
 
 void NetworkSystem::SpawnEntityOnClients(NetworkComponent *component) {
-//    appendToPackets(new EntityCreateDatum(component));
+    appendToPackets(new EntityCreateDatum(component));
 }
 
 void NetworkSystem::DestroyEntityOnClients(NetworkComponent *component) {
-//    appendToPackets(new EntityDestroyDatum(component));
+    appendToPackets(new EntityDestroyDatum(component));
 }
 
 void NetworkSystem::Update(float dt) {
@@ -152,7 +155,7 @@ void NetworkSystem::serverTick() {
     // Append any state updates for all NetworkComponents
     if (_role == HOST) {
         for (auto component : _componentList) {
-            if (component.first < 6 && component.second->CheckDiff(_tickNum)) {
+            if (component.second->CheckDiff(_tickNum)) {
                 appendToPackets(new StateUpdateDatum(component.first, component.second->GetLastState()));
             }
         }
@@ -228,11 +231,9 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 _connectionList[sender].SetLive();
                 _connectionList[sender].Append(new ConnAccDatum(_tickNum));
                 for (auto comp : _componentList) {
-					if (comp.first > 5) { // Send all entities to newly connected players. Disabled for release build
-						//_connectionList[sender].Append(new EntityCreateDatum(comp.second));
-					}
+					_connectionList[sender].Append(new EntityCreateDatum(comp.second));
                 }
-				_componentList[liveConnections()]->GetEntity()->SetEnabled(true);
+				// _componentList[liveConnections()]->GetEntity()->SetEnabled(true);
             }
             _connectionList[sender].Append(new AckDatum(packet->GetTick()));
             break;
@@ -300,9 +301,13 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 if (_componentList.find(componentID) != _componentList.end()) {
                     _componentList[componentID]->StateUpdate(newState);
                 } else {
-                    cout << "State update from unknown component " << componentID << endl;
+                    cout << "NETWORK WARNING: State update from unknown component " << componentID << endl;
                 }
             }
+			else
+			{
+				cout << "NETWORK ERROR: Cannot update state - unknown sender: " << sender << endl;
+			}
             break;
         case NetDatum::DataType::ENTITY_CREATE:
             if (_connectionList.find(sender) != _connectionList.end() && _connectionList[sender].GetState() == Connection::State::LIVE) {
@@ -322,6 +327,12 @@ void NetworkSystem::processDatum(const Address &sender, PacketData *packet) {
                 float sclX = packet->ReadFloat();
                 float sclY = packet->ReadFloat();
                 float sclZ = packet->ReadFloat();
+
+				cout << "NETWORK: Creating new entity pos: " << posX << "," << posY << "," << posZ 
+					<< " enabled: " << enabled 
+					<< " scale: " << sclX << "," << sclY << "," << sclZ 
+					<< " netID: " << netID
+					<< endl;
 
                 std::string componentData = packet->ReadString();
                 

@@ -9,7 +9,7 @@
 #include "NetDatum.h"
 #include <string>
 
-constexpr size_t MAX_PACKET_SIZE = 256;
+constexpr size_t MAX_PACKET_SIZE = 512;
 
 class PacketData {
 public:

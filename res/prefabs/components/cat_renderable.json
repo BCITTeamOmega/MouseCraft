@@ -1,0 +1,11 @@
+{
+	"type": "Renderable",
+	"model_path": "res/models/cat_tri.obj",
+	"texture_path": "res/models/test/blank.bmp",
+	"color":
+	{
+		"r":0.34,
+		"g":0.08,
+		"b":0.00
+	}
+}

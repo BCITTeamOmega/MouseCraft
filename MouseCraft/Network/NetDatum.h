@@ -7,7 +7,7 @@
 #include <string>
 #include "NetworkComponent.h"
 
-constexpr size_t MAX_DATUM_SIZE = 128;
+constexpr size_t MAX_DATUM_SIZE = 256;	// temporary fix to send larger amounts of data 
 
 class NetDatum {
 public:
@@ -36,7 +36,9 @@ protected:
     void appendByte(const unsigned char byte) {
         if (MAX_DATUM_SIZE - _size > sizeof(byte)) {
             _data[_size++] = byte;
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendBool(const bool b) {
@@ -44,7 +46,9 @@ protected:
             BoolChar data = { b };
             std::copy(data.c, data.c + sizeof(b), _data + _size);
             _size += sizeof(b);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendShort(const short s) {
@@ -52,7 +56,9 @@ protected:
             ShortChar data = { s };
             std::copy(data.c, data.c + sizeof(s), _data + _size);
             _size += sizeof(s);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendUShort(const unsigned short s) {
@@ -60,7 +66,9 @@ protected:
             UShortChar data = { s };
             std::copy(data.c, data.c + sizeof(s), _data + _size);
             _size += sizeof(s);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendFloat(const float f) {
@@ -68,7 +76,9 @@ protected:
             FloatChar data = { f };
             std::copy(data.c, data.c + sizeof(f), _data + _size);
             _size += sizeof(f);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendInt(const int i) {
@@ -76,7 +86,9 @@ protected:
             IntChar data = { i };
             std::copy(data.c, data.c + sizeof(i), _data + _size);
             _size += sizeof(i);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendUInt(const unsigned int i) {
@@ -84,7 +96,9 @@ protected:
             UIntChar data = { i };
             std::copy(data.c, data.c + sizeof(i), _data + _size);
             _size += sizeof(i);
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     void appendString(const std::string str) {
@@ -93,7 +107,9 @@ protected:
             const char * cstr = str.c_str();
             std::copy(cstr, cstr + str.size(), _data + _size);
             _size += str.size();
-        }
+		} else {
+			SDL_assert(false && "ERROR: Datum is too large!");
+		}
     }
 
     DataType _type;
