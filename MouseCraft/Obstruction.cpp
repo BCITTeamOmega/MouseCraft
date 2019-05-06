@@ -40,8 +40,8 @@ void Obstruction::HitByCat(Vector2D dir)
 	grid->removeArea(tl, br);
 
 	// now check 
-	auto ntl = new Vector2D(newPos - halfsize);
-	auto nbr = new Vector2D(newPos + halfsize);
+	auto ntl = new Vector2D(newPos - halfsize + Vector2D(0.5f, 0.5f));
+	auto nbr = new Vector2D(newPos + halfsize - Vector2D(0.5f, 0.5f));
 	// auto hits = grid->objectsInArea(ntl, nbr);
 
 	bool stop = false;
