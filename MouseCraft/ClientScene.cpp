@@ -390,10 +390,10 @@ catstandPhysics->initPosition();
 	mouse3Outline->setColor(Color(0.0f, 0.0f, 0.0f));
 	mouse3Entity->AddComponent(mouse3Outline);
 
-    root.AddChild(mouse1Entity);
-    root.AddChild(mouse2Entity);
-    root.AddChild(mouse3Entity);
-    root.AddChild(catEntity);
+    // root.AddChild(mouse1Entity);
+    // root.AddChild(mouse2Entity);
+    // root.AddChild(mouse3Entity);
+    // root.AddChild(catEntity);
     root.AddChild(floorEntity);
     root.AddChild(counter1Entity);
     root.AddChild(counter2Entity);

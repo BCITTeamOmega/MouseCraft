@@ -106,7 +106,8 @@ void HostScene::InitScene() {
     cameraEntity->AddComponent(cam);
 
     //Create the renderables, set their model and colour, and add them to their entity
-    Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
+	/*
+	Renderable* mouse1Rend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     mouse1Rend->setModel(*mouseModel);
     mouse1Rend->setColor(Color(0.46, 0.12, 0.08));
 	mouse1Rend->setShininess(0.4);
@@ -134,6 +135,19 @@ void HostScene::InitScene() {
 	catRend->setShininess(0.4);
 	catRend->setRoughness(10.0);
     catEntity->AddComponent(catRend);
+	*/
+
+	Component* mouse1Rend = PrefabLoader::LoadComponent("res/prefabs/components/mouse1_renderable.json");
+	mouse1Entity->AddComponent(mouse1Rend);
+
+	Component* mouse2Rend = PrefabLoader::LoadComponent("res/prefabs/components/mouse2_renderable.json");
+	mouse2Entity->AddComponent(mouse2Rend);
+
+	Component* mouse3Rend = PrefabLoader::LoadComponent("res/prefabs/components/mouse3_renderable.json");
+	mouse3Entity->AddComponent(mouse3Rend);
+
+	Component* catRend = PrefabLoader::LoadComponent("res/prefabs/components/cat_renderable.json");
+	catEntity->AddComponent(catRend);
 
     Renderable* catAttackRend = ComponentManager<Renderable>::Instance().Create<Renderable>();
     catAttackRend->setModel(*CatAttackModel);
@@ -356,15 +370,19 @@ void HostScene::InitScene() {
 
 	// Network Components
 	NetworkComponent *mouseNetwork = NetworkSystem::Instance()->CreateComponent(1);
+	mouseNetwork->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/mouse1_renderable.json"} });
 	mouse1Entity->AddComponent(mouseNetwork);
 
 	NetworkComponent *mouseNetwork2 = NetworkSystem::Instance()->CreateComponent(2);
+	mouseNetwork2->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/mouse2_renderable.json"} });
 	mouse2Entity->AddComponent(mouseNetwork2);
 
 	NetworkComponent *mouseNetwork3 = NetworkSystem::Instance()->CreateComponent(3);
+	mouseNetwork3->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/mouse3_renderable.json"} });
 	mouse3Entity->AddComponent(mouseNetwork3);
 
 	NetworkComponent *catNetwork = NetworkSystem::Instance()->CreateComponent(4);
+	catNetwork->AddComponentData({ {"type", "file"}, {"value", "res/prefabs/components/cat_renderable.json"} });
 	catEntity->AddComponent(catNetwork);
 
 	NetworkComponent *catAtkNet = NetworkSystem::Instance()->CreateComponent(5);
@@ -470,22 +488,22 @@ void HostScene::InitScene() {
 
 	TransformAnimator* mouse1Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 	mouse1Anim->AddAnimation(squishSquashAnim);
-	mouse1Entity->AddComponent(mouse1Anim);
+	//mouse1Entity->AddComponent(mouse1Anim);
 
 	TransformAnimator* mouse2Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 	mouse2Anim->AddAnimation(squishSquashAnim);
 	mouse2Anim->SetProgress(0.5f);	// chnage progress to look a little different
-	mouse2Entity->AddComponent(mouse2Anim);
+	//mouse2Entity->AddComponent(mouse2Anim);
 
 	TransformAnimator* mouse3Anim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 	mouse3Anim->AddAnimation(squishSquashAnim);
 	mouse3Anim->SetProgress(0.8f);	// change progress to look a little different
-	mouse3Entity->AddComponent(mouse3Anim);
+	//mouse3Entity->AddComponent(mouse3Anim);
 
 	TransformAnimator* catAnim = ComponentManager<UpdatableComponent>::Instance().Create<TransformAnimator>();
 	catAnim->AddAnimation(squishSquashAnim);
 	catAnim->SetSpeed(0.8f);
-	catEntity->AddComponent(mouse3Anim);
+	//catEntity->AddComponent(mouse3Anim);
 
 	auto doorEntity = PrefabLoader::LoadPrefab("res/prefabs/environment/door.json");
 	root.AddChild(doorEntity);

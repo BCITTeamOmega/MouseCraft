@@ -70,8 +70,8 @@ bool NetworkComponent::CheckDiff(unsigned short currTick) {
 }
 
 void NetworkComponent::StateUpdate(const NetState & ns) {
-    if (ns.parentID != _lastState.parentID)
-        NetworkSystem::Instance()->AddToEntity(ns.parentID, GetEntity());
+    //if (ns.parentID != _lastState.parentID)
+    //    NetworkSystem::Instance()->AddToEntity(ns.parentID, GetEntity());
     GetEntity()->SetEnabled(ns.enabled);
     GetEntity()->transform.setLocalPosition(ns.pos);
     GetEntity()->transform.setLocalRotation(ns.rot);

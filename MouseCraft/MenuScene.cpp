@@ -7,6 +7,7 @@
 #include "UI/ImageComponent.h"
 #include "UI/TextComponent.h"
 #include "HostScene.h"
+#include "ClientScene.h"
 #include "MenuController.h"
 #include "Sound/TrackParams.h"
 
